@@ -1,0 +1,77 @@
+Sure, here are a couple of examples of networking applications in Node.js:
+
+### 1. Simple TCP Server and Client:
+
+#### TCP Server (server.js):
+```javascript
+const net = require('net');
+
+const server = net.createServer((socket) => {
+  console.log('Client connected');
+
+  // Listen for data from the client
+  socket.on('data', (data) => {
+    console.log(`Received data from client: ${data}`);
+    // Send a response back to the client
+    socket.write('Hello from server!');
+  });
+
+  // Listen for the client to end the connection
+  socket.on('end', () => {
+    console.log('Client disconnected');
+  });
+});
+
+const PORT = 3000;
+
+// Start the server and listen on the specified port
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+```
+
+#### TCP Client (client.js):
+```javascript
+const net = require('net');
+
+// Create a connection to the server
+const socket = net.createConnection({ port: 3000 }, () => {
+  console.log('Connected to server');
+
+  // Send data to the server
+  socket.write('Hello from client!');
+});
+
+// Listen for data from the server
+socket.on('data', (data) => {
+  console.log(`Received data from server: ${data}`);
+});
+
+// Listen for the server to end the connection
+socket.on('end', () => {
+  console.log('Connection closed by server');
+});
+```
+
+### 2. Simple HTTP Server:
+
+```javascript
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  // Set the response header
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+
+  // Send a response back to the client
+  res.end('Hello, World!\n');
+});
+
+const PORT = 3000;
+
+// Start the HTTP server and listen on the specified port
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+```
+
+These examples cover both TCP-based communication and basic HTTP server functionality. You can run these scripts separately and observe how data is transmitted between the server and the client. Adjust the code as needed based on your requirements and explore more advanced networking concepts and modules in Node.js as you continue your development journey.

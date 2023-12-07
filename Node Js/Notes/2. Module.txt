@@ -1,17 +1,17 @@
 11. What is a Module in Node.js ?
 =================================
 
--> In node every file is a module and the variables and functions defined in it are scoped to that module, they are not accessible outside that module. to make them available we have to export them and they will become public to others.
--> In Node.js, Modules are the blocks of encapsulated code that communicate with an external application based on their related functionality.
--> Modules can be a single file or a collection of multiple files/folders.
--> NPM package can be considered as module.
--> Consider modules to be the same as JavaScript libraries.
--> A set of functions you want to include in your application
--> To load a module, use the require function.
+-> In node, Modules can be a single file or a collection of multiple files/folders which contain variables and functions defined in it 
+are scoped to that module, they are not accessible outside that module. to make them available we have to export them and they will 
+become public to others.
+-> In other words, Modules are the blocks of encapsulated code that communicate with an external application based on their related 
+functionality.
+-> like in java class considered as examples of encapsulation, we considered "module" as a example of encapsulation in node js.
+-> NPM package can be considered as module. like nodemon, helmet, mongoose, express
+-> To load a module, use the require() function.
 
 Types of Node Modules: 
 ----------------------
-
 There are three main types of Node modules that you will work with as a Node.js developer. They include the following.
 
 1. Built-in modules / core module
@@ -20,14 +20,15 @@ There are three main types of Node modules that you will work with as a Node.js 
 
 1. Built-in modules : 
 ---------------------
-
--> Node.js has many built-in modules that are part of the platform and come with Node.js installation. These modules can be loaded into the program by using the required function.
+-> Node.js has many built-in modules that come with Node.js installation. These modules can be loaded into the program by using the 
+required function.
 -> examples of built-in Node modules are the following:
-http
-url
-path
-fs
-os
+1. http
+2. os
+3. fs
+4. url
+5. path
+6. Events Module
 
 syntax: 
 const module = require('module_name');
@@ -38,14 +39,18 @@ const http = require('http');
 2. Local modules:
 -----------------
 
--> Local modules are nothing but the files you have created locally in your project like your route files where you define mutiple routes or it can be validateTokenHandler file where you are validating token or it can be errorHandler file where you are handling errors and export it to use in different place.
+-> Local modules are nothing but the files you have created locally in your project like our route files where you define multiple 
+routes or it can be validateTokenHandler file where you are validating token or it can be errorHandler file where you are handling 
+errors and export it to use in different place.
 
 
 3. Third-party module: 
 ----------------------
 
--> Third-party modules are modules that are available online using the Node Package Manager(NPM). These modules can be installed in the project folder or globally. 
-Some of the popular third-party modules are 
+-> Third-party modules are modules which we download from the NPM registry. 
+-> NPM package can be considered as module. like nodemon, helmet, mongoose, express
+-> These modules can be installed in the project folder or globally. 
+-> Some of the popular third-party modules are 
 Mongoose, 
 express, 
 angular,
@@ -68,9 +73,24 @@ Built-in modules :
 1. HTTP Module:
 ===============
 
--> In the Node.js HTTP module is a built-in module that allows you to create HTTP servers and make HTTP requests in Node.js. 
--> It provides a set of classes and methods for handling HTTP communications.
+-> HTTP module is a built-in module which is use for building Networking application.
+-> http module is built on top of TCP (Transmission Control Protocol). 
+-> with the help of http module we can easily create HTTP server that can listen for incoming requests, handle those requests, and 
+send back responses on a given port and with this we can easily create a backend server for our client application.
+-> for creating 'http server' we use 'http.createServer()' method which creates an instance of 'http.Server'. This method takes a callback 
+function that will be invoked for each incoming HTTP request. 
+-> http.createServer() is implemented inside 'http.Server' class and this http.Server class is provided by http module. 
+-> When you create an HTTP server using the http module, it uses the lower-level 'net module' which creates 'TCP Server' to handle 
+'TCP connections'.
+-> 'net.Server' class is used to create a 'TCP server'. 
+-> The 'http.Server' class inherits from 'net.Server' class which is part of the core 'net module'. 
+-> 'net.Server' is EventEmitter.
 -> In http module we have to write multiple if statements for checking multiple urls. To solve this problem we use Express js.
+
+
+
+
+
 
 code without using express js and then write same code using express js and explain it : 
 ========================================================================================
@@ -78,7 +98,8 @@ code without using express js and then write same code using express js and expl
 with 'http' : 
 
 const http = require('http');
-const server = http.createServer((req, res) => {
+// server here is eventEmitter. it has all the capabilities of eventEmitter like server.on() or server.emit() or server.addListener()
+const server = http.createServer((req, res) => {   
   if (req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello, Node.js!');
@@ -113,6 +134,31 @@ app.listen(port, () => {
 });
 
 
+with net module: 
+
+const net = require('net');
+const server = net.createServer((socket) => {
+  console.log('Client connected');
+  // Listen for data from the client
+  socket.on('data', (data) => {
+    console.log(`Received data from client: ${data}`);
+    // Send a response back to the client
+    socket.write('Hello from server!');
+  });
+  // Listen for the client to end the connection
+  socket.on('end', () => {
+    console.log('Client disconnected');
+  });
+});
+
+const PORT = 3000;
+
+// Start the server and listen on the specified port
+server.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
+});
+
+
 
 
 
@@ -137,7 +183,7 @@ Rename files
 
 const fs = require('fs');
 
-i. Read Files
+i. Read Files : file must be present if not then it will give you error
 -> The fs.readFile() method is used to read files on your computer.
 // fs.readFile('demofile.txt', 'utf-8', (err, data)=>{
 //     if(err){
@@ -151,7 +197,6 @@ i. Read Files
 ii. Create Files
 -> The File System module has methods for creating new files:
 fs.appendFile()
-fs.open()
 fs.writeFile()
 
 -> The fs.appendFile() method appends specified content to a file. If the file does not exist, the file will be created:
@@ -165,8 +210,8 @@ fs.writeFile()
 // }))
 
 
-iii] Update Files
--> The File System module hasn two methods for updating files:
+iii. Update Files
+-> The File System module has two methods for updating files:
 	1. fs.appendFile()
 	2. fs.writeFile()
 The fs.appendFile() method appends the specified content at the end of the specified file:
@@ -176,13 +221,14 @@ The fs.appendFile() method appends the specified content at the end of the speci
 //});
 
 -> The fs.writeFile() method replaces the specified file and content:
+-> it replaces old text with new text.
 fs.writeFile('mynewfile3.txt', 'This is my text', function (err) {
   if (err) throw err;
   console.log('Replaced!');
 });
 
 
-iV] Delete Files
+iV. Delete Files
 -> To delete a file use the fs.unlink() method.
 -> The fs.unlink() method deletes the specified file:
 // fs.unlink('demofile.txt', (err)=>{
@@ -191,7 +237,7 @@ iV] Delete Files
 // })
 
 
-V] Rename Files:
+V. Rename Files:
 -> To rename a file use the fs.rename() method.
 -> The fs.rename() method renames the specified file:
 // fs.rename('newfile.txt', 'updatedFile.txt', (err)=>{
@@ -200,7 +246,7 @@ V] Rename Files:
 // })
 
 
-vi] list all files from current directory
+vi. list all files from current directory
 // fs.readdir('./', (err, data)=>{
 //     if(err){
 //         console.error("Error: ", err);
@@ -234,7 +280,7 @@ var adr = 'http://localhost:8080/default.htm?year=2017&month=february';
 var q = url.parse(adr, true);
 console.log(q.host); //returns 'localhost:8080'
 console.log(q.pathname); //returns '/default.htm'
-console.log(q.search); //returns '?year=2017&month=february'
+console.log(q.search); //returns 
 var qdata = q.query; //returns an object: { year: 2017, month: 'february' }
 console.log(qdata.month); //returns 'february'
 
@@ -305,22 +351,15 @@ visit following two websites:
 
 -> The OS module provides information about the computer's operating system. 
 
-arch()	Returns the operating system CPU architecture
-constants	Returns an object containing the operating system's constants for process signals, error cotes etc.
-cpus()	Returns an array containing information about the computer's CPUs
-endianness()	Returns the endianness of the CPU
-EOL	Returns the end-of-line marker for the current operating system
-freemem()	Returns the number of free memory of the system
-hostname()	Returns the hostname of the operating system
-loadavg()	Returns an array containing the load averages, (1, 5, and 15 minutes)
-networkInterfaces()	Returns the network interfaces that has a network address
-platform()	Returns information about the operating system's platform
-release()	Returns information about the operating system's release
-tmpdir()	Returns the operating system's default directory for temporary files
-totalmem()	Returns the number of total memory of the system
-type()	Returns the name of the operating system
-uptime()	Returns the uptime of the operating system, in seconds
-userInfo()	Returns information about the current user
+type()	                  Returns the name of the operating system
+userInfo()	              Returns information about the current user
+hostname()	              Returns the hostname of the operating system
+arch()	                  Returns the operating system CPU architecture
+cpus()	                  Returns an array containing information about the computer's CPUs
+freemem()	                Returns the number of free memory of the system
+totalmem()	              Returns the number of total memory of the system
+uptime()	                Returns the uptime of the operating system, in seconds
+platform()	              Returns information about the operating system's platform
 
 
 
@@ -348,27 +387,33 @@ console.log("Architecture: " + os.arch());
 
 
 var path = require('path');
-var filename = path.basename('/Users/Refsnes/demo_path.js');
+var filename = path.basename('/Users/demo_path.js');
 console.log(filename);  //demo_path.js
 
 
-Method	Description
-basename()	Returns the last part of a path
-delimiter	Returns the delimiter specified for the platform
-dirname()	Returns the directories of a path
-extname()	Returns the file extension of a path
-format()	Formats a path object into a path string
-isAbsolute()	Returns true if a path is an absolute path, otherwise false
-join()	Joins the specified paths into one
-normalize()	Normalizes the specified path
-parse()	Formats a path string into a path object
-posix	Returns an object containing POSIX specific properties and methods
-relative()	Returns the relative path from one specified path to another specified path
-resolve()	Resolves the specified paths into an absolute path
-sep	Returns the segment separator specified for the platform
-win32	Returns an object containing Windows specific properties and methods
+Method	                   Description
 
+basename()	               Returns the last part of a path
+dirname()	                 Returns the directories of a path
+join()	                   Joins the specified paths into one
+normalize()	               Normalizes the specified path
 
+example: 
+
+const path = require('path');
+
+const filePath = 'E:/z Placement/Mosh/Node Js/13 Integration Testing';
+const messyPath = '/path/to/../files/example.txt'
+
+const directory = path.dirname(filePath); //E:/z Placement/Mosh/Node Js
+const fileName = path.basename(filePath); //13 Integration Testing
+const fullPath = path.join(__dirname, 'files', 'example.txt'); // E:\z Placement\Node\2. Node Projects\useMe\files\example.txt
+const cleanPath = path.normalize(messyPath); // \path\files\example.txt
+
+console.log('Directory:', directory);
+console.log('File Name:', fileName);
+console.log('Full Path Name:', fullPath);
+console.log('Clean Path : ', cleanPath);
 
 
 
@@ -381,25 +426,16 @@ win32	Returns an object containing Windows specific properties and methods
 =================
 
 -> The Events module provides a way of working with events.
--> In Node.js, all events are an instance of the EventEmitter object. To be able to access properties and methods of events , create an EventEmitter object.
--> EventEmitter is a class and we have to create its object in order to access all propertirs.
+-> Event is basically a signal that indicates something has happened in your application. Like when a connection is made or a 
+file is opened.
+-> Every action on a computer is an event. 
+-> EventEmitter is a class and we have to create its object in order to access all properties.
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
--> Node.js is perfect for event-driven applications
--> Every action on a computer is an event. Like when a connection is made or a file is opened.
--> Event is basically a signal that indicates something has happend in your application.
--> for ex in node we have a class called 'http' which we can use to build the web server. so we listen on a given port and every time we recive a request on that port that http class raises an event. our job is to respond to that event which basically involves reading that request and returning the right respons.
--> if you go through node documentation will see lots of node class/modules raises different kinds of events and in your code you have respond to that evets.
--> Objects in Node.js can fire events, like the readStream object fires events when opening and closing a file:
-var fs = require('fs');
-var rs = fs.createReadStream('./demofile.txt');
-/*Write to the console when the file is opened:*/
-rs.on('open', function () {
-  console.log('The file is open');
-});// o/p -> The file is open
--> Node.js has a built-in module, called "Events", where you can create-, fire-, and listen for- your own events.
-
--> You can assign event handlers to your own events with the EventEmitter object.
+-> lots of node class/modules raises different kinds of events and in your code you have respond to that events.
+-> for ex in node we have a class called 'http.Server' which we can use to build the http server. so we listen on a given port and 
+every time we receive a request on that port that http.Server class raises an event. our job is to respond to that event which 
+basically involves reading that request and returning the right response.
 -> In the example below we have created a function that will be executed when a "scream" event is fired.
 -> To fire an event, use the emit() method.
 
@@ -407,32 +443,19 @@ code :
 
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
-//Create an event handler:
-var myEventHandler = function () {
+var myEventHandler = function () {//Create an event handler:
   console.log('I hear a scream!');
 }
-//Assign the event handler to an event:
-eventEmitter.on('scream', myEventHandler);
+eventEmitter.on('scream', myEventHandler);//Assign the event handler to an event:
 //Fire the 'scream' event:
 eventEmitter.emit('scream');
 
 
+Method			        Description
 
-Method			Description
-addListener()		Adds the specified listener
-emit()			Call all the listeners(event handlers) registered with the specified name
-on()			Adds the specified listener(event handler)
-
-
-
-
-
-
--> Event is basically a signal that indicates something has happend in your application.
--> for ex in node we have a class called 'http' which we can use to build the web server. so we listen on a given port and every time we recive a request on that port that http class raises an event. our job is to respond to that event which basically involves reading that request and returning the right respons.
--> if you go through node documentation will see lots of node class/modules raises different kinds of events and in your code you have respond to that evets.
-
-
+addListener()		    Adds the specified listener
+emit()			        Call all the listeners(event handlers) registered with the specified name
+on()			          Adds the specified listener(event handler)
 
 
 
