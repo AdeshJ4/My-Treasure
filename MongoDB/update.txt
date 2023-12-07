@@ -1,0 +1,10 @@
+There are two methods present inside a MondoDB
+
+1. updateOne()
+2. updateMany()
+
+
+-> The first parameter is query object.
+-> The second parameter is object which contain data to be updated.
+
+

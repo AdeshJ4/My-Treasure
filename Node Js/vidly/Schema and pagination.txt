@@ -1,0 +1,221 @@
+const mongoose = require("mongoose");
+
+const connectDB = async () => {
+  try {
+    const connect = await mongoose.connect("mongodb://127.0.0.1/playGround");
+    console.log("Database is connected");
+    console.log("Host : ", connect.connection.host);
+    console.log("Name: ", connect.connection.name);
+  } catch (err) {
+    console.log("Database is not connected");
+    console.log("Error: ", err.message);
+    process.exit(1);
+  }
+};
+connectDB();
+
+const courseSchema = mongoose.Schema({
+  name: { 
+    type: String, 
+    required: true, 
+    minlength: 5, 
+    maxlength: 50,
+    trim: true
+  },
+  author: { 
+    type: String, 
+    required: true,
+    trim: true 
+  },
+  address: {
+    type: String,
+    lowercase: true,
+    trim : true
+  },
+  category: {
+    type: String,
+    required: true,
+    lowercase: true,
+    trim: true,
+    enum: ['tech', 'frontend', 'backend', 'database'] // category must be value inside a array
+  },
+  tags: [String],
+  books: {
+    type: [String],
+    required: true, // it will not helps us because if you insert empty array it will accept it so we have to define custom validation.
+    lowercase: true,
+    trim: true,
+    validate: {
+      validator: function(array){
+        return array.length > 0;
+      },
+      message: "A course should have at least one book."
+    }
+  },
+  publishedDate: {
+    type: Date,
+    default: Date.now(),
+  },
+  isPublished: Boolean,
+  price: {
+    type: Number,
+    required: function () {
+      // price is required only if isPublish is true
+      return this.isPublished;
+    },
+    min: 10,
+    max: 300,
+    get: value => Math.round(value),  // round the price at the time of getting / retrieving its value : 15.9 => 16
+    set: value => Math.round(value)   // round the price at the time of setting its value : 15.9 => 16  Note: some documents have value in decimal so they will be round
+  },
+});
+const Course = mongoose.model("Course", courseSchema);
+
+// create course
+const createCourse = async () => {
+  const course = new Course({
+    name: "   Adesh   ",
+    author: "God",
+    address: "LOHEGAON",
+    category: "   TECH    ",
+    books: [10, "Book"],
+    isPublished: true,
+    price: 45,
+    tags: [10, 20, 30]
+  });
+
+  try {
+    const result = await course.save();
+    console.log("Data: ", result);
+  } catch (err) {
+    console.log("Error: ", err.message);
+    // console.log("Error: ", err.message);
+    // console.log("Error: ", err.errors);
+    // console.log("Error: ", err.errors.books);
+    // for (let field in err.errors)
+    //   console.log(err.errors[field]);
+  }
+};
+
+// createCourse();
+
+// get All Courses
+const getAllCourses = async () => {
+  try {
+    // const courses = await Course.find();
+    // const courses = await Course.find({author: "Mosh Hamadani"});
+    // const courses = await Course
+    //     .find({$and: [{author: {$eq: 'Mosh Hamadani'}}, {isPublished: {$eq: true}}]})
+    //     .limit(10)
+    //     .sort({ name: 1})
+    //     .select({name: 1, tags: 1, _id: 0})
+    //     .count();
+
+    /*
+        regular expression : syntax: /pattern/
+
+        1. string start with "Mosh" it will return "Mosh Hamedani" and "Mosh Jadhav".
+        -> const courses = await Course.find({author: /^Mosh/})
+        if you want to make it case insensitive then add i at the end
+        -> const courses = await Course.find({author: /^Mosh/i})
+
+        2. string ends with 'Hamedani' it will return "Mosh Hamedani" and "Adesh Hamedani"
+        -> const courses = await Course.find({author: /Hamedani$/})
+        if you want to make it case insensitive then add i at the end
+        -> const courses = await Course.find({author: /Hamedani$/i})
+    */
+    //3. string contain 'Pramod' it will return "Adesh Pramod Jadhav" and "Mosh Pramod Hamedani"
+    //-> const courses = await Course.find({author: /.*Hamedani.*/})
+    //if you want to make it case insensitive then add i at the end
+    //-> const courses = await Course.find({author: /.*Hamedani.*/i})
+
+    /**
+     * pagination logic:
+     *
+     * In order to implement pagination we need to escape all the documents from previous page
+     * formula : skip((pageNumber -1) * pageSize)
+     * /api/courses?pageNumber=2&pageSize=10  this is how we take values of pageNumber and pageSize in real world
+     * 
+     * Query: 
+     * const pageNumber = 2; // pageNumber starts from 1 so more accurately it is page number.
+     * const pageSize = 10;
+     * const courses = await Course
+     *  .find()
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize);
+     * 
+     * 
+     * 
+     */
+
+    const courses = await Course.find()
+      .sort({ name: 1 })
+      .select({ name: 1, author: 1, _id: 0 });
+
+    console.log(courses);
+  } catch (err) {
+    console.log("Error: ", err.message);
+  }
+};
+
+// update course
+const updateCourse = async (id) => {
+  /**
+   * 1. Approach One : Query First
+   * findById()
+   * Modify its properties
+   * save()
+   * 
+   * code: 
+   * 
+   * 
+  const course = await Course.findById(id);
+  if (!course) return;
+
+  course.author = "Mosh";
+  course.isPublished = false;
+
+  const result = await course.save();
+  console.log(result);
+
+
+   *
+   * 2. Approach Two : Update First
+   * update directly
+   * Optionally get the updated document
+   *
+   * you can use updateOne() and findByIdAndUpdate() methods.
+   * 
+   * updateOne(): 
+   * -> THIS METHOD WILL NOT RETURN COURSE RATHER IT WILL RETURN ACKNOWLEDGEMENT
+   * const res = await Course.updateOne({ _id: id },{$set: {author: "Code with Harry",isPublished: true,},});
+   * -> update all documents which are not published means 'isPublished: false'
+   * const courses = await Course.updateOne({isPublished: false}, {$set: {author: "ADESH",isPublished: true,});
+   * 
+   * findByIdAndUpdate()
+   * -> this method return course object 
+   * const course = await Course.findByIdAndUpdate(id, {$set: {name: "React Js", author: 'Mosh Hamedani'}}, {new: true});
+   * 
+   * 
+   * 
+   */
+
+  //
+  //
+
+  const course = await Course.findByIdAndUpdate(
+    id,
+    { $set: { name: "React Js", author: "Mosh Hamedani" } },
+    { new: true }
+  );
+
+  console.log(course); // {acknowledged: true,modifiedCount: 1,upsertedId: null,upsertedCount: 0,matchedCount: 1}
+};
+
+const deleteCourse = async (id) => {
+  const res = await Course.deleteOne({ _id: id }); // does not return course obj instead return acknowledge
+  // const res = await Course.deleteMany({_id: id});
+  // const res = await Course.findByIdAndRemove(id);  // return course obj and null if course does not found
+
+  console.log(res);
+};

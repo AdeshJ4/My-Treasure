@@ -1,0 +1,96 @@
+-> we used to this package to store configuation setting of our application in json files or environment variables and overridig those setting in each environemnt(dev/prod).
+
+-> for ex in development environment we are going to use different database or mail server
+
+-> there are many npm packages available for managing configuration the most popular is rc but we are going to use config.
+
+-> we should not store the application secrets in this configuration file 
+for ex you should not store the p/w of your database or mail server
+because because when you checking your sorce code to a repository that p/w or that secret is visible to anyone who has access to that repo.
+
+
+-> always store your secrets inside .env file and add that file in .gitignore
+
+
+
+.env
+----
+
+PORT=3000
+NODE_ENV="development" 
+CONNECTION_STRING=mongodb://127.0.0.1/vidly
+ACCESS_TOKEN_SECRET_KEY=SECRETKEYISBEHAPPY
+
+
+
+custom-environment-variables.json:
+----------------------------------
+ex. 
+{
+    "DB_Connection_String": "CONNECTION_STRING",
+    "jwtPrivateKey": "ACCESS_TOKEN_SECRET_KEY",
+    "NODE_ENV": "NODE_ENV"
+}
+
+
+
+
+default.json :
+-------------
+-> in this file we are just defining a template for all the settings in our application
+ex.
+{
+    "name": "",
+    "Db_Connection_String" : "",
+    "jwtPrivateKey": "",
+    "NODE_ENV":""
+}
+
+
+
+development.json:
+------------------
+{
+    "name": "development-vidly"
+}
+
+
+
+production.json: 
+-----------------
+
+{
+    "name": "production-vidly"
+}
+
+
+
+
+-> Make sure spelling is correct
+-> in this file we specify the mapping between our application setting and .env variables.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

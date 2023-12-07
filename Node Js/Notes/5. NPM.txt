@@ -1,0 +1,101 @@
+NPM : 
+
+-> NPM Stands for "Node package manager".
+-> We use NPM to download  3rd-party packages from NPM registry.
+->  NPM registry have millions of npm packages that you can download according to your application need.
+-> popular npm packages are express, mongoose, nodemon, dotenv, bcrypt, helmet, joi
+
+// Install a package
+npm i <packageName>
+// Install a specific version of a package 
+npm i <packageName>@<version>
+// Install a package as a development dependency
+npm i <packageName> -dev
+// Uninstall a package
+npm un <packageName>
+// List installed packages 
+npm list —depth=0
+// View outdated packages
+npm outdated
+// Update packages 
+npm update
+
+
+
+Popular NPM Package: 
+
+1. nodemon
+
+Nodemon is used in Node.js projects to automatically restart the server whenever code changes are detected. This makes development more efficient by saving you the time and effort of manually stopping and restarting the server every time you make code modifications.
+if you don't use nodemon then you have to manually restart the server by using command "node server.js".
+
+2. express 
+
+Express is used in Node.js for building web applications and APIs. It simplifies the process of handling routes, requests, and responses, making it easier and faster to create web services and applications.
+
+
+Package.json: 
+-------------
+
+-> Every Node application has a package.json file that includes metadata about the application. This includes the name of the application, its version, dependencies, 
+etc. 
+
+
+{
+  "name": "useme",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "nodemon": "^3.0.1"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "config": "^3.3.9",
+    "debug": "^4.3.4",
+    "express": "^4.18.2",
+    "fawn": "^2.1.5",
+    "helmet": "^7.1.0",
+    "joi": "^17.11.0",
+    "joi-objectid": "^4.0.2",
+    "joi-password-complexity": "^5.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.0.1",
+    "morgan": "^1.10.0"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

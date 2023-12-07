@@ -1,0 +1,7 @@
+Authorization Middleware: 
+------------------------
+
+-> at the beginning of project we decide to protect the routes that can modufy the data and make them availabe only for authneticate user 
+
+-> ex in movie route we have a route to create movie. that route only be called by employee of the store menas by the user.
+-> 

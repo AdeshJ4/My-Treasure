@@ -1,0 +1,94 @@
+-> React component should be pure function 
+-> A pure function should not have any side effects and should return ssame result if the given same inputs.
+-> to make our componet pure we have to keep changes out of reder phase.
+-> There are situatios like we need to store some data in local storage of the browser so we can remeber it in future or we may need to call the server to fetch/save data or we may want to manuaaly modify the DOM elements, none of these situations are about rendering a component, these side effects have nothing to do about returning some JSX Markup.
+-> so where w can implement them ?
+=> That's where useEffect hook comes.
+-> with the effect hook we can tell react to execute a piece of code after a component is rendered.
+
+useEffect (()=>{}, [dependency])
+-> useEffect hook execute a piece of code after a component is rendered.
+
+
+import React, { useEffect, useState } from 'react'
+
+
+
+code : 
+------
+
+
+const MainCompo = () => {
+  const [category, setCategory] = useState('');
+  return(
+    <>
+      <select className='form-select' onChange={(event)=> setCategory(event.target.value)}>
+        <option value=""></option>
+        <option value="Clothing">Clothing</option>
+        <option value="Household">Household</option>
+      </select>
+      <ProductList category={category}/>
+    </>
+  )
+};
+
+const ProductList = ({category}) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(()=>{
+    console.log('Fetching products in ', category);    
+    setProducts(['Clothing', 'Household'])
+  }, [category]);
+
+  return (
+    <>
+      <h1>Products</h1>
+    </>
+  )
+}
+
+
+export default MainCompo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

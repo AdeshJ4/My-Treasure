@@ -1,0 +1,72 @@
+web server:
+----------
+
+-> The primary function of a web server is to deliver web pages on the request to clients
+-> This means delivery of HTML documents and any additional content that may be included by a document, such as 
+	images, style sheets and scripts.
+-> A web server is a computer program or software that runs on a computer and serves web pages over the internet. 
+-> Essentially, it's a program that receives requests from web browsers (like Chrome, Firefox, etc.) and responds 
+	with the appropriate web pages, images, videos, or other content.
+-> When you type a website address in your browser, your computer sends a request to the web server hosting that 
+	website.
+-> The web server then finds the requested content, such as HTML files, images, videos, etc., and sends it back to 
+	your browser as a response.
+
+
+localhost:
+----------
+
+-> In simple terms, localhost is a way to refer to your own computer as if it were a remote server, and it allows 
+	you to run and test web applications locally.
+
+-> Localhost is a term used to refer to the computer that you are currently using.
+-> it is a network interface that allows a computer to communicate with itself.
+-> When you access the localhost on your computer, you are accessing a web server that is installed on your machine.
+-> This web server can be used to run and test web applications locally before deploying them to a live server.
+-> For example, let's say you are developing a website on your computer. You can use the localhost address (typically 
+"http://localhost" or "http://127.0.0.1") in your browser to view the website as if it were live on the internet. 
+This allows you to test and debug the website without making it publicly available.
+
+
+
+web Framework:
+--------------
+
+-> In simple terms, a web framework is a tool that helps developers build web applications more efficiently by 
+	providing pre-built solutions for common tasks and ensuring that the application is secure, scalable, and 
+	maintainable.
+-> Web frameworks typically include a variety of features and tools that are commonly used in web development, such 
+	as routing, database integration, templating engines, and authentication systems.
+-> These tools make it easier for developers to build complex web applications by providing pre-built solutions for 
+	common tasks.
+-> Frameworks typically provide security features such as input validation, CSRF protection, and password hashing, 
+	making it easier for developers to build secure applications.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

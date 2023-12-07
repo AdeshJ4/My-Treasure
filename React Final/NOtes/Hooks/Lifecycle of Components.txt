@@ -1,0 +1,337 @@
+Lifecycle of Components: 
+------------------------
+
+-> Each component in React has a lifecycle which you can monitor and manipulate during its three main phases
+-> The three phases are: Mounting, Updating, and Unmounting.
+
+
+1. Mounting
+
+-> Mounting means putting elements into the DOM.
+-> React has four built-in methods that gets called, in this order, when mounting a component
+
+1. constructor()
+2. getDerivedStateFromProps()
+3. render()
+4. componentDidMount()
+
+-> The render() method is required and will always be called, the others are optional and will be called if you define them.
+
+
+1.constructor : 
+--------------
+
+-> when the component is initiated the constructor() method is the one which called first.
+-> it is the natural place to set up the initial state and other initial values.
+-> props should always be passed to the constructor and also to the React.Component via the super() method.
+-> we write super() in the constructor function which executes the parent component's constructor function, and your component has access to all the functions of the parent component (React.Component).
+
+
+2. getDerivedStateFromProps: 
+----------------------------
+
+-> The getDerivedStateFromProps() method is called right before rendering the element(s) in the DOM
+-> This is the natural place to set the state object based on the initial props.
+-> It takes state and props as an argument, and returns an updated state object.
+
+
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {favoritecolor: "red"};
+  }
+  static getDerivedStateFromProps(props, state) {
+    return {favoritecolor: props.favcol };  // yellow
+  }
+  render() {
+    return (
+      <h1>My Favorite Color is {this.state.favoritecolor}</h1>  // color : yellow
+    );
+  }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Header favcol="yellow"/>);
+
+
+
+3. render()
+-----------
+
+-> The render() method is required, and is the method that actually outputs the HTML to the DOM.
+
+
+
+
+4. componentDidMount(): 
+-----------------------
+
+-> This method only call once. 
+-> The componentDidMount() method is called after the component is rendered.
+-> This is where you run statements that requires that the component is already placed in the DOM.
+
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {favoritecolor: "red"};
+  }
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({favoritecolor: "yellow"})
+    }, 2000)
+  }
+  render() {
+    return (
+      <h1>My Favorite Color is {this.state.favoritecolor}</h1>
+    );
+  }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Header />);
+
+
+
+
+Updating: 
+---------
+
+-> The next phase in the lifecycle is when a component is updated.
+-> A component is updated whenever there is a change in the component's state or props.
+-> React has five built-in methods that gets called, in this order, when a component is updated:
+
+1. getDerivedStateFromProps()
+2. shouldComponentUpdate()
+3. render()
+4. getSnapshotBeforeUpdate()
+5. componentDidUpdate()
+
+-> The render() method is required and will always be called, the others are optional and will be called if you define them
+
+
+1. getDerivedStateFromProps
+
+-> Also at updates phase the getDerivedStateFromProps method is called.
+-> This is the first method that is called when a component gets updated.
+-> This is still the natural place to set the state object based on the initial props.
+-> same ex
+
+
+
+
+2. shouldComponentUpdate: 
+
+-> shouldComponentUpdate() method return a boolean value that specifies whether react should continue with the rendering or not.
+-> the default value is 'true'
+-> but if you set 'false' then when state will change component will not rendered.
+
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {favoritecolor: "red"};
+  }
+  shouldComponentUpdate() {
+    return false;
+  }
+  changeColor = () => {
+    this.setState({favoritecolor: "blue"});
+  }
+  render() {
+    return (
+      <div>
+      <h1>My Favorite Color is {this.state.favoritecolor}</h1>
+      <button type="button" onClick={this.changeColor}>Change color</button>
+      </div>
+    );
+  }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Header />);
+
+
+
+
+3. render()
+-------------
+
+-> The render() method is of course called when a component gets updated, it has to re-render the HTML to the DOM, with the new changes.
+
+
+
+4. getSnapshotBeforeUpdate():
+----------------------------
+
+-> In the getSnapshotBeforeUpdate() method you have access to the previous props and state, meaning that even after the update, you can check what the values were before the update.
+-> Note: If the getSnapshotBeforeUpdate() method is present, you should also include the componentDidUpdate() method, otherwise you will get an error.
+
+class Car extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      age: 20
+    }
+  }
+
+  componentDidMount(){
+    setTimeout(()=>{
+      this.setState({age: 21});
+    }, 2000);
+  }
+
+  getSnapshotBeforeUpdate(prevState, prevProps){
+    console.log('Previous State: ' + prevState);
+  }
+
+  componentDidUpdate(){
+    console.log('Updated State: ' + this.state.age);
+  }
+
+  render(){
+    return(
+      <>
+        <h1>Age: {this.state.age}</h1>
+      </>
+    )
+  }
+}
+
+
+
+
+
+5. componentDidUpdate: 
+
+-> The componentDidUpdate method is called after the component is updated in the DOM.
+
+
+class Car extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      age: 20
+    }
+  }
+
+  componentDidMount(){
+    setTimeout(()=>{
+      this.setState({age: 21});
+    }, 2000);
+  }
+
+  componentDidUpdate(){
+    console.log('Updated State: ' + this.state.age);
+  }
+
+  render(){
+    return(
+      <>
+        <h1>Age: {this.state.age}</h1>
+      </>
+    )
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+Unmounting
+
+-> the next phase in the lifecycle is unmounting.
+-> unmounting means removing component from DOM
+-> React has only one built-in method that gets called when a component is unmounted
+
+
+componentWillUnmount()
+
+-> The componentWillUnmount method is called when the component is about to be removed from the DOM.
+
+
+class Container extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {show: true};
+  }
+  delHeader = () => {
+    this.setState({show: false});
+  }
+  render() {
+    let myheader;
+    if (this.state.show) {
+      myheader = <Child />;
+    };
+    return (
+      <div>
+      {myheader}
+      <button type="button" onClick={this.delHeader}>Delete Header</button>
+      </div>
+    );
+  }
+}
+
+class Child extends React.Component {
+  componentWillUnmount() {
+    alert("The component named Header is about to be unmounted.");
+  }
+  render() {
+    return (
+      <h1>Hello World!</h1>
+    );
+  }
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<Container />);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,5 @@
+1. is it correct that $regex operator is not good for performance and we have to use text index
+
+-> 
+
+

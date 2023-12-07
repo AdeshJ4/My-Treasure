@@ -1,0 +1,656 @@
+-> arrow function don't have their own "this". they used "this" value from their enclosing execution context.
+
+-> In js, there are two ways of defining a function.
+	1. Function Declaration
+	2. Function Expression
+
+1. Function Declaration
+
+-> Normal way of defining a function
+ 
+function intro(){
+	console.log('Function declaration');
+}
+
+
+2. Function Expression
+
+-> storing a function inside a variable like a expression.
+
+const fun1 = function (){
+    console.log('Anonymous Function expression');
+};
+
+const fun2 = function intro(){
+    console.log('Named Function expression');
+};
+
+
+Note: 
+
+const fun = function(){
+	console.log("Hello");
+}
+
+let another = fun;
+
+// both another and fun1 are referencing to same function in memory which is a object in memory because functions are special kind of object.
+
+
+
+
+
+
+-> we can call a function which is define using function decalration syntax before it is defined.
+-> but we can't do that with function expression syntax.
+-> when our js engine excutes this code it moves the all function decalration to the top.
+
+ex. 
+
+walk();
+function walk(){
+	log('walk');
+}
+
+
+================================================================================================================================================
+
+
+JavaScript Hoisting: 
+--------------------
+
+-> Hoisting is JavaScript's default behavior of moving all declarations(function declaration, variable declaration) to the top of the current scope which can be current script or the current function and this done by automatically by js engine.
+
+-> In JavaScript,variables can be used before declaration.
+-> but it is applicable to "var" keyword only, and not for "let" & "const".
+-> if you talked about "let" keyword you have to first declare the let variable then and only then you can use it.
+-> const keyword must be initiallized at the time of declaration.
+-> JavaScript in strict mode does not allow variables to be used if they are not declared.
+
+x = 5;  // initialization
+var x;  // declaration
+
+-> same with function. 
+-> we can call a function which is define using function decalration syntax before it is defined.
+
+walk();
+function walk(){
+	log('walk');
+}
+
+
+================================================================================================================================================
+
+Arguments : 
+-----------
+
+-> we have object called "arguments" which contain all arguments passed to function.
+function fun (){
+    let sum=0;
+    for (let args of arguments){
+        sum += args
+    }
+    // we have object called "arguments" which contain all arguments passed to function.
+    console.log(typeof(arguments));  // object 
+    console.log(arguments.length);  
+    console.log(sum); 
+}
+
+fun(10, 20, 30, 50);
+
+
+================================================================================================================================================
+
+Rest parameters : 
+-----------------
+
+-> The rest parameter allows a function to accept an indefinite number of arguments as an array.
+
+
+
+================================================================================================================================================
+
+Getter and Setter Methods : 
+--------------------------
+
+1. Getter: 
+
+-> we used getter to access properties of an object.
+-> we can access function as a property
+
+2. Setter: 
+
+-> we used setter to change or mutate properties of an object.
+
+const person = {
+  fname: "Adesh",
+  lname: "Jadhav",
+  age: 22,
+  get intro() {
+    return `Name: ${person.fname} ${person.lname}`;
+  },
+
+  set intro(value) {
+    const parts = value.split(" ");
+    this.fname = parts[0];
+    this.lname = parts[1];
+  }
+};
+person.intro = "Akshay Pawade";
+console.log(person.intro);
+
+
+================================================================================================================================================
+
+Default Parameter : 
+-------------------
+
+-> Default parameter are the parameters which are initialized with default values if no value or undefined is passed.
+
+function multiply(a, b = 1) {
+  return a * b;
+}
+console.log(multiply(5, 2));
+// Expected output: 10
+console.log(multiply(5));
+// Expected output: 5
+
+
+================================================================================================================================================
+
+JavaScript try...catch...finally Statement :
+-------------------------------------------
+
+-> The try, catch and finally blocks are used to handle exceptions.
+
+Types of Errors: 
+
+1. Compile-time errors
+
+-> Compile-time errors are the errors that occurred during compilation time.
+-> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the compiler
+->The compiler will not allow to run the program until all the errors are removed from the program.
+ex . 
+compile time errors like you spell variable name wrongly or you forget to end paranthesis, Undefined Variable, Incorrect Function Definition, Missing Import Statement, Incorrect Loop Syntax.
+
+
+
+
+2. Runtime errors
+
+-> The runtime errors are the errors that occur during the execution and after compilation.
+-> These errors are not easy to detect as the compiler does not point to these errors.
+ex. 
+For example,
+calling an invalid function or a variable, 
+errors such as division by zero, 
+determining the square root of a negative number.
+
+Exception: 
+
+-> These errors that occur during runtime are called exceptions
+-> When an error occurs, an exception is thrown, and the normal flow of the program is interrupted
+-> Exception handling allows developers to gracefully manage errors and prevent the program from crashing.
+
+
+
+JavaScript try...catch Statement : 
+
+-> Exception handling allows developers to gracefully manage errors and prevent the program from crashing.
+-> Exception handling contain try - catch - finally
+-> The try...catch statement is used to handle the exceptions. 
+Its syntax is:
+try {
+    // body of try
+} 
+catch(error) {
+    // body of catch  
+}
+
+
+try: 
+
+-> The main code is inside the try block.
+-> we write the code which might throw an exception inside try block .
+-> 
+
+
+catch : 
+
+-> if any error occurs, it goes to the catch block.
+-> we handle exception inside catch block.
+
+
+
+Finally Block:
+
+-> piece of code inside finally block runs regardless of whether an exception is thrown or not
+-> it is used to close the resorces which are opened at the starting of the program.
+
+
+Throwing Exceptions:
+
+You can throw an exception explicitly using the throw statement. This is often done in response to an error condition:
+
+ex
+
+function divide(x, y) {
+  if (y === 0) {
+    throw new Error("Cannot divide by zero");
+  }
+  return x / y;
+}
+
+try {
+  console.log(divide(10, 0));
+} catch (error) {
+  console.error(error.message);
+}
+
+
+Error Objects:
+--------------
+
+JavaScript provides built-in error objects like Error, SyntaxError, TypeError, etc., that can be used to represent different types of errors:
+
+try {
+  throw new SyntaxError("Invalid syntax");
+} catch (error) {
+  console.error(error.name + ": " + error.message);
+}
+
+Custom Errors:
+--------------
+
+Developers can create custom error objects by extending the built-in Error object or one of its subclasses:
+
+
+class CustomError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "CustomError";
+  }
+}
+
+try {
+  throw new CustomError("This is a custom error");
+} catch (error) {
+  console.error(error.name + ": " + error.message);
+}
+
+
+
+=================================================================================================
+
+
+JavaScript Scope : 
+------------------
+
+
+
+-> Scope determines the accessibility (visibility) of variables.
+-> JavaScript has 3 types of scope: 
+	1. Block scope 
+	2. Function scope/ local scope
+	3. Global Scope
+
+
+1. Block Scope
+
+-> Before ES6 (2015), JavaScript had only Global Scope and Function Scope.
+-> ES6 introduced two important new JavaScript keywords: let and const.
+-> These two keywords provide Block Scope in JavaScript
+-> var does not support block scope, it only support function scope;
+function fun() {
+  for(var i=0; i<10; i++){
+    console.log(i);
+  }
+  console.log('Inside a function : ' , i); // i is accessible
+}
+fun();
+console.log('outside a function : ' , i); // i is not accessible
+
+-> Variables declared inside a { } block cannot be accessed from outside the block
+Example: 
+
+{
+  let x = 2;
+}
+// x can NOT be used here
+
+
+
+
+2. Function Scope: 
+
+-> JavaScript has function scope: Each function creates a new scope.
+-> Local variables have Function Scope.
+-> Variables declared within a JavaScript function, become LOCAL to the function
+-> Local variables are created when a function starts, and deleted when the function is completed.
+-> Variables defined inside a function are not accessible (visible) from outside the function.
+-> Function parameters work as local variables inside functions.
+-> Avoid using var keyword because it creates variables that are function scope and not block scope.
+-> Variables declared with var, let and const are quite similar when declared inside a function.
+
+
+function myFunction() {
+  var carName1 = "Volvo";   // Function Scope
+  let carName2 = "Volvo";   // Function Scope
+  const carName3 = "Volvo";   // Function Scope
+
+}
+
+log(carName1); // not assible
+
+
+Note : 
+
+you can't use variable declare inside if block outside a if block;
+ex.
+function fun(){
+if(true){
+	const name = "Adesh";
+}
+log(name) // error
+}
+
+-> same with for loop, while loop.
+
+3. Global Scope: 
+
+-> A variable declared outside a function, becomes GLOBAL.
+-> Variables declared Globally (outside any function) have Global Scope.
+-> Global variables can be accessed from anywhere in a JavaScript program
+-> Variables declared with var, let and const are quite similar when declared outside a block.
+-> Global variables defined with the var keyword belong to the window object
+ex .
+<script>
+var carName = "Volvo";
+// code here can use window.carName
+document.getElementById("demo").innerHTML = "I can display " + window.carName;
+</script>
+
+-> if we have local vaible with the same name as global variable then function will give priority to the local variable whic is define inside it.
+eg
+
+var name = "Adesh";   // global variable
+function fun(){ 
+	var name = "Ram";  // local variable
+	log(name); // Ram if local variable with same name not define then Adesh
+}
+
+fun();
+log(name);  // Adesh
+
+
+
+Automatically Global: 
+
+-> If you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable.
+
+function myFunction() {
+  carName = "Volvo";
+}
+myFunction();
+log(carName); // Volvo
+
+
+-> In "Strict Mode", undeclared variables are not automatically global.
+
+ex. 
+
+"use strict";
+function fun(){
+    x = 5;
+    console.log(x);
+}
+fun()
+console.log(x);  //ReferenceError: x is not defined
+
+
+
+
+The Lifetime of JavaScript Variables:
+-------------------------------------
+
+-> The lifetime of a JavaScript variable starts when it is declared
+-> local  variables are deleted when the function is completed.
+-> In a web browser, global variables are deleted when you close the browser window (or tab).
+
+
+
+
+-> when we used var outside a function, this creates a global variable and attaches that global variable to the window  object in the browser.
+-> so in broswer we have this window object which is a complex object with a lot of properties.and methods.
+-> var keyword attaches variable name to window objct. so if you write window.myName it will log your name.
+eg.
+
+var myName = "Adesh";  // global variable
+window.myName; // write this code inside browser console.
+o/p => Adesh
+
+-> In contrast when we use let keyword to define a global variable that global variable is not attached to the window object.
+-> then why it is bad to attach variable to window object ?
+Your global variables (or functions) can overwrite window variables (or functions).
+Any function, including the window object, can overwrite your global variables and functions.
+
+
+
+
+JavaScript let Vs var : 
+=======================
+
+
+	let							var
+let is block-scoped.					var is function scoped.
+let does not allow to redeclare variables.		var allows to redeclare variables.
+Hoisting does not occur in let.				Hoisting occurs in var.
+Your global variables (or functions) can overwrite window variables (or functions).
+Any function, including the window object, can overwrite your global variables and functions.
+-> when we used var outside a function, this creates a global variable and attaches that global variable to the window  object in the browser.
+-> so in broswer we have this window object which is a complex object with a lot of properties.and methods.
+-> var keyword attaches variable name to window objct. so if you write window.myName it will log your name.
+eg.
+
+
+
+
+
+
+
+this: 
+-----
+
+-> "this" references the object that is executing the current function.
+-> if the that function is part of object we called that function a  method. so if that function is part of that object "this" reference that obj itself.
+-> otherwise if that function is regular function which means it is not part of the object then "this" references to global object which is "window" object in the browser and "global" in node.
+-> in case of constructor function, we all know that we create object using new operator. so new operator create a new empty object like this {} and set "this" to point newly created object.
+
+
+ex
+
+1. function inside obj
+
+const obj = {
+    fname: "Adesh",
+    age: 22,
+    fun(){
+        console.log(this);
+    }
+}
+
+obj.fun();  // here "this" refer to object itself
+
+o/p-> { fname: 'Adesh', age: 22, fun: [Function: fun] }
+
+
+2. separate function
+
+function fun(){
+	console.log(this);		
+}
+
+fun();
+
+o/p-> [object Window]
+
+
+3. Constructor function: 
+
+function Person(fname){
+  this.fname = fname;  // we added new property inside empty object created by new operator.
+  console.log(this);
+}
+
+const p1 = new Person('Adesh');
+
+o/p-> Person { fname: 'Adesh' }
+
+
+
+
+4. callback function: 
+
+const obj = {
+  title: 'A',
+  tags : ['a', 'b', 'c'],
+  showTags(){
+    this.tags.forEach(function(tag){
+      console.log(this, tag);
+    })
+  }
+}
+obj.showTags();
+
+o/p-> 
+Window {window: Window, self: Window, document: document, name: '', location: Location, …} 'a'
+Window {window: Window, self: Window, document: document, name: '', location: Location, …} 'b'
+Window {window: Window, self: Window, document: document, name: '', location: Location, …} 'c'
+
+
+/* 
+"this" from callback function of forEach refer to window/global object.
+why this is happing .
+because that callback function is inside a forEach method and not a inside a obj. so it acts as a regular function
+and in case of regular function "this" refer to global object.
+*/ 
+
+solution : 
+
+const person = {
+  title: 'A',
+  tags : ['a', 'b', 'c'],
+  showTags(){
+    this.tags.forEach(function(tag){
+      console.log(this.title, tag);
+    }, this)  					// ->  }, {fname: "Adesh"});
+  }
+}
+person.showTags();
+
+o/p=> 
+A a
+A b
+A c
+
+/* 
+our forEach method have 2nd parameter which is "thisArg" means we can pass object as a 2nd parameter and "this" will 
+points to that object. but we have our obj which is Person so we don't have to pass extra object. just write "this" as 
+a 2nd parameter . note that showTag() comes under obj so new "this" will not refer to global.
+
+Note : but not all methods will give you ability to pass "this"  as 2nd argument.
+*/ 
+
+solution : 
+
+ex. 1 : using self = this;
+
+const obj = {
+  title: 'a',
+  tags: ['A', 'B', 'C'],
+  showTags(){
+    const self = this;
+    this.tags.forEach((tag)=>{
+      console.log(self.title, tag);
+    })
+  }
+}
+
+obj.showTags();
+
+
+ex.2 : using bind() method
+
+const obj = {
+  title: 'a',
+  tags: ['A', 'B', 'C'],
+  showTags(){
+    this.tags.forEach(function(tag){
+      console.log(this.title, tag);
+    }.bind(this));
+  }
+};
+
+obj.showTags();
+
+
+
+ex. 3 : using arrow function
+
+-> The good thing about arrow function is that they inherit "this" value from containing function in below ex that function is showTags().
+
+const obj = {
+  title: 'a',
+  tags: ['A', 'B', 'C'],
+  showTags(){
+    this.tags.forEach((tag)=>{
+      console.log(this.title, tag);
+    });
+  }
+};
+
+obj.showTags()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,81 @@
+1. $exists: 
+
+-> if you want to know that given field is exists in document or not we use $exists operator.
+-> This operator takes boolean value as a input.
+-> if exists : true then return all documents where that field exists
+-> if false then return you documents that don't have that field.
+
+// Find documents where the "fieldName" exists
+db.collectionName.find({ fieldName: { $exists: true } })
+// Find documents where the "fieldName" does not exist
+db.collectionName.find({ fieldName: { $exists: false } })
+
+db.tb1.find({age: {$exists: true}})
+
+
+2. $type
+
+-> This operator is used to match documents based on the BSON type of a field's value.
+-> BSON (Binary JSON) is the binary-encoded format used by MongoDB to store and exchange data.
+
+-> count all documents whose type is "number" for given field.
+-> this query will return all documents where age is a number.
+db.tb1.find({age: {$type: "number"}})
+
+1 for double
+2 for string
+3 for object
+4 for array
+8 for boolean
+16 for int32
+18 for int64
+
+db.addressBook.find( { "zipCode" : { $type : 1 } } )
+db.addressBook.find( { "zipCode" : { $type : "double" } } )
+
+db.addressBook.find( { "zipCode" : { $type : 2 } } );
+db.addressBook.find( { "zipCode" : { $type : "string" } } );
+
+
+
+3. $expr: 
+
+-> useful when you need to compare fields from the same document or perform more complex comparisons
+-> find all documents where "age" is greater than "target" (both have the same document).
+-> db.tb1.find({$expr: {$eq: ["$age", "$target"]}})
+-> db.tb1.find({$expr: {$ne: ["$age", "$target"]}})
+-> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})
+-> db.tb1.find({$expr: {$lt: ["$age", "$target"]}})
+-> db.tb1.find({$expr: {$gte: ["$age", "$target"]}})
+-> db.tb1.find({$expr: {$lte: ["$age", "$target"]}})
+
+-> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})
+
+
+4. $regex
+
+-> it stands for regular expression
+-> it has a pattern and according to that pattern it finds the documents.
+-> ex. pattern for string that starts with abc or ends with xyz or have mno in between text.
+-> it is not good for performance. instead use "text index".
+-> Regular expression queries without an index can be resource-intensive and may not scale well as the 
+dataset grows.
+
+1. Find documents where "fieldName" starts with "abc" or "ABC" (case-insensitive)
+-> db.t1.find({name: {$regex: /^abc/i}});
+
+2. Find documents where "fieldName" contains "xyz" or "XYZ" anywhere in the string (case-insensitive)
+-> db.t1.find({name: {$regex: /xyz/i}})
+
+3. Find documents where "fieldName" ends with "xyz" (case-insensitive)
+-> db.tb1.find({name: {$regex: /xyz$/i}})
+
+4. Find documents where "fieldName" contains the whole word "word" (case-insensitive)
+-> db.tb1.find({name: {$regex: /\bword\b/i}})
+
+5. Find documents where "fieldName" does not contain "123" (case-insensitive)
+-> db.tb1.find({name: {$not: /123/i}})
+
+
+
+

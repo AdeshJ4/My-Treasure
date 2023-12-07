@@ -1,0 +1,14 @@
+const ages = [31, 54, 21, 18, 17, 16];
+
+const passCandidates = ages.filter(checkAge);
+
+function checkAge(candidate, index, arr) {
+  console.log(candidate, index, arr);
+  return candidate >= 18;
+}
+
+console.log("pass candidates: ", passCandidates);
+
+
+
+

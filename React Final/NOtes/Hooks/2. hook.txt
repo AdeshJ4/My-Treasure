@@ -1,0 +1,83 @@
+React Hook:
+-----------
+
+What is a Hook?
+---------------
+
+-> Hooks are reusable functions.
+
+-> Hooks were added to React in version 16.8.
+
+-> Hooks allow function components to have access to state and other React features like managing state, side effects, and lifecycle events . 
+
+-> Because of this, class components are generally no longer needed. Although Hooks generally replace class components, there are no plans to remove classes from React.
+
+
+For example, useState lets you add state to functional components, useEffect handles side effects like data fetching or subscriptions, and useContext allows accessing the context of your application. These hooks make it easier to organize and share logic across components, promoting a more functional and modular code structure."
+
+
+
+You must import Hooks from react.
+---------------------------------
+
+Hook Rules
+There are 3 rules for hooks:
+
+Hooks can only be called inside React function components.
+Hooks can only be called at the top level of a component.
+Hooks cannot be conditional
+Note: Hooks will not work in React class components.
+
+
+
+
+
+
+
+Notes from Mosh :
+
+1. React updates state asynchronously means not immediatly.
+-> when event handler completes its excution then only state updated.
+-> This is for performance reason. because as part of handling an event we could set multiple state variable.and if every time we called set Function react rernder our component and we will end up to many rerenders this is unnecessory so for performane reason reacts taks all state variables and uopdates patches them at later time after event handler completes its execution. so at that time point  react applies all the update at once.and then it will rernder our componentwith updated state.
+
+-> Ex. 
+
+const [color, setColor] = useState("Red");
+// event handler
+const updateColor = () => { 
+  setColor(color: "Blue");
+  console.log(color) ;  // Red
+} // after completion of an event handler changes applied.
+console.log(color) ; // Blue
+
+
+2. State is stored outside of a function.
+----------------------------------------
+-> we used local variables to store values in a function and update that local variable with updated value.
+-> when our function completed its excution then all the local varibles he created will be removed from memory and hence our data will be lost.
+-> this is the reason why useState hook store state outside of a component.
+-> Somewhwer react is going to store all the state variables for this componentand it will automatically reamove those 	 varivales when this component is no loger visble to screen.
+
+
+3. Use hooks at the top level of your component.
+------------------------------------------------
+ex> 
+
+const Fun = () => {
+	const [num, setNum] = useState(true);
+	const [name, setName] = useState(false);
+	return ();
+	
+}
+
+Using hooks at the top level of your component ensures that they are called in the same order on every render, maintaining consistent behavior and avoiding unexpected issues
+
+-> the names(num, name) here we use are just local identifier in this component function, react is not aware of them.
+-> when we use useState hook we are telling react hey i need to store two boolean values react is not aware of these names.
+-> so somewhere react is going to store values most likely inside a arraylike this. -> [true, false]
+-> so the next time react rerender our component is going to look at this array is going to grab the first element and stored it  value inside this first variable.
+-> so react depends on the order of this elements in array and map these values properly to local varibales in this function.and tat meanse we can't use hooks inside for loop, while loop etc.beacuse if we does then it will impact order in which the state hook is called.
+so to insure  the consistant order we can only call state hook at the top level of our component.
+
+
+

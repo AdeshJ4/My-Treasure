@@ -1,0 +1,37 @@
+1. $and
+
+-> This operator return documents if the conditions specified inside an array are all true.
+-> in $and operator we have array of conditions.
+-> The $and operator is used to combine multiple conditions, and there is no strict limit on the number of 
+conditions you can include.
+db.tb1.find({$and: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
+db.tb1.find({id: 101, name: "Adesh", age: 21})
+
+
+2. $or : 
+
+-> This operator return documents if at least one of the specified condition inside an 
+array are true.
+-> in $or operator we have array of conditions.
+-> The $or operator is used to combine multiple conditions, and there is no strict limit on the number of 
+conditions you can include.
+db.tb1.find({$or: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
+
+
+
+3. $not: 
+
+-> This operator invert the result of an query.
+-> If you query a collection:  like db.tb1.find({age: {$eq: 20}}) it will return you all documents where 
+age = 20. but if you add $not operator like db.tb1.find({age: {$not: {$eq: 20}}}) then it will give you all 
+documents where age is not equal to 20.
+-> Not use often.
+-> db.tb1.find({runtime: {$not: {$eq: 60}}})  ===  db.tb1.find({runtime: {$ne: 60}})
+
+
+
+4. $nor: 
+
+-> This operator return documents that do not match any of the specified conditions.
+-> db.tb1.find({$nor: [{id: 101}, {name: "Adesh"}, {age : 21}]})
+-> the documents except having id 101, name = "Adesh", age = 21 all documents will returned.

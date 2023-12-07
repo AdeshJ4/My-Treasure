@@ -1,0 +1,9 @@
+screen shots =>   	window + shift+ s  
+Scrren Recording  => 	Window + Alt + R     Window + G (list of recordings)
+voice Typing	  => 	Window + H
+Refresh drivers   => 	window + ctrl+ shift + b
+
+
+
+
+

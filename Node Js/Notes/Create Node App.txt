@@ -1,0 +1,8 @@
+Step 1: create folder for project
+Step 2: Enter Inside Project
+Step 3: Open Terminal
+Step 4: Write: "npm init"
+Step 5: answer basic questions or press enter for each question. 
+
+
+

@@ -1,0 +1,161 @@
+JavaScript try...catch...finally Statement :
+-------------------------------------------
+
+-> The try, catch and finally blocks are used to handle exceptions.
+
+Types of Errors: 
+
+1. Compile-time errors
+
+-> Compile-time errors are the errors that occurred during compilation time.
+-> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the compiler
+->The compiler will not allow to run the program until all the errors are removed from the program.
+ex . 
+compile time errors like you spell variable name wrongly or you forget to end paranthesis, Undefined Variable, Incorrect Function Definition, Missing Import Statement, Incorrect Loop Syntax.
+
+
+
+
+2. Runtime errors
+
+-> The runtime errors are the errors that occur during the execution and after compilation.
+-> These errors are not easy to detect as the compiler does not point to these errors.
+ex. 
+For example,
+calling an invalid function or a variable, 
+errors such as division by zero, 
+determining the square root of a negative number.
+
+Exception: 
+
+-> These errors that occur during runtime are called exceptions
+-> When an error occurs, an exception is thrown, and the normal flow of the program is interrupted
+-> Exception handling allows developers to gracefully manage errors and prevent the program from crashing.
+
+
+
+JavaScript try...catch Statement : 
+
+-> Exception handling allows developers to gracefully manage errors and prevent the program from crashing.
+-> Exception handling contain try - catch - finally
+-> The try...catch statement is used to handle the exceptions. 
+Its syntax is:
+try {
+    // body of try
+} 
+catch(error) {
+    // body of catch  
+}
+
+
+try: 
+
+-> The main code is inside the try block.
+-> we write the code which might throw an exception inside try block .
+-> 
+
+
+catch : 
+
+-> if any error occurs, it goes to the catch block.
+-> we handle exception inside catch block.
+
+
+
+Finally Block:
+
+-> piece of code inside finally block runs regardless of whether an exception is thrown or not
+-> it is used to close the resorces which are opened at the starting of the program.
+
+
+Throwing Exceptions:
+
+You can throw an exception explicitly using the throw statement. This is often done in response to an error condition:
+
+ex
+
+function divide(x, y) {
+  if (y === 0) {
+    throw new Error("Cannot divide by zero");
+  }
+  return x / y;
+}
+
+try {
+  console.log(divide(10, 0));
+} catch (error) {
+  console.error(error.message);
+}
+
+
+Error Objects:
+--------------
+
+JavaScript provides built-in error objects like Error, SyntaxError, TypeError, etc., that can be used to represent different types of errors:
+
+try {
+  throw new SyntaxError("Invalid syntax");
+} catch (error) {
+  console.error(error.name + ": " + error.message);
+}
+
+Custom Errors:
+--------------
+
+Developers can create custom error objects by extending the built-in Error object or one of its subclasses:
+
+
+class CustomError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "CustomError";
+  }
+}
+
+try {
+  throw new CustomError("This is a custom error");
+} catch (error) {
+  console.error(error.name + ": " + error.message);
+}
+
+
+
+
+
+========================================================================================
+
+
+final ex: 
+
+
+
+const obj = {
+  fname: "Adesh",
+  lname: "Jadhav",
+  get fullName() {
+    console.log(`name: ${this.fname} ${this.lname}`);
+  },
+  set fullName(val) {
+    if (typeof val !== "string") throw new Error("Value is not a string");
+
+    const parts = val.split(" ");
+
+    if (parts.length !== 2) throw new Error("fname anf lname both imp");
+
+    this.fname = parts[0];
+    this.lname = parts[1];
+  },
+};
+
+
+try{
+    obj.fullName = 1;
+}catch(e){
+    console.log(e.message);
+}finally{
+    console.log('Closing all the resources..');
+}
+
+
+
+

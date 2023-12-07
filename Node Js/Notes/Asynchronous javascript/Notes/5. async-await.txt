@@ -1,0 +1,68 @@
+-> async-await are nothing but syntatically sugar over the promise.
+-> "async and await make promises easier to write"
+-> async makes a function return a Promise
+-> await makes a function wait for a Promise
+
+-> we write 'async' keyword before a function whicjh is going to return promise.
+-> The await keyword can only be used inside an async function.
+-> The await keyword makes the function pause the execution and wait for a resolved promise before it continues:
+
+
+
+
+
+
+Example: 
+--------
+async function myFunction() {
+  return "Hello";
+}
+
+Is the same as:
+---------------
+function myFunction() {
+  return Promise.resolve("Hello");
+}
+
+
+myFunction()    
+    .then((res)=>console.log(res))
+    .catch((err)=>console.log(err.message))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

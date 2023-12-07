@@ -1,0 +1,158 @@
+Understaning the strict Mode: 
+----------------------------
+
+code : 
+
+example of impure function: 
+-------------------------
+
+Fun.js:
+------
+let count = 0;
+const Fun = () => {
+  count++;
+  return(
+    <>
+      <h1>Count: {count}</h1>
+    </>
+  )
+}
+
+
+App.js:
+-------
+const App = () => {
+  return (  
+    <>
+	// three instances of Fun component
+      <Fun />
+      <Fun />
+      <Fun />
+    </>
+  );
+};
+
+output: 
+-------
+Count: 2
+Count: 4
+Count: 6
+
+
+expected result was: 
+Count: 1
+Count: 2
+Count: 3
+
+
+why this happen ? 
+-----------------
+
+-> if you head over to main.js then you see the following code : 
+
+code: 
+-----
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);
+
+
+-> our App component is wrapped inside StrictMode component in react.
+-> This is built in component in react that doesn't have visual representation its only there to catch potential errors.
+-> One of the potential error is impure component.
+-> So when strit mode is enable in development react renders each component twice that is why instead of count 1,2,3
+we get count 2,4,6.
+
+<Fun /> count 1  -> for detecting & reporting potential errors
+        count 2	 -> for updating UI
+<Fun /> count 3
+        count 4
+<Fun /> count 5
+        count 6
+
+-> so in this case react renders each <Fun /> component twice and takes result od second render.
+-> The first render is used primarily for detecting and reporting potential issues with our code. while the 2nd render is used to actally updates UI. that is why we don't see count 1,2,3
+-> from React 18 strict mode is on by default so react render each component twice.
+-> strict mode only behaves like this in development mode.
+-> so when we build our application for production we will teurn off strict mode.
+
+
+ex.
+
+code: 
+-----
+
+Fun.js:
+------
+let count = 0;
+const Fun = () => {
+  console.log("Count called : ", count);
+  count++;
+  return(
+    <>
+      <h1>Count: {count}</h1>
+    </>
+  )
+}
+
+
+App.js:
+-------
+const App = () => {
+  return (  
+    <>
+      <Fun />
+    </>
+  );
+};
+
+output: 
+-------
+Count: 2
+
+console output window: 
+----------------------
+Count called :  0(clearly visible)			fun.jsx:4
+Count called :  1(visible in grey color)		installHook.js:1  
+
+
+2nd console message came from strict mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

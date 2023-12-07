@@ -1,0 +1,624 @@
+-> Objects are collections of key value pair written inside {}.
+-> if we have properties which are highly related then we can encapsulate them inside object.
+-> main purpose of object is to grouped related properties.
+
+
+const person = {
+    fname: "Adesh",
+    age: 22,
+    location: {
+        street: "lohegaon"
+    },
+    intro(){  // we are calling draw method of person object 
+        console.log(`fname: ${this.fname}`);
+    }
+}
+
+person.intro()
+
+
+
+
+================================================================================================================
+
+
+there are different ways to create objects: 
+
+1. factory function
+2. constructor function
+
+
+
+Factory Function :
+-------------------
+
+-> just like factory producing products this factory function produce objects
+-> the beauty of factory function is that we define our logic in one place. so we can call this function with different values we will get diiferent person objects but we have define intro method only in one place.
+-> so if there is bug in future then we have single place to modify.
+-> in factory function we used built in constructor function called 'Object()' to create objects beacuse we used object literal syntax(eg. const x = {}).
+eg. const x = {}  // this line converted to -> const x = new Object();
+
+function createPerson(fname, age) {
+    return {
+        id: 101,
+        fname, // if our key and value are same then we can make our code shorter  by writing only key
+        age,
+        intro(){
+            console.log(`Name: ${this.fname} Age: ${this.age}`);
+        }
+    }
+}
+
+const person1 = createPerson('Adesh', 22);
+person1.intro();
+const person2 = createPerson('Akshay', 23);
+person2.intro();
+
+
+
+
+Constructor Funtion: 
+--------------------
+
+-> job of constructor function is to construct or create an object.
+-> "this" is reference to the object that is excuting this piece of code.
+-> In javascript objects are dynamic. once we create them we can add additional properties or can remove properties.
+-> new keyword creates empty js object. next "this" keyword points to newely created object. and insert all properties inside that newly created object. finally "new" keyword return newly created object from constructor function.
+
+function Person(fname, age){
+    this.fname = fname,
+    this.age = age,
+    this.intro = function(){
+        console.log(`Name: ${fname} Age: ${age}`);
+    }
+}
+
+const p1 = new Person("Adesh", 22)
+p1.intro()
+console.log(p1.fname);
+
+
+=============================================================================================================================
+
+
+Dynamic Nature of Objects
+-------------------------
+
+-> you can add or remove properties after creating object thats why objects are dynamic in nature.
+
+-> Ex.
+
+const person = {};
+
+// Add the properties
+person.fname = "Adesh";
+person.intro = function(){
+    console.log('Hello');
+}
+
+// remove properties
+delete person.fname;
+delete person.intro;
+
+
+=============================================================================================================================
+
+
+
+Constructor Property:  refer video -> Object -> 5.5- Constructor Property
+---------------------
+
+-> Every object in js have property called "constructor".
+-> and that references the function that was used to construct or create an object. 
+-> if we talk about factory function then it returned : f Object()
+-> son in factory function we used built in constructor function called 'Object()' to create objects beacuse we used object literal syntax(eg. const x = {}).
+eg. const x = {}  // this line converted to -> const x = new Object();
+-> also we have another constructors.
+-> new String(); but we used string literal which are '', "", ``
+
+
+=============================================================================================================================
+
+
+
+
+
+Functions are Objects: 
+-----------------------
+
+-> In JavaScript, the `typeof` operator returns the type of a variable or expression. 
+-> When you use `typeof` with a function, it returns `'function'`, indicating that the value is a function.
+-> in JavaScript, functions are a special kind of object. 
+-> While they are functions, they also have properties and methods like objects. 
+-> Specifically, functions in JavaScript are instances of the `Function` object.
+-> when we declare a function using constructor function or factory function internally js engine will use "Function()" constructor which is built in contructor to create a object
+
+// constructor function
+function Person(fname, age) {
+	this.fname = fname,
+	this.age = age,
+	this.intro = function () {
+		console.log(`Name: ${fname} Age: ${age}`);
+  	};
+}
+
+// above code is equvalent to following code 
+// using Function() constructor
+
+const Person = new Function('fname', 'age', `
+    this.fname = fname;
+    this.age = age;
+    this.intro = function (){
+        console.log('Name: '  + fname + ' Age: ' + age );
+    }
+`);
+
+const p1 = new Person('Adesh', 22);
+
+
+-> when we declare a function using constructor function or factory function internally js engine will use "Function()" constructor which is built in contructor to create a object
+
+Ex. 
+
+// constructor function
+function Person(fname, age) {
+  (this.fname = fname),
+    (this.age = age),
+    (this.intro = function () {
+      console.log(`Name: ${fname} Age: ${age}`);
+    });
+}
+
+// factory function
+function createPerson(fname, age) {
+  return {
+    fname,
+    age,
+    intro() {
+      console.log(`Name: ${this.fname} Age: ${this.age}`);
+    },
+  };
+}
+
+const p1 = new Person("Adesh", 22);
+const p2 = createPerson('Akshay', 21)
+console.log(Person.name);  // Person
+console.log(Person.length);  // 2 (no of parameters)
+console.log(Person.constructor);       // f Function() { [native code] }  // constructor function
+console.log(createPerson.constructor); // f Function() { [native code] }  // factory function
+console.log(p1.constructor); // f Person(fname, age) {code}  // object created with constructor function
+console.log(p2.constructor); // f Object() { [native code]}  // object created with factory function
+
+
+===========================================================================================================================
+
+
+
+
+What is the difference between call() apply() & bind() ?
+
+
+1. call()
+
+-> The call() method calls the function directly and sets "this" to the first argument passed to the call method and subsequent arguments are passed to the function as individual parameters.
+-> NOTE: The call method doesn’t return a new function.
+
+Ex.1
+
+function test(arg1, arg2){
+  console.log(this.num, arg1, arg2); // 100, 10, 20
+}
+
+test.call({num: 100}, 10, 20);
+
+Ex.2
+
+const person = {
+  fullName: function (city, country) {
+    console.log(
+      this.firstName + " " + this.lastName + ", " + city + ", " + country
+    );
+  },
+};
+
+const john = {
+  firstName: "John",
+  lastName: "Doe",
+};
+
+person.fullName.call(john, "New York", "USA");
+// Output: John Doe, New York, USA
+
+
+
+2. Apply() Method: 
+
+-> The apply() method calls the function directly and sets this to the first argument passed to the apply method
+-> it takes an array of elements as the second argument, where each element of the array corresponds to an argument passed to the function.
+-> In the apply method, we pass arguments in the form of an array this is only the primary difference between call and apply.
+
+
+ex.1
+
+const sum = function(a, b, c) {
+  return a + b + c;
+};
+
+const result = sum.apply(null, [1, 2, 3]);
+console.log(result); // Output: 6
+
+
+
+ex.2
+  
+let PrintName = { 
+    name: "steve", 
+    sayHi: function (...age) {  // rest parameter
+        console.log(this.name + " age is " + age); 
+    } 
+} 
+PrintName.sayHi.apply({name: "Tony"}, [42]);
+
+
+
+3. bind() method :
+
+-> The bind() method creates a new function and when that new function is called it set this keyword to the first argument which is passed to the bind method and subsequent arguments are passed to the function as individual parameters.
+
+
+const greet = function (message) {
+  console.log(message + " " + this.name);
+};
+const person = {
+  name: "John",
+};
+const greetJohn = greet.bind(person, "Hello");
+greetJohn(); // Output: Hello John
+
+
+
+===========================================================================================================================
+
+
+
+explain pass by value or pass by reference.
+
+-> "Copied by value" and "copied by reference" refer to the way values are assigned and passed between variables in programming languages. 
+-> Note:
+	In JavaScript, primitive types (like numbers, strings) are copied by value, while objects and arrays are copied by reference.
+	Functions in JavaScript are references, but their behavior is more complex and involves both value and reference aspects.
+
+
+
+1. Copied by Value:
+-> primitive are copied by their value.
+-> suppose we have two variables.
+-> let x = 10; let y = x;
+-> both x and y are independent of each other, they don't have any relation with each other.
+-> the main point is that we store/copied the value and not a reference of x inside y.
+->  so if any changes made either in x or y will not afffect thr other varible.
+
+-> ex.1
+let a = 5;
+let b = a;  // Copied by value
+b = 10;    // Changing b does not affect a
+console.log(a);  // Output: 5
+console.log(b);  // Output: 10
+
+ex.2
+let num = 10;
+function cal1(num) { // local variable
+  num++;
+}
+cal1(num); // primitive types are pass by value, both variables are different
+console.log(num);
+
+
+
+
+2. Copied by Reference:
+
+-> Objects are copied by their references.
+-> same example as above.
+-> suppose we have two vaiables.
+-> let x = {value:10} let y = x;
+-> when we stored a object inside a variable, that object is not going to store inside a variable.
+-> that object is store somewhere in memory. and address of that memory location is stored inside that variable.
+-> when we copied x into y (y = x), its the address or the reference which is copied and not a object.
+-> In other word both x and y pointing to the same object in memory.
+-> and when we modify that object using either x or y the cahnges are immediatly visibl to other variable.
+
+
+ex.1
+
+let obj1 = { value: 5 };
+let obj2 = obj1;  // Copied by reference
+obj2.value = 10;  // Changing obj2 affects obj1
+console.log(obj1.value);  // Output: 10
+console.log(obj2.value);  // Output: 10
+
+
+ex.2
+
+let obj = {value: 10};
+function cal2(obj){ // local object/variable
+    obj.value++;
+}
+cal2(obj);
+console.log(obj.value); //  reference type are pass by reference, both variable points to same obj in memory.
+
+
+
+
+===========================================================================================================================
+
+
+
+Enumerating Properties of an Object
+-> so the simplest way to enumerate the properties of an object is using for in loopbut we can also use for of loop along with Object.key(),  Object.entries()
+-> Objects are not iterable so we can't use "for of" loop, we have to use "for in" loop for objects.
+-> but we can use "Object.keys(obj)" method which will return string array which is iterable inside a for of loop.
+-> we have other similar method, Object.entries(obj), instead of returning keys as a string array it return each key value pair as an array.
+-> we know that "Object()" is built in constructor function. and in js all functions are specail kind of objects so they have properties and methods that we can access.
+-> somewhere we have constructor function like this 
+	function Object(){
+		code;
+	}
+-> and whenvwe we create object using object literal syntax (let x = {}) internally that is translated into a call to constructor function (function Object(){})
+-> so when we create a object using a object literal syntax -> let x = {value: 10} -> internally that is translated to call to this Object constructo functionso that look like this : 
+
+let x = {value: 10}  <===> const x = new Object();
+
+
+
+ex.
+
+const obj = {
+    fname: 'Adesh',
+    lname: "Jadhav",
+    age: 22
+}
+
+
+for (let key in obj){
+    console.log(key, obj[key]);
+}
+//o/p:
+// fname Adesh
+// lname Jadhav
+// age 22
+
+for (let key of Object.keys(obj)){
+    console.log(key);
+}
+//o/p:
+// fname
+// lname
+// age
+
+for (let entry of Object.entries(obj)){
+    console.log(entry);
+}
+//o/p:
+// [ 'fname', 'Adesh' ]
+// [ 'lname', 'Jadhav' ]
+// [ 'age', 22 ]
+
+
+// check given property is obj or not use in opearator
+if('fname' in obj) console.log('yes'); //yes
+
+
+
+
+
+=======================================================================================================================================================================================
+
+
+Cloning an Object: 
+------------------
+
+
+1. using assign() method: 
+
+-> Copy the values from one or more source objects to a target object. Returns the target object.
+
+const obj1 = {
+    fname: "Adesh",
+    lname: "Jadhav",
+    age : 22
+}
+const obj2 = {
+
+    address:{
+        city: 'Pune',
+        country: 'India'
+    }
+}
+
+const another = Object.assign({fname: "Akshay"}, obj1, obj2);
+console.log(another);
+
+
+
+
+2. using for in 
+
+const obj1 = {
+    fname: "Adesh",
+    lname:"Jadhav"
+}
+const another = {};
+for (let key in obj1){
+    another[key] = obj1[key];
+}
+console.log(another);
+
+
+
+3. using spread operator
+
+const obj1 = {
+    fname: "Adesh",
+    lname:"Jadhav"
+}
+const another = {...obj1};
+console.log(another);
+
+
+
+=======================================================================================================================================================================================
+
+
+Garbage collection: 
+-------------------
+
+-> in low lwvwl languages like c, c++ when creating an object we need to aloocate memory to it and when ew are done we have to deallocate mememry.
+-> But in javascript we don't have this concept 
+-> we can easly create object. at the time of initialize the object the memory is automatially allocate to this object.
+-> our js engine have what we called "garbage collector" 
+-> the job of garbage collector is to find variables or constants that are no longer use and then deallocate the memory that are allocate them early.
+-> memory allocation and deallocation happen automatically behind the scene and we don't have control ove it.
+
+
+
+=======================================================================================================================================================================================
+
+
+
+Math Object: 
+------------
+
+-> 
+
+
+
+
+
+
+String 
+------
+
+-> In js we have two kinds of string
+const msg = "Hii" // string primitive  -> typeof is string
+const msg = new String("Hii"); // String Object  ->  typeof is object
+-> when we use dot notation with string primitive js engine internallly wrap this string object.
+
+
+
+
+ex.
+
+const msg = "Adesh Jadhav";
+
+console.log(msg.length); // 12
+console.log(msg[0]);  // A
+console.log(msg.includes('Adesh')); // true
+console.log(msg.startsWith('Adesh'));  // true
+console.log(msg.endsWith('Jadhav'));  // true
+console.log(msg.indexOf('desh'));  // 1
+const newMsg = msg.replace('Jadhav', 'Kumar');  // return new string and does not modify original one
+console.log(msg.toUpperCase());
+console.log(msg.toLowerCase());
+console.log(msg.trim());  // remove of all white space before and after msg
+console.log(msg.trimStart());
+console.log(msg.trimEnd());
+console.log(msg.split(',')); // Split a string into substrings using the specified separator and return them as an array.
+console.log(msg.charAt(0));  // return the character at specified index
+// return section of string
+console.log(msg.slice(0, 5)); // Adesh
+console.log(msg.slice(0));  // return whole string
+console.log(msg.concat(" achoo")); // does not change original string
+console.log(msg);
+
+
+
+=======================================================================================================================================================================================
+
+
+
+
+
+
+// constructor function
+function Location(street, city, zipCode) {
+  // Function()
+  (this.street = street),
+    (this.city = city),
+    (this.zipCode = zipCode),
+    (this.address = function () {
+      console.log(`${street}`);
+    });
+}
+
+const p1 = new Location("lohegaon", "pune", 411047);
+const p2 = new Location("lohegaon", "pune", 411047);
+const p3 = new Location("wagholi", "mumbai", 415716);
+
+function areEqual(p1, p2) {
+  // check if two objects are equal by comparing properties of objects
+  // if all properties of these objects are equal or not
+  return (
+    p1.street === p2.street && p1.city === p2.city && p1.zipCode === p2.zipCode
+  );
+}
+
+function areSame(p1, p2) {
+  // to check two variables are referencing/pointing the same object we use strick equality operator.
+  return p1 === p2;
+}
+
+console.log(areEqual(p1, p2));
+console.log(areSame(p1, p2));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,76 @@
+Main website : https://rawg.io/games/action
+
+
+Intro to the project:
+---------------------
+-> we are going to build video game discovery app 
+-> This is mini version of rawg website which is popular video game discovery application
+-> In our application we have several useful features 
+1. we can toggle between dark and light mode.
+2. we can serch for games in serach bar
+3. we can filter games by game genres
+4. As the games and genres are loading we can see loading skeleton for games and genres.
+5. We can also filter by platforms like PC, playStation, XBOX, Androis
+6. we can sort the games by name, ppularity, average rating, release date
+
+
+
+Tools and libraries: 
+--------------------
+For creating the project i have used vite version "vite": "^4.3.9".
+For styling a application i have used chakra-ui library version "@chakra-ui/react": "^2.8.0",
+
+
+
+
+
+Creating responsive layout : 
+---------------------------
+
+-> for creating reponsive layout we have used 'Grid' component of charkra UI library which workds as the same as HTML Grid.
+-> 
+
+
+
+
+
+Fetching the games from rawg api
+--------------------------------
+
+-> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

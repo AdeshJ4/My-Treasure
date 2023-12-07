@@ -1,0 +1,33 @@
+1. Delete Database: 
+
+-> db.dropDatabase();
+
+
+2. Delete collection
+
+-> db.tb1.drop();
+
+
+3. Delete First document
+
+-> db.tb1.deleteOne({});
+
+
+4. Delete All documents
+
+-> db.tb1.deleteMany({});
+
+
+5. Delete One Document according to condition
+
+-> db.tb1.deleteOne({_id: 101});
+
+
+6. Delete All Documents according to condition
+
+-> db.tb1.deleteMany({age: {$gt: 20}});
+-> db.tb1.deleteMany({age: {$exists: true}});
+
+
+
+delete

@@ -1,0 +1,96 @@
+cascading is applying styles in order from top to bottom.
+
+1. If you have applied different property values to the same property in different areas of your CSS, the last property value will be rendered.
+ex: 
+
+h2{
+    font-size: 40px;
+}
+h2{
+    color: green;
+}
+h2{
+    color: red;
+}
+
+-> The last "color: red" property will be applied.
+
+
+
+
+
+
+
+What is the Cascade?
+
+-> The cascade is how the browser determines what styles to apply to a particular element. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

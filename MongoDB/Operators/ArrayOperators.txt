@@ -1,0 +1,171 @@
+
+// Operators to work with array : 
+
+1. $all :
+2. $elemMatch
+3. $size
+
+data: 
+
+[
+  {
+    _id: ObjectId("65658eeb0cea2748b06400af"),
+    name: 'Max',
+    hobbies: [
+      { title: 'Sports', frequency: 3 },
+      { title: 'Cooking', frequency: 6 }
+    ],
+    phone: 131782734
+  },
+  {
+    _id: ObjectId("65658eeb0cea2748b06400b0"),
+    name: 'Manuel',
+    hobbies: [
+      { title: 'Cooking', frequency: 5 },
+      { title: 'Cars', frequency: 2 }
+    ],
+    phone: '012177972',
+    age: 30
+  },
+  {
+    _id: ObjectId("65658eeb0cea2748b06400b1"),
+    name: 'Anna',
+    hobbies: [
+      { title: 'Sports', frequency: 2 },
+      { title: 'Yoga', frequency: 3 }
+    ],
+    phone: '80811987291',
+    age: null
+  },
+  {
+    _id: ObjectId("65658eeb0cea2748b06400b2"),
+    name: 'Chris',
+    hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
+  }
+]
+
+
+Note : You can access array elements like objects means using dot notation.
+eg. db.tb1.find({'hobbies.title': {$eq: 'Sports'}});
+
+
+
+
+1. $all :
+---------
+
+-> $all operator used on the array.
+-> This operator return documents if the value of given field contains all the specified values in an array.
+-> Find products that have both "Intel Processor" and "256GB SSD" features
+Note that the field "features" may contain others properties also but we are mainly searching for above two values.
+-> order of elements doesn't matter.
+
+ex. 1
+I/P: 
+{
+    _id: 1,
+    productName: 'Laptop',
+    features: [ 'Intel Processor', '8GB RAM', '256GB SSD' ]
+}
+Query : db.tb1.find({features: {$all : ["Intel Processor", "256GB SSD"]}});
+
+ex.2 if arrays contain nested elements 
+I/P
+{
+    _id: 1,
+    productName: "Laptop",
+    features: [
+      { name: "Processor", value: "Intel" },
+      { name: "RAM", value: "8GB" },
+      { name: "Storage", value: "256GB SSD" }
+    ]
+  },
+
+
+Query: db.tb1.find({features: {$all: [{ name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" }]}})
+
+
+=============================================================================================================
+
+
+2. $elemMatch
+
+-> This operator return documents if array element satisfy the condition specify by the $elemMatch operator.
+-> $elemMatch works on array.
+
+ex.1:
+
+I/P: 
+{
+  "_id": 1,
+  "name": "Alice",
+  "grades": [85, 90, 88]
+}
+{
+  "_id": 2,
+  "name": "Bob",
+  "grades": [92, 87, 95]
+}
+
+Query: 
+find user who has grade above 91;
+-> db.tb1.find({grades: {$elemMatch: {$eq: 91}}})
+
+
+ex.2
+
+I/P: 
+  {
+    _id: 1,
+    productName: "Laptop",
+    features: [
+      { name: "Processor", value: "Intel" },
+      { name: "RAM", value: "8GB" },
+      { name: "Storage", value: "256GB SSD" }
+    ]
+  },
+
+-> db.find({features: {$elemMatch: {$and: [{name: 'Processor', value: 'Intel'}, {name: 'RAM', value: '8GB'}]}}})
+  -> db.tb1.find({features: {$elemMatch: {name: 'Processor', name: 'Intel'}}})
+
+Query: 
+
+-> give me products which has processor of Intel and RAM of 8GB.
+db.t1.find({
+  features: {
+    $elemMatch: {
+      $and: [
+        { name: "Processor", value: "Intel" },
+        { name: "RAM", value: "8GB" }
+      ]
+    }
+  }
+})
+
+-> Give me products which has processor of 'Intel'
+db.t1.find({
+    features: {
+        $elemMatch: {
+            name: 'Processor',
+            value: 'Intel'
+        }
+    }
+})
+
+
+
+=============================================================================================================
+
+
+
+3. $size: 
+---------
+-> the size operator returns the documents if the given array field has the same length size to that value 
+specified in size operator.
+-> size operator only takes number and not another document with operator.
+eg. find({hobbies: {$size: {$gt: 3}}}) // not acceptable
+-> return me all documents who has hobbies elements equal to 3.
+-> db.tb1.find({hobbies: {$size: 3}})
+
+
+

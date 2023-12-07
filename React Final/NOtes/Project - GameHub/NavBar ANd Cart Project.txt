@@ -1,0 +1,94 @@
+IMP : The component which held the state is responsible for updating it also. in this example App component is responsible for updating it.
+
+============================================================================================================================================================
+
+
+App.js
+------
+
+import { useState } from "react";
+import NavBar from "./Components/NavBar";
+import Cart from "./Components/Cart";
+
+const App = () => { 
+
+  const [cartItems, setCartItems] = useState(["Apple", "Banana", "Cherry", "dragon fruit"]);
+
+  const onClear = () => {
+    setCartItems([]);
+  }
+
+  return (  
+    <>
+      <NavBar cartItems={cartItems.length} />
+      <Cart cartItems={cartItems} onClear={onClear}/>
+    </>
+  );
+};
+
+export default App;
+
+
+============================================================================================================================================================
+
+Cart.js
+-------
+
+import React from 'react'
+
+const Cart = ({cartItems, onClear}) => {
+  return (
+    <>
+        <h1>Cart Items: </h1>
+        <ul>
+            {cartItems.map(item=> <li key={item}>{item}</li>)}
+        </ul>
+
+        <button onClick={onClear}> Clear All</button>
+    </>
+  )
+}
+
+export default Cart
+
+============================================================================================================================================================
+
+NavBar.js
+---------
+
+const NavBar = ({cartItems}) => {
+
+    return (
+        <>
+            NavBar: {cartItems}
+        </>
+    );
+}
+
+export default NavBar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+Installing Chakra UI : 
+----------------------
+
+-> There are many different libraries available for styling our application.
+-> we can use bootstarp, material UI, tailwind, and so on.
+-> but for this project i have used Chakra UI because its gives us bunch of beautiful reusable UI components. 
+
+
+chakra give us beautiful and reusable UI component
+
+
+Installation Guide : 
+--------------------
+
+Vite
+1. Installation#
+
+In your Vite React project, install Chakra UI by running either of the following:
+
+-> npm i @chakra-ui/react @emotion/react @emotion/styled framer-motion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,277 @@
+useContext Hook : 
+-----------------
+
+-> Before understanding useContext lets understand what is context ?
+-> Context in React is a mechanism for sharing values, like themes or authentication status, across components in a component tree without the need for explicit prop passing.
+-> to consume the context we use useCOntext hook
+-> useContext hook allows a functional component to consume values from a context, without prop drilling.
+
+
+
+prop drilling : 
+---------------
+
+-> it is a process of passsing state/data as "props" from a parent component to nested child component through intermediate components in between.
+-> the intermediate components don't require state, they are rendering their own data, but still they have to receive that state and have to send it to next component as a prop.
+
+-> 
+suppose we have three components : compo 1 , compo 2, compo 3
+-> compo 1 is parent component where we storede our state.
+-> Compo 2 is a child of Compo 1 like that compo 3 is child of compo 2
+-> compo 3 require state to do some calculations.
+-> so with the help of prop drilling we are passsing state from compo 1 to compo 2 and from compo 2 to compo 3 as a prop.
+-> compo 2 don't require state but still accepts the state and pass to next compo because of prop drilling syntax.
+-> ex.
+
+function Component1() {
+  const [user, setUser] = useState("Jesse Hall");
+
+  return (
+    <>
+      <h1>{`Hello ${user}!`}</h1>
+      <Component2 user={user} />
+    </>
+  );
+}
+
+function Component2({ user }) {
+  return (
+    <>
+      <h1>Component 2</h1>
+      <Component3 user={user} />
+    </>
+  );
+}
+
+
+function Component3({ user }) {
+  return (
+    <>
+      <h1>Component 3</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+
+
+
+
+The Solution: 
+-------------
+
+The solution is to create context: 
+
+1. Create Context:
+------------------
+
+-> To create context, you must Import createContext() and initialize it:
+-> createContext is not a hook; it is a function in React. The createContext function is part of React's" context API "and is used to create a new context.
+
+import { useState, createContext } from "react";
+import ReactDOM from "react-dom/client";
+
+const UserContext = createContext()
+
+
+
+2. Context Provider
+-------------------
+
+-> wrap all data which is inside the return statement inside the context Provider and supply the state value.
+
+function Component1() {
+  const [user, setUser] = useState("Jesse Hall");
+
+  return (
+    <UserContext.Provider value={user}>
+      <h1>{`Hello ${user}!`}</h1>
+      <Component2 user={user} />
+    </UserContext.Provider>
+  );
+}
+
+
+-> Now, all components in this tree will have access to the user Context.
+
+
+3. Use the useContext Hook : 
+----------------------------
+
+-> In order to use the Context in a child component, we need to access it using the useContext Hook.
+
+function Component3() {
+  const user = useContext(UserContext);
+
+  return (
+    <>
+      <h1>Component 5</h1>
+      <h2>{`Hello ${user} again!`}</h2>
+    </>
+  );
+}
+
+
+Ex: 
+
+
+
+
+
+File1.jsx: 
+----------
+
+
+import React, { createContext, useState } from "react";
+import File1 from "./File1";
+
+export const UserContext = createContext();
+
+const FIle1 = () => {
+  const [user, setUser] = useState("Adesh");
+
+  return (
+    <UserContext.Provider value={user}>
+        <h1>Parent Component</h1>
+      <h1>{`Hello ${user}!`}</h1>
+      <br />
+      <File1 />
+    </UserContext.Provider>
+  );
+};
+
+export default FIle1;
+
+
+
+File 2.jsx
+-----------
+
+import React from 'react'
+import File3 from './File3'
+
+const File2 = () => {
+  return (
+    <>
+        <h1>File 2</h1>
+        <br />
+        <File3 />
+    </>
+  )
+}
+
+export default File2
+
+
+
+File3.jsx
+---------
+
+import React, { useContext } from 'react'
+import { UserContext } from './File';
+
+
+const File3 = () => {
+    const user = useContext(UserContext);
+
+  return (
+    <>
+        <h1>User : {user}</h1>
+        <h2>Component 3</h2>
+    </>
+  )
+}
+
+export default File3
+
+
+
+
+
+
+
+
+
+
+useContext : How to change value of context in useContext
+there is rule in react js : The component which holds the state is responsible for updating it. 
+if any child componet want to chage the context Then we can pass calback from parent compoent to child compoent. 
+child compoent can invoke that callback and change value
+
+Parent Component: 
+------------------
+import { createContext, useState } from "react";
+import File1 from "./File1";
+export const UserContext = createContext();
+const Fun = () => {
+  const [users, setUsers] = useState([
+    { id: 1, name: "Adesh" },
+    { id: 2, name: "Pramod" },
+    { id: 3, name: "Ram" },
+  ]);
+  const createUser = (value) => {
+    setUsers([...users, { id: users.length + 1, name: value }]);
+  };
+  const updateUser = (id) => {
+    setUsers(
+      users.map((user) => (user.id === id ? { ...user, name: "AdeshJ" } : user))
+    );
+  };
+  const deleteUser = (id) => {
+    setUsers(users.filter((user) => user.id !== id));
+  };
+  return (
+    <UserContext.Provider value={{ users, createUser, updateUser, deleteUser }}>
+      <h1>Parent Component</h1>
+      <File1 />
+    </UserContext.Provider>
+  );
+};
+export default Fun;
+
+
+
+child Component: 
+----------------
+
+import React, { useContext } from 'react';
+import { UserContext } from './Fun';
+
+const File2 = () => {
+  const { users, createUser, updateUser, deleteUser } = useContext(UserContext);
+
+  return (
+    <>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>
+            {user.name}
+            <button onClick={() => updateUser(user.id)}>Update User</button>
+            <button onClick={() => deleteUser(user.id)}>Delete User</button>
+          </li>
+        ))}
+      </ul>
+
+      <button onClick={() => createUser('Ram')}>Add User</button>
+    </>
+  );
+};
+
+export default File2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

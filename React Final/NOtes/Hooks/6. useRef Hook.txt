@@ -1,0 +1,103 @@
+-> The useRef Hook allows you to persist values between renders.
+-> It is used to store a mutable value that does not cause a re-render when updated.
+-> It can be used to access a DOM element directly.
+-> useRef() only returns one item. It returns an Object called current.
+-> Ex. 
+	const count = useRef(0);
+It's like doing this: const count = {current: 0}. We can access the count by using count.current.
+
+
+
+The useRef hook in React is primarily used for two main purposes:
+=================================================================
+
+
+1.Accessing and interacting with the DOM:
+=========================================
+
+-> In general, we want to let React handle all DOM manipulation
+-> But there are some instances where useRef can be used without causing issues.
+-> In React, we can add a ref attribute to an React element to access it directly in the DOM.
+-> we can add a ref attribute and attach it to a React element, and then you can access and modify properties of the DOM element directly.
+
+
+
+import React, { useRef } from "react";
+const Login = () => {
+  const nameRef = useRef(null);
+  const submitHandler = (event) => {
+    event.preventDefault();
+    console.log(nameRef.current.value); // accessing dom elements. "nameRef.current" will return you element and "nameRef.current.value" return you value of input field.
+    console.log('Form Submitted.');
+  }
+  return (
+    <form onSubmit={submitHandler}>
+      <div className="mb-3">
+        <label htmlFor="name" className="form-label">Name</label>
+        <input ref={nameRef} id="name" type="text" className="form-control"/>
+      </div>
+
+      <button type="submit" className="btn btn-primary">Submit</button>
+    </form>
+  );
+};
+
+
+
+2. Persisting values between renders without causing re-renders:
+================================================================
+
+
+-> Another important use case of useRef is to persist values across renders without triggering a re-render. 
+-> It can be used to store a mutable value that does not cause a re-render when updated.
+
+
+const Fun = () => {
+  const count = useRef(0);  {/*This is mutable value */}
+  useEffect(()=> {
+    count.current += 1;  {/* This is not going to re-render component */}
+    console.log('Rendered : ', count.current);
+  });
+  return(
+    <>
+      <h1>Count: {count.current}</h1>  {/* This will print 0 because useEffect run after component rendered. */}
+    </>
+  )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

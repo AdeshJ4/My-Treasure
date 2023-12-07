@@ -1,0 +1,90 @@
+/*
+vidly is an imaginary backend service for renting out movies.
+
+-> create a service for managing the list of genres : "http://vidly.com/api/genres"
+-> Each movie have a genre like action, horror, etc
+-> we should have a endpoint for getting all the list of genres because somewhere in our client application 
+we have dropdown list for user to select genre.
+-> so we need endpoint to get all genres 
+-> we also able to create a new genre as well as update or delete an existing one
+
+ */
+
+
+const express = require('express');
+const app = express();
+const dotenv = require('dotenv').config();
+const Joi = require('joi');
+
+const genres = [
+    {id: 1, name: 'Action'},
+    {id: 2, name: 'Comedy'},
+    {id: 3, name: 'Thriller'},
+    {id: 4, name: 'Romance'},
+    {id: 5, name: 'Anime'},
+]
+
+app.use(express.json());
+
+function validateCourse (course){
+    const joiSchema = Joi.object({
+        name: Joi.string().min(3).required()
+    });
+
+    return joiSchema.validate(course);
+}
+
+// get all genres
+app.get('/api/genres', (req, res)=>{
+    res.status(200).send(genres);
+});
+
+// get single genre
+app.get('/api/genres/:id', (req, res)=>{
+    const genre = genres.find(g=>g.id === parseInt(req.params.id));
+    if(!genre) return res.status(404).send(`The genre with given id ${req.params.id} not found.`);
+
+    res.status(200).send(genre);
+})
+
+// post a genre
+app.post('/api/genres', (req, res)=>{
+    const {error} = validateCourse(req.body);
+    if(error) return res.status(404).send(error.details[0].message);
+
+    const genre = {
+        id: genres.length + 1,
+        name : req.body.name
+    }
+
+    genres.push(genre);
+    res.status(201).send(genre);
+});
+
+// update a genre
+app.put('/api/genres/:id', (req, res)=>{
+    const genre = genres.find(g=>g.id === parseInt(req.params.id));
+    if(!genre) return res.status(404).send(`The genre with given ID ${req.params.id} not found.`);
+
+    const {error} =  validateCourse(req.body);  // check updated data is correct or not
+    if(error) return res.status(400).send(error.details[0].message);
+
+    genre.name = req.body.name;
+    res.status(200).send(genre);
+})
+
+
+// delete genre
+app.delete('/api/genres/:id', (req, res)=> {
+    const genre = genres.find(g=> g.id === parseInt(req.params.id));
+    if(!genre) return res.status(404).send(`The genre with given ID ${req.params.id} not found`);
+
+    const index = genres.indexOf(genre);
+    genres.splice(index, 1);
+    res.status(200).send(genre);
+})
+
+const port = process.env.PORT || 5001;
+app.listen(port, ()=>{
+    console.log(`Server is listening on port ${port}`);
+})

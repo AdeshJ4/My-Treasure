@@ -1,0 +1,149 @@
+-> The reduce() method executes a reducer function on each element of the array and returns a single output value.
+
+reduce() Syntax:
+----------------
+
+-> arr.reduce(callback(accumulator, currentValue), initialValue)
+
+
+reduce() Parameters:
+---------------------
+
+The reduce() method takes in:
+
+callback - The function to execute on each array element (except the first element if no
+initialValue is provided). 
+It takes in
+accumulator - It accumulates the callback's return values.
+currentValue - The current element being passed from the array.
+
+IMP : 
+-----
+
+-> initialValue (optional) - A value that will be passed to callback() on first call. 
+-> If not provided, "the first element acts as the accumulator on the first call and callback() won't execute on it".
+-> It is almost always safer to provide initialValue
+
+
+reduce() Return Value:
+----------------------
+
+Returns the single value resulting after reducing the array.
+
+Notes:
+------
+-> reduce() executes the given function for each value from left to right.
+-> reduce() does not change the original array.
+-> It is almost always safer to provide initialValue.
+
+
+
+
+code 1 : 
+--------
+
+const arr = ["Javascript " , "is ", "Easy"];
+let iniValue = "A => ";
+let sentence = arr.reduce((acc, curEle) => acc + curEle, iniValue);
+console.log(sentence);
+
+
+
+Example 1: Sum of All Values of Array:
+--------------------------------------
+
+// without initial Value
+const arr = [ 10, 20, 30];
+let sum = arr .reduce((acc, curEle)=> acc + curEle); // 10 + 20 + 30 => 60
+console.log(sum);  // 60
+
+// with initial value
+const arr = [ 10, 20, 30];
+const iniValue = 60;
+let sum = arr .reduce((acc, curEle)=> acc + curEle, iniValue); // 60 + 10 + 20 + 30 => 120
+console.log(sum);  // 120
+
+
+
+Example 2: Subtracting Numbers in Array
+---------------------------------------
+
+// without initial Value
+const arr = [ 10, 20, 30];
+let sum = arr .reduce((acc, curEle)=> acc - curEle); // 10 - 20 - 30 => -40
+console.log(sum);  // -40
+
+// with initial value
+const arr = [ 10, 20, 30];
+const iniValue = 100;
+let sum = arr .reduce((acc, curEle)=> acc + curEle, iniValue); // 100 - 10 - 20 - 30 => 40
+console.log(sum);  // 40
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

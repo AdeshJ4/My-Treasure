@@ -1,0 +1,50 @@
+-> Sometimes we need to return a cleaup function from our useEffect.
+-> what happen if user navigate from the page we don't need server to return the data and render it here.
+-> so for a best practise when we fetch data in useEffect we should also provide a cleaup function for cancelling fetch request in case the data is no longer needed.
+-> to do that we create a object called "controller".
+	const controller = new AbortController();
+-> This is built in class in modern browsers that allow us to cancel or abort aynchronous oprations like fetch request, DOM manipulations, or any other operations that may took long time to complete.
+-> 
+
+code : 
+------
+
+import React, { useEffect, useState } from "react";
+import axios, { CanceledError } from "axios";
+
+const Fun = () => {
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState("");
+
+  const fetchData = async (controller) => {
+    try {
+      const res = await axios.get(
+        "https://jsonplaceholder.typicode.com/users",
+        { signal: controller.signal }
+      );
+      setUsers(res.data);
+    } catch (err) {
+      if(err instanceof CanceledError) return;
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchData(controller);
+    return () => controller.abort();
+  }, []);
+
+  return (
+    <>
+      {error && <p className="text-danger">{error}</p>}
+      <ol>
+        {users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ol>
+    </>
+  );
+};
+
+export default Fun;

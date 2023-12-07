@@ -1,0 +1,8 @@
+-> so when we called axios.get() method, axios send an 'HTTP request' to the server.
+-> HTTP means 'HyperText transfer Protocol'
+-> basically it is a protocol for transferring data over the internet.
+-> is is a same protocol that power the internet
+-> when we visit the website our browser sends an http request to website server asking for some data.
+-> the server then send response with an http response which contain some html, css, and other resourses needed to display the website in the browser.
+
+-> 

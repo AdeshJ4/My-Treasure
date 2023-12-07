@@ -1,0 +1,222 @@
+-> Express.js is a popular open-source web application framework for Node.js
+-> Before express we have to create a server using http module.
+-> to create a server wa have a method  inside http module called 'createServer()'.
+-> In http module we have to write multiple if statements for checking multiple urls inside 'createServer()' method.
+-> As we add more routes for our appliction we need to add more if blocks in the callback function of createServer((req, res)=>{if()}) method.
+->  To solve this problem we use Express js.
+-> A express frameork gives our application a proper structure so we can easily add more routes while kepping our application code maintanable.
+-> There are lots of framework available for building web apllication and web server on top of node but the most popular one is express.
+-> Express is used in Node.js for building web applications and APIs. It simplifies the process of handling routes, requests, and responses, making it easier and faster to create web services and applications.
+
+Here are some of the key benefits of using Express.js:
+
+1. Flexibility: 
+
+Express.js provides a flexible and modular structure for building web applications. It allows developers to easily add or remove features, such as middleware or plugins, to customize the application according to their needs.
+
+2. Templating: 
+
+Express.js supports a variety of templating engines, such as EJS, Handlebars, and pug, which allow developers to generate dynamic HTML pages and views for their applications.
+
+3. Middleware: 
+
+Express.js provides a middleware system that allows developers to add functionality to the request/response cycle, such as authentication, logging, error handling, and more. This makes it easy to add common features to an application without having to write the code from scratch.
+
+
+4. Routing: 
+
+Express.js provides a simple and intuitive routing system for defining endpoints and handling HTTP requests. This makes it easy to create RESTful APIs and web services.
+
+
+
+
+
+
+
+code without using express js and then write same code using express js and explain it : 
+========================================================================================
+
+with 'http' : 
+-------------
+const http = require('http');
+const server = http.createServer((req, res) => {
+  if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Hello, Node.js!');
+  } else if (req.url === '/about') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('About us');
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+  }
+});
+
+const port = 3000;
+server.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
+
+
+
+
+with "Express.js" : 
+-------------------
+const express = require('express');
+const app = express();
+app.get('/', (req, res) => {
+  res.send('Hello, Node.js!');
+});
+app.get('/about', (req, res) => {
+  res.send('About us');
+});
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+more advance example: 
+---------------------
+const express = require("express");
+const app = express();
+const dotenv = require("dotenv").config();
+const Joi = require("joi");
+
+// data from database
+const courses = [
+  { id: 1, name: "React JS" },
+  { id: 2, name: "Node JS" },
+  { id: 3, name: "Express JS" },
+  { id: 4, name: "MongoDB" },
+];
+
+app.use(express.json());
+
+function validateCourse(course) {
+  const joiSchema = Joi.object({
+    name: Joi.string().min(3).required(),
+  });
+
+  return joiSchema.validate(course);
+}
+
+app.get("/", (req, res) => {
+  res.send("Home Page");
+});
+
+// define route parameter id
+app.get("/api/courses/:id", (req, res) => {
+  // res.send(req.params.id)
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course) res.status(404).send("The course with given id was not found.");
+  res.send(course);
+});
+
+app.get("/api/courses", (req, res) => {
+  res.send(courses);
+});
+
+app.post("/api/courses", (req, res) => {
+  // input validation
+  // part 1 : manual validation
+  //   if (!req.body.name || req.body.name.length < 3) {
+  //     res.status(400).send("Name is required and must be 4 character long");
+  //     return;
+  //   }
+
+  // part 2 : using schema based validation library called Joi
+  const { error } = validateCourse(req.body); // object destructuring
+
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const course = {
+    id: courses.length + 1,
+    name: req.body.name,
+  };
+
+  courses.push(course);
+  res.status(200).send(courses);
+});
+
+app.put("/api/courses/:id", (req, res) => {
+  // look up the course, if not exist return 404
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    return res.status(404).send("The course with given ID not found");
+
+  //validate req body, if invalid return 404
+  const { error } = validateCourse(req.body); // object destructuring
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // update course
+  course.name = req.body.name;
+  res.status(200).send(courses);
+});
+
+app.delete("/api/courses/:id", (req, res) => {
+  // look up the course, not exists return 404
+  const course = courses.find((c) => c.id === parseInt(req.params.id));
+  if (!course)
+    return res.status(404).send("The COurse with given ID not found");
+
+  // delete course
+  const index = courses.indexOf(course);
+  courses.splice(index, 1);
+  res.status(200).send(courses);
+});
+
+// define multiple route parameters
+app.get("/api/posts/:year/:month", (req, res) => {
+  res.send(req.params);
+});
+
+/* 
+-> query string parameter -> This are the parameters that we add in the url after question mark. 
+-> we use query string parameter to provide additional data to backend services.
+-> so we use parameters for essential values or required values where we use query string parameters for anything
+that is optional 
+this part from below is query string parameter : ?sortBy=name
+ex. http://localhost:5000/api/posts/2001/06?sortBy=name
+*/
+app.get("/api/blogs/:year", (req, res) => {
+  res.send(req.query);
+});
+
+const port = process.env.PORT || 5001;
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

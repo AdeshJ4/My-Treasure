@@ -1,0 +1,69 @@
+In React, data flow is typically unidirectional, meaning that the flow of data moves in one direction within the component tree. 
+
+
+Here's how the unidirectional data flow works in React:
+
+1. **Parent-to-Child:**
+   - Data is passed from a parent component to its child components through props.
+   - Parent components own the state and pass data down to their children as props.
+
+    // Parent Component
+    import React from 'react';
+    import ChildComponent from './ChildComponent';
+
+    const ParentComponent = () => {
+      const data = 'Hello from Parent';
+
+      return <ChildComponent message={data} />;
+    };
+
+    export default ParentComponent;
+
+
+
+    // Child Component
+    import React from 'react';
+
+    const ChildComponent = (props) => {
+      return <p>{props.message}</p>;
+    };
+
+    export default ChildComponent;
+
+
+2. **Child-to-Parent (Callback Props):**
+   - If a child component needs to communicate with its parent, the parent can pass callback functions to the child as props.
+   - The child invokes the callback, and the parent handles the state changes.
+
+    // Parent Component
+    import React, { useState } from 'react';
+    import ChildComponent from './ChildComponent';
+
+    const ParentComponent = () => {
+      const [data, setData] = useState('');
+
+      const handleChildClick = () => {
+        setData('Data received from Child');
+      };
+
+      return (
+        <>
+          <ChildComponent onClick={handleChildClick} />
+          <p>{data}</p>
+        </>
+      );
+    };
+
+    export default ParentComponent;
+
+
+    // Child Component
+    import React from 'react';
+
+    const ChildComponent = (props) => {
+      return <button onClick={props.onClick}>Click me</button>;
+    };
+
+    export default ChildComponent;
+
+This unidirectional data flow simplifies the mental model of how data changes and updates in a React application. It makes it clear where the state is managed, where the data originates, and how it's consumed in the component tree. Additionally, this one-way flow helps in managing and debugging the application state more effectively.

@@ -1,0 +1,16 @@
+
+*** Optional Chaining ***
+-----------------------
+
+-> Optional chaining is a feature in JavaScript that allows you to safely access properties and methods of an object without worrying about whether those properties or the object itself exist. 
+-> It helps prevent errors, like "Cannot read property 'something' of undefined," that can occur when you try to access properties on objects that might be null or undefined
+
+
+ex> 
+
+// An empty person object with missing optional location information
+const person = {}
+
+// The following will equate to undefined instead of an error
+const currentAddress = person.location?.address
+

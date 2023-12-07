@@ -1,0 +1,10 @@
+There are two ways for creating react app: 
+
+1. Create React App (CRA)
+
+-> we can use official tool provided by React team its called 'create-react-app' 
+
+2. Vite
+
+-> but also we have another tool called vite
+-> vite is more popular  beause its more faster gand gives us smaller bundle sizes. 

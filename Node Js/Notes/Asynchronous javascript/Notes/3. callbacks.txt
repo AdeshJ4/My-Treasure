@@ -1,0 +1,295 @@
+JavaScript Callbacks:
+---------------------
+
+-> "I will call back later!"
+
+-> In JavaScript, callbacks are functions that are passed as arguments to other functions and are invoked when an asynchronous operation is completed.
+
+-> This technique allows a function to call another function
+
+-> A callback function can run after another function has finished
+
+
+When to Use a Callback ?
+------------------------
+
+-> Where callbacks really shine are in asynchronous functions, where one function has to wait for another function (like waiting for a file to load).
+
+-> A callback is a function that we are going to call when the result of asynchronous opearation is ready.
+
+
+
+
+Ex 1: 
+-----
+
+function calculate(num1, num2, callback){	
+	let res = num1 * num2;
+	callback(res);
+}
+
+function display(res){
+	log(res);
+}
+
+calculate(10, 10, display);
+
+output: 
+-------
+
+100
+
+
+
+
+Ex 1 :
+------
+
+function calculate(n1, n2, callback){
+    setTimeout(()=>{
+        let res = n1 * n2;
+        callback(res);
+    }, 2000);
+}
+
+function display(res){
+	log(res);
+}
+
+calculate(10, 10, display); 
+
+
+
+
+
+
+Ex 2: 
+------
+
+function calculate(num1, num2, callback){	
+	let res = num1 * num2;
+	callback(res);
+}
+
+calculate(10, 10, (res)=log(res));
+
+output:
+--=----
+
+100
+
+
+
+
+Ex 3:
+-----
+
+console.log('start');
+getUser(101, (user)=>{  // user obj (output of getUser) is passed to getRepositories
+    getRepositories(user, (repos)=>{ // repos arr (output of getRepositories) is passed to getRepositories
+        getCommits(repos[0], (commits)=>{ // commits arr (output of getCommits) is passed to getRepositories
+            console.log(commits);
+        })
+    })
+});
+console.log('end');
+
+
+
+function getUser(id, callback){
+    setTimeout(()=>{
+        console.log(`Fetching User from database with id ${id}`);
+        callback({id: 101, githubName: 'AdeshJ'});
+    }, 2000);
+}
+
+function getRepositories({githubName}, callback){
+    setTimeout(() => {
+        console.log(`Fetching Repos for user ${githubName}`);
+        callback(['repo1', 'repo2', 'repo3']);
+    }, 2000);
+}
+
+function getCommits(repo, callback){
+    setTimeout(() => {
+        console.log(`Fetching Commits for ${repo}`);
+        callback(['commit1', 'commit2', 'commit3'])
+    }, 2000);
+}
+
+
+
+output: 
+-------
+
+start
+end
+Fetching User from database with id 101
+Fetching Repos for user AdeshJ
+Fetching Commits for repo1
+[ 'commit1', 'commit2', 'commit3' ]
+
+
+
+
+
+
+
+
+Callback Hell / Chrimas tree problem: 
+-------------------------------------
+
+Callback Hell, also known as the "Pyramid of Doom," is a term used to describe a situation where a series of nested callbacks make the code difficult to read, understand, and maintain. It usually occurs when dealing with asynchronous operations using callbacks, and as the number of nested callbacks increases, the code becomes deeply indented and less readable.
+
+
+getUser(101, (res1)=>{  					// asynchronous operation 1
+    getRepositories(res1.gitHubUsername, (res2)=>{		// asynchronous operation 2
+        getCommits(res2[0], (res3)=>{				// asynchronous operation 3
+            console.log(res3);
+        })
+    })
+});
+
+
+-> supposw we have function called getUser which is fetching user from database.
+-> inside callback function of getUser we are calling getRepositories function.
+-> getRepositories function fetching the repos of user.
+-> inside callback function of getRepositories we are calling getCommits fucntion.
+-> gettCommits function fetching the commits of that repo.
+-> inside callback function of getCommits we are logging commits of repo.
+
+
+
+
+
+
+Named function to rescue
+------------------------
+// mine
+
+console.log('Start');
+getUser(101, displayUser);
+console.log('End');
+
+// main functions
+function getUser(id, callback){
+    setTimeout(()=>{
+        console.log('Fetching Data from Database');
+        callback({id: id, gitHubUsername: "AdeshJ4"})
+    }, 2000);
+}
+
+function getRepositories (user, callback){
+    setTimeout(()=>{
+        console.log(`Fetching repos from Database for user ${user.gitHubUsername}...`);
+        callback(['repo1', 'repo2', 'repo3'])
+    }, 2000);
+}
+
+function getCommits (repos, callback){
+    setTimeout(()=>{
+        console.log("Fetching Commits from repo 1");
+        callback(['commit1', "commit2", "commit3"])
+    }, 2000);
+}
+
+
+// callback functions
+function displayUser(user){
+    getRepositories(user, displayRepos)
+}
+
+function displayRepos (repos){
+    getCommits(repos, displayCommits)
+}
+
+function displayCommits(commit){
+    console.log(commit);
+}
+
+output: 
+-------
+
+Start
+End
+Fetching Data from Database
+Fetching repos from Database for user AdeshJ4...
+Fetching Commits from repo 1
+[ 'commit1', 'commit2', 'commit3' ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

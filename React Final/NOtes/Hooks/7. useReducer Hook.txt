@@ -1,0 +1,154 @@
+useReducer: 
+===========
+
+
+-> The useReducer hook is a powerful alternative to useState when dealing with complex custom state logic. 
+-> with the help of useReducer hook we can write complex custom state logic inside reducer function.
+-> useReducer is inspired by the concept of reducers in Redux.
+-> If you find yourself keeping track of multiple pieces of state that rely on complex logic, useReducer may be useful.
+-> The main advantage of useReducer over useState is that it provides a more structured way to handle complex state logic. 
+-> In summary, useReducer hook is used for managing more complex state logic in functional components. It involves a reducer function that specifies how state should change in response to actions, and 
+-> The useReducer hook returns the current state and a dispatch function to trigger state updates.
+
+Here's a basic explanation:
+===========================
+
+1. Reducer Function:
+--------------------
+
+-> The reducer function contains your custom state logic.
+-> The reducer function takes the current state and an action as parameters and returns the new state.
+->  The action is an object with a type property (and optionally a payload).
+-> Payload (Optional):The payload is an optional property within the action object. It contains additional data that is needed to perform the state update. suppose you want to increment or decrement value by 10 then you can send payload as 10 and do calculation in reducer function.
+
+  const reducer = (curState, action) => {
+    switch (action.type) {
+      case "Increment":
+        return curState + 1;
+      case "Decrement":
+        return curState - 1;
+      default:
+        return curState;
+    }
+  };
+
+
+
+2. useReducer Hook:
+-------------------
+
+-> The useReducer Hook accepts two arguments.
+
+	const [count, dispatch] = useReducer(reducer, initialState);
+
+
+-> The reducer function contains your custom state logic and the initialState be a simple value but generally will contain an object.
+-> The useReducer Hook returns the current state and a dispatch method.
+
+
+
+3.Dispatching Actions:
+----------------------
+
+-> The dispatch function is provided by useReducer and is used to send/dispatch actions to the reducer
+-> The action is an object with a type property (and optionally a payload).
+-> To update the state, you dispatch actions to the reducer.
+-> In the following example, clicking the "Increment" button dispatches an action of type 'INCREMENT', and clicking the "Decrement" button dispatches an action of type 'DECREMENT'.
+
+
+
+
+
+
+
+const login = () => {
+  const reducer = (curState, action) => {
+    switch (action.type) {
+      case "Increment":
+        return curState + 1;
+      case "Decrement":
+        return curState - 1;
+      case "IncreBy10":
+        return curState + action.payload;
+        case "SetTo100":
+          return action.payload;
+      default:
+        return curState;
+    }
+  };
+
+  const [count, dispatch] = useReducer(reducer, 0);
+
+  return (
+    <>
+      <p>Count: {count}</p>
+      <button onClick={()=>{dispatch({type: "Increment"})}}>Increment</button>
+      <button onClick={()=>{dispatch({type: "Decrement"})}}>Decrement</button>
+      <button onClick={()=>{dispatch({type: "IncreBy10", payload: 10})}}>Increment By 10</button>
+      <button onClick={()=>{dispatch({type: "SetTo100", payload: 100})}}>Set to 100</button>
+    </>
+  );
+};
+
+export default login;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

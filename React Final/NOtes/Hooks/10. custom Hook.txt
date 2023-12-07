@@ -1,0 +1,15 @@
+React Custom Hooks:
+-------------------
+
+-> Hooks are reusable functions.
+-> When you have component logic that needs to be used by multiple components, we can extract that logic to a custom Hook.
+-> Custom Hooks start with "use". Example: useFetch.
+
+
+Example: 
+--------
+
+
+-> Suppose we have Home Component inside that we are fetching the data.
+-> The Fetch Logic may be needed in another component as well, so we extract that logic inside custom hook.
+-> 

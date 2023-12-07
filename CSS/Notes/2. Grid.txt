@@ -1,0 +1,144 @@
+-> The CSS Grid Layout Module offers a grid-based layout system, with rows and columns, making it easier to design web pages without having to use floats and positioning
+
+-> A grid layout consists of a parent element, with one or more child elements.
+
+<div class="grid-container">
+  <div class="grid-item">1</div>
+  <div class="grid-item">2</div>
+  <div class="grid-item">3</div>
+</div>
+
+
+-> An HTML element becomes a grid container when its display property is set to grid or inline-grid
+-> All direct children of the grid container automatically become grid items.
+
+HTML: 
+-----
+
+<div class="grid-container">
+  <div class="grid-item">1</div>
+  <div class="grid-item">2</div>
+  <div class="grid-item">3</div>
+</div>
+
+
+CSS : 
+-----
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;   // i need only 3 columns i doesn't care about rows. rows will be adjusted according to n. of elements
+    background-color: aqua;
+    padding: 20px;		// distance between border of container and border of element.
+    border: 1px solid black;
+}
+
+.grid-item{
+    background-color: beige;
+    border: 1px solid black;
+    padding: 20px;
+    text-align: center;
+    font-size: 25px;
+}
+-> The vertical lines of grid items are called columns
+-> The horizontal lines of grid items are called rows.
+-> The spaces between each column/row are called gaps.
+You can adjust the gap size by using one of the following properties:
+column-gap
+row-gap
+gap
+
+eg: 
+
+gap: 10px 100px;  // row-gap  column-gap;
+column-gap: 50px;
+row-gap: 50px;
+
+
+
+HTML : 
+------
+
+    <div class="grid-container">
+      <div class="item1">Header</div>
+      <div class="item2">Menu</div>
+      <div class="item3">Main</div>
+      <div class="item4">Right</div>
+      <div class="item5">Footer</div>
+    </div>
+
+
+CSS :
+-----
+
+.item1 { grid-area: header; }
+.item2 { grid-area: menu; }
+.item3 { grid-area: main; }
+.item4 { grid-area: right; }
+.item5 { grid-area: footer; }
+
+.grid-container{
+    display: grid;
+    grid-template-areas: 
+            'header header header header header header'
+            'menu main main main right right'
+            'menu footer footer footer footer footer';
+    gap: 10px;
+    background-color: aqua;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.grid-container > div{
+    text-align: center;
+    border: 1px solid black;
+    padding: 20px 0px;
+    font-size: 20px;
+    background-color: bisque;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+header header header header right right
+main main menu menu right right 
+footer footer footer fooyer footer footer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

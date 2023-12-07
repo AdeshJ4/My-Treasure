@@ -1,0 +1,125 @@
+We are going to provide some endpoints which will help the user to register themselves  and then login. 
+Once they login they can use access token and then with the help of that token they can manage their contacts.
+
+
+Authentication and Authorization:
+---------------------------------
+
+1. Authentication: 
+
+-> is the process of determining if the user is who he/she claims to be. It involves validating their email/password.
+
+
+2. Authorization:
+
+-> is the process of determining if the user has permission to perform a given operation.
+
+
+
+Token :
+------
+
+-> In JWT (JSON Web Token), a token is a string that contains encoded information about a user or a client that is used for authentication and authorization purposes.
+Ex. token looks like this :  
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkZXNoIiwiZW1haWwiOiJhZGVqYWQxMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE2Nzg3NzA2NTUsImV4cCI6MTY3ODc3MDk1NX0.0CmG7Ykj69lK0EbUtShPBbAV6pyKefSYKRZNUqJGTZU"
+
+-> The token is made up of three parts: a header, a payload, and a signature. 
+
+1. HEADER: ALGORITHM & TOKEN TYPE
+
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+2. PAYLOAD:DATA
+
+{
+  "user": {
+    "id": 1,
+    "username": "Adesh",
+    "email": "adejad1234@gmail.com"
+  },
+  "iat": 1678770655,
+  "exp": 1678770955
+}
+
+3. VERIFY SIGNATURE
+
+HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  
+your-256-bit-secret
+
+) secret base64 encoded
+
+
+-> The token is signed using a secret key that only the server knows, which ensures that the data cannot be tampered with or modified. This signature is created by combining the header and payload with the secret key using a cryptographic algorithm.
+
+-> Once the token is created, it can be sent to the client and stored in a cookie or local storage. On subsequent requests, the client can send the token back to the server in the HTTP headers to authenticate and authorize the user.
+
+
+
+
+
+
+JSON Web Token (JWT):
+---------------------
+
+- A JSON Web Token (JWT) is a JSON object encoded as a long string. We use 
+them to identify users. It’s similar to a passport or driver’s license. It includes a 
+few public properties about a user in its payload. These properties cannot be 
+tampered because doing so requires re-generating the digital signature. 
+- When the user logs in, we generate a JWT on the server and return it to the 
+client. We store this token on the client and send it to the server every time we 
+need to call an API endpoint that is only accessible to authenticated users.
+-To generate JSON Web Tokens in an Express app use jsonwebtoken package.
+
+
+
+
+
+what do you mean by "To hash passwords, use bcrypt"
+---------------------------------------------------
+
+"To hash passwords, use bcrypt" means that when storing passwords in a database, it is important to hash them for security reasons, and the recommended way to do this is using the bcrypt algorithm. Hashing a password means converting the password into a fixed-length string of characters that cannot be easily reversed, making it more difficult for attackers to access user accounts even if they gain access to the password database.
+
+Bcrypt is a popular and widely-used algorithm for password hashing because it is designed to be slow and resource-intensive, which makes it harder for attackers to crack the hash. It also includes features like salting (adding random data to the password before hashing) and configurable work factors (to adjust the computational cost of hashing), which further increase the security of the hash.
+
+In summary, if you need to store passwords in a database, it is important to hash them using a secure algorithm like bcrypt to protect your users' data from unauthorized access.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

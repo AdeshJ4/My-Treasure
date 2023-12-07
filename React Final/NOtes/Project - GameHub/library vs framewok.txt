@@ -1,0 +1,25 @@
+
+**Library**:
+- Think of a library as a collection of pre-written code that you can use to perform specific tasks in your program. 
+- It's like a toolbox with tools you can use when you need them.
+- A library is like going to furniture store. You already have a home, but you need a bit of help with furniture. You don’t feel like making your own table from scratch. furniture store allows you to pick and choose different things to go in your home. You are in control.
+- You have control over your program, and you decide when to use the library's functions.
+- Libraries are usually smaller in scope and don't dictate the overall structure of your program.
+- You call the functions from a library when you want to use them.
+
+**Framework**:
+- A framework is like a blueprint or a pre-designed structure for building a specific type of application. It's like a house with rooms already set up, and you just need to decorate them.
+- The framework controls the overall flow and structure of your application. You work within the framework's rules and guidelines.
+- Frameworks are more extensive and often provide a complete application structure, including rules for how you organize your code.
+- Your code is called by the framework when certain events or conditions occur.
+
+In essence, a library gives you tools to use in your code, while a framework gives you a structure and rules to follow when building your application.
+
+
+Example: 
+
+Library: jQuery, React, NumPy, Pandas
+Frameworks: Angular, Vue.js, Django, Flask, Laravels
+
+
+

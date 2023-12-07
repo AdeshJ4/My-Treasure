@@ -1,0 +1,51 @@
+1. $eq: 
+
+-> This operator return documents if the value of given field is equal to specified value.
+-> db.voters.find({age: {$eq: 18}})
+-> db.voters.find({age: 18})
+
+
+2. $ne
+
+-> This operator return documents if the given field value is not equal to specified value. 
+-> db.voters.find({age: {$ne: 10}});
+
+
+3. $gt: 
+
+-> This operator return documents if the value of given field is greater than specified value.
+-> db.sales.find({quantity: {$gt: 10}});
+
+
+4. $lt: 
+
+-> This operator return documents if the value of given field is less than specified value.
+-> db.sales.find({quantity: {$lt: 10}});
+
+
+5. $gte: 
+
+-> This operator return documents if the value of given field is greater than  equal to specified value.
+-> db.sales.find({quantity: {$gte: 20}});
+
+
+6. $lte: 
+
+-> This operator return documents if the value of given field is less than equal to specified value. 
+-> db.sales.find({quantity: {$lte: 20}});
+
+
+7. $in
+
+-> This operator returned documents if the value of the given field is in specified array.
+-> db.sales.find({category: {$in: ['Cloth', 'Books']}})
+
+
+8. $nin
+
+-> This operator returned documents if the value of the given field is not in specified array.
+-> db.sales.find({category: {$nin: ['Cloth', 'Books']}})
+
+
+
+

@@ -1,0 +1,75 @@
+-> There is another way to get values of input fields in the form.
+-> instead of useRef hook we can use useState hook.
+-> All input fields have a onChange event that is triggered everytime the user type a key stroke.
+-> so we can handle this event and update our state variable every time the user type something in that input field.
+-> so here we set "onChange" attribute to our name input field.
+-> onChange attribute takes callback function and in this function we update the name proprty of the person object.
+-> to get the current value of the input field we give this function as a parameter "event". from "event.target" we can access the given input and then we can read the value proprty 
+
+code : 
+------
+<input onChange={(event)=>setPerson({...person, name: event.target.value})} id="name" type="text" className="form-control" />
+
+-> Here is what we have done : we handle onChange event and every time user type a key stroke we update the name of the person.
+
+-> Every time the user types or remove the charater because we update the state our component is re-render. for most cases this is not issuse.
+
+-> There is tiny problem with this approach : we know that all input fields in HTML have a "value" property for maintaning their own state. but in this implementation we also have the state variable called person.
+-> so it is possible that these sources get out of sync. so to solve this problem we should make react the single source of truth. How ? 
+-> Back to our input field here we set value attribute to person.name .
+-> Now this input field always rely on the value in our state variable. 
+
+code : 
+
+<input onChange={(event)=>setPerson({...person, name: event.target.value})} value={person.name} id="name" type="text" className="form-control" />
+
+-> Now we have single source for storing the name of the person 
+-> Now we reffered this input field as a controlled component.
+-> because its state internally controlled by react. this means that the value f input field is not managed by DOM but instead it stored and updaed in the component state
+
+
+
+code : 
+------
+
+
+
+import { useState } from "react"
+
+const Fun = () => {
+    const [person, setPerson ] = useState(null);
+
+    const handleSubmit  = (e) => {
+        e.preventDefault();
+        console.log(person);
+    }
+    return(
+        <>
+            {person && (
+                <>
+                    <h1>Name: {person.name}</h1>
+                    <h1>Age: {person.age}</h1>
+                </>
+            )
+
+            }
+            <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Name</label>
+                    <input type="text" id="name" className="form-control" onChange={(e)=> setPerson({...person, name: e.target.value})} />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="age" className="form-label">Age</label>
+                    <input type="number" id="age" className="form-control" onChange={(e)=> setPerson({...person, age: e.target.value})} />
+                </div>
+
+                <button type="submit" className="btn btn-primary">Submit</button>
+            </form>
+        </>
+    )
+}
+
+
+export default Fun
+
+

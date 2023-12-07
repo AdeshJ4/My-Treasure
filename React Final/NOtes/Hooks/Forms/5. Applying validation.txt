@@ -1,0 +1,55 @@
+import React from "react";
+import { useForm } from "react-hook-form";
+
+const Form = () => {
+  const { register, handleSubmit, formState:{errors} } = useForm();
+  const submitForm = (data) => {
+    console.log("Submitted Data: ", data);
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(submitForm)}>
+        <div className="mb-3">
+            <label htmlFor="name" className="form-label">Name: </label>
+            <input {...register('name', {required: true, minLength: 3, maxLength: 50})} type="text" id="name" className="form-control" />
+            {errors.name?.type ==='required' && <p className="text-danger">The Name field is required.</p>}
+            {errors.name?.type === 'minLength' && <p className="text-danger">The name must be at least 3 character long</p>}
+            {errors.name?.type === 'minLength' && <p className="text-danger">The name must be at most 50 character long</p>}
+        </div>
+        <div className="mb-3">
+            <label htmlFor="age" className="form-label">Age: </label>
+            <input {...register('age', {required: true, min: 18, max: 130})} type="number" id="age" className="form-control" />
+            {errors.age?.type === 'required' && <p className="text-danger">The age field is required</p>}
+            {errors.age?.type === 'min' && <p className="text-danger">The Age must be greater than 18.</p>}
+            {errors.age?.type === 'max' && <p className="text-danger">The Age must be less than 130.</p>}
+        </div>
+
+        <button className="btn btn-primary">Submit</button>
+      </form>
+    </>
+  );
+};
+
+export default Form;
+
+
+
+===========================================================================================================================================
+
+
+*** Optional Chaining ***
+-----------------------
+
+-> Optional chaining is a feature in JavaScript that allows you to safely access properties and methods of an object without worrying about whether those properties or the object itself exist. 
+-> It helps prevent errors, like "Cannot read property 'something' of undefined," that can occur when you try to access properties on objects that might be null or undefined
+
+
+ex> 
+
+// An empty person object with missing optional location information
+const person = {}
+
+// The following will equate to undefined instead of an error
+const currentAddress = person.location?.address
+

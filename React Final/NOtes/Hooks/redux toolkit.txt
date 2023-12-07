@@ -1,0 +1,121 @@
+Redux: 
+
+-> Redux Toolkit is an official package from the creators of Redux that aims to simplify the process of working with Redux, making it more efficient and developer-friendly
+-> Redux is an open source javascript library and state managenment tool for managing and centralizing application data and to easily pass data between components.
+-> Redux provides a store which makes the state inside components easier to maintain.
+-> Along with stores, react-redux introduces actions and reducers which work simultaneously with stores to make the state more predictable.
+
+
+Redux ToolKit (RTK): 
+
+-> Redux Toolkit is used for writing redux code but in a more concise way. 
+-> Redux Toolkit (RTK) solves problems that most of the developer’s face who used redux in a react application. 
+-> RTK abstracts the basic redux code and provides us boilerplates that enable us to write redux code in less lines of code
+
+
+Issues with basic Redux:
+
+Configuring a Redux store is too complicated
+Have to add a lot of packages to build a large-scale application
+Redux requires too much boilerplate code which makes it cumbersome to write efficient and clean code
+
+
+Reasons for preferring RTK(Redux ToolKit):
+
+Redux ToolKit solves various issues by providing a hook-based implementation of Redux 
+RTK gives the ability to write mutable state updates in the reducers.
+It also eliminates the use of extra coding by providing boilerplates.
+RTK also has the feature of RTK query which eliminates the use of Thunks and makes the query processing faster
+It also provides automatic support for Redux Dev-tools Extension and for immer.js library which is a great tool to deal with immutable objects. 
+You can also use the various predefined functions of Redux Toolkit which not only speeds up the process but also saves time.
+
+
+
+To install RTK(Redux ToolKit) in the existing project use the command
+
+npm install @reduxjs/toolkit
+npm install react-redux
+
+
+
+Here are some key features and components of Redux Toolkit:
+
+1. configureStore(): 
+
+-> A friendly abstraction over the standard Redux createStore() function.
+-> configureStore is a function provided by Redux Toolkit that simplifies the process of creating a Redux store. 
+-> It combines Redux-thunk, Redux DevTools Extension, and default middleware
+
+2. createReducer();
+
+
+
+code : 
+
+store.js
+--------
+import { configureStore } from '@reduxjs/toolkit';
+import customReducer from './Reducers';
+
+const store = configureStore({
+/ *
+"reducer" is a object which contain multiple reducers. customReducer is a function in a file having a name "Reducers.js" where all reducers are defined.
+*/
+    reducer: {
+    	custom: customReducer,
+   },
+});
+
+
+Reducers.js
+-----------
+
+
+
+
+src/
+  ├── components/
+  ├── pages/
+  ├── features/
+  │   ├── user/
+  │   │   ├── userReducers.js
+  │   │   ├── userActions.js
+  │   │   └── ...
+  │   ├── post/
+  │   │   ├── postReducers.js
+  │   │   ├── postActions.js
+  │   │   └── ...
+  └── redux/
+      └── store.js
+
+
+
+
+src/
+  ├── components/
+  ├── pages/
+  ├── redux/
+  │   ├── store.js
+  │   ├── userReducers.js
+  │   └── postReducers.js
+  └── ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

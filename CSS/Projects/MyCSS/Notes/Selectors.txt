@@ -1,0 +1,12 @@
+The selector points/select to the HTML element you want to style.
+
+ex. 
+h1{
+    color: blue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 300%;
+    border: 2px solid blue;
+    padding: 20px;
+}
+
+here h1 is selector

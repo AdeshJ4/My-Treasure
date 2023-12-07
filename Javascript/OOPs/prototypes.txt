@@ -1,0 +1,64 @@
+-> In javascript we don't have a class we only have objects.
+-> Thats when prototypical inheritance comes in picture.
+-> In javascript we have two types of inheritance.
+1. classical Inheritance
+2. Prototypical Inheritance
+
+
+
+
+
+
+
+-> we know that in js we only have objects and not a class.
+-> so how we are going to implememt inheritance using objects ?
+
+
+-> here we have a circle object and can define another object lets called it shape and all add common behavior
+or all common methods in the shape object.
+-> and somehow we are going to link circle object to shape object.
+
+circle -------> shape
+
+-> Now we refer shape object as a prototype of the circle.
+-> Prototype is essentially parent of another objects.
+-> whenver you heard the word prototype just think parent.
+-> Every object in javascript has a prototype or parent and it inherit all the members define in its prototype
+-> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

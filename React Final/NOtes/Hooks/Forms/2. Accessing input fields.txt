@@ -1,0 +1,122 @@
+Accessing DOM Elements:
+-----------------------
+
+-> In general, we want to let React handle all DOM manipulation
+-> But there are some instances where useRef can be used without causing issues.
+-> In React, we can add a ref attribute to an element to access it directly in the DOM.
+-> The useRef Hook allows you to persist values between renders.
+-> It can be used to store a mutable value that does not cause a re-render when updated.
+-> It can be used to access a DOM element directly
+-> useRef() only returns one item. It returns an Object called current.
+-> Ex. 
+	const count = useRef(0);
+It's like doing this: const count = {current: 0}. We can access the count by using count.current.
+
+
+-> useRef Hook is used to reference input field and reads its value when our form is submitted.
+-> the common practice is to give "null" as a initial value for useRef Hook.
+	const count = useRef(null);
+-> this return reference object called "current" so we can store it inside constant named count.
+-> now we have to associate this reference object whith input field.
+-> In React, we can add a ref attribute to an element to access it directly in the DOM.
+   ex. 
+	const count = useRef(null);
+	<input type="text" ref={count} />
+
+-> count object have single property that is current and this return the DOM element we are referencing.
+-> In HTML all input fields have "value" property so instead of logging "count.current" lets log "count.current.value"
+-> Typically when submmiting the form we need to send object to server to be saved.
+
+
+
+
+
+code : 
+------
+
+
+import { useRef, useState } from "react";
+
+const File1 = () => {
+  const [person, setPerson] = useState(null);
+
+  const nameRef = useRef(null);
+  const ageRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setPerson({
+      name: nameRef.current.value,
+      age: Number(ageRef.current.value)
+    });
+    console.log(person);
+  };
+  return (
+    <>
+      {person &&(
+        <>
+          <h1>Name: {person.name}</h1>
+          <h1>Age: {person.age}</h1>
+        </>
+      )}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">Name:</label> 
+          <input type="text" id="name" className="form-control" ref={nameRef} />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="age" className="form-label">Age:</label>
+          <input type="number" id="age" className="form-control" ref={ageRef} />
+        </div>
+
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </form>
+    </>
+  );
+};
+
+
+
+export default File1;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

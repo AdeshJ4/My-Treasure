@@ -1,0 +1,36 @@
+window object: 
+
+-> In a browser we have this "window" object that represent our global scope.
+-> So all the variables and functions that defined globally we can access them via this window object.
+-> In the client side javascript which we run inside a browser, when we declare a variable or functions that is added to global scope means inside a window object and we can access them by window.variableName or window.functionName.
+-> But there is problem with this approach. 
+-> the problem with this approach is that if we have same variableName, functionName as in the window object then we can easily override the the variables, functions in genereal properties of window object which is not good.
+-> so we have to stop using var keyword inside client side js which executes inside a browser.
+
+
+
+global object: 
+
+-> We don’t have the window object in Node.
+-> The global object in Node is “global”. 
+-> Unlike browser applications, variables we define are not added to the “global” object.
+-> In node we don't have this "window" object instead we have "global" object.
+-> so we can do like : global.console.log() or global.setTimeout()
+-> variables and functions which we define in a file like app.js they are not added to a global object.
+They are only scoped to this file (app.js) so they are not available outside this app.js file.
+and this is because node module system.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

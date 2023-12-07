@@ -1,0 +1,3 @@
+-> certain operations like deleteing the data must be performed by Admin
+-> there are certain properties that need to be add or update directly in database
+like isAdmin property.

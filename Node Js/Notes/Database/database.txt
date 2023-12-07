@@ -1,0 +1,139 @@
+Basically we have two approches: 
+
+1. Using references (Normalization)
+2. Using Embedded Documents (DeNormalization)
+3. Using Hybrid Approach
+
+
+
+
+1. Using references (Normalization)
+-> for understaning this concept suppose we have two collections : 1. Courses 2. Authors
+-> Each course object should have author name. for that we store id of author document from author collection inside a course document. so here we are using reference. 
+-> In relatonal databases we have this concept of relationship which enforeces data integrity but in mongodb or nosql databases we don't have relationship. even though we are setting id of author document inside a course document there will be no association or no relatonship between these two documents(author document and course document) in the database.
+-> in another world we can set invalid id of a author document inside a course document and mongodb doesn't care about it.
+
+ex 1: if we have single author 
+let author = {
+	name: 'Mosh'
+};
+let course = {
+	author: {
+      		type: mongoose.Schema.Types.ObjectId,
+      		ref: "Author",
+    	},
+};
+ex 2: if we have multiple authors 
+let course = {
+	author: ['id1', 'id2'],
+}
+
+
+
+
+2. Using Embedded Documents (DeNormalization)
+-> There is another approach instead of having differnet collection for storing authors we can embedded an author document inside a course document.
+-> so basically we are embedding one document inside another document. and this we called denormalization.
+
+ex: 
+
+let course = {
+	courseName: 'Node js',
+	author: {
+		name: 'Mosh'
+		contact: '9527370288'
+	}
+}
+
+
+
+1st approach advantage and disadvantages
+-> In 1st approach we have single place to define a author which is inside a author collection. if tomarrow i decided to change name of author from 'A' to 'B' there is single place that i need to modify. and all courses which are referencing that author will see updated author.
+-> so in 1st approach we have consistency 
+-> However when we query a course document we need to do extra query to load related author from author collection. 
+
+2nd approach advantage and disadvantages
+-> in this approach we can easily load course document with author document withount extra query to author collection because author is inside acourse document.
+-> However with this approach tomarrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple course documents that need to updated and if our update operation doen't complete successfully it is possible that we have some documents which are not updated. so will end up with unconsistent data.
+
+Summary : 
+-> 1st approach gives us consistency 
+-> 2nd approach gives us performance
+-> Each approach have strenght and wicknesses.
+-> which approach you use is really depends on your application and its querring requirements.
+-> so thats why we have to do trade off between to approaches, we can't have both at the same time.
+
+
+
+ 
+
+
+3. Hybrid Approach
+-> lets imagine each author docuent have 50 properties we don't want to duplicate all these properties inside a course document.
+-> so we can have seprate collection of author and course, but instead of using reference of author document inside course document we can embedded author docment inside a course document but not the complete representation of that author perhaps we just need some imp properties from author document like its name , contact info.
+-> SO with hybrid approach our course document will look like this: 
+let author = {
+	name: 'Mosh',
+	50+ properties
+}
+let course = {
+	author: {	
+		id: 'ref',	// reference to author document incase in future if we have detailed info about author
+		name: 'Mosh'  	//imp properties like name, contact info of author
+	}
+}
+
+->  with this approach we can quikly read course document along with his author, so we can optimised our query performance, but we don't have to store all the properties od an authoer inside a course document
+-> This approach is particurely useful if you wanna have snapshot of your data at a point in a time
+-> imagine you are building e commerce application there we will have collections like orders products, shopping cart and so on 
+-> In each order we need to store a snapshot of product because we wanna know price of product at a give point of time 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

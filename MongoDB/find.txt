@@ -1,0 +1,47 @@
+There are 2 methods to find and select data from a MongoDB collection, 
+
+1. find()
+2. findOne().
+
+
+1. find()
+
+-> find() method return all documents from collection if no query object is passed.
+-> This method accepts a query object.
+-> if query object is pass then selected documents will be returned who match the 
+    query object.
+
+
+
+
+2. findOne()
+
+-> findOne() method return only first document.
+-> This method also accepts query object
+-> If left empty, it will return the first document it finds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

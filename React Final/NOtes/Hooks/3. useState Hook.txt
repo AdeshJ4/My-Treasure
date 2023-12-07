@@ -1,0 +1,319 @@
+useState Hook : 
+---------------
+
+-> useState hook is used to initialized the initial state of the application.
+-> The React useState Hook allows us to track state in a function component.
+-> State generally refers to application data or properties that need to be tracked.
+
+Steps to use useState Hook :
+----------------------------
+
+1. Import useState
+
+To use the useState Hook, we first need to import it into our component.
+
+Example:
+
+import { useState } from "react";
+
+
+2. Initialize useState
+
+-> We initialize our state by calling useState in our function component
+-> useState accepts an initial state and returns two values:
+	1. The current state.
+	2. A function that updates the state.
+
+Example: 
+
+import { useState } from "react";
+
+function FavoriteColor() {
+  const [color, setColor] = useState("");
+}
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Example:Get your own React.js Server
+Here is an example of a Hook. Don't worry if it doesn't make sense. We will go into more detail in the next section.
+
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+
+function FavoriteColor() {
+  const [color, setColor] = useState("red");
+
+  return (
+    <>
+      <h1>My favorite color is {color}!</h1>
+      <button
+        type="button"
+        onClick={() => setColor("blue")}
+      >Blue</button>
+      <button
+        type="button"
+        onClick={() => setColor("red")}
+      >Red</button>
+      <button
+        type="button"
+        onClick={() => setColor("pink")}
+      >Pink</button>
+      <button
+        type="button"
+        onClick={() => setColor("green")}
+      >Green</button>
+    </>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<FavoriteColor />);
+
+
+
+6- Updating Objects:
+--------------------
+
+update price property of an drink object :
+
+code: 
+
+const Fun = () => {
+  const [drink, setDrink] = useState({
+    title: "Americano",
+    price: 5
+  });
+
+  const changePrice = () => {
+    setDrink ({...drink, price: 6})
+  }
+
+  return(
+    <>
+      <h1>Title: {drink.title}</h1>
+      <h1>Price: {drink.price}</h1>
+
+      <button onClick={changePrice}>Change Price</button>
+    </>
+  );
+}
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+7- Updating Nested Objects:
+---------------------------
+
+const Fun = () => {
+  const [customer, setCustomer] = useState({
+    name: "John",
+    age: 22,
+    address: {
+      city: "san-francisco",
+      zipCode: 411047,
+    }
+  });
+
+  const changeCity = () => {
+    setCustomer({ ...customer, address: { ...customer.address , city: "Pune" } });
+  };
+
+  return (
+    <>
+      <h1>name: {customer.name}</h1>
+      <h1>age: {customer.age}</h1>
+      <h1>city: {customer.address.city}</h1>
+      <h1>zip Code: {customer.address.zipCode}</h1>
+
+      <button onClick={changeCity}>Change City</button>
+    </>
+  );
+};
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+8 - CRUD Operations on Array
+----------------------------
+
+
+const Fun = () => {
+  const [tags, setTags] = useState(['Happy', 'Sad']);  
+
+  // Add elements
+  const addTag = () => {
+    setTags([...tags, 'Angry']);
+  }
+
+  // Remove Elements
+  const removeTag = () => {
+    setTags (tags.filter((tag)=> tag !== 'Angry'))
+  }
+
+  // Update Element
+  const updateTag = () => {
+    setTags(tags.map((tag)=>tag==='Happy'? "Happiness": tag))
+  }
+
+  return (
+    <>
+      <h1>Tags: {tags}</h1>    
+      <button onClick={addTag}>Add One More</button>
+      <button onClick={removeTag}>Remove Angry</button>
+      <button onClick={updateTag}>Update Happy</button>
+    </>
+  );
+};
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+9 - Nested array opearations
+----------------------------
+
+const Fun = () => {
+  
+  const [bugs, setBugs] = useState([
+    {id: 101, title: 'Bug 1', fixed: false},
+    {id: 102, title: 'Bug 2', fixed: false},
+  ]);
+  
+  const fixedBug = () => {
+    // map method creates new array.
+    setBugs(bugs.map((bug)=>bug.id === 102 ? {...bug, fixed: true}: bug));
+  };
+  
+  console.log("Bug 1 fixed: " , bugs[0].fixed);
+  console.log("Bug 2 fixed: " , bugs[1].fixed);
+  
+  return (
+    <>
+      <h1>Bug 1: </h1>
+      <h3>id: {bugs[0].id}</h3>
+      <h3>title: {bugs[0].title}</h3>
+
+      <h1>Bug 2: </h1>
+      <h3>id: {bugs[1].id}</h3>
+      <h3>title: {bugs[1].title}</h3>
+
+      <button onClick={fixedBug}>Change Fixed</button>
+
+    </>
+  );
+};
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+10- Array and Object 
+--------------------
+
+Example 1: 
+-----------
+
+const Fun10 = () => {
+  const [pizza, setPizza] = useState({
+    name: "Spicy Pepperoni",
+    toppings: ["Mushroom", "Cheese", "Salt", "Sugar", "water"],
+  });
+
+  const addTopping = () => {
+    setPizza({ ...pizza, toppings: [...pizza.toppings, "Bread"] });
+  };
+
+  const removeTopping = () => {
+    setPizza({
+      ...pizza,
+      toppings: pizza.toppings.filter((item) => item !== "Cheese"),
+    });
+  };
+
+  const updateTopping = () => {
+    setPizza({
+      ...pizza,
+      toppings: pizza.toppings.map((item) =>
+        item === "water" ? "Hot Water" : item
+      ),
+    });
+  };
+
+  return (
+    <>
+      <h1>Pizza Hut</h1>
+      <h2>name: {pizza.name}</h2>
+      <ul>
+        {pizza.toppings.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+
+      <button onClick={addTopping}>Add ELement</button>
+      <button onClick={removeTopping}>Remove Element</button>
+      <button onClick={updateTopping}>Update Element</button>
+    </>
+  );
+};
+
+
+
+
+
+
+
+Example 2: 
+----------
+
+
+const Fun10 = () => {
+  const [cart, setCart] = useState({
+    discount: 0.1,
+    items: [
+      { id: 101, title: "Product 1", quantity: 1 }, 
+      { id: 102, title: "Product 2", quantity: 1 }, // change quantity to 2
+    ],
+  });
+
+  const updateQuantity = () => {
+    setCart({...cart, items: cart.items.map((item)=> item.id===102? {...item, quantity: item.quantity + 1} : item)})
+  }
+
+  return (
+    <>
+      <h1>Discount: {cart.discount}</h1>
+      <h1>Items: </h1>
+      <ol>
+        {cart.items.map((item) => (
+          <li key={item.id}>ID: {item.id} title: {item.title} quantity: {item.quantity}</li>
+        ))}
+      </ol>
+
+      <button onClick={updateQuantity}>Change Quantity</button>
+    </>
+  );
+};
+
+export default Fun10;
+
+
+
+
+
+
+
+
+
+
+
+
