@@ -1,0 +1,33 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Environment variables
+.env
+
+# Log files
+*.log
+
+# Dependency directory (created by npm/yarn)
+/dist/
+/build/
+
+# Editor directories and files
+.vscode/
+.idea/
+
+# Project-specific
+/.idea/
+*.iml
+
+# React.js
+/.next/
+/public/
+/build/
