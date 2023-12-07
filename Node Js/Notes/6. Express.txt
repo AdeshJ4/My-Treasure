@@ -2,10 +2,10 @@
 -> Before express we have to create a server using http module.
 -> to create a server wa have a method  inside http module called 'createServer()'.
 -> In http module we have to write multiple if statements for checking multiple urls inside 'createServer()' method.
--> As we add more routes for our appliction we need to add more if blocks in the callback function of createServer((req, res)=>{if()}) method.
+-> As we add more routes for our application we need to add more if blocks in the callback function of createServer((req, res)=>{if()}) method.
 ->  To solve this problem we use Express js.
--> A express frameork gives our application a proper structure so we can easily add more routes while kepping our application code maintanable.
--> There are lots of framework available for building web apllication and web server on top of node but the most popular one is express.
+-> A express framework gives our application a proper structure so we can easily add more routes while kepping our application code maintanable.
+-> There are lots of framework available for building web application and web server on top of node but the most popular one is express.
 -> Express is used in Node.js for building web applications and APIs. It simplifies the process of handling routes, requests, and responses, making it easier and faster to create web services and applications.
 
 Here are some of the key benefits of using Express.js:

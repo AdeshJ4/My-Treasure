@@ -1,7 +1,9 @@
--> Middleware function is basically a function that takes a request object and either returns a response to the client or passes control to another middleware function.
--> Middleware allow programmer to add functionality to the request response cycle such as authentication,  logging, error handling and many more.
--> Middleware functions are invoked in the order they are defined and are capable of modifying the request and response objects, as well as passing control to the next middleware function in the stack.
--> This makes it easy to add common features to an application without having to write the code from scratch
+-> Middleware function is basically a function that takes a request object and either returns a response to the client or passes 
+control to another middleware function.
+-> Middleware allow programmer to add functionality to the request response cycle such as authentication,  logging, error handling 
+and many more.
+-> Middleware functions are invoked in the order they are defined and are capable of modifying the request and response objects, 
+as well as passing control to the next middleware function in the stack.
 -> if you use lots of middleware functions inside your request processing pipeline then it will slow down your application.
 -> Middleware can be defined globally, for all routes, or can be defined for specific routes or groups of routes. 
 -> So an express application is essentially nothing but a bunch of middleware functions
@@ -14,12 +16,12 @@
 app.get('/', (req, res)=>{
 	res.send("Hello");
 });
-In the above ex "(req, res)=>{
+In the above ex tha callback function passes to route handler is the example of middleware function.
+"(req, res)=>{
 	res.send("Hello");
 }"
-
-is the example of middleware function.
--> So in express every route handler function we have is technically a middleware function. because it takes a req object and returns res object to client. so it termiates req-res cyle.
+-> So in express every route handler function we have is technically a middleware function. because it takes a req object and returns 
+res object to client. so it termites req-res cycle.
 	
 
 
@@ -27,14 +29,16 @@ is the example of middleware function.
 Request Processing Pipeline:
 ----------------------------
 
--> at runtime, when we receive a request on the server that request goes through a pipeline we call this pipeline "Request Processing Pipeline".
--> In this pipeline we have one or more middleware functions. Each middleware function either terminates the request response cycle by returning a response object or it will pass control to another function.
+-> at runtime, when we receive a request on the server that request goes through a pipeline we call this pipeline "Request Processing 
+Pipeline".
+-> In this pipeline we have one or more middleware functions. Each middleware function either terminates the request response cycle 
+by returning a response object or it will pass control to another function.
 -> So every request that we get on the server will go through our middleware function.
 -> So an express application is essentially nothing but a bunch of middleware functions
 
 
 
-Building Custome Middleware: 
+Building Custom Middleware: 
 ----------------------------
 
 
@@ -43,25 +47,33 @@ Building Custome Middleware:
 const express = require("express");
 const app = express();
 
-app.use(function (req, res, next) {
-  console.log("1st Middleware function");
-  next();
-});
-
-app.use(function(req, res, next){
-    console.log("2nd Middleware function");
+app.use((req, res, next)=> {
+    console.log('1st middleware function');
     next();
 })
 
-app.get("/", (req, res) => {
-    console.log("3rd Middleware function");
-  res.send("Simple Get Request");
+app.get("/", (req, res, next) => {
+  res.send("Home Page");
+  next();
 });
 
-app.listen(3000, () => {
-  console.log(`Server listening on port 3000`);
+app.use(function (req, res, next) {
+  console.log("last Middleware function");
+  next();
 });
 
+app.listen(5000, () => {
+  console.log("Server is listening on port 5000");
+});
+
+o/p: 
+
+when you send a request then only all middleware functions going to be executed. 
+send a request like : http://localhost:5000
+Server is listening on port 5000
+1st middleware function
+2nd middleware function
+last Middleware function
 
 
 
@@ -72,15 +84,18 @@ Built in Middleware functions:
 1. app.use(express.json());
 
 -> In Express.js, the `express.json()` middleware is used to parse incoming JSON data from HTTP requests. 
--> When a client sends JSON data in the request body, you need to parse and access that data in your Express route handlers. The `express.json()` middleware parses the JSON data and makes it available as a JavaScript object in the `req.body` property. so you don't have to manually parse the incoming data using `JSON.parse()`. You can directly access the parsed JSON data using `req.body`.
-->it also performs error handling. If the incoming data is not valid JSON, it will catch the parsing error and send an HTTP 400 Bad Request response, which helps prevent your application from crashing due to malformed JSON.
+-> The `express.json()` middleware parses the JSON data and makes it available as a JavaScript object in the `req.body` property. 
+so you don't have to manually parse the incoming data using `JSON.parse()`. 
+->it also performs error handling. If the incoming data is not valid JSON, it will catch the parsing error and send an HTTP 400 Bad
+Request response, which helps prevent your application from crashing due to malformed JSON.
 
 
 2. app.use(express.urlencoded({ extended: true }));
 
 -> This middleware function parses incoming requests with URL encoded payloads that is request with body like	this : "key=value&key=value".
--> So we have key set value and another key set value. Now this is more of a traditional approach. Its not something tht we use that often these days.
--> Basically if you have an HTML form with inputs fields and post that form to the server the body of the request will looks like this "key=value&key=value".
+-> Now this is more of a traditional approach. Its not something tht we use that often these days.
+-> Basically if you have an HTML form with inputs fields and post that form to the server the body of the request will looks 
+like this "key=value&key=value".
 -> So that's where you have URL encoded payload in the request.
 -> Now this middleware parse this body "key=value&key=value" and populates req.body like a json object.
 
@@ -88,17 +103,18 @@ Built in Middleware functions:
 3. app.use(express.static('public'));
 
 -> This middleware is used to serve static files  
--> so we are going to put all our static assests like images, css and so on in this folder.
--> create folder having name "Public" and cretae a file inside it havinf name "f1.txt"
+-> so we are going to put all our static assets like images, css and so on in this folder.
+-> create folder having name "Public" and create a file inside it having name "f1.txt"
 -> Then visit localhost:3000/f1.txt
 
 
 
 Third-party Middleware: 
-======================
+=======================
 
 1. helmet : Helps secure your app by setting various HTTP Headers.
-2. morgan : "Morgan" is a middleware for logging HTTP requests in Node.js, providing insights into server activity, request details, and response statuses.
+2. morgan : "Morgan" is a middleware for logging HTTP requests in Node.js, providing insights into server activity, request details, 
+and response statuses.
 3. rc : The rc npm package is used to load configuration settings from configuration files in a consistent and flexible manner. It's often used in Node.js applications to simplify the process of managing and accessing configuration parameters.
 4. debug: A tiny JavaScript debugging utility modelled after Node.js core's debugging technique. Works in Node.js and web browsers.
 
