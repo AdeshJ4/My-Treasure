@@ -1,5 +1,7 @@
--> Mongoose give us simple api to work with mongodb databse.
-->  Mongoose is an ODM(Object data Modeling) library, which means it allows you to define schemas (blueprints for data) and models (constructors for creating documents based on those schemas).
+-> Mongoose give us simple api to work with mongodb database.
+-> Mongoose is build top og the mongodb database.
+-> Mongoose is an ODM(Object data Modeling) library, which means it allows you to define schemas (blueprints for document) and 
+models (constructors for creating documents based on those schemas).
 
 
 

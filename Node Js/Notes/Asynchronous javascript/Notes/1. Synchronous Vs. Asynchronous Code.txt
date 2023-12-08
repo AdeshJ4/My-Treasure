@@ -44,6 +44,8 @@ to use asynchronous architecture but you have to do extra work for that
 Asynchronous Code:
 ------------------
 
+-> Asynchronous here refers to all those functions in JavaScript that are processed in the background without blocking any other 
+request.
 -> Asynchronous code is executed in a simultaneously, parallelly and non blocking manner.
 -> Asynchronous programming is a technique that enables your program to start a long-running task and still be able to be responsive 
 to other tasks while that long running task runs, rather than having to wait until that long running task has finished. 
@@ -96,4 +98,79 @@ why node should not be used for CPU intensive applications. it should only be us
 
 
 
+============================================================================================================
 
+
+
+
+-> Javascript is synchronous, blocking, single threaded language.
+-> To make async programming possible we need the help of libuv library.
+
+Code execution in node js : 
+
+On the left we have V8 engine which consists of two parts: 
+1. memory heap
+2. Call Stack
+
+and on the right side we have : libuv library
+
+-> whenever we declare a variable or function memory is allocated on the heap.
+-> When you executed code function is pushed to the call stack and when tje function returned it popped out call stack.
+
+
+-> On the right we have 'libuv' library 
+-> whenever you execute async method it is off loaded to the libuv.
+-> libuv then run the task using native async mechanism of operating system.
+-> and if that is not possible it will utilized its thread pool to run that task ensuring the main thread is not block
+(main thread resides in call stack).
+
+
+
+
+How V8 engine and libuv are used by node .
+
+1. Synchronous code Execution in Node js : 
+
+ex> 
+
+1. console.log('First')
+1. console.log('Second')
+1. console.log('Third')
+
+
+Step 1 : The main thread of execution always starts in the global() scope. global() function is pushed to the stack.
+Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. First is log to the console. The log statement is popped out of stack.
+Step 3 : Execution comes to line two. Second log statement is pushed on the stack. Second is log tot he console and log popped out of stack after Execution
+Step 4 : Finally execution comes on line three. Third log statement is pushed on the stack. Third is log to the console and log popped out of stack after Execution
+Step 5 : No code is left to execute so global() will be popped from stack.
+
+This is how synchronous code execute in node runtime.
+
+ 
+
+Asynchronous Code Execution in Node js: 
+
+1. console.log('First);
+2. fs.readFile('demo.txt',()=>{
+3.     console.log('Second);
+4. });
+5. console.log('Third);
+
+
+Step 1 : The main thread of execution always starts in the global() scope. global() function is pushed to the stack.
+Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. 'First' is log to the console. 
+The log statement is popped out of stack.
+Step 3 : Execution comes to line two. The readFile() method gets pushed to the stack. readFile() is async operation thats why it 
+will be off loaded to 'libuv' section only callback function present inside readFile() will be handed over to libuv. 
+readFile() without callback will remain inside call stack section. like : fs.readFile();
+Step 4 : Javascript then simply pops out fs.readFile() method from the call stack because its job is done as far as executing of 
+line 2 is concerned. remember we still have callback function of readFile() inside libuv section. In the background libuv starts 
+read file content on a 'separate thread'.
+Step 5 : Now flow of execution moves to line 5. last log statement is pushed on the stack. 'Third' is log to the console and log 
+popped out of stack after Execution.
+Step 6 : Now there is no user written code in the call stack. so call stack is empty. At some point the file read task completed in 
+the thread pool. The associate call back function is now pushed to the call stack. Inside the callback function we have log statement
+which is pushed to call stack. Second is log to the statement and the log is pop out. as there are no more code left in callback, 
+the callback also pop out from stack. 
+Step 7 : Now no more code to run so global() also pop out.
+Step 8 : The output will be 'First', 'Second', 'Third'. 

@@ -4,7 +4,7 @@ What is Node js ?
 ->Node is not a programming language nor its a framework it is just a open source, cross platform runtime environment for 
 executing js code outside a browser.
 -> we use Node js to build backend services also call APIs.
-
+-> NodeJS is an asynchronous event-driven JavaScript runtime environment designed to build scalable network applications.
 
 APIs : 
 
@@ -75,9 +75,81 @@ applications we have a lots of calculation that should be done by CPU  and few o
 why node should not be used for CPU intensive applications. it should only be used for data intensive and real time applications. 
 
 
+Event Queue:
+-> The event queue is a data structure that holds tasks or events that need to be processed.
+-> It acts as a waiting area for tasks that are triggered by various events, such as user interactions, I/O operations, or timers.
+-> When you make an asynchronous function call or register an event listener, the associated task goes into the event queue.
+-> Imagine people standing in line to buy tickets. Each person represents a task waiting to be processed.
+-> Tasks in the event queue are processed in the order they are added (FIFO - First In, First Out - the first item that is added to 
+a queue is the first one to be removed).
+-> Tasks can include callbacks, promises, or other asynchronous operations.
+
+
+Event Loop: 
+
+-> 'Event loop' is a C program and is part of libuv.
+-> Event loop is a loop that is alive as long as your node js application is up and running.
+-> The event loop is what allows Node.js to perform non-blocking I/O operations — despite the fact that JavaScript is single-threaded
+-> The event loop is like a manager that checks the event queue and decides which task to execute next.
+-> An event loop is an loop, which waits for tasks, executes them, and then sleeps until it receives more tasks.
+-> The event loop constantly checks whether the call stack is empty and executes tasks one by one
+-> The event loop executes tasks from the event queue only when the call stack is empty i.e. there is no ongoing task.
+-> The event loop follows a cycle: it checks if the call stack is empty, and if so, it takes tasks from the event queue and adds 
+them to the call stack for execution.
+-> The event loop processes tasks in the order they were added to the queue. 
+This follows the FIFO principle. (First In, First Out - the first item that is added to a queue is the first one to be removed).
+-> The event loop allows for non-blocking, asynchronous execution in a single-threaded environment.
+-> It prevents the program from getting stuck on one task, enabling it to handle multiple tasks concurrently.
+
+
+call Stack : 
+
+-> The call stack is a data structure that keeps track of the currently executing functions. When a function is called, 
+it is pushed to the call stack and popped off when completed.
+-> The call stack in Node.js follows the Last In, First Out (LIFO) order. This means that the most recently added function call 
+in the stack is the first one to be executed and removed when the function completes.
+-> Whenever a function is called, a new frame is added to the top of the call stack.
+-> frame contains information about the function call, including the function's parameters and local variables.
+-> As functions are executed, their frames are pushed onto the call stack. When a function completes, its frame is popped off the 
+stack.
+
+ex: 
+function f1() {
+    console.log('Hi by f1!');
+}
+function f2() {
+    f1();
+    console.log('Hi by f2!');
+}
+f2();
+
+The call stack would look like:
+------------------------------
+
+-> suppose we have two functions f1() and f2(). we called f1() inside f2(). 
+Step 1: When the code loads in memory, the 'global execution context' gets pushed in the stack.
+Step 2: The f2() function gets called, and the 'execution context of f2()' gets pushed into the stack
+Step 3: The execution of f2() starts and during its execution, the f1() function gets called inside the f2() function. 
+This causes the execution context of f1() to get pushed in the call stack.
+Step 4: Now the f1() function starts executing.
+Step 5: When f1() completes its execution it will be popped from the stack.
+Step 6: Now remaining code of f2() gets executed and after that f2() will be popped from the stack.
+Step 7: Now left is only 'global execution context' which at the end will be popped out.
+global execution context: 
+
+The global execution context is the outermost or top-level context in the JavaScript execution environment. When a JavaScript 
+program starts running, it creates a global execution context, which includes the following key components like Global Object, this etc.
+
+
+
+
+
+
+
 why we use single thread in Node js?
 ==========================================
-
+-> A single-threaded approach consumes less memory than multi-threading, making Node.js suitable for lightweight, memory-efficient 
+applications and microservices.
 -> To maximize efficiency in handling I/O operations. 
 -> This allows it to handle many concurrent requests without the overhead of managing multiple threads. 
 
