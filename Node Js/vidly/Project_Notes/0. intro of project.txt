@@ -1,0 +1,128 @@
+-> sir i have created a project having name "Vidly"  which is a 'movie rental application' which runs locally on a video store.
+-> with the help of this application we can rent a movie from a movie rental video store.
+-> This movie rental application only runs locally on a video store.
+-> The peoples which are going to use this application are the employees of that video store.
+-> Its like application which we see in a dmart like shops.
+-> Basically peoples who want to rent a movie will come to this movie shop and with this application we can register the user and 
+creates its renal which contain customer details and which movie he rented.
+
+-> The technology i used in this application are : 
+1. ExpressJS :     "express": "^4.18.2",
+2. Mongoose :     "mongoose": "^8.0.1", 
+3. jsonwebtoken    "jsonwebtoken": "^9.0.0",
+4. "bcrypt": "^5.1.1",
+5. "nodemon": "^3.0.1"
+
+ 
+
+
+-> Basically in this project i have created 5 APIs. which are as follows: 
+
+1. Customer APIs
+2. Movie API
+3. Genre API
+4. Rental API
+5. User API
+
+
+
+1. Customer API : 
+
+-> Inside a customer api i have different route handlers to handle different kinds of requests.
+-> Request like:  
+getting all the customers,
+getting a single customer
+create a customer
+update a customer
+delete a customer
+
+
+
+2. Movie API: 
+
+-> This API is used for adding movies information inside a database.
+-> When new movie stock comes, or new movie come in store we use this movie API to store all information of movies in database like 
+movie name, its quantity, its genre, its daily rental rate.
+
+
+3. Genre API
+
+-> Each movie have a genre like Action, Romance, thriller, sci-fi
+-> we use this genre api for : 
+
+adding a genre of a movie 
+updating genre name
+deleting a genre 
+
+
+
+
+4. Rental API
+
+-> rental api is used to  manage a rental.
+-> like rental consists of customer details, movie details like this information
+-> The route handlers are : 
+1. get all rentals
+2. get single rental
+3. create rental 
+
+
+5. User API: 
+
+-> user api is most important api because in this api i implement logic of authentication and authorization
+-> User api  have most important route handlers.
+
+we have two route handlers in this api : 
+1. route handler for register User
+2. route handler for login user
+
+authentication: 
+-> In the authentication part we are checking the employees is valid employees or not 
+-> it contain checking email id and password of the employee. 
+-> if the user is valid then we are going to give access to the application.
+-> so here for comparing passwords we use 'bcrypt' package.
+-> if the employee is not register then we are going to register it using registerUser route handler.
+-> in this route handler, we are going to store a password of a employee in a database.  we are not going to store original p/w
+in the database instead we are going to hashed the password convert it into a encrypted text and that encrypted p/w is 
+
+login user: 
+
+
+authorization: 
+-> we have role based authorization.
+1. normal employee
+2. admin
+-> In the authorization part we are checking the employee have access to a particular api end point or not.
+-> like some endpoint are very important like deleting a movie, deleting a customer, deleting a genre, deleting a rental as well as
+deleting a user, so basically all the deleting operations are very important and only be accessible by admin.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

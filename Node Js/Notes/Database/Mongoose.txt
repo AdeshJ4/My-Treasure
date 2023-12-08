@@ -3,14 +3,76 @@
 -> Mongoose is an ODM(Object data Modeling) library, which means it allows you to define schemas (blueprints for document) and 
 models (constructors for creating documents based on those schemas).
 
+Schema : 
+
+-> In mongoose we have this concept called schema.
+-> this is specific to mongoose its not a part of a mongodb.
+-> we use the schema in mongoose to define shape of a  documents in mongodb.
+-> we use it to define what are the properties we have in this document.
+-> this schema define shape of course document in mongodb database.
+-> here we are creating instance of Schema class.
+
+const courseSchema = new mongoose.Schema({
+    name: String,
+    author: String,
+    tags: [String],
+    date: {
+        type: Date,
+        default: Date.now()
+    },
+    isPublished: Boolean
+})
+const Course = mongoose.model('Course',courseSchema);
+const course = new Course({
+    name: 'Node Js',
+    author: 'Mosh',
+    tags: ['Node', 'backend'],
+    isPublished: true
+})
+
+
+Schema Types : 
+--------------
+1. String
+2. Number
+3. Date
+4. Buffer (which is used to store binary data)
+5. Boolean
+6. ObjectID (used for signing unique identifier)
+7. Array
 
 
 
 
+Model : 
+
+-> models is constructors for creating documents based on those schemas.
+-> we need to compile schema into a model. 
+-> mongoose have a method called model() which takes two arguments. 
+first argument is singular name of the collection that this model is for.
+second argument is schema which define shape of document of this collection.
+-> Once we have schema we need to compile that into a model which give us the class(Course), next we can create an object(course) 
+based on that class and this object map to a document in a mongodb database.
+
+ex.
+
+const Course = mongoose.model('Course',courseSchema);
+const course = new Course({
+    name: 'Node Js',
+    author: 'Mosh',
+    tags: ['Node', 'backend'],
+    isPublished: true
+})
 
 
 
 
+Mongoose Methods: 
+
+1. Create (Insert) -    create()
+2. Read (Find) -        find(), findOne(), findById()
+3. Update -             updateOne(), updateMany(), findOneAndUpdate(), findByIdAndUpdate()
+4. Delete -             deleteOne(), deleteMany(), findOneAndDelete(), findByIdAndDelete()
 
 
 

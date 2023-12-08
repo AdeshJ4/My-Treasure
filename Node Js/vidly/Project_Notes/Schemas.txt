@@ -1,4 +1,4 @@
--> In mongoose we have this conecept called schema.
+-> In mongoose we have this concept called schema.
 -> this is specific to mongoose its not a part of a mongodb.
 -> we use the schema in mongoose to define shape of a  documents in mongodb.
 -> we use it to define what are the properties we have in this document.
@@ -25,7 +25,7 @@ Schema Types :
 3. Date
 4. Buffer (which is used to store binary data)
 5. Boolean
-6. ObjectID (used for signning unique identifier)
+6. ObjectID (used for signing unique identifier)
 7. Array
 
 

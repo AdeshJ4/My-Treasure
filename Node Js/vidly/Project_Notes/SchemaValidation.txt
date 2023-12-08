@@ -1,4 +1,4 @@
--> All the properties you define inside a schema are optional so mongoDB doesn't care about schema and properties indside it.
+-> All the properties you define inside a schema are optional so mongoDB doesn't care about schema and properties inside it.
 code : 
 const castSchema = new mongoose.Schema({
   name: String,   // optional
@@ -22,14 +22,17 @@ const createCourse = async () => {
 };
 
 
--> mongoDb doesn't care we have a Course that doen't have a name or age or any other properties.
--> for this we hhave to implement validation so that we doesn't insert empty document.
--> The validation we implemented here is only meaningful in mongoose at the time we save the course mongoose run the validation logic and if the course document is not valid it give us error.
+-> mongoDb doesn't care we have a Course that doesn't have a name or age or any other properties.
+-> for this we have to implement validation so that we doesn't insert empty document.
+-> The validation we implemented here is only meaningful in mongoose at the time we save the course mongoose run the validation 
+logic and if the course document is not valid it give us error.
 -> we use Joi for validation
 -> so you must be thinking that we have two types of validation 1. mongoose validation 2.Joi validation then which one we should use ?
--> the ans is both this kind of validtion support each other.so weuse Joi in our RESTful API we use it as a first attack. to make sure the data client sending is valid data.
--> but you still need mongoose kind of validation to make sure that the data we save to database is in the right shape. because it is possible that client send us a valid course in the body of the request but when we create course object in our http service perhaps we forget to set a name propertyto what we get from req.body.name
--> 
+-> the ans is both this kind of validation support each other.so we use Joi in our RESTful API we use it as a first attack. 
+to make sure the data client sending is valid data.
+-> but you still need mongoose kind of validation to make sure that the data we save to database is in the right shape. because it 
+is possible that client send us a valid course in the body of the request but when we create course object in our http service 
+perhaps we forget to set a name property to what we get from req.body.name
 
 
 Built in validator: 
@@ -37,13 +40,13 @@ Built in validator:
 
 1. required : true
 
--> price is required if isPublush is true: 
+-> price is required if isPublish is true: 
 const courseSchema = mongoose.Schema({
   name: { type: String, required: true },
   isPublished: Boolean,
   price: {
     type: Number,
-    required: function () { // price is required only if isPublush is true
+    required: function () { // price is required only if isPublish is true
       return this.isPublished;
     },
   },
@@ -55,14 +58,14 @@ const courseSchema = mongoose.Schema({
 2. enum validator: 
 
 -> we set enum to an array of valid string. so lets say we have predefine category. ['web', 'mob']
--> so when creating a course the category we set should be one of the array value. otherwiaw we will get validation error.
+-> so when creating a course the category we set should be one of the array value. otherwise we will get validation error.
 
 code: 
 
 
 
 
-3. custome validation: 
+3. custom validation: 
 
 -> book array must contain at least one book.
 -> if you use required : true then it will not helps us because if you insert empty array it will accept it so we have to define custom validation.
@@ -83,7 +86,8 @@ const createCourse = async () => {
         message: "A course should have at least one book."
       }
     },
-});
+})
+};
 
 
 
@@ -96,7 +100,8 @@ const createCourse = async () => {
 Async Validators: 
 -----------------
 
--> Sometimes validation logic may involve reading something from database or remote services, so we don't have a answer straight way, in that case you need a async validator. 
+-> Sometimes validation logic may involve reading something from database or remote services, so we don't have a answer straight way, 
+in that case you need a async validator. 
 
 books: {
     type: Array,

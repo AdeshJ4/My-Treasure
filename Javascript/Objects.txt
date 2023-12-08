@@ -35,7 +35,7 @@ Factory Function :
 -> just like factory producing products this factory function produce objects
 -> the beauty of factory function is that we define our logic in one place. so we can call this function with different values we will get diiferent person objects but we have define intro method only in one place.
 -> so if there is bug in future then we have single place to modify.
--> in factory function we used built in constructor function called 'Object()' to create objects beacuse we used object literal syntax(eg. const x = {}).
+-> in factory function we used built in constructor function called 'Object()' to create objects because we used object literal syntax(eg. const x = {}).
 eg. const x = {}  // this line converted to -> const x = new Object();
 
 function createPerson(fname, age) {
