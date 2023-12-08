@@ -1,8 +1,8 @@
-There are three paterns to deal with asynchronus code : 
+There are three patterns to deal with asynchronous code : 
 
 1. callBack
 2. Promises
-3. Async/Await  (basically syntatical sugar over promises)
+3. Async/Await  (basically syntactical sugar over promises)
 
 
 

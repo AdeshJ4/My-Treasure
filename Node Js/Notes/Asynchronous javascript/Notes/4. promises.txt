@@ -7,8 +7,8 @@ JavaScript Promises:
 -> A Promise is a JavaScript object that links producing code and consuming code
 
 
--> peomise is javascript object which holds the eventual(result of period of time) result of an asychronous operation.
--> when asynchronous operation completes it can either return rresult in value or an error.
+-> promise is javascript object which holds the eventual(result of period of time) result of an asynchronous operation.
+-> when asynchronous operation completes it can either return result in value or an error.
 -> A promise basically promise you that it will give the result of an asynchronous operation.
 -> this object can be in one of the three state: 
 	1. Pending
@@ -25,10 +25,11 @@ When a Promise object is "rejected", the result is an error object.
 
 -> Initially when we create promise object it is initially in "pending" state.
 -> at this point it will kick/start some asynchronous operations.
--> when the result is ready the promise can either be fullfilled or resolved which basically means asynchroonos operation completes successfully so here we have a value.
--> otherwise if something went wrong during the exection of that asynchronous operation our promise is in the rejected state.
--> in this we have an error object.
--> 
+-> when the result is ready the promise can either be fulfilled or resolved which basically means asynchronous operation completes 
+successfully so here we have a value.
+-> otherwise if something went wrong during the execution of that asynchronous operation our promise is in the rejected state.
+in this we have an error object.
+
 
 
 Ex.
@@ -98,7 +99,7 @@ Promise.all([])
 
 -> Promise.all is a method that takes an array of promises and returns a new promise.
 -> This new promise contain array of the results when all promises are successfully fulfilled.
--> Sometimes we have to run few asynchronous opearation in parallel,and when they all complete you wanna do somethinng after.
+-> Sometimes we have to run few asynchronous operations in parallel,and when they all complete you wanna do something after.
 -> for example you may call different api like facebook api and twitter api and when the result of both asynchronous operations are ready then you are gonna return something to user.
 
 code: 
@@ -151,7 +152,8 @@ Promise.all([p1, p2]):
 
 Promise.race([p1, p2]):
 -----------------------
--> when you have to do something as soon as first promise completes then instead of using Promise.all() we have to use Promise.race([p1, p2])
+-> when you have to do something as soon as first promise completes then instead of using Promise.all() we have to use 
+Promise.race([p1, p2])
 -> in this case our first promise completes first so result is : 
 Async Operation 1...
 { id: 101, name: 'Adesh' }
@@ -193,7 +195,7 @@ Async Operation 1...
 Creating Settled Promises:
 --------------------------
 
--> Sometimes we have to create a promise that is already resolved. this is particurely used while writing unit tests.
+-> Sometimes we have to create a promise that is already resolved. this is particularly used while writing unit tests.
 -> in your unit test you have to write promise that is already resolved.
 
 code : 

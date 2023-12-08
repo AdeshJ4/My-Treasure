@@ -2,30 +2,39 @@
 -> Before express we have to create a server using http module.
 -> to create a server wa have a method  inside http module called 'createServer()'.
 -> In http module we have to write multiple if statements for checking multiple urls inside 'createServer()' method.
--> As we add more routes for our application we need to add more if blocks in the callback function of createServer((req, res)=>{if()}) method.
+-> As we add more routes for our application we need to add more if blocks in the callback function of 
+createServer((req, res)=>{if()}) method.
 ->  To solve this problem we use Express js.
--> A express framework gives our application a proper structure so we can easily add more routes while kepping our application code maintanable.
--> There are lots of framework available for building web application and web server on top of node but the most popular one is express.
--> Express is used in Node.js for building web applications and APIs. It simplifies the process of handling routes, requests, and responses, making it easier and faster to create web services and applications.
+-> A express framework gives our application a proper structure so we can easily add more routes while keeping our application 
+code maintainable.
+-> There are lots of framework available for building web application and web server on top of node but the most popular one is 
+express.
+-> Express is used in Node.js for building web applications and APIs. It simplifies the process of handling routes, requests, 
+and responses, making it easier and faster to create web services and applications.
 
 Here are some of the key benefits of using Express.js:
 
 1. Flexibility: 
 
-Express.js provides a flexible and modular structure for building web applications. It allows developers to easily add or remove features, such as middleware or plugins, to customize the application according to their needs.
+Express.js provides a flexible and modular structure for building web applications. It allows developers to easily add or remove
+features, such as middleware or plugins, to customize the application according to their needs.
 
 2. Templating: 
 
-Express.js supports a variety of templating engines, such as EJS, Handlebars, and pug, which allow developers to generate dynamic HTML pages and views for their applications.
+Express.js supports a variety of templating engines, such as EJS, Handlebars, and pug, which allow developers to generate dynamic
+ HTML pages and views for their applications.
 
 3. Middleware: 
 
-Express.js provides a middleware system that allows developers to add functionality to the request/response cycle, such as authentication, logging, error handling, and more. This makes it easy to add common features to an application without having to write the code from scratch.
+Express.js provides a middleware system that allows developers to add functionality to the request/response cycle, 
+such as authentication, logging, error handling, and more. This makes it easy to add common features to an application without 
+having to write the code from scratch.
 
 
 4. Routing: 
 
-Express.js provides a simple and intuitive routing system for defining endpoints and handling HTTP requests. This makes it easy to create RESTful APIs and web services.
+Express.js provides a simple and intuitive routing system for defining endpoints and handling HTTP requests. 
+This makes it easy to create RESTful APIs and web services.
 
 
 

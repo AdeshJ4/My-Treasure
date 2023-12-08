@@ -1,21 +1,21 @@
 JavaScript Callbacks:
 ---------------------
 
--> "I will call back later!"
-
--> In JavaScript, callbacks are functions that are passed as arguments to other functions and are invoked when an asynchronous operation is completed.
+-> In JavaScript, callbacks are functions that are passed as arguments to other functions and are invoked when an asynchronous 
+operation is completed.
 
 -> This technique allows a function to call another function
 
--> A callback function can run after another function has finished
+-> A callback function can run after anther function has finisohed
 
 
 When to Use a Callback ?
 ------------------------
 
--> Where callbacks really shine are in asynchronous functions, where one function has to wait for another function (like waiting for a file to load).
+-> Where callbacks really shine are in asynchronous functions, where one function has to wait for another function 
+(like waiting for a file to load).
 
--> A callback is a function that we are going to call when the result of asynchronous opearation is ready.
+-> A callback is a function that we are going to call when the result of asynchronous operation is ready.
 
 
 

@@ -2,9 +2,10 @@ Synchronous Code :
 ------------------
 
 -> Synchronous code is executed in a sequential and blocking manner.
--> it means first task/operation completes its excution then and only then 2nd task/operation will start its excution.
+-> it means first task/operation completes its execution then and only then 2nd task/operation will start its execution.
 -> it means first task/operation is blocking the execution of 2nd task/operation
--> other thing to notice is that the order of execution in sequential that means It follows a natural flow of execution which is from top to bottom, and each line of code is executed one after the other.
+-> other thing to notice is that the order of execution in sequential that means It follows a natural flow of execution which is 
+from top to bottom, and each line of code is executed one after the other.
 
 
 Here's an example of synchronous code:
@@ -15,19 +16,25 @@ console.log("End");
 
 real life example: 
 
--> Back to our restarunt example.
--> waiter comes to your table and take your order and give it to the kitchen now the waiter is sitting in the kitchen waiting for the chef to prepare you meal. during that time a waiter is not doing anything he is just waiting he is not going to take order from another tables until your meal is ready.
+-> Back to our restaurant example.
+-> waiter comes to your table and take your order and give it to the kitchen now the waiter is sitting in the kitchen waiting for the
+chef to prepare you meal. during that time a waiter is not doing anything he is just waiting he is not going to take order from 
+another tables until your meal is ready.
 -> This is what we called blocking or synchronous way.
 -> This is how applications are build using framework like ASP.NET or rails out of a box.
 
-Practical Knowlege: 
+Practical Knowledge: 
 
--> In a synchronous architecture, when we receive a request on a server, we allocate a thread to handle that request. suppose that request is querring a database. as you know querring a database may takes some time for returning a result.
+-> In a synchronous architecture, when we receive a request on a server, node allocate a thread to handle that request. 
+suppose that request is queering a database. as you know queering a database may takes some time for returning a result.
 -> so When database is executing a query that thread is sitting ideal. 
 -> Now suppose another request comes at that point then we have to allocate another thread for a new request.
--> Now imagine, what will happen, if we have a server with lots of no of concueernt requests/clients.
--> At some time we will out of threads beecause there are lots of cuncurrrent requets.
--> so new client or request have to wait until threads are available or if we don't want to wait them we need to add more hardware. so with this kind of architecture we are not utilizing resourses efficiently this is a problem with  blocking or synchronous architecture. this is how applications are build with framewoks like ASP.NET. works by default. ofcourse in ASP.net it is possible to use asynchronous architecture but you have to do extra work for that
+-> Now imagine, what will happen, if we have a server with lots of no of concurrent requests/clients.
+-> At some time we will out of threads because there are lots of concurrent request.
+-> so new client or request have to wait until threads are available or if we don't want to wait them we need to add more hardware. 
+so with this kind of architecture we are not utilizing recourses efficiently this is a problem with  blocking or synchronous 
+architecture. this is how applications are build with frameworks like ASP.NET. works by default. of course in ASP.net it is possible 
+to use asynchronous architecture but you have to do extra work for that
 
 
 
@@ -38,41 +45,53 @@ Asynchronous Code:
 ------------------
 
 -> Asynchronous code is executed in a simultaneously, parallelly and non blocking manner.
--> Asynchronous programming is a technique that enables your program to start a long-running task and still be able to be responsive to other tasks while that long running task runs, rather than having to wait until that long running task has finished. Once that long running task has finished, your program is presented with the result.
--> you can handle multiple tasks simultaneously, parallelly rather than executing them one after the other. This is especially important in scenarios where tasks, such as fetching data from a server or reading a file, may take some time. this doesn't block the execution of the program. 
--> callbacks or promises, async-await handle the result of these asynchronous operations.
+-> Asynchronous programming is a technique that enables your program to start a long-running task and still be able to be responsive 
+to other tasks while that long running task runs, rather than having to wait until that long running task has finished. 
+Once that long running task has finished, your program is presented with the result.
+-> you can handle multiple tasks simultaneously, parallelly rather than executing them one after the other. 
+This is especially important in scenarios where tasks, such as fetching data from a server or reading a file, may take some time. 
+this doesn't block the execution of the program. 
+-> callbacks, promises, async-await handle the result of these asynchronous operations.
 
 
 
-There are three paterns to deal with asynchronus code : 
+There are three patterns to deal with asynchronous code : 
 
 1. callBack
 2. Promises
-3. Async/Await  (basically syntatical sugar over promises)
+3. Async/Await  (basically syntactical sugar over promises)
 
 
 real life example: 
 
--> imagine you go to restarunt, waiter comes to a table. takes your order and give it to a chef in the kitchen. then he moves immediaely to serve another table while the chef preparing you meal.
+-> imagine you go to restaurant, waiter comes to a table. takes your order and give it to a chef in the kitchen. then he moves immediaely to serve another table while the chef preparing you meal.
 -> The main point here is that waiter does not stop at the chef for waiting 1st customer order because that order was going to take time instead he moves immediately to take order of 2nd cusomer/table.
 -> So he waiter does no seat ideal.
 -> because of this same waiter can serves many different tables.
--> The waiter is like a single thread allcated to handle a request.so a single thread is used to handle multiple requests.
+-> The waiter is like a single thread allocated to handle a request.so a single thread is used to handle multiple requests.
 -> This is what we called non-blocking Asynchronous programming/Architecture.
 -> And this is how  Node Applications work.
 
 
-Practical Knowlege: 
+Practical Knowledge: 
 
--> Node applcaitions are Asynchronous by default.
+-> Node applications are Asynchronous by default.
 -> In node we have a single thread to handle all requests.
--> In Aynchronous architecture, When a request arrives on a server, Node assign single thread to handle that request. suppose that request is querring a database. as you know querring a database may takes some time for returning a result but important point is that our thread doesn't have to wait for database to return a data. while the database is executing query that thread is used to serve another client/request.
--> When our asynchronous task completes in our case asynchronous task is fetching data from databse, database puts the message in what we called "Event Queue".
--> Node is continuously monitoring queuse in background. when Node found event in this event queue node will take out that event or data and process it. 
--> This kind of architecture make a node ideal for building applications which includes lots of disk or network access like I/O-intensive apps.
--> we can serve more clients without the need of using more hardware. and that why node application higly scalable.
--> In contrast Node should not be used for CPU intensive apps like a video encoding or image manipulations servises. In this kind of applications we have a lots of calculatios that should be done by CPU  and few operations touch the file system or the netwok. 
--> Since Node applcaitions are single threaded when performing calculations to serve one client other clients have to wait and thats why node should not be used for CPU intensive applications. it should only be used for data intensive and real time applications. 
+-> In Asynchronous architecture, When a request arrives on a server, Node assign single thread to handle that request. suppose that 
+request is queering a database. as you know queering a database may takes some time for returning a result but important point is 
+that our thread doesn't have to wait for database to return a data. while the database is executing query that thread is used to 
+serve another client/request.
+-> When our asynchronous task completes in our case asynchronous task is fetching data from database, database puts the message in 
+what we called "Event Queue".
+-> Node is continuously monitoring queue in background. when Node found event in this event queue node will take out that event 
+or data and process it. 
+-> This kind of architecture make a node ideal for building applications which includes lots of disk or network access like 
+I/O-intensive apps.
+-> we can serve more clients without the need of using more hardware. and that why node application highly scalable.
+-> In contrast Node should not be used for CPU intensive apps like a video encoding or image manipulations services. In this kind 
+of applications we have a lots of calculation that should be done by CPU  and few operations touch the file system or the network. 
+-> Since Node applications are single threaded when performing calculations to serve one client other clients have to wait and thats 
+why node should not be used for CPU intensive applications. it should only be used for data intensive and real time applications. 
 
 
 
