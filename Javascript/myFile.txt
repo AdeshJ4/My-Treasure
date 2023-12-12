@@ -1,0 +1,95 @@
+-> All JavaScript objects inherit properties and methods from a prototype means from parent.
+-> In JavaScript, every function and object has a property named 'prototype' which is parent of that object and that prototype contain
+all the properties and methods related to that object.
+-> The prototype property is used for implementing prototype-based inheritance, allowing objects to inherit properties and methods 
+from other objects.
+-> Every object have prototype or parent except 'Object.prototype'.
+-> One object is trying to access properties and methods of another object.
+
+if you write following code in browser console, then you will get two things as output: 
+code: 
+ex.1
+let arr = [];
+console.log(arr);
+output: 
+>[]  // when you expand this then you will get following two properties
+length: 0
+>[[prototype]]:Array(0)
+
+so here "[[prototype]]:Array(0)" is a prototype/parent of our 'arr' object which is "Array.prototype" because it contain properties 
+and methods related to that arr object.
+
+we can set prototype/parent by setting __proto__. 
+ex.2
+let grandpa = {
+    grandpaName: 'Uday'
+}
+let parent = {
+    parentName: "Pramod", 
+}
+let child =  {
+    childName: 'Adesh',
+}
+child.__proto__ = parent;   // child have parent 
+parent.__proto__ = grandpa; // parent have its own parent
+console.log(child);
+
+
+-> The Array object inherits from Array.prototype, and Array.prototype contains all the methods and properties related to the Array 
+object. Array.prototype itself is an object and has a prototype, which is the generic "Object.prototype".
+For example, Array.prototype includes methods like push(), pop(), forEach(), and many others, which can be used on arrays
+
+-> The Date object inherits from Date.prototype, and Date.prototype contains all the methods and properties related to the Date object.
+Date.prototype itself is an object and has a prototype, which is the generic Object.prototype
+For example. getFullYear(), getDate(), setDate(), setMinutes().
+
+-> The Person object inherits from Person.prototype, and Person.prototype contains all the methods and properties related to the 
+Person object. Person.prototype itself is an object and has a prototype, which is the generic Object.prototype
+For example. its fname, lname, age.
+
+
+
+
+-> The 'Object.prototype' is on the top of the prototype inheritance chain and It does not have a prototype/parent itself.
+-> Date objects, Array objects, and Person objects inherit from Object.prototype.
+
+-> Only modify your own prototypes. Never modify the prototypes of standard JavaScript objects.  like Array.prototype, Date.prototype
+code:
+function Person (fname, age){
+    this.fname = fname;
+    this.age = age;
+}
+const p1 = new Person('Adesh', 22);
+
+'Person' is the 'prototype' of 'p1'. 
+The prototype chain looks like this: p1 ---> Person.prototype ---> Object.prototype ---> null
+
+How to modify own prototype: 
+-----------------------------
+The JavaScript 'prototype' property also allows you to add new methods to objects constructors:
+code: 
+function Person (fname, age){
+    this.fname = fname;
+    this.age = age;
+}
+Person.prototype.gender = 'Male'; 
+Person.prototype.intro = function(){
+    return this.fname + ' ' + this.age;
+}
+const p1 = new Person('Adesh', 22);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

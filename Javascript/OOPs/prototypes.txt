@@ -1,64 +1,30 @@
--> In javascript we don't have a class we only have objects.
--> Thats when prototypical inheritance comes in picture.
 -> In javascript we have two types of inheritance.
 1. classical Inheritance
 2. Prototypical Inheritance
 
 
+2. Prototypical Inheritance: 
 
-
-
-
-
--> we know that in js we only have objects and not a class.
--> so how we are going to implememt inheritance using objects ?
-
-
--> here we have a circle object and can define another object lets called it shape and all add common behavior
-or all common methods in the shape object.
--> and somehow we are going to link circle object to shape object.
+-> All JavaScript objects inherit properties and methods from a prototype.
+-> Every object in javascript has a prototype/parent and it inherit all the members define in its prototype.
+-> Prototype is essentially parent of other objects.
+-> whenever you heard the word prototype just think 'parent'.
+-> Every object have prototype or parent except root object.
+ex
+-> suppose we have two objects, circle object & shape object. circle object is going to inherit all the properties from shape object
+so we can say that shape object is prototype/parent of circle object.
 
 circle -------> shape
 
--> Now we refer shape object as a prototype of the circle.
--> Prototype is essentially parent of another objects.
--> whenver you heard the word prototype just think parent.
--> Every object in javascript has a prototype or parent and it inherit all the members define in its prototype
--> 
+Prototype Inheritance: 
+
+All JavaScript objects inherit properties and methods from a prototype:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Date objects inherit from Date.prototype
+Array objects inherit from Array.prototype
+user defined objects inherit from user defined prototype like Person objects inherit from Person.prototype
+The Object.prototype is on the top of the prototype inheritance chain.
+Date objects, Array objects, and Person objects inherit from Object.prototype.
 
 

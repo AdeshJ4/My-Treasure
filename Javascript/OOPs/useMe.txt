@@ -1,0 +1,73 @@
+-> In javascript we don't have a class we only have objects.
+-> Thats when prototypical inheritance comes in picture.
+
+
+
+-> In inheritance we have parent class and child class. child class get all the properties from parent class. but in js we only have 
+objects, so how we are going to implement inheritance ? 
+
+
+
+
+let x = {};
+log(x); 
+
+[[prototype]]: Object
+
+-> when we access a property or a method of an object, js engine first look for that property or method inside the object itself.
+if it can't find then it looks at the prototype/parent of that object. again if it can't find that member it will look at prototype 
+of that object all the way up to root object which we called objectBase('name given by mosh to understand a concept').
+->so this is prototypical inheritance. 
+-> when accessing a property or method on a object js engin walks up the 'Prototype chain' to find out target member.
+-> A prototype is just a regular object in memory.
+
+-> here we have property called '[[prototype]]' which faded because it is deprecated and we shouldn't directly assess it. its only 
+here to troubleshoot problem.
+-> Once you expand this [[prototype]] then you will get lots of properties. so these properties are prototype or parents for this 
+'x' obj.
+-> inside the prototype we have lots of built in methods like constructor, to String etc.
+
+-> so we have this 'x' obj in memory which is link to another obj which is its [[prototype]] / parent.
+
+            x -----> objectBase ([[prototype]] / parent)
+
+-> for simplicity lets call this [[prototype]] a 'objectBase', its not a official term, its just a name mosh gives for simplicity.
+-> So Every object we create in js is directly or indirectly inherits from objectBase / [[prototype]]
+-> objectBase ([[prototype]]) is a root of all objects in js and it doesn't have any prototype or parent.
+-> that means prototype itself don't have any parent/ prototype. (parent don't have parent. prototype is last)
+-> Inside [[prototype]] of any object you don't see any prototype property.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

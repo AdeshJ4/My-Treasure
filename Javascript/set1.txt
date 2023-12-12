@@ -1,89 +1,3 @@
-1. What are the different data types present in javascript?
-===========================================================
-
-Note: 
-
-1. In JavaScript, the `typeof` operator returns the type of a data, variable or expression. 
-2. JavaScript Types are Dynamic: JavaScript has dynamic types. This means that the same variable can be used to hold different data types.
-
--> there are ywo types of datatypes present 
-	1. primitive/value type 
-	2. reference type 
-
-
-1. Primitive Data Types:
-
-Number:
-Represents numeric values.
-All JavaScript numbers are stored as decimal numbers: double (64-bit floating point).
-Numbers can be written with, or without decimals:
-Javascript numbers are always one type: double (64-bit floating point).
-Examples: 10, 3.14, -5.
-
-String:
-Represents sequences of characters.
-Examples: 'Hello, World!', "JavaScript".
-
-Boolean:
-Represents a logical value indicating true or false.
-Examples: true, false.
-
-Undefined:
-Represents a variable that has been declared but not assigned a value. also we can explicitly assigned undefined to varaiable.
-Example: let x; (here, x is undefined). let x = undefined;
-
-Null:
-Represents the intentional absence of any object value.
-Example: let y = null;.
-
-Symbol (ES6 and later):
-Represents a unique identifier.
-Symbols are immutable (cannot be changed) and are unique identifier.
-Example: const mySymbol = Symbol('description');.
-
-
-
-2. reference type 
-
-Object: 
-
--> when we are dealing with multiple related variables we can put this variables inside an object.
--> for ex we can have a object having name "person". inside that we can have related properties of person object like name, age, eyeColor etc.
--> JavaScript objects are written with curly braces {}.
--> Object properties are written as key:value pairs, separated by commas
--> In JavaScript, almost "everything" is an object.
-
-Numbers can be objects (if defined with the new keyword)
-Strings can be objects (if defined with the new keyword)
-Booleans can be objects (if defined with the new keyword)
-null are objects
-Dates are always objects
-Maths are always objects
-Regular expressions are always objects
-Arrays are always objects
-Functions are always objects
-Objects are always objects
-
-
-
-Examples
---------
-
-let length = 16;  	// typeof is Number
-let weight = 7.5; 	// typeof is Number
-let color = "Yellow"; 	// typeof is String
-let x = true 		// typeof is boolean
-const x = null; 	// typeof is object
-const  y = undefined;  	// tupeof os undefined
-const person = {firstName:"John", lastName:"Doe"}; 	 // typeof is object
-const cars = ["Saab", "Volvo", "BMW"];			 // typeof is object
-const date = new Date("2022-03-25");			 // typeof is object
-const fun = () => {
-    console.log('Hello');
-}  // typeof is function
-const value1 = Symbol('hello'); // typeof is symbol
-
-
 
 
 
@@ -117,12 +31,6 @@ let x = "Volvo" + 16 + 4; // "Volvo164" -> since the first operand is a string, 
 
 
 
-
-
-
-
-The JavaScript this Keyword: 
-============================
 
 
 

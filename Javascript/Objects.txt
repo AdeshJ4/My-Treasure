@@ -1,7 +1,7 @@
 -> Objects are collections of key value pair written inside {}.
 -> if we have properties which are highly related then we can encapsulate them inside object.
 -> main purpose of object is to grouped related properties.
-
+-> In javascript objects are dynamic. once we create them we can add additional properties or can remove properties.
 
 const person = {
     fname: "Adesh",
@@ -33,9 +33,11 @@ Factory Function :
 -------------------
 
 -> just like factory producing products this factory function produce objects
--> the beauty of factory function is that we define our logic in one place. so we can call this function with different values we will get diiferent person objects but we have define intro method only in one place.
+-> the beauty of factory function is that we define our logic in one place. so we can call this function with different values we 
+will get different person objects but we have define intro method only in one place.
 -> so if there is bug in future then we have single place to modify.
--> in factory function we used built in constructor function called 'Object()' to create objects because we used object literal syntax(eg. const x = {}).
+-> in factory function we used 'built in constructor function' called 'Object()' to create objects because we used object literal 
+syntax(eg. const x = {}).
 eg. const x = {}  // this line converted to -> const x = new Object();
 
 function createPerson(fname, age) {
@@ -57,13 +59,14 @@ person2.intro();
 
 
 
-Constructor Funtion: 
+Constructor Function: 
 --------------------
 
 -> job of constructor function is to construct or create an object.
--> "this" is reference to the object that is excuting this piece of code.
+-> "this" is reference to the object that is executing this piece of code.
 -> In javascript objects are dynamic. once we create them we can add additional properties or can remove properties.
--> new keyword creates empty js object. next "this" keyword points to newely created object. and insert all properties inside that newly created object. finally "new" keyword return newly created object from constructor function.
+-> new keyword creates empty js object. next "this" keyword points to newly created object. and insert all properties inside that 
+newly created object. finally "new" keyword return newly created object from constructor function.
 
 function Person(fname, age){
     this.fname = fname,
@@ -93,8 +96,11 @@ const person = {};
 // Add the properties
 person.fname = "Adesh";
 person.intro = function(){
-    console.log('Hello');
+    console.log(`Name: ${this.fname} Age: ${this.age}`);
 }
+
+// update properties: 
+person.fname = 'New Value'
 
 // remove properties
 delete person.fname;
@@ -111,7 +117,8 @@ Constructor Property:  refer video -> Object -> 5.5- Constructor Property
 -> Every object in js have property called "constructor".
 -> and that references the function that was used to construct or create an object. 
 -> if we talk about factory function then it returned : f Object()
--> son in factory function we used built in constructor function called 'Object()' to create objects beacuse we used object literal syntax(eg. const x = {}).
+-> In factory function we used built in constructor function called 'Object()' to create objects because we used object literal 
+syntax(eg. const x = {}).
 eg. const x = {}  // this line converted to -> const x = new Object();
 -> also we have another constructors.
 -> new String(); but we used string literal which are '', "", ``
@@ -131,7 +138,9 @@ Functions are Objects:
 -> in JavaScript, functions are a special kind of object. 
 -> While they are functions, they also have properties and methods like objects. 
 -> Specifically, functions in JavaScript are instances of the `Function` object.
--> when we declare a function using constructor function or factory function internally js engine will use "Function()" constructor which is built in contructor to create a object
+-> when we declare a function using constructor function or factory function internally js engine will use built in constructor 
+function called "Function()" to create a object.
+
 
 // constructor function
 function Person(fname, age) {
@@ -142,7 +151,7 @@ function Person(fname, age) {
   	};
 }
 
-// above code is equvalent to following code 
+// above code is equivalent to following code 
 // using Function() constructor
 
 const Person = new Function('fname', 'age', `
@@ -155,18 +164,15 @@ const Person = new Function('fname', 'age', `
 
 const p1 = new Person('Adesh', 22);
 
-
--> when we declare a function using constructor function or factory function internally js engine will use "Function()" constructor which is built in contructor to create a object
-
 Ex. 
 
 // constructor function
 function Person(fname, age) {
-  (this.fname = fname),
-    (this.age = age),
-    (this.intro = function () {
-      console.log(`Name: ${fname} Age: ${age}`);
-    });
+  this.fname = fname,
+  this.age = age,
+  this.intro = function () {
+    console.log(`Name: ${fname} Age: ${age}`);
+  };
 }
 
 // factory function
@@ -200,7 +206,8 @@ What is the difference between call() apply() & bind() ?
 
 1. call()
 
--> The call() method calls the function directly and sets "this" to the first argument passed to the call method and subsequent arguments are passed to the function as individual parameters.
+-> The call() method calls the function directly and sets "this" to the first argument passed to the call method and subsequent 
+arguments are passed to the function as individual parameters.
 -> NOTE: The call method doesn’t return a new function.
 
 Ex.1
@@ -208,11 +215,9 @@ Ex.1
 function test(arg1, arg2){
   console.log(this.num, arg1, arg2); // 100, 10, 20
 }
-
 test.call({num: 100}, 10, 20);
 
 Ex.2
-
 const person = {
   fullName: function (city, country) {
     console.log(
@@ -225,16 +230,25 @@ const john = {
   firstName: "John",
   lastName: "Doe",
 };
-
 person.fullName.call(john, "New York", "USA");
 // Output: John Doe, New York, USA
 
+
+Ex.3
+const person = {
+    fname: 'Adesh',   // you can't access this properties now, because we change reference of 'this' to first arguments.
+    intro(city){
+        console.log(`Name: ${this.fname} city: ${city} planet : ${this.planet}`);
+    }
+}
+person.intro.call({planet: 'Earth'}, 'India');  //Name: undefined city: India planet : Earth
 
 
 2. Apply() Method: 
 
 -> The apply() method calls the function directly and sets this to the first argument passed to the apply method
--> it takes an array of elements as the second argument, where each element of the array corresponds to an argument passed to the function.
+-> it takes an array of elements as the second argument, where each element of the array corresponds to an argument passed to the 
+function.
 -> In the apply method, we pass arguments in the form of an array this is only the primary difference between call and apply.
 
 
@@ -263,7 +277,8 @@ PrintName.sayHi.apply({name: "Tony"}, [42]);
 
 3. bind() method :
 
--> The bind() method creates a new function and when that new function is called it set this keyword to the first argument which is passed to the bind method and subsequent arguments are passed to the function as individual parameters.
+-> The bind() method creates a new function and when that new function is called it set this keyword to the first argument which 
+is passed to the bind method and subsequent arguments are passed to the function as individual parameters.
 
 
 const greet = function (message) {
@@ -283,20 +298,22 @@ greetJohn(); // Output: Hello John
 
 explain pass by value or pass by reference.
 
--> "Copied by value" and "copied by reference" refer to the way values are assigned and passed between variables in programming languages. 
+-> "passed by value" and "passed by reference" refer to the way values are assigned and passed between variables in programming 
+languages. 
 -> Note:
-	In JavaScript, primitive types (like numbers, strings) are copied by value, while objects and arrays are copied by reference.
-	Functions in JavaScript are references, but their behavior is more complex and involves both value and reference aspects.
+In JavaScript, primitive data types (like numbers, strings) are passed by value and non-primitive data types like objects and arrays
+are passed by reference. Functions in JavaScript are references, but their behavior is more complex and involves both value and 
+reference aspects.
 
 
 
-1. Copied by Value:
+1. Passed by Value:
 -> primitive are copied by their value.
 -> suppose we have two variables.
 -> let x = 10; let y = x;
 -> both x and y are independent of each other, they don't have any relation with each other.
 -> the main point is that we store/copied the value and not a reference of x inside y.
-->  so if any changes made either in x or y will not afffect thr other varible.
+->  so if any changes made either in x or y will not affect thr other variable.
 
 -> ex.1
 let a = 5;
@@ -316,36 +333,46 @@ console.log(num);
 
 
 
-2. Copied by Reference:
+2. Passed by Reference:
 
 -> Objects are copied by their references.
 -> same example as above.
--> suppose we have two vaiables.
+-> suppose we have two variables.
 -> let x = {value:10} let y = x;
 -> when we stored a object inside a variable, that object is not going to store inside a variable.
 -> that object is store somewhere in memory. and address of that memory location is stored inside that variable.
 -> when we copied x into y (y = x), its the address or the reference which is copied and not a object.
 -> In other word both x and y pointing to the same object in memory.
--> and when we modify that object using either x or y the cahnges are immediatly visibl to other variable.
+-> and when we modify that object using either x or y the changes are immediately visible to other variable.
 
 
 ex.1
 
-let obj1 = { value: 5 };
-let obj2 = obj1;  // Copied by reference
-obj2.value = 10;  // Changing obj2 affects obj1
-console.log(obj1.value);  // Output: 10
-console.log(obj2.value);  // Output: 10
+const x = { value: 5 };
+const y = x;
+console.log("Before x: " + x.value);
+y.value++;
+console.log("After x: " + x.value);
 
 
 ex.2
 
-let obj = {value: 10};
-function cal2(obj){ // local object/variable
+let num = 10;
+function fun(num){
+    num++;
+}
+console.log('Before num: ' + num);
+fun(num);
+console.log('After num: ' + num);  // just value is passed.
+
+
+let obj = {value: 5};
+function fun(obj){  // local variable
     obj.value++;
 }
-cal2(obj);
-console.log(obj.value); //  reference type are pass by reference, both variable points to same obj in memory.
+console.log('Before value: ' + obj.value);
+fun(obj);
+console.log('After value: ' + obj.value);//  reference type are pass by reference, both variable points to same obj in memory.
 
 
 
@@ -473,7 +500,7 @@ console.log(another);
 Garbage collection: 
 -------------------
 
--> in low lwvwl languages like c, c++ when creating an object we need to aloocate memory to it and when ew are done we have to deallocate mememry.
+-> in low level languages like c, c++ when creating an object we need to aloocate memory to it and when ew are done we have to deallocate mememry.
 -> But in javascript we don't have this concept 
 -> we can easly create object. at the time of initialize the object the memory is automatially allocate to this object.
 -> our js engine have what we called "garbage collector" 

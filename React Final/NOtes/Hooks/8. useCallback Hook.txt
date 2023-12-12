@@ -13,7 +13,7 @@ what is Memoization ?
 
 what is cached result ?
 =======================
-A cached result refers to the stored output or value of a computation or function call that has been previously calculated and saved for future use. When a function is memoized that means  result of a specific set of inputs is stored in memory, and if subsequent requests for the same inputs occour we can retrieve the cached result instead of recalculating it.
+A cached result refers to the stored output or value of a computation or function call that has been previously calculated and saved for future use. When a function is memoized that means  result of a specific set of inputs is stored in memory, and if subsequent requests for the same inputs occour we can retrieve the cached result instead of recalculating it. A cache is just a temporary data
 
 
 

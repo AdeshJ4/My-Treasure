@@ -11,7 +11,7 @@ Types of Errors:
 -> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the compiler
 ->The compiler will not allow to run the program until all the errors are removed from the program.
 ex . 
-compile time errors like you spell variable name wrongly or you forget to end paranthesis, Undefined Variable, Incorrect Function Definition, Missing Import Statement, Incorrect Loop Syntax.
+compile time errors like you spell variable name wrongly or you forget to end parenthesis, Undefined Variable, Incorrect Function Definition, Missing Import Statement, Incorrect Loop Syntax.
 
 
 
@@ -52,7 +52,6 @@ try:
 
 -> The main code is inside the try block.
 -> we write the code which might throw an exception inside try block .
--> 
 
 
 catch : 
@@ -65,7 +64,7 @@ catch :
 Finally Block:
 
 -> piece of code inside finally block runs regardless of whether an exception is thrown or not
--> it is used to close the resorces which are opened at the starting of the program.
+-> it is used to close the resources which are opened at the starting of the program.
 
 
 Throwing Exceptions:
@@ -91,7 +90,8 @@ try {
 Error Objects:
 --------------
 
-JavaScript provides built-in error objects like Error, SyntaxError, TypeError, etc., that can be used to represent different types of errors:
+JavaScript provides built-in error objects like Error, SyntaxError, TypeError, etc., that can be used to represent different types 
+of errors:
 
 try {
   throw new SyntaxError("Invalid syntax");
@@ -127,13 +127,11 @@ try {
 
 final ex: 
 
-
-
 const obj = {
   fname: "Adesh",
   lname: "Jadhav",
   get fullName() {
-    console.log(`name: ${this.fname} ${this.lname}`);
+    return this.fname + ' ' + this.lname;
   },
   set fullName(val) {
     if (typeof val !== "string") throw new Error("Value is not a string");

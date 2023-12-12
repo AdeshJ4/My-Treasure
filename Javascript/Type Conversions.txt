@@ -1,0 +1,161 @@
+Type Conversions: 
+-----------------
+
+-> In programming, type conversion is the process of converting one data type to another another. For example: converting String data 
+to Number.
+
+There are two types of type conversion in JavaScript :
+
+1. Implicit Conversion - automatic type conversion
+2. Explicit Conversion - manual type conversion
+
+
+i. Implicit Conversion : 
+
+-> Implicit Conversion also called 'automatic type conversion' and 'Type coercion'.
+-> In certain situations, JavaScript automatically converts one data type to another.
+For example: converting String data to Number.
+
+
+Example 1: Implicit Conversion to String
+numeric string or normal string used with + gives string type.
+When a number is added to a string, JavaScript converts the number to a string before concatenation
+code: 
+console.log('Adesh' + 4);     //  "Adesh4"
+console.log('3' + 2);         //  "32"
+console.log('3' + 2 + 5);         //  "325"
+console.log('2' + undefined); //  "2undefined"
+console.log('str' + null);    // "strnull"
+
+
+
+Example 2: Implicit Conversion to Number
+numeric string used with - , / , * results number type.
+code : 
+console.log('4' - '2');  // 2
+console.log('4' - 2);    // 2
+console.log('4' * 2);    // 8
+console.log(4 / '2');    // 2
+
+
+Example 3: Non-numeric String Results to NaN
+non-numeric string used with - , / , * results to NaN
+code : 
+console.log("a" - "b");
+console.log("4" - 'b');
+
+
+Example 4: Implicit Boolean Conversion to Number
+if boolean is used, true is 1, false is 0
+code: 
+console.log(4 - true);  // 4 - 1 = 3
+console.log('4' - true);// 4 - 1 = 3
+console.log('4' - false);// 4 - 0 = 4
+console.log('4' + false);// '4false'
+console.log(4 - false); // 4 - 0 = 4
+
+
+Example 5: null Conversion to Number
+null is 0 when used with number
+code: 
+console.log(4 + null);  // 4 + 0 = 4
+console.log(4 - null);  // 4 - 0 = 4
+console.log('4' - null);  // 4 - 0 = 4
+console.log('4' + null);  // '4null'
+
+
+Example 6: undefined used with number, boolean or null
+Arithmetic operation of undefined with number, boolean or null gives NaN
+code : 
+console.log(4 + undefined);     // NAN
+console.log(4 - undefined);     // NAN
+console.log(true + undefined);  // NAN
+console.log(4 + undefined);     // NAN
+console.log(null + undefined);  // NAN
+
+
+
+
+2. Explicit Conversion - manual type conversion
+
+-> You can also convert one data type to another as per your needs. 
+-> The type conversion that you do manually is known as explicit type conversion
+-> In JavaScript, explicit type conversions are done using built-in methods
+
+i. Convert to Number Explicitly
+
+To convert numeric strings and boolean values to numbers, you can use Number(), parseInt(), parseFloat();
+code : 
+console.log(Number('22.25'));       // 22.25
+console.log(parseFloat('22.25'));   // 22.25
+console.log(parseInt('22.25'));     // 22
+console.log(Number(true));          // 1
+console.log(Number(false));         // 0
+console.log(Number("A"));           // NAN
+console.log(Number(null));          // 0
+console.log(Number(undefined));     // NAN
+console.log(Number(' '));           // 0
+
+
+ii. Convert to String Explicitly
+
+To convert other data types to strings, you can use either String() or toString(). For example,
+String() takes null and undefined and converts them to string. However, toString() gives error when null, undefined() are passed.
+code : 
+console.log(String(321));       // "321"
+console.log(String(2 + 4));     // "6"
+console.log(String(null));      // "null"
+console.log(String(undefined)); // "undefined"
+console.log(String(true));      // "true"
+console.log(String(false));     // "false"
+console.log(String(NaN));       // "NaN"
+
+
+iii. Convert to Boolean Explicitly
+To convert other data types to a boolean, you can use Boolean().
+code: 
+console.log(Boolean(1));          // true
+console.log(Boolean(25));         // true
+console.log(Boolean(0));          // false
+console.log(Boolean(''));         // false
+console.log(Boolean(' '));        // true
+console.log(Boolean(false));      // false
+console.log(Boolean(undefined));  // false
+console.log(Boolean(null));       // false
+console.log(Boolean(NaN));        // false
+
+
+
+
+
+Truthy and falsy: 
+----------------
+
+-> All values except false, 0, 0n, -0, “”, null, undefined, and NaN are truthy values.
+code: 
+
+var x = 0;
+var y = 23;     
+if(x) { console.log(x) }   // The code inside this block will not run since the value of x is 0(Falsy)       
+if(y) { console.log(y) }    // The code inside this block will run since the value of y is 23 (Truthy)
+
+
+Logical operators:
+------------------
+
+Logical operators in javascript, unlike operators in other programming languages, do not return true or false. 
+They always return one of the operands.
+
+OR ( || ) operator - If the first value is truthy, then the first value is returned. Otherwise, always the second value gets returned.
+
+AND ( && ) operator - If both the values are truthy, always the second value is returned. If the first value is falsy then the first value is returned or if the second value is falsy then the second value is returned.
+
+
+console.log( 0 || "Adesh Pramod Jadhav");   // "Adesh Pramod Jadhav"
+console.log( 10 || "Adesh Pramod Jadhav");  // 10
+console.log( " " || "Adesh Pramod Jadhav"); // " "
+
+
+console.log( 10 && "Adesh");    // "Adesh"
+console.log( "" && "Adesh");    // ""
+console.log( 10 && 0);          // 0 
