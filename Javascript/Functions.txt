@@ -127,10 +127,9 @@ Getter and Setter Methods :
 
 -> ECMAScript 5 (ES5 2009) introduced Getter and Setters.
 -> Getters and setters allow you to define Object Accessors (Computed Properties).
--> with the help of getter and setter our original properties are not exposed to outside environment. so it provide abstraction.
 -> if you want to access any property of an object then you can access it through getter method.
 -> if you want to change value of any property then you can change through setter method.
-
+-> use setter and getter if you want to do something special with the value before returning them, or before you set them.
 1. Getter: 
 
 -> we used getter to access properties of an object.

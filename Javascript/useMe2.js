@@ -1,19 +1,31 @@
-function fun(n1, n2){
-    console.log('Thing 1');
-    try{
-        if(n2 === 0){
-            throw new Error('Cannot divide by 0');
-        }else{
-            console.log('Division: ' + (n1/n2));
-        }
-    }catch(err){
-        console.log(err.message);
-    }finally{
-        console.log("File is closed");
+class Person{
+    constructor(fname){
+        this.fname = fname;
     }
 
-    console.log("Thing 2");
+    firstName(){
+        console.log('First Name : ' + this.fname);
+    }
+
+    display(){
+        console.log('Parent class Display method');
+    }
+    
 }
 
 
-fun(10, 0);
+class Child extends Person{
+    constructor(fname, age){
+        super(fname)
+        this.age = age;
+    }
+
+    display(){
+        super.display();
+        console.log('Child class Display Method');
+    }
+}
+
+
+const p1 = new Child('Adesh', 22);
+p1.display()

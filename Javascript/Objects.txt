@@ -38,7 +38,7 @@ will get different person objects but we have define intro method only in one pl
 -> so if there is bug in future then we have single place to modify.
 -> in factory function we used 'built in constructor function' called 'Object()' to create objects because we used object literal 
 syntax(eg. const x = {}).
-eg. const x = {}  // this line converted to -> const x = new Object();
+eg. 
 
 function createPerson(fname, age) {
     return {

@@ -1,7 +1,10 @@
-const arr = [10, 20, 30, 40, 50];
+function foo(arg1) { 
+    console.log(arg1); 
+} 
 
-const [, twenty, ...rest] = arr;
+function foo(arg1, arg2) { 
+    console.log(arg1, arg2); 
+} 
+  
 
-console.log(twenty);
-
-
+foo("Geeks")

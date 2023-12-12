@@ -1433,7 +1433,7 @@ Destructing Arrays::
 
 ex. 1
 const arr = [10, 20, 30, 40, 50];
-const [ten, , thirty, ...rest] = arr;  // rest is spread operator
+const [ , , thirty, ...rest] = arr;  // rest is spread operator
 
 ex. 2
 function calculate(a, b){
@@ -1481,19 +1481,289 @@ function extractPerson ({id, lname, address: {city}}) {
 */
 
 
+// Q25] Different Ways to Create Objects 
+/*
+You can create an object in three different ways:
+
+1. Using object literal -> {}
+2. By creating instance of Object directly ->  new Object({})
+3. By using constructor function -> Person
+4. factory method 
+5. Using the Object.create() method
+6. Using es6 classes
+
+
+Example 1: Using object literal -> {}
+-------------------------------------
+-> syntax =>  const obj = {}
+-> const x = {}  ==> converted to => const x = new Object();
+-> we used 'built in constructor function' called 'Object()'
+
+const person = { 
+    name: 'John',
+    age: 20,
+    hobbies: ['reading', 'games', 'coding'],
+    greet: function() {
+        console.log('Hello everyone.');
+    },
+    score: {
+        maths: 90,
+        science: 80
+    }
+};
+
+console.log(typeof person); // object
+console.log(person.name);
+console.log(person.hobbies[0]);
+person.greet();
+console.log(person.score.maths);
+person['address'] = {city: 'pune', village: 'Palgad'};  // adding new property
+person.lname = 'Jadhav'; // adding a new property 
+console.log(person);
+
+
+Example 2: By creating instance of Object directly ->  new Object({})
+---------------------------------------------------------------------
+-> 'built in constructor function' called 'Object()'
+-> syntax : const objectName = new Object();
+const obj = new Object({
+  fname: 'Adesh',
+  age: 22
+});
+console.log(obj.fname);
+
+
+
+Example 3: Create an object using Constructor Function
+------------------------------------------------------
+-> job of constructor function is to construct or create an object.
+-> new keyword creates empty js object. next "this" keyword points to newly created object. and insert all properties inside that 
+newly created object. finally "new" keyword return newly created object from constructor function.
+
+function Person(fname, age){
+    this.fname = fname,
+    this.age = age,
+    this.intro = function(){
+        console.log(`Name: ${fname} Age: ${age}`);
+    }
+}
+
+const p1 = new Person("Adesh", 22)
+p1.intro()
+console.log(p1.fname);
+
+
+Example 4: Create an object using factory Function
+---------------------------------------------------
+-> just like factory producing products this factory function produce objects
+-> The Factory Function is similar to constructor functions, but instead of using 'new' keyword to create an object.
+-> factory function do not require the use of the ‘this‘ keyword for accessing inner values
+factory functions simply creates an object and returns it.
+-> If we have complex logic, and we have to create multiple objects again and again that have the same logic, we can write the logic 
+once in a function and use that function as a factory to create our objects. It’s exactly the same as a real-world factory producing 
+products.
+-> in factory function we used 'built in constructor function' called 'Object()' to create objects because we used object literal 
+syntax(eg. const x = {}).
+eg. const x = {}  // this line converted to -> const x = new Object();
+
+function createPerson(fname, age) {
+    return {
+        id: 101,
+        fname, // if our key and value are same then we can make our code shorter  by writing only key
+        age,
+        intro(){
+            console.log(`Name: ${this.fname} Age: ${this.age}`);
+        }
+    }
+}
+
+const person1 = createPerson('Adesh', 22);
+person1.intro();
+const person2 = createPerson('Akshay', 23);
+person2.intro();
+
+
+
+Example 5: Creating object with Object.create() method:
+-------------------------------------------------------
+
+-> The Object.create() method creates a new object, using an existing object as the prototype of the newly created object. 
+Example:
+
+const parentObj = { 
+    fname: 'Adesh',
+    lname: 'Jadhav',
+    age: 22,
+    intro(){
+        console.log(`fname: ${this.fname} lname: ${this.lname} age: ${this.age}`);
+    }
+}; 
+
+const childObj = Object.create(parentObj); 
+console.log(childObj);  // return empty array {}
+childObj['fname'] = 'Ram'; 
+childObj.intro();  // fname: Ram lname: Jadhav age: 22  -> js engine will search property in a child if it present then it will take from their but if it absent then js engine will search for that property in parent obj.
+
+
+Example 6 : Using es6 classes: 
+
+-> ES6 supports class concept 
+-> object can be created using class 
+-> classes are nothing but syntactic sugars for constructor functions.
+-> They provide a new way of declaring constructor functions in javascript. 
+-> JavaScript Classes are templates for JavaScript Objects.
+-> classes are not hoisted. A class cannot be used before it is declared.
+-> A class can inherit properties and methods from other classes by using the extend keyword.
+-> All classes must follow the strict mode(‘use strict’) of javascript. An error will be thrown if the strict mode rules are not 
+followed.
+-> Classes we have in js are not classes like we have inside c#., java
+-> The constructor method is called automatically when a new object is created. It is used to initialize object properties
+If you do not define a constructor method, JavaScript will add an empty constructor method.
+-> typeof Classes are 'function', they are constructor functions. typeof constructor function is also function.
+
+class Person {
+    constructor(fname, age){
+        this.fname =fname;
+        this.age =age;
+    }
+
+    intro(){
+        console.log(`Name : ${this.fname} age: ${this.age}`);
+    }
+}
+const p1 = new Person('Adesh', 22); //The example above uses the Person class to create two Person objects
 
 
 
 
 
+*/
+
+// Q26] What are arrow functions?
+
+/*
+-> Arrow functions were introduced in the ES6 version of javascript
+-> arrow functions provide shorter syntax for declaring functions
+-> Arrow functions can only be used as a function expression.
+-> Arrow functions are declared without the function keyword
+-> Arrow functions are not hoisted. They must be defined before they are used.
+-> If there is only one returning expression then we don’t need to use the return keyword Also, for functions having just one line 
+of code, curly braces { } can be omitted.
+-> If the function takes only one argument, then parenthesis () around the parameter can be omitted.
+eg. const arrowAdd = (a,b) => a + b;
+eg. const fun = num => num * num ;  
+
+
+-> Arrow functions do not have their own this. They are not well suited for defining object methods.
+-> they inherit "this" value from containing function.
+
+const person1 = {
+    fname: 'Adesh',
+    age: 22,
+    tags: ['A', 'B', 'C'],
+    intro(){
+        this.tags.forEach((tag)=> {
+            console.log(this, tag);
+        })        
+    }
+}
+
+const person2 = {
+    fname: 'Adesh',
+    age: 22,
+    tags: ['A', 'B', 'C'],
+    intro(){
+        this.tags.forEach(function (tag){
+            console.log(this, tag);
+        })        
+    }
+}
+*/
 
 
 
+// Q27] Explain difference between synchronous and asynchronous architecture and different ways of handling asynchronous code ?
+
+// refer Asynchronous javascript folder
 
 
 
+// Q28] classes: 
+
+/*
+
+-> ES6 supports class concept 
+-> object can be created using class 
+-> classes are nothing but syntactic sugars for constructor functions.
+-> They provide a new way of declaring constructor functions in javascript. 
+-> JavaScript Classes are basically a blueprint or template of the object
+-> classes are not hoisted. A class cannot be used before it is declared.
+-> All classes must follow the strict mode(‘use strict’) of javascript. An error will be thrown if the strict mode rules are not 
+followed.
+-> to access parent class variable inside a child class we can use "this.parentClassVariableName" and to access parent class
+methods we can use super keyword like "super.parentClassMethod"
+-> Classes we have in js are not classes like we have inside c#., java
+-> typeof Classes are 'function', they are constructor functions. typeof constructor function is also function.
+
+The Constructor Method::
+-> The constructor method is called automatically when a new object is created. It is used to initialize object properties
+If you do not define a constructor method, JavaScript will add an empty constructor method.
 
 
+Instance Methods / class Methods::
+-> instance methods are methods that are associated with an instance of a class.
+-> instance methods are also called Class Methods.
+-> Syntax
+class ClassName {
+  constructor() { ... }
+  method_1() { ... }
+}
+
+Static Methods::
+-> static method is a method that belongs to a class rather than an instance of the class.
+-> Unlike instance methods, which are called on an instance of the class, static methods are called on the class itself. 
+-> They are defined using the static keyword in the class definition.
+-> They can be useful for tasks that are related to the class rather than to a particular instance.
+
+-> Syntax
+class ClassName {
+  constructor() { ... }
+  static method_1() { ... }
+  method_2() { ... }
+}
+className.static_method_1();
+
+
+Class Inheritance::
+-> A class can inherit properties and methods from parent class by using the 'extend' keyword.
+-> to access parent class variable inside a child class we can use "this.parentClassVariableName" and to access parent class
+methods we can use super keyword like "super.parentClassMethod"
+
+class Parent {
+    constructor(fname){
+        this.fname =fname;
+    }
+    get firstName (){
+        return this.fname;
+    }
+}
+class Child extends Parent{
+    constructor(fname, age){
+        super(fname);
+        this.age = age;
+    }
+    bioData(){
+        console.log(`Name : ${this.firstName}  Age: ${this.age}`);
+    }
+}
+const obj1 = new Child('Adesh', 22);
+obj1.bioData()
+
+
+Method overriding: 
+-> method in parent class 
+
+*/
 
 
 
