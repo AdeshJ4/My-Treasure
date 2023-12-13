@@ -1761,7 +1761,36 @@ obj1.bioData()
 
 
 Method overriding: 
--> method in parent class 
+-> method overriding occurs when a subclass (child class) has the same method as the parent class. 
+class Person{
+    constructor(fname){
+        this.fname = fname;
+    }
+    display(){
+        console.log('Parent class Display method');
+    }
+}
+class Child extends Person{
+    constructor(fname, age){
+        super(fname)
+        this.age = age;
+    }
+    display(){
+        super.display();
+        console.log('Child class Display Method');
+    }
+}
+const p1 = new Child('Adesh', 22);
+p1.display();
+
+
+
+Function overloading: 
+-> Function overloading is a feature of object-oriented programming where two or more functions can have the same name but different 
+parameters 
+-> In Function Overloading “Function” name should be the same and the arguments should be different.
+-> JavaScript Does not support Function Overloading
+
 
 */
 

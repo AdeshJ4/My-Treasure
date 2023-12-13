@@ -1,10 +1,13 @@
-function foo(arg1) { 
-    console.log(arg1); 
-} 
+function fun(){
+    return 44;
+}
 
-function foo(arg1, arg2) { 
-    console.log(arg1, arg2); 
-} 
-  
 
-foo("Geeks")
+const add = (para1) => {
+    console.log(para1);
+}
+
+console.log(add(fun));
+
+
+
