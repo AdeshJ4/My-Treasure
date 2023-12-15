@@ -1,3 +1,17 @@
+// Q0] What is a first class function in Javascript?
+/*
+-> In JavaScript, functions are considered first-class citizens, which means they can be treated like any other variable 
+(e.g., a number, string, or object).
+
+-> so we can assign a function to a variable using function expression syntax.
+-> we can pass a function as a argument to another function (concept of callback).
+-> we can return a function from another function (concept of closure)
+-> we can store a function inside a data structure like array.
+-> Functions can be higher order function.
+
+
+*/
+
 
 //Q1]. What are the different data types present in javascript?
 /*

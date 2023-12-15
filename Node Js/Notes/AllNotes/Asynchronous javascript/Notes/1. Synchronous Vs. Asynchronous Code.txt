@@ -102,9 +102,26 @@ why node should not be used for CPU intensive applications. it should only be us
 
 
 
+-> JavaScript is both synchronous and asynchronous. It is primarily designed to be a single-threaded, synchronous language, meaning 
+that it executes one operation at a time, in a sequence. However, JavaScript also has features that allow asynchronous programming.
+-> Asynchronous behavior in JavaScript is achieved through mechanisms like callbacks, promises, and async/await. These allow certain 
+operations to be non-blocking, enabling the program to continue executing other tasks while waiting for asynchronous operations to 
+complete.
+-> For example, when making an HTTP request or reading a file, JavaScript can initiate the operation and continue with other tasks 
+without waiting for the result. Once the asynchronous operation is completed, a callback function or a promise resolution can handle 
+the result.
+ex. 
+console.log("Start");
+// Asynchronous operation (e.g., setTimeout)
+setTimeout(function () {
+  console.log("Asynchronous operation completed");
+}, 2000);
+console.log("End");
 
--> Javascript is synchronous, blocking, single threaded language.
 -> To make async programming possible we need the help of libuv library.
+
+
+
 
 Code execution in node js : 
 
@@ -112,24 +129,41 @@ On the left we have V8 engine which consists of two parts:
 1. memory heap
 2. Call Stack
 
-and on the right side we have : libuv library
-
 -> whenever we declare a variable or function memory is allocated on the heap.
--> When you executed code function is pushed to the call stack and when tje function returned it popped out call stack.
+-> When you executed code function is pushed to the call stack and when the function returned it popped out call stack.
 
+libuv library: 
 
--> On the right we have 'libuv' library 
+-> on the right side we have libuv library.
+-> libuv is a multi-platform C library
 -> whenever you execute async method it is off loaded to the libuv.
--> libuv then run the task using native async mechanism of operating system.
+-> Libuv provides the event loop that allows Node.js to perform non-blocking I/O operations asynchronously.
+-> The event loop is at the core of Node.js, managing and dispatching events and tasks and callbacks from asynchronous 
+operations.
+-> libuv then run the task using 'native async mechanism' of operating system.
 -> and if that is not possible it will utilized its thread pool to run that task ensuring the main thread is not block
 (main thread resides in call stack).
 
 
 
 
-How V8 engine and libuv are used by node .
+
+
+
+
+
+
+
+How V8 engine and libuv are used by node 
 
 1. Synchronous code Execution in Node js : 
+
+-> Synchronous code is executed in a sequential and blocking manner.
+-> it means first task/operation completes its execution then and only then 2nd task/operation will start its execution.
+-> it means first task/operation is blocking the execution of 2nd task/operation
+-> other thing to notice is that the order of execution in sequential that means It follows a natural flow of execution which is 
+from top to bottom, and each line of code is executed one after the other.
+
 
 ex> 
 
@@ -139,9 +173,12 @@ ex>
 
 
 Step 1 : The main thread of execution always starts in the global() scope. global() function is pushed to the stack.
-Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. First is log to the console. The log statement is popped out of stack.
-Step 3 : Execution comes to line two. Second log statement is pushed on the stack. Second is log tot he console and log popped out of stack after Execution
-Step 4 : Finally execution comes on line three. Third log statement is pushed on the stack. Third is log to the console and log popped out of stack after Execution
+Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. 'First' is log to the console. 
+The log statement is popped out of stack.
+Step 3 : Execution comes to line two. Second log statement is pushed on the stack. Second is log tot he console and log popped out 
+of stack after Execution
+Step 4 : Finally execution comes on line three. Third log statement is pushed on the stack. 'Third' is log to the console and log 
+popped out of stack after Execution
 Step 5 : No code is left to execute so global() will be popped from stack.
 
 This is how synchronous code execute in node runtime.
@@ -149,6 +186,19 @@ This is how synchronous code execute in node runtime.
  
 
 Asynchronous Code Execution in Node js: 
+
+-> Asynchronous here refers to all those functions in JavaScript that are processed in the background without blocking any other 
+request.
+-> Asynchronous code is executed in a simultaneously, parallelly and non blocking manner.
+-> Asynchronous programming is a technique that enables your program to start a long-running task and still be able to be responsive 
+to other tasks while that long running task runs, rather than having to wait until that long running task has finished. 
+Once that long running task has finished, your program is presented with the result.
+-> you can handle multiple tasks simultaneously, parallelly rather than executing them one after the other. 
+This is especially important in scenarios where tasks, such as fetching data from a server or reading a file, may take some time. 
+this doesn't block the execution of the program. 
+-> callbacks, promises, async-await handle the result of these asynchronous operations.
+
+
 
 1. console.log('First);
 2. fs.readFile('demo.txt',()=>{

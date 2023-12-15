@@ -150,7 +150,7 @@ why we use single thread in Node js?
 ==========================================
 -> A single-threaded approach consumes less memory than multi-threading, making Node.js suitable for lightweight, memory-efficient 
 applications and microservices.
--> To maximize efficiency in handling I/O operations. 
+-> we use single thread in Node js To maximize efficiency in handling I/O operations. 
 -> This allows it to handle many concurrent requests without the overhead of managing multiple threads. 
 
 
