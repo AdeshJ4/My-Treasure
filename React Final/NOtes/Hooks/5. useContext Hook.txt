@@ -2,7 +2,8 @@ useContext Hook :
 -----------------
 
 -> Before understanding useContext lets understand what is context ?
--> Context in React is a mechanism for sharing values, like themes or authentication status, across components in a component tree without the need for explicit prop passing.
+-> Context in React is a mechanism for sharing values, like themes or authentication status, across components in a component tree 
+without the need for explicit prop passing.
 -> to consume the context we use useCOntext hook
 -> useContext hook allows a functional component to consume values from a context, without prop drilling.
 
@@ -11,15 +12,17 @@ useContext Hook :
 prop drilling : 
 ---------------
 
--> it is a process of passsing state/data as "props" from a parent component to nested child component through intermediate components in between.
--> the intermediate components don't require state, they are rendering their own data, but still they have to receive that state and have to send it to next component as a prop.
+-> it is a process of passing state/data as "props" from a parent component to nested child component through intermediate components
+ in between.
+-> the intermediate components don't require state, they are rendering their own data, but still they have to receive that state and
+ have to send it to next component as a prop.
 
 -> 
 suppose we have three components : compo 1 , compo 2, compo 3
--> compo 1 is parent component where we storede our state.
+-> compo 1 is parent component where we store our state.
 -> Compo 2 is a child of Compo 1 like that compo 3 is child of compo 2
 -> compo 3 require state to do some calculations.
--> so with the help of prop drilling we are passsing state from compo 1 to compo 2 and from compo 2 to compo 3 as a prop.
+-> so with the help of prop drilling we are passing state from compo 1 to compo 2 and from compo 2 to compo 3 as a prop.
 -> compo 2 don't require state but still accepts the state and pass to next compo because of prop drilling syntax.
 -> ex.
 
@@ -65,7 +68,8 @@ The solution is to create context:
 ------------------
 
 -> To create context, you must Import createContext() and initialize it:
--> createContext is not a hook; it is a function in React. The createContext function is part of React's" context API "and is used to create a new context.
+-> createContext is not a hook; it is a function in React. The createContext function is part of React's" context API "and is used 
+to create a new context.
 
 import { useState, createContext } from "react";
 import ReactDOM from "react-dom/client";
@@ -194,8 +198,8 @@ export default File3
 
 useContext : How to change value of context in useContext
 there is rule in react js : The component which holds the state is responsible for updating it. 
-if any child componet want to chage the context Then we can pass calback from parent compoent to child compoent. 
-child compoent can invoke that callback and change value
+if any child component want to change the context Then we can pass callback from parent component to child component. 
+child component can invoke that callback and change value
 
 Parent Component: 
 ------------------

@@ -17,7 +17,7 @@ It's like doing this: const count = {current: 0}. We can access the count by usi
 -> the common practice is to give "null" as a initial value for useRef Hook.
 	const count = useRef(null);
 -> this return reference object called "current" so we can store it inside constant named count.
--> now we have to associate this reference object whith input field.
+-> now we have to associate this reference object with input field.
 -> In React, we can add a ref attribute to an element to access it directly in the DOM.
    ex. 
 	const count = useRef(null);
@@ -25,7 +25,7 @@ It's like doing this: const count = {current: 0}. We can access the count by usi
 
 -> count object have single property that is current and this return the DOM element we are referencing.
 -> In HTML all input fields have "value" property so instead of logging "count.current" lets log "count.current.value"
--> Typically when submmiting the form we need to send object to server to be saved.
+-> Typically when submitting the form we need to send object to server to be saved.
 
 
 

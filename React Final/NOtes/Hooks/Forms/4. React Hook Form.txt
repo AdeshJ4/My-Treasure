@@ -13,7 +13,8 @@ install : npm i react-hook-form
 -> we called useForm to get form object.
 	const form = useForm();
 
--> in this object we have bunch of properties and methods. for ex we have "register" method for registering our input field with react hoook form. we have set of functions for controlling our form.
+-> in this object we have bunch of properties and methods. for ex we have "register" method for registering our input field with 
+react hook form. we have set of functions for controlling our form.
 
 -> lets destructure  some properties from this object. 
 -> name of our input field.

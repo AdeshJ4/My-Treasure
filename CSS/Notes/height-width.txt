@@ -1,0 +1,19 @@
+CSS Height, Width and Max-width: 
+
+-> The CSS height and width properties are used to set the height and width of an element.
+-> The height and width properties do not include padding, borders, or margins.
+
+width: 50%;     
+width: 50px;
+
+
+
+max-width: 
+
+-> The CSS max-width property is used to set the maximum width of an element.
+-> When the width of an element is larger than browser window then browser adds a horizontal scrollbar to the page.
+-> tp solve this we use max-width.
+<div>Hello</div>
+div{
+    max-width: 500px;
+}

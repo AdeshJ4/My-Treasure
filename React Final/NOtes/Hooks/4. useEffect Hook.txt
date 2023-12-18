@@ -6,12 +6,14 @@
    useEffect(<function>, <dependency>)
 
 
--> The useEffect Hook allows you to specify a callback function that will be executed after the component renders. This function can perform side effects.
+-> The useEffect Hook allows you to specify a callback function that will be executed after the component renders. 
+This function can perform side effects.
 
--> useEffect runs on every render That means that when the state changes, a render happens, which then triggers another effect. Thats why we use depenedecies.
--> Dependencies: You can also specify dependencies, which are variables or values that, when they change, trigger the useEffect to run. This allows you to control when your side effect should be executed.
+-> useEffect runs on every render That means that when the state changes, a render happens, which then triggers another effect. 
+Thats why we use dependencies.
 
--> For example, you can use useEffect to fetch data from a server when your component loads, update the document title when certain data changes, or set up event listeners to respond to user interactions. These are all side effects that don't directly affect the component's rendering but are essential for the overall functionality of your application. The useEffect Hook helps you manage and control these side effects in a structured and efficient way.
+-> Dependencies: You can also specify dependencies, which are variables or values that, when they change, trigger the useEffect to 
+run. This allows you to control when your side effect should be executed.
 
 
 
@@ -52,11 +54,30 @@ useEffect(() => {
 
 
 
+const App = () => {
+  const [count, setCount] = useState(0);
+  const[calculation, setCalculation] = useState(0);
+
+  useEffect(() => {
+      setCalculation(count * 2);
+  }, [count]);
+
+  return (
+    <>
+      <h1>Count: {count}</h1>
+      <h1>Calculation: {calculation}</h1>
+
+      <button onClick={()=>setCount(count+1)}>Count</button>
+    </>
+  );
+};
+
 
 
 Example No 1: fetch the data : 
 ------------------------------
 
+// inside a list
 
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -98,7 +119,52 @@ const UseMe = () => {
 
 export default UseMe;
 
+// inside a table
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
+const App = () => {
+  const [users, setUsers ] = useState(null);
+  async function fetchUsers(controller){
+    try{
+      const {data} = await axios.get('https://jsonplaceholder.typicode.com/users', {signal: controller.signal});
+      setUsers(data);
+    }catch(err){
+      console.log(err.message);
+    }
+  }
+  useEffect(()=>{
+    const controller = new AbortController();
+    fetchUsers(controller);
+    return ()=> controller.abort();
+  }, []);
+  return(
+    <>
+      {users?
+        <table className='table table-bordered'>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>UserName</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map(user=><tr key={user.id}>
+              <td>{user.id}</td>
+              <td>{user.name}</td>
+              <td>{user.username}</td>
+              <td>{user.email}</td>
+            </tr>)}
+          </tbody>
+        </table> : 
+        <p>Loading....</p>
+      }
+    </>
+  )
+}
+export default App;
 
 
 
@@ -182,7 +248,8 @@ Effect Cleanup:
 -> Timeouts, subscriptions, event listeners, and other effects that are no longer needed should be disposed
 -> We do this by including a return function at the end of the useEffect Hook.
 -> If the component is unmounted or if the dependencies of the useEffect change, the cleanup function is executed.
--> The cleanup function is a good place to release resources, cancel subscriptions, clear intervals, or perform any other necessary cleanup.
+-> The cleanup function is a good place to release resources, cancel subscriptions, clear intervals, or perform any other necessary 
+cleanup.
 -> Not all useEffect functions require a cleanup. If cleanup is not needed, you can omit the return statement.
 
 

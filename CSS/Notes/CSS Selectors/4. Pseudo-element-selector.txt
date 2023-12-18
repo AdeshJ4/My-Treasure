@@ -1,0 +1,50 @@
+4. Pseudo-elements selectors (select and style a part of an element):
+=====================================================================
+
+
+For example, it can be used to:
+
+Style the first letter, or line, of an element
+Insert content before, or after, the content of an element
+
+
+1. '::first-line'
+-> This pseudo element selector is used to select and styled first line og the paragraph.
+
+2. ::first-letter
+-> This pseudo element selector is used to select and styled first letter of an element
+
+3. ::after
+-> use to add content after 
+
+4. ::selection
+->  styled the portion of an element that is selected by a user
+
+
+-> we can used classes with pseudo element selectors.
+<p>Para1</p>
+<p class="para">Para2</p>   // red
+p.para::first-letter{
+    color: red;
+}
+
+
+-> Several pseudo-elements can also be combined
+<p class="para">Hey Whats Up Doing Ok</p>
+p.para::first-letter{
+    color: orange;
+    font-family: 'Courier New';
+    font-size: large
+}
+p.para::first-line{
+    color: blue;
+    font-family: 'monospace';
+    font-size: medium;
+}
+
+
+-> Styled the portion selected by the user.
+::selection{
+    color: red;
+    background-color: yellow;
+}

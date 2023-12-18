@@ -1,6 +1,9 @@
 -> The React useCallback Hook returns a memoized callback function.
--> with the help of this hook we can isolate resource intensive functions which are related to child component so that they will not automatically run on every render.
--> Every time a component re-renders, its functions get recreated. Because of this, another nested component will re-render to stop this we use useCallback hook.
+-> with the help of this hook we can isolate resource intensive functions which are passed as a prop to child component so they will 
+not automatically run on every render when state of the parent component get changed, they will only changed when one of the dependency
+get changed.
+-> Every time a component re-renders, its functions get recreated. Because of this, another nested component will re-render to stop 
+this we use useCallback hook.
 -> The useCallback Hook only runs when one of its dependencies update. This can improve performance.	
 -> we use memo function along with useCallback hook.
 
@@ -8,13 +11,14 @@
 what is Memoization ?
 =====================
 
--> Memoization is a programming technique where we are storing the results of expensive function calls and returning the cached result when the same inputs given which helps prevent unnecessary renders.
+-> Memoization is a programming technique where we are storing the results of expensive function calls and returning the cached 
+result when the same inputs given which helps prevent unnecessary renders.
 
 
 what is cached result ?
 =======================
-A cached result refers to the stored output or value of a computation or function call that has been previously calculated and saved for future use. When a function is memoized that means  result of a specific set of inputs is stored in memory, and if subsequent requests for the same inputs occour we can retrieve the cached result instead of recalculating it. A cache is just a temporary data
-
+A cached result refers to the stored output or value of a computation or function call that has been previously calculated and saved 
+for future use. its a temporary data.
 
 
 
@@ -22,7 +26,7 @@ A cached result refers to the stored output or value of a computation or functio
 difference between memo and useCallback hook: 
 ----------------------------------------------
 
--> Suppose we have two compoents 1. App.jsx  2. Todos.jsx
+-> Suppose we have two components 1. App.jsx  2. Todos.jsx
 -> Inside App component we have two states which are initialized using useState Hook. 1. count state  2. todos state
 -> so  we are passing todos state to todo component as a props.
 -> so we use memo if we are just passing state from one compnet to another componet. to stop unnecessory re-rendring we use memo in todos component.
@@ -44,7 +48,7 @@ const App = () => {
 
   const addTodos = useCallback((value) => {
     setTodos([...todo, value]);
-  }, [todo])
+  }, [todo]);
 
   return (
     <>

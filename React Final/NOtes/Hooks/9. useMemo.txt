@@ -1,8 +1,10 @@
 -> The React useMemo Hook returns a memoized value.
 -> The useMemo Hook only runs when one of its dependencies update. This can improve performance
--> The useMemo and useCallback Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback returns a memoized function
+-> The useMemo and useCallback Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback 
+returns a memoized function
 -> The useMemo Hook can be used to keep expensive, resource intensive functions from needlessly running
--> We can wrap the expensive function call with useMemo. The useMemoHook accepts a second parameter to declare dependencies. The expensive function will only run when its dependencies have changed.
+-> We can wrap the expensive function call with useMemo. The useMemoHook accepts a second parameter to declare dependencies. 
+The expensive function will only run when its dependencies have changed.
 
 syntax: const calculation = useMemo(() => expensiveCalculation(), [count]);
 
@@ -12,7 +14,7 @@ import { useState } from "react";
 const App = () => {
   const [count, setCount] = useState(0);
   const calculation = expensiveCalculation(count);
-
+//const calculation = useMemo(expensiveCalculation(count), [count]);
   const increment = () => {
     setCount(count + 1);
   };

@@ -1,0 +1,102 @@
+The display Property:
+
+-> The display property is used to specify how an element is shown on a web page.
+-> Every HTML element has a default display value, depending on what type of element it is. 
+-> The default display value for most elements is block or inline.
+-> The display property is used to change the default display behavior of HTML elements.
+
+
+Block-level Elements: 
+-> A block-level element ALWAYS starts on a 'new line' and takes up the full width available (stretches out to the left and right 
+as far as it can).
+Examples of block-level elements:
+<div>
+<h1> - <h6>
+<p>
+<form>
+<header>
+<footer>
+<section>
+
+
+Inline Elements: 
+-> An inline element DOES NOT start on a 'new line' and only takes up as much width as necessary.
+-> you cannot set height and width property for inline element. for that you have to use 'display: inline-block' property.
+-> an inline element with display: block; is not allowed to have other block elements inside it.
+Examples of inline elements:
+<span>
+<a>
+<img>
+
+
+
+
+The display Property Values: 
+
+
+Value	                Description
+
+inline	                Displays an element as an inline element
+block	                Displays an element as a block element
+flex	                Displays an element as a block-level flex container
+grid	                Displays an element as a block-level grid container
+inline-block	        The element is formatted as an inline element, but you can apply height and width values.
+none	                The element is completely removed               
+initial	                Sets this property to its default value
+inherit	                Inherits this property from its parent element
+
+
+
+
+1. display: none;
+    <div class="myDiv">
+      <p>Hover over me</p>
+      <p class="myPara">Hey you Found me</p>
+    </div>
+
+p.myPara{
+    display: none;
+    background-color: orange;
+    border: 1px solid black;
+}
+
+div.myDiv:hover p.myPara{
+    display: block;
+}
+
+
+
+2. display: inline-block;
+    <div class="mainDiv">
+      <div class="myDiv"></div>
+      <div class="myDiv"></div>
+      <div class="myDiv"></div>
+    </div>
+
+div.myDiv{
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    border: 2px solid black;
+    background-color: aqua;
+    margin: 20px;
+    
+}
+div.mainDiv{
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

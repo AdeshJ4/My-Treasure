@@ -1,0 +1,86 @@
+CSS Margins
+
+-> Margins are used to create space around elements, outside of any defined borders.
+
+properties for specifying the margin: 
+
+margin-top
+margin-right
+margin-bottom
+margin-left
+
+margin: 25px 50px 75px 100px;
+top margin is 25px
+right margin is 50px
+bottom margin is 75px
+left margin is 100px
+
+
+margin: 25px 50px 75px;
+top margin is 25px
+right and left margins are 50px
+bottom margin is 75px
+
+margin: 25px 50px;
+top and bottom margins are 25px
+right and left margins are 50px
+
+
+margin: 25px;
+all four margins are 25px
+
+
+
+The auto Value: 
+===============
+-> the browser calculates the margin
+-> it is used to 'horizontally center' the element within its container.
+-> The element will then take up the 'specified width', and the remaining space will be split equally between the left and right margins.
+div {
+  width: 300px;
+  margin: auto;
+  border: 1px solid red;
+}
+
+
+
+The inherit Value: 
+==================
+-> child element will inherit margin value from its parent.
+
+<div>
+    <p>para 1</p>
+    <p class="para">para 2</p>
+</div>
+
+div {
+  border: 1px solid red;
+  margin-left: 100px;
+}
+p.ex1 {
+  margin-left: inherit;
+}
+
+
+
+Margin Collapse: 
+================
+-> Top and bottom margins of elements are sometimes collapsed into a single margin
+-> In margin collapse, the larger margins of the element is used, and the smaller one is ignored.
+-> This does not happen on left and right margins! Only top and bottom margins!
+
+
+<h1>Heading 1</h1>
+<h2>Heading 2</h2>
+
+h1 {
+  margin: 0 0 100px 0;          // bottom margin
+  border: 1px solid black;      // top margin
+}
+h2 {
+  margin: 50px 0 0 0;
+  border: 1px solid blue;
+}
+
+In this example the h1 element has a bottom margin of 100px and the h2 element has a top margin of 50px. So, the vertical margin 
+between h1 and h2 should have been 150px (100px + 50px). However, due to margin collapse, the actual margin ends up being 100px.

@@ -1,6 +1,0 @@
-The CSS margin property defines a margin (space) outside the border.
-
-p {
-  border: 2px solid powderblue;
-  margin: 50px;
-}

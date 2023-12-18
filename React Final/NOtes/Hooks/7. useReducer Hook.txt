@@ -1,13 +1,13 @@
 useReducer: 
 ===========
 
-
 -> The useReducer hook is a powerful alternative to useState when dealing with complex custom state logic. 
 -> with the help of useReducer hook we can write complex custom state logic inside reducer function.
 -> useReducer is inspired by the concept of reducers in Redux.
 -> If you find yourself keeping track of multiple pieces of state that rely on complex logic, useReducer may be useful.
 -> The main advantage of useReducer over useState is that it provides a more structured way to handle complex state logic. 
--> In summary, useReducer hook is used for managing more complex state logic in functional components. It involves a reducer function that specifies how state should change in response to actions, and 
+-> In summary, useReducer hook is used for managing more complex state logic in functional components. It involves a reducer 
+function that specifies how state should change in response to actions
 -> The useReducer hook returns the current state and a dispatch function to trigger state updates.
 
 Here's a basic explanation:

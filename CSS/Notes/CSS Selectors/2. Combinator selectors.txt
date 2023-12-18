@@ -1,0 +1,82 @@
+2. Combinator selectors (select elements based on a specific relationship between them):
+========================================================================================
+
+-> There are four different combinators in CSS:
+
+1. descendant selector (space)
+2. child selector (>)
+3. adjacent sibling selector (+)
+4. general sibling selector (~)
+
+
+
+1. descendant selector (space)
+
+-> The descendant selector matches all elements that are descendants of a specified element.
+-> for ex: p tags define inside a div tag are descendants of div tag.
+<div>
+    <p>Para 1</p>               // red
+    <h1><p>Para 2</p></h1>      // red
+</div>
+div p{
+    color: red;
+}
+
+
+2. Child Selector (>)
+-> The child selector selects all elements that are the children of a specified element.
+-> for ex: p tags define inside a div tag are child selector of 
+<div>
+    <p>Para 1</p>               // red
+    <h1><p>Para 2</p></h1>      // not red because p is not direct child of div, p is direct child of h1
+</div>
+div p{
+    color: red;
+}
+
+
+3. Adjacent Sibling Selector (+)
+-> The adjacent sibling selector is used to select an element that is 'directly' after another specific element.
+ex: 1
+    <div>
+      <p>Para 1</p>  // not this one
+    </div>
+    <p>Para 2</p>    // red
+    <p>Para 3</p>    // not this one
+
+div + p{
+    color: red;
+}
+
+ex: 2
+    <div></div>
+    <h1>head</h1>
+    <p>Para</p>    // not this one
+div + p{
+    color: red;
+}
+
+
+4. General Sibling Selector (~)
+-> The general sibling selector selects 'all elements' that are next siblings of a specified element.
+    <div>
+      <p>Para 1</p>
+    </div>
+    <h1>Head</h1>
+    <p>Para 2</p>   // red
+    <p>Para 3</p>   // red
+
+div ~ p{
+    color: red;
+}
+
+
+
+
+
+
+
+
+
+
+

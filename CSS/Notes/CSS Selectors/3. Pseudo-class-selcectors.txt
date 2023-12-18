@@ -1,0 +1,60 @@
+3. Pseudo-class selectors (select elements based on a certain state): 
+=====================================================================
+
+For example, it can be used to:
+
+Style an element when a user mouses over it
+Style visited and unvisited links differently
+Style an element when it gets focus
+
+
+1. 'link' is a pseudo-class-selector which is used to select and style unvisited links
+2. 'visited' is a pseudo-class-selector which is used to select and style visited links
+3. 'hover ' is pseudo-class-selector which is used to select and style element once you mouse over it.
+
+
+ex: 
+<a href="www.google.com">Google.com</a>
+a:link{
+    color: blue;
+}
+a:hover{
+    color: red;
+}
+
+
+-> Pseudo-classes can be combined with HTML classes:
+
+    <p>Para 1</p>
+    <p class="onlyMe">Para 2</p>
+    <p>Para 3</p>
+    p.onlyMe:hover{
+        color: powderblue;
+    }
+
+
+-> Simple Tooltip hover
+    <div>
+      <p>Para 1</p>
+      <p class="para2">Para 2</p>
+    </div>
+
+    .para2{
+        display: none;
+        background-color: yellow;
+        padding: 20px;
+    }
+    div:hover p.para2{
+        display: block;
+    }
+
+
+
+
+
+
+
+
+
+
+

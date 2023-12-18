@@ -1,7 +1,7 @@
 -> The useRef Hook allows you to persist values between renders.
 -> It is used to store a mutable value that does not cause a re-render when updated.
 -> It can be used to access a DOM element directly.
--> useRef() only returns one item. It returns an Object called current.
+-> useRef() only returns one item. It returns an Object which has single property called current.
 -> Ex. 
 	const count = useRef(0);
 It's like doing this: const count = {current: 0}. We can access the count by using count.current.
@@ -60,7 +60,7 @@ const Fun = () => {
   });
   return(
     <>
-      <h1>Count: {count.current}</h1>  {/* This will print 0 because useEffect run after component rendered. */}
+      <h1>Count: {count.current}</h1>  {/* This will print 0 becase useEffect run aufter component rendered. */}
     </>
   )
 }

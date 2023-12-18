@@ -1,0 +1,88 @@
+Simple selectors (select elements based on name, id, class): 
+=============================================================
+
+-> In nutshell CSS give more preference to id inline css then external css then id then class then universal selector
+
+i] element Selector: 
+-> The element selector selects HTML elements based on the element name.
+<p>Element Selector</p>
+p{
+    color: red
+}
+
+ii] id Selector: 
+-> id selector uses the 'id attribute' of an HTML element to select a specific element
+-> An id name cannot start with a number!
+-> we use # to give style
+-> The id of an element is unique within a page, so the id selector is used to select one unique element.
+-> if id selector and class selector have the same css property and define on same element then css will give preference to id selector
+-> inside id selector we write unique property of an element.
+<p id='para1'>ID Selector</p>
+#para1{
+    color: blue;
+}
+
+<h1 id="head1" class="head">Home Page</h1>  // render in blue
+#head1{
+    color: blue;
+}
+.head{
+    color: red;
+}
+
+
+iii] class Selector: 
+-> class selector uses the 'class attribute' of an HTML element to select multiple elements.
+-> we use . to give styling
+-> if you have a common properties to apply on multiple elements then use class selector.
+-> HTML elements can have more than one class.
+-> A class name cannot start with a number!
+-> you apply class attribute to specific 'element name' like if you want to apply css only on all p tags then you can do that, even 
+if you applied same class on h tag.
+
+<p class="para">Paragraph</p>
+.para{
+    color: red;
+}
+
+<p class="para1 para2">Paragraph</p>  // render in blue
+.para1{
+    color: red;
+}
+.para2{
+    color: blue;
+}
+
+// only p tags will get all properties of common class
+<h1 class="common">Heading</h1>
+<p class="common">Paragraph</p>  
+<p class="common">Paragraph</p>  
+p.common{
+    color: red;
+}
+
+
+
+universal selector (*): 
+-> universal selector selects all html elements.
+-> it also called wildcard selector.
+* {
+  color: blue;
+}
+
+
+Grouping Selector: 
+-> if multiple elements have the same style then we can group them together.
+h1{
+    color: red;
+    text-align: center;
+}
+p{
+    color: red;
+    text-align: center;
+}
+you can group above two style in one: 
+h1, p {
+    color: red;
+    text-align: center;
+}

@@ -1,4 +1,5 @@
--> The CSS Grid Layout Module offers a grid-based layout system, with rows and columns, making it easier to design web pages without having to use floats and positioning
+-> The CSS Grid Layout Module offers a grid-based layout system, with rows and columns, making it easier to design web pages without 
+having to use floats and positioning
 
 -> A grid layout consists of a parent element, with one or more child elements.
 
@@ -103,18 +104,12 @@ CSS :
 
 
 
-
-
-
-
-
-header header header header right right
-main main menu menu right right 
-footer footer footer fooyer footer footer
-
-
-
-
+justify-content: space-evenly;
+justify-content: space-around;
+justify-content: space-between;
+justify-content: center;
+justify-content: start;
+justify-content: end;
 
 
 
@@ -125,10 +120,26 @@ footer footer footer fooyer footer footer
 
 
 
+grid-template-columns: 
+-> The grid-template-columns property defines the number of columns in your grid layout
+-> it can define the width of each column.
+
+div.parentDiv{
+  display: grid;
+  grid-template-columns: auto auto 100px;    // 3 columns
+}
 
 
 
 
+
+grid-template-rows property: 
+-> The grid-template-rows property defines the height of each row.
+div.parentDiv{
+  display: grid;
+  grid-template-columns: auto auto 100px;
+  grid-template-rows: 50px 100px 150px;     // 1st_row 2nd_row 3rd_row
+}
 
 
 

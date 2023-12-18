@@ -1,0 +1,28 @@
+/* all margin set to so we don't get any extra margin  */
+*{
+    margin: 0;
+    font-family: Ariel;
+    border: border-box;  /* extra margin and padding are counted inside width-> border included inside width */
+}
+
+.navbar{
+    height: 60px;
+    background-color: #0f1111;
+    color: white;
+}
+
+.nav-logo{
+    height: 50px;
+    width: 100px;
+}
+
+.logo{
+    background-image: url('./Photos/amazon_logo.png');
+    height: 50px;
+    width: 100%;
+    background-size: cover;   /* The background image is resized to cover the entire container, even if it has to stretch the image or cut a little bit off one of the edges */
+}
+
+.border{
+    border: 2px solid transparent;
+}

@@ -4,7 +4,7 @@ Adding Forms in React:
 -> Just like in HTML, React uses forms to allow users to interact with the web page
 -> By default When we submit an html form that form is posted to server so we ge full page reload.
 -> to solve this problem we have to prevent this default behavior and let React control the form.
--> In real worls application quite often when submmiting the form we need to call the server to save the data .
+-> In real world application quite often when submitting the form we need to call the server to save the data .
 
 
 Handling Forms: 

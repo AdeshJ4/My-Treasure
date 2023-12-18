@@ -1,6 +1,7 @@
 cascading is applying styles in order from top to bottom.
 
-1. If you have applied different property values to the same property in different areas of your CSS, the last property value will be rendered.
+1. If you have applied different property values to the same property in different areas of your CSS, the last property value will 
+be rendered.
 ex: 
 
 h2{
