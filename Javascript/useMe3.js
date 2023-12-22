@@ -1,16 +1,10 @@
-const myObject = { a: 1, p: 2, l: 1, e: 8 };
+// duplicate removal 
 
-let maxProperty = null;
-let maxValue = 0;
-
-for (let key in obj) {
-  if (obj[key] > maxValue) {
-    // 1>0, 2>1, 1>2, 8>2
-    maxValue = obj[key]; // 1, 2, 8
-    maxProperty = key; // a, p, e
-  }
+function removeDuplicate(arr){
+  return arr.filter((ele, index, array)=>{  // 10 0, 20 1, 20 2, 10 3, 20 4, 30 5
+    return array.indexOf(ele)  === index; //  0==0, 1==1, 1!=2, 0!=3, 1!=4, 5==5
+  })// [10, 20, 30]
 }
 
-console.log(
-  `The property with the largest value is '${maxProperty}' with a value of ${maxValue}.`
-);
+removeDuplicate([10, 20, 20, 10, 20, 30]);
+

@@ -1,14 +1,20 @@
-function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]]; // Swap elements
+function unionArray(arr1, arr2) {
+  const arr = [...arr1, ...arr2];
+  const uniqueArr = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    let duplicate = false;
+    for (let j = 0; j < uniqueArr.length; j++) {
+      if (arr[i] === arr[j]) {
+        duplicate = true;
+        break;
+      }
+    }
+    if (!duplicate) {
+      uniqueArr.push(arr[i]);
     }
   }
-  
-  // Example usage:
-  const myArray = [1, 2, 3, 4, 5];
-  console.log('Original Array:', myArray);
-  
-  shuffleArray(myArray);
-  console.log('Shuffled Array:', myArray);
-  
+  return uniqueArr;
+}
+const unionArr = unionArray([10, 20, 30], [20, 30, 40]);
+
