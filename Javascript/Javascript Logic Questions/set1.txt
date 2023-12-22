@@ -1,0 +1,522 @@
+Question 1 : Reverse each word of a sentence.
+
+INPUT : "Hey Adesh"
+OUTPUT: "yeH hsedA"
+code : using split(), reverse(), join()
+function reverseSentence(str){
+    // separate each word of the sentence.  -> ["Adesh", "Pramod", "Jadhav"] -> ['A', 'd', 'e', 's', 'h'] -> ['h', 's', 'e', 'd', 'A'] => 'hsedA'
+    let savesStr = str.split(" ").map((ele)=>{
+        return ele.split("").reverse().join("")
+    }); // return ["hsedA", "domarP", "vahdaJ"];
+
+    return savesStr.join(" ");
+}
+let res = reverseSentence("Adesh Pramod Jadhav");   
+
+code 2: using loop
+INPUT : "Adesh Jadhav"
+OUTPUT: "hsedA vahdaJ"
+
+function reverseString(str) {
+  let reverse = "";
+// R A M = 2, 1, 0
+  for (let i = str.length - 1; i >= 0; i--) {
+    reverse = reverse + str[i]; // M A  R
+  }
+  return reverse.split(' ').reverse().join(' ');
+}  // hsedA vahdaJ
+
+
+
+============================================================================================================================
+
+Question 2 : Reverse a String.
+
+INPUT : "Adesh"
+OUTPUT: "hsedA"
+code : using split(), reverse(), join()
+function reverseString(str){ // Adesh -> ['A', 'd', 'e', 's', 'h'] -> ['h', 's', 'e', 'd', 'A'] -> hsedA
+    return str.split('').reverse().join("");
+}
+const res = reverseString('Adesh');
+
+code 2: using loop
+
+function reverseString(str){
+    let reverse = '';
+    for(let i=str.length-1; i>=0; i--){
+        reverse += str[i];
+    }
+    return reverse;
+}
+============================================================================================================================
+
+Question 3 : check given object is array or not.
+
+INPUT : []
+OUTPUT: true
+INPUT : {}
+OUTPUT: false
+code: 
+function checkArray(ele){
+    return Array.isArray(ele);
+} // return true or false
+
+
+============================================================================================================================
+
+Question 4 : How to empty an array.
+
+code : 
+
+solution 1: using length property 
+arr.length = 0;
+solution 2: using while loop
+while(arr.length > 0){
+    arr.pop();
+}
+solution 3: using splice()
+arr.splice(0);  // only give starting position and omit 2nd argument.
+solution 4 : reassigning array
+arr = [];  // only with var and let
+
+
+
+
+============================================================================================================================
+
+Question 5 : check given number is Integer or not.
+
+INPUT : 10
+OUTPUT: Integer / true
+INPUT : 10.15
+OUTPUT: Not Integer / false
+
+code 1: using Number.isInteger()
+function checkInteger(num){
+    return Number.isInteger(num);
+}// 
+
+code 2: using  remainder operator (%) => returns the remainder
+// Dividend/Divisor = Quotient reminder  
+// 12/1 = 12 0   
+// 6/1 = 6 0
+// 12/2 = 6 0
+// 12.5/1 = 12 0.5
+// 12.5/6 = 2 0.5
+function checkInteger(num){
+    if(num%1===0){
+        log("Integer")
+    }else{
+        log('Not Integer')
+    }
+}
+
+code 3: using Math.round() -> 
+function checkInteger(num){
+    return num === Math.round(num);  // 10 === Math.round(10)  ✔  ,   10.4  === Math.round(10.4=>10)  X,  10.5  === Math.round(10.5=>11)  X
+}
+
+
+============================================================================================================================
+
+Question 6 : check given number is Float or not.
+
+INPUT : 10.1
+OUTPUT: Float
+INPUT : 10
+OUTPUT: Integer
+
+function checkFloat(num){
+    if(num !== Math.round(num)){// 10.5 !== 10
+        log()
+    }
+}
+
+
+============================================================================================================================
+
+Question 7 : duplicate the no inside array
+
+INPUT: [10, 20, 30]
+OUTPUT: [10, 20, 30, 10, 20, 30]
+
+code : 
+function duplicateArray(array){
+    const temp1 = [...array, ...array];
+    const temp2 = array.concat(array);
+
+    return temp2;
+};
+
+
+
+============================================================================================================================
+
+Question 8 : reverse a Number 
+INPUT: 12
+OUTPUT: 21
+INPUT: 123
+OUTPUT: 321
+
+code 1: using split(), reverse(), join(), Number()
+function reverseNumber(num){ 
+    return Number(num.toString().split('').reverse().join(''));
+}
+
+code 2: using loop
+function reverseNum(num) {
+  let reverse = "";
+  let strNum = num.toString();
+  console.log(strNum);
+  for (let i = strNum.length - 1; i >= 0; i--) {
+    reverse += strNum[i];
+  }
+  return Number(reverse);
+}
+
+code 3: 
+function reverseNum (num){
+    let reverse = '';
+    while(num > 0){  // 1234 , 123, 12
+        let num1 = num % 10; // 1234%10=>4, 123%10=>3, 12%10=>2, 1%10=>1
+        num = Math.floor(num / 10); // 1234/10=>123 , 123/10=>12, 12/10=>1
+        reverse += num1;//4 3 2 1
+    }
+    return  Number(reverse);
+}
+
+code 4:
+function reverseNum (num){
+    let reverse = 0;
+    while(num > 0){// 1234, 123, 12, 1, 
+        let remainder = num % 10; // 1234%10=>4, 123%10=>3, 12%10=>2, 1%10=>1
+        reverse = reverse * 10 + remainder; // 0*10+4=>4 , 4*10+3=>43, 43*10+2=>432, 432*10+1=>4321
+        num = Math.floor(num / 10); // 1234/10=>123, 123/10=>12, 12/10=>1, 1/10=>0
+    }
+    return reverse
+}
+
+const res = reverseNum(1234)
+
+
+
+
+============================================================================================================================
+
+Question 9 : palindrome string (aba===aba, 101===101)
+INPUT: aba
+OUTPUT: true
+INPUT: 101
+OUTPUT: true
+
+code: 
+
+function palindrome(str){
+    let reverse = str.split('').reverse().join('');
+    return str === reverse;
+}
+
+
+
+============================================================================================================================
+
+Question 10 : write a js code that return a passed string with letters in alphabetically order.
+INPUT: Adesh1461
+OUTPUT: 1146Adehs
+INPUT: apple
+OUTPUT: aelpp
+
+code: 
+function alphabeticalOrder(str){
+    return str.split('').sort().join('');
+}
+
+
+
+
+============================================================================================================================
+
+Question 11 : first letter of each word in uppercase
+INPUT: adesh jadhav
+OUTPUT: Adesh Jadhav
+
+function capitalizedWord(str){
+    let strArr = str.split(' ').map((ele)=>{
+        return ele.charAt(0).toUpperCase() + ele.substring(1); 
+    }); ['Adesh', 'Jadhav']
+
+    return strArr.join(' '); // Adesh Jadhav
+}
+
+
+============================================================================================================================
+
+Question 12 : calculate how many times given element occur in given string
+INPUT: a
+OUTPUT: 2 times
+
+code 1 : 
+function occurrenceOfSpecificCharacter(str, searchEle) {
+  let strArr = str.split("");
+  let count = 0;
+
+  for (let num of strArr) {
+    if (num === searchEle) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+
+code 2: 
+function occurrenceOfSpecificCharacter(str, character) {
+  const occurrences = {};
+
+  str.split("").forEach((ele) => {
+    if (occurrences.hasOwnProperty(ele)) {
+      occurrences[ele]++;
+    } else {
+      occurrences[ele] = 1;
+    }
+  });
+  for (let key in occurrences) {
+    if (key === character) {
+      return occurrences[key];
+    }
+  }
+  return `Invalid Character`;
+  //   return occurrences;
+}
+const res = occurrenceOfAllCharacters("apple", "z");
+
+
+
+
+============================================================================================================================
+
+Question 13 : calculate how many times each element occur in given string
+INPUT: apple
+OUTPUT: {a: 1, p: 2, l: 1, e: 1};
+
+function calculateOccurrenceOfAllCharacters(str){
+    const occurrences = {};
+    str.split('').forEach((ele)=>{
+        if(obj.hasOwnProperty(ele)){
+            obj[ele]++;
+        }else{
+            obj[ele] = 1;
+        }
+    });
+    return occurrences;
+}
+
+============================================================================================================================
+
+Question 14 : calculate some of elements inside an array.
+INPUT: [10, 20, 30]
+OUTPUT: 60
+
+code 1 : using reduce ()
+function calculateSumOfArray(array){  // [10, 20, 30]
+    return array.reduce((accumulator, curEle)=>{  
+        return accumulator + curEle;  // 0 + 10=> 10, 10 + 20=>30, 30 + 30=> 60 
+    }, 0);
+}
+
+code 2 : using sum = 0;
+function calculateSumOfArray(array){
+    let sum = 0;
+    for(let num of array){
+        sum += num;
+    }
+    return sum;
+}
+
+code 3: using forEach()
+function calculateSumOfArray(array){
+    let sum = 0;
+    array.forEach((ele)=>{
+        sum += ele;
+    })
+    return sum;
+}
+
+
+
+
+
+============================================================================================================================
+
+Question 15 : calculate some of only integers from mixed array.
+INPUT: [11, 'a', 'b', 20, 30, 'c']
+OUTPUT: 61
+
+code 1: 
+function calculateOnlyNumbers(array){
+    let sum = 0;
+    array.forEach((ele)=>{
+        if(typeof ele === 'number'){
+            sum += ele;
+        }
+    });
+    return sum;
+}
+
+
+
+============================================================================================================================
+
+
+want element, don't want element: 
+================================
+
+1. want gender="M": ele.gender === "M";  // return only males
+2. don't want gender: ele.gender !== "M"   // return female, unknown
+3. want gender Property: ele.hasOwnProperty("gender")   // return only gender objects
+4. don't want gender property: !ele.hasOwnProperty("gender")   // return everything except gender
+
+
+Question 16 : return elements from array which contain gender property that means delete all objects which don't have gender.
+INPUT: [
+    {id: 101, fname: 'Adesh', gender: 'M'},
+    {id: 102, fname: 'Akshay', gender: 'M'},
+    {id: 103, fname: 'Manoj'}, 
+]
+OUTPUT: [
+    {id: 101, fname: 'Adesh', gender: 'M'},
+    {id: 102, fname: 'Akshay', gender: 'M'},
+]
+
+code 1 : 
+function genderRemove(array){
+    return array.filter((ele)=>{
+        return ele.hasOwnProperty(ele);
+    });
+};
+code 2: 
+
+function onlyGender(array){
+    for(let i=array.length-1; i>=0; i--){
+        if(array[i]['gender'] === undefined){
+            array.splice(i, 1);
+        }
+    }
+}
+
+
+============================================================================================================================
+
+Question 17 : return elements from array which contain gender="M" 
+INPUT: [
+    {id: 101, fname: 'Adesh', gender: 'M'},
+    {id: 102, fname: 'Akshay', gender: 'M'},
+    {id: 103, fname: 'Manoj', gender: 'F'}, 
+]
+OUTPUT: [
+    {id: 101, fname: 'Adesh', gender: 'M'},
+    {id: 102, fname: 'Akshay', gender: 'M'},
+]
+
+code 1: 
+function returnOnlyMale(array){
+    return array.filter((ele)=>{
+        return ele.gender === 'M';
+    });
+}
+
+code 2: 
+function onlyGender(array){
+    for(let i=array.length-1; i>=0; i--){
+        if(array[i]['gender'] !== 'M'){  // removes female, unknown
+            array.splice(i, 1);
+        }
+    }
+}
+
+============================================================================================================================
+
+Question 18 : return elements from array which don't contain gender="M" 
+INPUT: [
+    {id: 101, fname: 'Adesh', gender: 'M'},
+    {id: 102, fname: "Manoj", gender: "Unknown" }
+    {id: 103, fname: 'Sita', gender: 'F'}, 
+]
+OUTPUT: [
+    {id: 102, fname: "Manoj", gender: "Unknown" }
+    {id: 103, fname: 'Sita', gender: 'F'}, 
+]
+
+code 1: by creating new array
+function removeGenderMale(arr){
+    return arr.filter((ele)=>{
+        return ele.gender !== "M";
+    })
+}
+
+code 2: by doing modification in original array
+function removeMale(arr){
+    for(let i=arr.length-1; i>=0; i--){
+        if(arr[i]['gender'] === 'M'){
+            arr.splice(i, 1);
+        }
+    }
+}
+
+============================================================================================================================
+
+Question 19 : clone array
+1. using spread operator
+2. using concat method
+3. using forEach()
+4. using map()
+
+const arr = [10, 20, 30];
+const arr1 = [...arr];
+const arr2 = arr.concat();
+const arr3 = [];
+arr.forEach((ele)=>{
+    arr3.push(ele)
+});
+const arr4 = arr.map(ele=>{
+    return ele;
+})
+
+
+
+
+
+============================================================================================================================
+
+Question 20 : return most frequent element of array.
+INPUT: [10, 20, 30, 10, 10, 50]
+OUTPUT: [10]
+INPUT: [10, 10, 20, 20, 50]
+OUTPUT: [10, 20]
+
+function mostFrequentElementOfArray(array) {
+  const obj = {};
+  for (let num of array) {
+    if (!obj.hasOwnProperty(num)) {
+      obj[num] = 1;
+    } else {
+      obj[num]++;
+    }
+  }
+  let maxValue = 0;
+  let maxProperty = [];
+  for (let key in obj) {    // 1>2, 2>2
+
+    if (obj[key] > maxValue) {
+      maxValue = obj[key];
+      maxProperty = [key]; // p
+    } else if (obj[key] === maxValue) {
+      maxProperty.push(key); // e  -> p, e
+    }
+  }
+  return maxProperty;
+}
+const res = mostFrequentElementOfArray(["a", "p", "p", "l", "e", "e", "e"]);
+

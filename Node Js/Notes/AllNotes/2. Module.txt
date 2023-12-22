@@ -439,6 +439,9 @@ basically involves reading that request and returning the right response.
 -> In the example below we have created a function that will be executed when a "scream" event is fired.
 -> To fire an event, use the emit() method.
 
+-> we use on() or addListener() to define a event and as a second argument we give a callback fuction which will be executed when this
+event is executed.
+-> To execute a event we use emit() method which takes a event name as a argument and called assocaiated callback function og that event.
 code : 
 
 var events = require('events');
@@ -448,7 +451,7 @@ var myEventHandler = function () {//Create an event handler:
 }
 eventEmitter.on('scream', myEventHandler);//Assign the event handler to an event:
 //Fire the 'scream' event:
-eventEmitter.emit('scream');
+eventEmitter.emit('scream');  // signalling event happened.
 
 
 Method			        Description
@@ -457,9 +460,8 @@ addListener()		    Adds the specified listener
 emit()			        Call all the listeners(event handlers) registered with the specified name
 on()			          Adds the specified listener(event handler)
 
-
-
-
+on() and addListener() are basically same, but quite often we used on() method.
+on() or addListener() must be define before emit() method. emit() method iterate over all on() methods.
 
 
 

@@ -23,25 +23,28 @@ There are 2 methods to find and select data from a MongoDB collection,
 
 
 
+3. findOneAndDelete() and findOneAndReplace(): 
+
+-> findOneAndDelete is focused on deleting a document, while findOneAndReplace is focused on replacing a document with a new one.
+-> findOneAndDelete: Returns the deleted document or null if no document is found.
+-> findOneAndReplace: By default, returns the original document before replacement.
+
+// Delete a document where the 'username' is 'john_doe'
+db.tb1.findOneAndDelete({name: 'john_doe'});
+
+// Delete a document where the 'status' is 'inactive' and return only the 'username' field
+db.tb1.findOneAndDelete({status: 'inactive'}, { projection: {name: 1, _id: 0}})
+
+// Replace a document where the 'username' is 'john_doe' with a new document
+db.tb1.findOneAndReplace({ username: 'john_doe' }, { username: 'jane_doe', age: 30 })
+
+// Replace a document where the 'status' is 'active' and return only the 'username' field
+db.tb1.findOneAndReplace({ status: 'active' }, { username: 'new_username', status: 'inactive' }, {projection: {userName: 1, _id: 0}})
 
 
 
+4. findOneAndUpdate()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-> 
 
 

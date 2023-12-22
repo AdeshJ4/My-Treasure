@@ -9,12 +9,6 @@ yarn-error.log
 # Windows
 Thumbs.db
 
-# Environment variables
-.env
-
-# Log files
-*.log
-
 # Dependency directory (created by npm/yarn)
 /dist/
 /build/

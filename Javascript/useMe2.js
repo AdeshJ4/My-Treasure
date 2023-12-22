@@ -1,31 +1,20 @@
-class Person{
-    constructor(fname){
-        this.fname = fname;
-    }
+const obj = { a: 1, p: 2, l: 1, e: 2 };
 
-    firstName(){
-        console.log('First Name : ' + this.fname);
-    }
+let maxProperties = [];
+let maxValue = 0;
 
-    display(){
-        console.log('Parent class Display method');
-    }
-    
+for (let key in obj) {
+  if (obj[key] > maxValue) {  // 1>0, 2>1, 1>2, 2>2
+    maxValue = obj[key];  // 1, 2
+    maxProperties = [key]; // a  , p
+  } else if (obj[key] === maxValue) { //1==2, 2==2
+    // If multiple properties have the same max value, add them to the array
+    maxProperties.push(key); // e
+  }
 }
 
-
-class Child extends Person{
-    constructor(fname, age){
-        super(fname)
-        this.age = age;
-    }
-
-    display(){
-        super.display();
-        console.log('Child class Display Method');
-    }
-}
-
-
-const p1 = new Child('Adesh', 22);
-p1.display()
+console.log(
+  `The properties with the largest value (${maxValue}) are: ${maxProperties.join(
+    ", "
+  )}.`
+);

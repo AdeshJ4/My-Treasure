@@ -1,0 +1,355 @@
+Indexes: 
+
+Retriving data Efficiently
+
+
+1. what are Indexes ?
+2. Different Types of ndexes.
+3. Using & Optimizing Indexes.
+
+
+
+
+1. Why Indexes ? 
+----------------
+
+-> Index can speed up our "Create", "Read", "Update", "Delete" querries.
+Ex.db.products.find({seller: "max"})
+-> if you don't have any index set up on seller then mongodb then go to each document 
+	of that product collection thats called 	"collScan"
+-> But when you create an index 	for the seller key of the products collection here
+ 	and 
+
+
+
+
+
+Indexes:
+-------
+
+-> MongoDB uses indexing in order to make the query processing more efficient.
+-> Without indexes, MongoDB must perform a collection scan, i.e. scan every document in a collection, 
+	to select those documents that match the query statement.
+-> If an appropriate index exists for a query, MongoDB can use the index to limit the number of 
+	documents.
+-> Indexes are special data structures that store a small portion of the collection's data set in 
+	an easy to traverse form.
+-> Indexes are special data structures that stores some information which is small portion related to the 
+	documents such that it becomes easy for MongoDB to find the right data file. 
+-> The indexes are order by the value of the field specified in the index. 
+	Eg. {name: "Adesh"}  here "name" is "key" and "Adesh" is its value.
+-> The ordering of the index entries supports efficient equality matches and range-based query operations.
+-> In addition, MongoDB can return sorted results by using the ordering in the index.
+-> Fundamentally, indexes in MongoDB are similar to indexes in other database systems.
+-> MongoDB defines indexes at the collection level and supports indexes on any field or sub-field of 
+	the documents in a MongoDB collection.
+-> if your find query return the 20% to 30% of your data from database then use Index otherwise don't.
+
+
+Query Diagnosis and Query Planning:
+-----------------------------------
+
+1. explain():
+-- ----------
+
+-> explain() method is used for "Query Diagnosis and Query Planning".
+-> explain() method takes three parameters one at a time.
+	
+	1. explain("queryPlanner"): Show summary for Executed Query + Winning Plan
+
+	2. explain("executionStats"): Show detailed summary for executed query + Winning plan 
+												+ Possibility  Rejected Plans.
+
+	3. explain("allPlansExecution"): Show detailed summary for executed query + Winning plan 
+													Decision Process.
+
+-> Ex. db.tb1.explain().find({"dob.age": {$gt: 60}})
+
+
+2. Efficient Queries & Covered Queries: 
+-- ---------------------------------
+
+-> You also haveto see Milliseconds Process Time of a query.
+-> No of documents examined  and no of Documents returned should be as close as possible 
+   or no of documents should be 0.
+
+
+
+
+Input: 
+------
+-> db.tb1.explain("executionStats").find({"dob.age": {$gt: 60}})
+
+output: 
+-------
+-> executionStats: {
+    executionSuccess: true,
+    nReturned: 1222,
+    executionTimeMillis: 5,  		<---- Time Taken
+    totalKeysExamined: 0,
+    totalDocsExamined: 5000,
+    executionStages: {
+      stage: 'COLLSCAN',
+      filter: {
+        'dob.age': {
+          '$gt': 60
+        }
+      },
+
+
+
+
+Create Index: 
+-------------
+
+-> db.tb1.createIndex({"dob.age": 1})
+
+
+
+Drop Index: 
+-----------
+
+-> db.tb1.dropIndex({"dob.age": 1})
+-> db.tb1.dropIndexes({"dob.age": 1, "name": 1}) 
+
+
+
+description of all indexes:
+---------------------------
+
+-> db.tb1.getIndexes()
+
+
+
+
+Compound Indexes:
+-----------------
+
+-> compound indexes are the indexes which are combination of two or more than two fields.
+-> Eg. db.tb1.createindex({"dob.age": 1, gender: 1})
+-> here index will be : dob.age_1_gender_1.
+-> Here you can apply this index to find out only age, age+gender and not for only gender because data is sorted according to first field which is age.
+   Data: 	31 Female
+	    	31 Female
+		31 Female
+		31 Male
+		32 Male
+		32 Male
+		32 Male
+		32 Female
+		33 Female
+
+
+
+
+
+
+
+
+Using Indexes for sorting:
+-------------------------
+
+
+-> if you have index for age field and you have to sort data according to age then you don't have to 
+	sort data once more time beacuse it alredy sorted in "age index".
+-> if you don't have index for age then mongoDD will essentially fetch all your documents into memory
+	and do the sort there. 
+-> if you search following to get sorted data according to age: 
+
+	-> db.tb1.find({age: {$gt: 20}}).sort({age: 1})
+
+		in the output window you will see that this data is alredy sorted using "age" index key so it will
+		not sort it once agin.
+
+
+
+How to create unique index:
+---------------------------
+
+-> db.tb1.createIndex({email: 1}, {unique: true})
+
+
+
+
+
+
+
+
+
+
+
+
+
+Partial Filters: 
+----------------
+
+-> You have lots of values in your index that you never actually query for. Your index 
+	will still efficient but it will be unnecessory big.and also index eats up size on 
+	your disk.
+-> if you know certain values will not be looked at or only very very rarely and you
+ 	would be fine using collection scan if that happens, you can actually create a patial 
+	index where you only add the values you are regularly going to look at. 
+
+-> db.tb1.createIndex({"dob.age": 1}, {partialFilterExpression: {gender: "male"}})
+-> The meaning of above query is, we created index on age field and we sorted the age of
+	all documents in ascending order but the the index stores only that documnets whose 
+	gender is male.
+
+-> db.tb1.createIndex({"dob.age": 1}, {partialFilterExpression: {"dob.age": {$gt: 60}}})
+
+
+
+
+
+Time to Live Index: 
+-------------------
+
+-> This index is useful for a lot of applications where you have self-destructuring data,
+	lets say sessions of users where you want to clear their data after some durations or 
+	anything like that.
+-> This index only works on "date indexes", "date fields", if you create it on other fields
+	then it just ignore.
+
+-> db.sessions.createIndex({user_createAt: 1}, {expireAfterSeconds: 10})
+
+-> The mening of above query is it will delete user after 10 seconds.
+
+-> So this can be very useful because it allows you to maintain a collection of documents
+	which destroy themselves after a certain time span.
+
+-> This indes only works on single field and not on compound indexes and also works on 
+	date objects.
+
+
+
+
+
+
+
+Covered Queries: 
+----------------
+
+Step 1: db.tb1.createIndex({name: 1});
+Step 2: db.tb1.find({name: "Max"})
+
+-> In the above query you will get "totalDocsExamined: 1" and we have only one document inside 
+	collection.
+	
+Step 3: db.tb1.find({name: "Max"}, {_id: 0, name: 1});
+
+-> In the above query you will get "totalDocsExamined: 0".
+
+-> You can reach a so-called covered query if you actually would find "Max" and then also add
+	projection to not return the ID and only return the name and don't return any other fields.
+-> So in the above query i just want to return the fields which are also the indexed fields in our 
+	this case we have index on "name" field. It could do that from entirly from inside the index.
+-> Now you will not always be able to reach that state but if you can, if you have some query 
+	where you can optimize your index for that to reach that covered query state as it is called 
+	because the query is fully covered by the index then you will of cource have a very efficient 
+	query.
+
+
+
+Multi-Key Indexes:
+------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

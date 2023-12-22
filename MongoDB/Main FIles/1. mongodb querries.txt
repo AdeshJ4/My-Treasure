@@ -1,0 +1,631 @@
+Data : 
+------
+
+[
+  {
+    _id: 'txl-1',
+    departureAirport: 'Japan',
+    arrivalAirport: 'In',
+    distance: 14000,
+    Viman: 'Tata'
+  },
+  {
+    _id: 'txl-2',
+    departureAirport: 'US',
+    arrivalAirport: 'Japan',
+    distance: 14000,
+    Viman: 'Tata'
+  },
+  {
+    _id: 'txl-3',
+    departureAirport: 'In',
+    arrivalAirport: 'US',
+    distance: 18000,
+    Viman: 'Tata'
+  },
+  {
+    _id: 'txl-4',
+    departureAirport: 'US',
+    arrivalAirport: 'In',
+    distance: 18000,
+    Viman: 'Tata'
+  }
+]
+
+
+
+Operations : 
+------------
+
+CRUD
+
+
+
+Operations related Databases: 
+----------------------------
+
+1] List of All databases: 
+
+show dbs
+
+2] Drop database:
+
+db.dropDatabase().
+
+
+
+
+Operations related Collections: 
+------------------------------
+
+1] List of All Collections: 
+
+db.getCollectionNames()
+
+
+2] Delete specific collection: 
+
+db.product.drop()
+
+
+
+
+db.stats():
+----------
+
+stats is a utility method provided by the shell which output the some well stasts about this database.
+
+
+
+
+Select One Database to do operations:
+-------------------------------------
+
+use shop
+
+
+
+
+How to get type of Data : 
+-----------------------
+
+db.prod.findOne({name: "Adesh"}).age
+	-> number
+
+db.prod.findOne({name: "Adesh"}).name
+	-> string
+
+
+
+Select Data : 
+-------------
+
+1] Select All Data :
+   find() return cursor object and not all the documents of that collection. so if you have millions of documents then it will return jsut first 10 to 20 
+   documents. if you want all documnets then type find().toArray(), but agin it is not optimal.
+
+
+1] find() method:
+
+db.products.find();
+
+
+
+2] toArray() method : 
+
+db.products.find().toArray();
+
+
+
+2] forEach() method 
+   this method simply simply allows you to write a code to do somthing on every element that is in your databse on every document you got in there.
+	
+
+
+2] Select Unique Data : 
+
+db.flightData.find({_id : "txl-1"});
+
+
+
+3] Select All documents whose distance = 18000
+
+db.flightData.find({distance : 18000});
+
+
+4] Select All documents whose distance > 14000
+
+db.flightData.find({distance : {$gt : 14000}});
+
+
+
+4] Select First documents whose distance > 14000
+
+db.flightData.findOne({distance : {$gt : 14000}});
+
+
+
+Insert Data :
+------------
+
+1] Insert Many Documents: 
+
+db.flightData.insertMany([
+  {
+    _id: 'txl-1',
+    departureAirport: 'Japan',
+    arrivalAirport: 'In',
+    distance: 14000,
+    Viman: 'Tata'
+  },
+  {
+    _id: 'txl-2',
+    departureAirport: 'US',
+    arrivalAirport: 'Japan',
+    distance: 14000,
+    Viman: 'Tata'
+  }
+]);
+
+
+
+2] Insert One Document:
+
+db.products.insertOne({name:"Adesh", age: 21})
+
+db.products.insertOne({name:"Book", author:{name:"Adesh", age : 21}})
+
+db.products.insertOne(
+	{
+		name: "Java", 
+		author:{
+					author1:{
+									name:"Max", 
+									age:40
+								}, 
+					author2:{
+									name:"Mosh", 
+									age: 52, 
+									address:{
+													city:"Ohio",
+													country: "America"
+												}
+								}
+					}
+	}
+)
+
+
+
+
+
+
+
+Delete Data :
+-------------
+
+1] Delete All Documents 
+
+db.flightData.deleteMany({});
+
+
+
+2] Delete all documents whose disance = 14000
+
+db.flightData.deleteMany({distance : 14000})
+
+
+
+3] Delete Single Document whose departureAirport = "TXL"
+
+db.flightData.deleteOne({departureAirport: "TXL"});
+db.flightData.deleteOne({_id: "txl-1"})
+db.flightData.deleteOne({_id: ObjectId("63e8f234a7b50011737bc660")})
+
+
+
+
+
+Update Data :
+-----------
+
+1] Update Single document - update existing fields.
+
+db.flightData.updateOne({_id: "txl-1"}, {$set: {departureAirport: "US", arrivalAirport: "In"}});
+			Before : { _id: 'txl-1', departureAirport: 'TXL', arrivalAirport: 'LHR' },
+			After :  { _id: 'txl-1', departureAirport: 'US', arrivalAirport: 'In' },
+
+
+
+2] Update Single document - Add a field in selected document
+
+db.flightData.updateOne({_id: "txl-1"}, {$set : {distance : 12000}});
+			Before : { _id: 'txl-1', departureAirport: 'US', arrivalAirport: 'In' },
+			After :  { _id: 'txl-1', departureAirport: 'US', arrivalAirport: 'In', distance : 12000},
+
+
+
+3] Update Many documents - Add a field in all documents
+
+db.flightData.updatemany({}, {$set: {distance : 12000}});
+
+
+
+4] Update Many documents - Update a field in all documents
+
+db.flightData.updatemany({}, {$set: {distance : 14000}});
+
+
+
+
+
+Replace Object with another object
+----------------------------------
+
+db.flightData.replaceOne({_id: "txl-3"}, {name: "Adesh"});
+
+Before : 
+[
+  {
+    _id: 'txl-3',
+    departureAirport: 'In',
+    arrivalAirport: 'US',
+    distance: 18000,
+    Viman: 'Tata'
+  }
+]
+
+
+
+After : 
+[
+  { 
+	_id: 'txl-3', 
+	name: 'Adesh' 
+  }
+]
+
+
+
+
+
+
+
+
+Projection : 
+------------
+
+
+from the below json object i just want name property.
+
+
+db.passengers.find({}, {name:1})
+
+
+Before : 
+
+[
+	{
+	    _id: ObjectId("63e91563a7b50011737bc664"),
+	    name: 'Sandeep Kumar',
+	    age: 28
+	},
+
+	{
+	    _id: ObjectId("63e91563a7b50011737bc664"),
+	    name: 'Adesh Kumar',
+	    age: 28
+	}
+]
+
+
+After : 
+[
+	{
+	    _id: ObjectId("63e91563a7b50011737bc664"),
+	    name: 'Sandeep Kumar',
+	},
+
+	{
+	    _id: ObjectId("63e91563a7b50011737bc664"),
+	    name: 'Adesh Kumar',
+	}
+]
+
+so this filtering or data transformation is happining on the MongoDB server 
+
+
+
+
+
+
+
+
+
+Embedded Documents : 
+--------------------
+document inside another document.
+up to 100 levels of Nesting.
+Max 16mb document.
+
+{
+		name: "Java", 
+		author:{
+					author1:{
+									name:"Max", 
+									age:40
+								}, 
+					author2:{
+									name:"Mosh", 
+									age: 52, 
+									address:{
+													city:"Ohio",
+													country: "America"
+												}
+								}
+					}
+}
+
+
+
+
+
+
+
+How to insert Array of documents, list of numbers, strings:
+-----------------------------------------------------------
+
+
+1] insert array of string:
+
+db.passengers.insertOne({ name: 'Albert Twostone',age: 68,hobbies: [ 'Reading', 'Swimming' ]});
+    
+Before : 
+{
+    _id: ObjectId("63e91563a7b50011737bc674"),
+    name: 'Albert Twostone',
+    age: 68
+}
+
+After : 
+
+[
+  {
+    _id: ObjectId("63e91563a7b50011737bc674"),
+    name: 'Albert Twostone',
+    age: 68,
+    hobbies: [ 'Reading', 'Swimming' ]
+  }
+]
+
+
+
+2] insert array of documents.
+
+db.passengers.updateOne({age: 68}, {$set:{address: [{name: "address 1", city: "Pune"}, {name : "address 2", city : "Mumbai"}]}})
+
+
+Before : 
+[
+  {
+    _id: ObjectId("63e91563a7b50011737bc674"),
+    name: 'Albert Twostone',
+    age: 68,
+    hobbies: [ 'Reading', 'Swimming' ]
+  }
+]
+
+
+After : 
+[
+  {
+    _id: ObjectId("63e91563a7b50011737bc674"),
+    name: 'Albert Twostone',
+    age: 68,
+    hobbies: [ 'Reading', 'Swimming' ],
+    address: [
+      { name: 'address 1', city: 'Pune' },
+      { name: 'address 2', city: 'Mumbai' }
+    ]
+  }
+]
+
+
+
+
+
+
+
+How to access elements of document
+----------------------------------
+
+1] fetch only hobbies of the given document
+
+data: 
+[
+  {
+    _id: ObjectId("63e91563a7b50011737bc674"),
+    name: 'Albert Twostone',
+    age: 68,
+    hobbies: [ 'Reading', 'Swimming' ],
+    address: [
+      { name: 'address 1', city: 'Pune' },
+      { name: 'address 2', city: 'Mumbai' }
+    ]
+  }
+]
+
+
+Ans : 
+
+db.passengers.findOne({age: 68}).hobbies
+
+[ 'Reading', 'Swimming' ]
+
+
+
+2] find all documents whose hobbies array include "Reading"
+
+db.passengers.find({hobbies: "reading"})
+
+
+3] operations related to address array
+
+	db.passengers.findOne({age:68}).address
+		[
+		  { name: 'address 1', city: 'Pune' },
+		  { name: 'address 2', city: 'Mumbai' }
+		]
+	db.passengers.findOne({age:68}).address[0]
+		{ name: 'address 1', city: 'Pune' }
+	db.passengers.findOne({age:68}).address[0].city
+		Pune
+
+
+
+
+data: 
+
+
+ {    
+    name: 'Java',
+    author: {
+      author1: { name: 'Max', age: 40 },
+      author2: { name: 'Mosh', age: 52, address: { city: 'Ohio', country: 'America' }}
+    }
+  }
+
+
+db.products.find({"author.author1.name": "max"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+db.student.insertMany([
+
+	{	
+		_id: "id-1", 
+		name: {
+			  fname: "Adesh", 
+			  lname: "Jadhav"
+			}, 
+		age : 23, 
+		mob_no : { 
+			     mob1: {
+					name: "jio", 
+					mob_no: 9527370288
+				    }, 
+			     mob2: {
+					name: "airtail", 
+					mob_no: 7721031355
+				    }
+			   },
+		address: [
+				{
+				   city_address: {
+						       city: "Pune", 
+							 tel: "haveli",
+							location : "Lohegaon"
+						    }
+				}, 
+				{
+				   village_address : {
+								city: "Ratnagiri",
+								tel : "Dapoli",
+								location : "Pawarwadi"
+						        }
+				}
+			  ],
+		hobbies: [ "Reading", "Swimming", "Gym"],
+	},
+
+	{	
+		_id: "id-2", 
+		name: {
+			  fname: "Akshay", 
+			  lname:"Pawde"
+			}, 
+		age : 24, 
+		mob_no : { 
+			     mob1: {
+					name: "airtail", 
+					mob_no: 7427570288
+				    }, 
+			     mob2: {
+					name: "BSNL", 
+					mob_no: 8721034345
+				    }
+			   },
+		address: [
+				{
+				   city_address: {
+						       city: "Pune", 
+							 tel: "wagholi",
+							location : "wagholi"
+						    }
+				}, 
+				{
+				   village_address : {
+								city: "Nagar",
+								tel : "koregaon",
+								location : "nagarwadi"
+						        }
+				}
+			  ],
+		hobbies: [ "webseries", "tv", "Gym"],
+	}
+])
+					
+					
+
+
+
+
+db.student.find({_id: "id-1"})
+db.student.find({"name.fname": "Adesh"})
+db.student.findOne({"name.fname": "Adesh"})
+db.student.find({age: {$gt: 21}})
+db.student.find({age: 24})
+db.student.find({"mob_no.mob1.name": "jio"})
+db.student.findOne({_id: "id-1"}).address
+db.student.findOne({_id: "id-1"}).address[0]
+db.student.findOne({_id: "id-1"}).address[0].city_address
+db.student.findOne({_id: "id-1"}).address[0].city_address.city
+db.passengers.findOne({_id: "id-1"}).hobbies
+db.passengers.find({hobbies: "reading"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

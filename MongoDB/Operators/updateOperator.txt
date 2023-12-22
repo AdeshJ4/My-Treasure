@@ -1,3 +1,62 @@
+1. $set
+
+-> operator replaces the value of a field with the specified value.
+-> If the field does not exist, $set will add a new field with the specified value.
+
+
+2. $unset
+
+-> The $unset operator deletes a particular field.
+-> If the field does not exist, then $unset does nothing.
+
+
+3. $rename
+
+-> The $rename operator updates the name of a field 
+-> If the field to rename does not exist in a document, $rename does nothing
+
+
+4. $inc
+
+-> The $inc operator increments a field by a specified value.
+-> The $inc operator accepts positive and negative values.
+-> If it accepts +ve number then increase the no. it it accepts -ve no then decrees no.
+-> If the field does not exist, $inc creates the field and sets the field to the specified value.
+-> Use of the $inc operator on a field with a null value will generate an error.
+
+
+5. $min
+
+-> Only updates the field if the specified value is less than the existing field value.
+-> If the field does not exist, the $min operator sets the field to the specified value
+
+Input: [{ _id: 1, highScore: 800, lowScore: 200 } ]
+Output: [{ _id: 1, highScore: 800, lowScore: 150 } ]
+Query: db.tb1.updateOne({_id: 1}, {$min: {lowScore: 150}})
+
+
+
+ 6. $max
+
+-> Only updates the field if the specified value is greater than the existing field value.
+-> If the field does not exists, the $max operator sets the field to the specified value.
+
+Input: [{ _id: 1, highScore: 800, lowScore: 150 } ]
+Output: [{ _id: 1, highScore: 800, lowScore: 200 } ]
+Query: db.tb1.updateOne({_id: 1}, {$max: {lowScore: 200}})
+
+
+
+7. $mul
+
+-> Multiplies the value of the field by the specified amount.
+
+Input: [ { "_id": 1, "quantity": 3 } ]
+Output: [ { "_id": 1, "quantity": 6 }]
+Query: db.tb1.updateOne({_id: 1}, {$mul: {quantity: 2}})  // 3 * 2 = 6
+
+
+
 1. Add a Single Property:
 -------------------------
 Input: [{name: 'Adesh'}]
@@ -26,6 +85,38 @@ Output:[ { name: 'Adesh' age: 22, height: 6 } ]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$set: {age: 22, height: 6}})
 
 
+3. Rename a field in all documents:
+-----------------------------------
+Input: [
+   {
+     "_id": 1,
+     "alias": [ "The American Cincinnatus", "The American Fabius" ],
+     "mobile": "555-555-5555",
+     "nmae": { "first" : "george", "last" : "washington" }        <------------- Change this property
+   },
+   {
+     "_id": 2,
+     "alias": [ "My dearest friend" ],
+     "mobile": "222-222-2222",
+     "nmae": { "first" : "abigail", "last" : "adams" }
+   }
+]
+output: Input: [
+   {
+     "_id": 1,
+     "alias": [ "The American Cincinnatus", "The American Fabius" ],
+     "mobile": "555-555-5555",
+     "name": { "first" : "george", "last" : "washington" }
+   },
+   {
+     "_id": 2,
+     "alias": [ "My dearest friend" ],
+     "mobile": "222-222-2222",
+     "name": { "first" : "abigail", "last" : "adams" }
+   }
+]
+
+Query: db.tb1.updateMany({}, {$rename: {"nmae": "name"}})
 
 ==========================================================================================================
 
@@ -100,12 +191,12 @@ Input: [{name: 'Adesh', location: { vill: 'Lohegaon' }, obj: {name: 'hey'} }]
 output: [{name: 'Adesh' }]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$unset: {'location': 1, 'obj': 1}})
 
-
 3. Rename a property of a Object: 
 ------------------------------
 Input: [{name: 'Adesh', location: { vill: 'Lohegaon' }}] 
 Output: [{name: 'Adesh', location: { village: 'Lohegaon' }}] 
 Query: db.tb1.updateOne({name: 'Adesh'}, {$rename: {'location.vill': 'location.village'}`})
+
 
 3. Rename Object Name: 
 ----------------------
@@ -114,6 +205,16 @@ Output: [{name: 'Adesh', loc: { village: 'Lohegaon' }}]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$rename: {'location': 'loc'}})
 
 
+4. increase orders and decrease quantity: 
+Input: [{sku: "abc123", quantity: 10, metrics: { orders: 2, ratings: 3.5 }}]
+Output: [{sku: "abc123", quantity: 8, metrics: { orders: 4, ratings: 3.5 }}]
+Query: db.tb1.updateOne({sku: "abc123"}, {$inc: {quantity: -2, "metrics.orders": 2}})
+     
+
+5. set lowScore to 150.
+
+     
+   
 
 ===========================================================================================================
 
@@ -123,13 +224,13 @@ Array :
 4. add a array:
 ---------------
 Input : [{name: 'Adesh'}]
-output: [{name: 'Adesh',hobbies: [ 'Swimming', 'Reading' ] }]
+output: [{name: 'Adesh', hobbies: [ 'Swimming', 'Reading' ] }]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$set: {hobbies: ["Swimming", "Reading"]}})
 
 
 4. Insert value inside a existing array.
 ---------------------------------------
-Input : [{name: 'Adesh'}, hobbies: [ { name: 'Anime' }] ]
+Input : [{name: 'Adesh'}, hobbies: [ { name: 'Anime' } ]]
 output: [{name: 'Adesh',hobbies: [ { name: 'Anime' }, { name: 'KDrama' } ] }]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$push: {hobbies: { name: 'KDrama' }}})
 
@@ -139,6 +240,7 @@ Query: db.tb1.updateOne({name: 'Adesh'}, {$push: {marks: 40}})
 
 
 Input: [
+   { _id: 1, scores: [ 44, 78, 38, 80, 89 ] },
    { _id: 2, scores: [ 45, 78, 38, 80, 89 ] } ,
    { _id: 3, scores: [ 46, 78, 38, 80, 89 ] } ,
    { _id: 4, scores: [ 47, 78, 38, 80, 89 ] }

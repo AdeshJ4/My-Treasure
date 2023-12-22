@@ -1,26 +1,24 @@
+-> You can add multiple types of elements inside an array.
+-> You can add empty item inside an array. typeof this item is undefined.
+eg. arr = [10, true, 'Adesh',  , null, undefined];  
+
+
+
+check array is array or not : 
+
+log(Array.isArray(arr));  // true / false
+
+
 1. Adding Elements: 
 -------------------
-
-ex. 1
------
-const arr = [30, 40];
 
 arr.unshift(10, 20);// add elements at the beginning
 arr.push(50, 60);// add elements at the end
 arr.splice(3, 0, 'a', 'b');// add elements in between 
 
 
-
-ex. 2 
-------
-
-const arr = [
-  {id: 1, name: 'A'},
-  {id: 2, name: 'B'}
-];
-
-arr.push( {id: 2, name: 'B'});
 arr.unshift({id: 1, name: 'A'});
+arr.push( {id: 2, name: 'B'});
 arr.splice(1, 0, {id: 3, name: 'C'});
 
 ===================================================================================================
@@ -28,76 +26,79 @@ arr.splice(1, 0, {id: 3, name: 'C'});
 2. Finding elements: 
 --------------------
 
-// find the index of element 10
--> arr.indexOf(10);
+1. indexOf()
 
-// find the index of element 10 but start searching from index 3
--> arr.indexOf(10, 3);
+-> This method return index of element, if element not found then return -1;
+-> this methods only works on primitive types and not for comparing objects.
+let res = arr.indexOf(10, 2); // find element 10 but start from position 2;
+if(res !== -1)
+  log('Element Found');
+else
+  log('Element Not Found');
 
-//check element exists or not
-1. let res = arr.includes(10); // built in method, return true/false
-2. let res1 = arr.indexOf(10) !== -1;  // true -> found element  -> logic
-3. const res = arr.find((ele) => {  // built in method return value otherwise undefined
-  return ele === 30;
-});
 
+2. includes()
+
+-> This method return true or false;
+-> if you don't provide any value then it will return true. 
+-> this methods only works on primitive types and not for comparing objects.
+
+
+ex.1
+if(arr.includes(10))
+  log('Element Found');
+else
+  log('Element Not Found');
+
+ex.2 const res = arr.includes();  // return true
+
+
+3. find()
+
+-> Returns the first element in an array that satisfies a provided testing function
+-> Returns undefined if no element is found.
+
+let res = arr.find((ele)=> {
+  return ele > 20;
+});  // return element otherwise undefined.
+
+let res = arr.find((eleObj)=>{
+  return eleObj.id === 101;
+}); // return you object like : {id: 101, name: 'Adesh}
+
+4. findIndex()
+
+-> Returns the index of the first element in an array that satisfies a provided testing function.
+-> Returns -1 if no element is found
+
+let res = arr.findIndex((ele)=>{
+  return ele > 50;
+})  // return you index otherwise -1
+
+
+5. filter()
+
+-> Creates a new array with all elements that pass the test implemented by the provided function.
+-> return you empty array if none of element satisfy the condition.
+
+let res = arr.filter((ele)=>{
+  return ele > 10;
+}); // return [20,30] otherwise []
+
+let res = arr.filter((eleObj)=>{
+  return eleObj.name === 'Adesh';
+}) // return [{id: 101, name: 'Adesh'}, {id: 102, name: 'Adesh'}]  otherwise []
 
 ===================================================================================================
-
-3.  Finding elements (reference type): 
----------------------------------------
-
--> the "includes()" method to find element exists in array will not work in refeence type.
--> the object we passed as a argument inside includes method to check it exists or not and the object we have in the courses object, theses are two different objects. two objects have different references.
--> so we use find() and findIndex() method.
--> find() method find the element inside the array. if element found then we return value otherwise we retun undefined.
--> findIndex() method is also similer but instead of returning value it returned index of element otherwise it returned -1.
-
-
-const arr = [
-  {id: 101, name: 'Adesh'},
-  {id: 102, name: 'Akshay'}
-];
-const res = arr.find((ele)=>{
-  return ele.name === 'Akshay';
-})
-
-
-
-===================================================================================================
-
 
 
 4. Removing elements: 
 --------------------
+-> work on both primitive and reference type.
 
-ex.1
-
-const arr = [10, 20, 30, 40, 50];
-
-// remove from end
-arr.pop();
-
-// remove from start
-arr.shift();
-
-// remove from in between
-arr.splice(1, 1);  // (index, deleteCount)
-
-
-
-ex.2
-
-const arr = [
-  {id: 1, name: 'A'},
-  {id: 2, name: 'B'},
-  {id: 3, name: 'C'},
-]
-
-arr.pop();
-arr.shift()
-arr.splice(1,1)
-
+arr.pop();// remove from end
+arr.shift();// remove from start
+arr.splice(1, 1);  // (index, deleteCount) // remove from in between
 
 
 ===================================================================================================
@@ -108,7 +109,7 @@ arr.splice(1,1)
 --------------------
 
 // solution 1
-arr = [];  // decalre array with let keyword
+arr = [];  // declare array with let keyword
 
 // solution 2
 arr.length = 0;
@@ -120,6 +121,9 @@ arr.splice(0);
 while(arr.length > 0)
   arr.pop();
 
+// solution 5
+for(let i=0; arr.length>0; i++)
+  arr.pop()
 
 ===================================================================================================
 
@@ -211,7 +215,7 @@ arr3.reverse();  	// ['z', 'a', 'Z', 'A',  30,  20,  10]
 
 
 
-
+10 A a
 
 
 

@@ -27,7 +27,3 @@
 
 -> db.tb1.deleteMany({age: {$gt: 20}});
 -> db.tb1.deleteMany({age: {$exists: true}});
-
-
-
-delete

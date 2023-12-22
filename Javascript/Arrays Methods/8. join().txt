@@ -1,0 +1,10 @@
+join()
+
+-> The join() method returns an array as a string..
+-> The join() method does not change the original array
+-> Any separator can be specified. The default is comma (,).
+
+
+const arr = ['Apple', 'Banana', 'Cherry']
+let res1 = arr.join();  // Apple,Banana,Cherry
+let res2 = arr.join(' and '); // Apple and Banana and Cherry

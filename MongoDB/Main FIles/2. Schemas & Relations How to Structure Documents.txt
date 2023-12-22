@@ -1,0 +1,466 @@
+Data Schemas and modelling - storing your data correctly
+
+1] Understanding Document Schemas and Data Types
+2] Modeling relations
+3] Schema validation
+
+
+
+
+Schema less or Not ?
+
+Isn't MongoDB all about having no Data Schemas ?
+
+-> Schema simply means the structure of one document, so how does it look like, which field 
+	does it have, which types of values do these fields have, that is what schema.
+-> MongoDB enforces no schemas! Document don't have to use the same schema inside of one or 
+	same collection that means you can have totally different documents in one and the same 
+	collection.
+
+
+ex . [
+  {
+    _id: ObjectId("63ea21e9127d4e22007d0567"),
+    name: 'Java',
+    price: 23.21
+  },
+  {
+    _id: ObjectId("63ea2260127d4e22007d0568"),
+    title: 'T-shirt',
+    seller: 'Mosh'
+  }
+]
+
+
+In the above array we have two different json objects store, so they don't follow any schema.
+
+
+
+-> but that does not mean that you can't use some kind 	of schema !
+ex.But in reality you will probably have some kind of schema because if you are building the 
+	backend for your online shop, its in your interest that all your products have a price, name 
+	which is stored in a field named "name","price" because if you then write some application code 
+	lets say in PHP, C#, java and you retrive your data from database, you obvoiosly want ot cycle 
+ 	through that data and output it into a view which you render to the userand to cycle through 
+	your data and access your data you need to know in which field which data is stored.
+
+	so you will most likely have some kind of schema because your application needs it.
+
+
+
+
+Data Types : 
+----------
+
+
+1] Text : "Adesh",'Adesh'
+2] Boolean : true, false
+3] Number : 
+				1. NumberInt  (int32) - 55
+				2. NumberLong (int 64) - 100000000000
+				3. NumberDecimal - 12.99
+4] ObjectId : ObjectId("sfsad")
+5] ISODate : ISODate("2018-09-22")
+6] Embedded Document : {"a": {...}}
+7] Array : {"b": [...]}
+8] Timestamp: Timestamp(11421532)
+
+
+
+
+
+
+
+Understanding relations :
+----------------------- 
+
+if you have multiple collections that are still are related of cource or what the documents in 
+these relations.
+
+
+
+
+
+1. One To One Relations - Embedded
+----------------------------------
+
+
+
+		Patient A  <-----------> Summary A
+
+
+
+This is all about when you have to use One to One relationship and when to use Embedded solution 
+over One to One relation.
+
+
+Example :
+
+-> when you have strong one-to-one relationship then you have to use embedded document.
+-> Most One-To-One relationships probabbly go with the embedded document 
+
+using One-to-One relationship :
+
+hospital> db.getCollectionNames()
+[ 'summaries', 'patients' ]
+hospital> db.summaries.find()
+[ { _id: 'summary-1', diseases: [ 'cold', 'fever' ] } ]
+hospital> db.patients.find()
+[ { _id: 'id-1', name: 'Max', age: 29, summary: 'summary-1' } ]
+hospital> db.patients.findOne().summary
+summary-1
+hospital> var sid = db.patients.findOne({_id: "id-1"}).summary
+hospital> sid
+summary-1
+hospital> db.summaries.findOne({_id: sid})
+{ _id: 'summary-1', diseases: [ 'cold', 'fever' ] }
+
+
+In the above example we have strong one-to-one relationship but we hhave to do two steps to get
+data. so the solution is to use embedded document instead of creting another collection.
+
+Using Embedded document: 
+
+[ { _id: 'id-1', name: 'Max', age: 29, summary: [ 'cold', 'fever' ] } ]
+
+because summary-1 report only belongs to patients-1 and vice versa so its better to store it in 
+same json object.
+
+
+
+
+
+
+
+2. One To One Relations - Using references
+------------------------------------------
+
+-> Most One-To-One relationships probabbly go with the embedded document but again its all based on 
+	software requirements.
+
+In the below ex assume that a owner can owned only one car and a car can be owned by single person.
+again there is no need to use second collection, you can use embedded document for this.
+
+Example : 
+
+
+family> db.getCollectionNames()
+[ 'cars', 'persons' ]
+family> db.persons.find()
+[ { _id: 'id-1', name: 'Adesh', age: 21 } ]
+family> db.cars.find()
+[
+  {
+    _id: ObjectId("63eb824d78df244213581e1e"),
+    model: 'BMW',
+    price: 40000,
+    owner: 'id-1'  <----- see here
+  }
+]
+
+
+
+
+
+
+
+
+3. One To Many - Embedded
+-------------------------
+
+-> Single question can have multiple answers but that multiple answers belong to that single 
+	question.
+
+
+										---> Ans 1
+						Question <--|---> Ans 2
+										---> Ans 3
+
+
+Example 
+
+support> db.getCollectionNames()
+[ 'answers', 'question' ]
+support> db.answers.find()
+[
+  { _id: 'q1a1', answer: 'It is a Database' },
+  { _id: 'q1a2', answer: 'It is MongoDB' }
+]
+support> db.question.find()
+[
+  {
+    _id: ObjectId("63eb853e78df244213581e1f"),
+    creator: 'Adesh',
+    question: 'What is DB ?',
+    answers: [ 'q1a1', 'q1a2' ]
+  }
+]
+
+
+
+
+-> In the above example we have strong one-to-Many relationship but we have to do two steps to 
+	get data. so the solution is to use embedded document instead of creting another collection.
+
+
+Using Embedded document: 
+------------------------
+
+
+{
+    _id: ObjectId("63eb853e78df244213581e1f"),
+    creator: 'Adesh',
+    question: 'What is DB ?',
+    answers: [   { answer1: 'It is a Database' },{answer2: 'It is MongoDB' } ]
+}
+
+
+
+
+
+
+
+
+
+Using lookUp() for merging References Relations:
+-----------------------------------------------
+
+-> this operation mongodb offers for merging related documents that you split up 	by using the 
+	references approach, so where you got no embeded document and that is the lookup.
+-> lookup is essntially a helpful tool that allow you to fetch two related documents merged 
+	together in one document in one step instead of having to do two steps.
+
+bookStore> db.authorsTable.find()
+[
+  { _id: 'a1', name: 'Adesh', age: 21 },
+  { _id: 'a2', name: 'Akshay', age: 22 }
+]
+
+bookStore> db.booksTable.find()
+[ { _id: 'b1', name: 'The Sky', authors: [ 'a1', 'a2' ] } ]
+
+
+bookStore> db.booksTable.aggregate([{$lookup: {from: "authorsTable", localField: "authors", foreignField: "_id", as: "creators"}}])
+[
+  {
+    _id: 'b1',
+    name: 'The Sky',
+    authors: [ 'a1', 'a2' ],
+    creators: [
+      { _id: 'a1', name: 'Adesh', age: 21 },
+      { _id: 'a2', name: 'Akshay', age: 22 }
+    ]
+  }
+]
+
+
+
+
+
+
+
+Project : Blog Application
+--------------------------
+
+
+
+
+blogs> db.users.find()
+[
+  { _id: 'u1', name: 'user1', email: 'user1@gmail.com' },
+  { _id: 'u2', name: 'user2', email: 'user2@gmail.com' }
+]
+blogs> db.posts.insertOne({_id: "p1", name: "Post 1", tags: ["Happiness", "Positivity"], creator: "u1", comments: [{message: "Hare Krishna", user: "u2"}, 
+																							{messgae: "Jai shree Ram", user: "u1"}]})
+blogs> db.posts.find()
+[
+  {
+    _id: 'p1',
+    name: 'Post 1',
+    tags: [ 'Happiness', 'Positivity' ],
+    creator: 'u1',
+    comments: [
+      { message: 'Hare Krishna', user: 'u2' },
+      { messgae: 'Jai shree Ram', user: 'u1' }
+    ]
+  }
+]
+
+
+
+
+
+
+
+
+
+
+
+Schema validation : 
+-------------------
+
+
+
+db.createCollection("posts", {
+  validator: {
+    $jsonSchema: {
+      bsonType: "object",
+      required: ["title", "text", "creator", "comments"],
+      properties: {
+        title: {
+          bsonType: "string",
+          description: "must be a string and its required.",
+        },
+        text: {
+          bsonType: "string",
+          description: "must be a string and its required.",
+        },
+        creator: {
+          bsonType: "objectId",
+          description: "must be ObjectId and its a required.",
+        },
+        comments: {
+            bsonType: "array",
+            description: "must be an array and its required.",
+            items: {
+                bsonType: "object",
+                required: ["text", "author"],
+                properties: {
+                    text: {
+                        bsonType: "string",
+                        description: "must be string and its required."
+                    },
+                    author: {
+                        bsonType: "objectId",
+                        description: "must be objectId and it is required."
+                    }
+                }
+            }
+        }
+      },
+    },
+  },
+});
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

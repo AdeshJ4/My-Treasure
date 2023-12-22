@@ -1,0 +1,18 @@
+every() 
+
+-> every() method checks if all the array elements pass the given test or not
+-> return true if all elements pass the test otherwise false.
+-> some() method also similar to this method but it return true if at least one element pass the test.
+
+
+let arr = [10, 20, 30];
+
+const res = arr.every((ele)=>{
+    return ele > 20;
+});  // return false
+
+const res = arr.every((ele)=>{
+    return ele > 5;
+});  // return true
+
+

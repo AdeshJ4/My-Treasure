@@ -1,0 +1,37 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* The :root selector matches the document's root element(html element).*/
+:root {
+    /* colors */
+    --primary-color: #0E4BF1;
+    /* css variables which are used inside var(--primary-color)*/
+    --panel-color: #FFF;
+    --text-color: #000;
+    --black-light-color: #707070;
+    --border-color: #e6e5e5;
+    --toggle-color: #DDD;
+    --box1-color: #4DA3FF;
+    --box2-color: #E7D1FC;
+    --box3-color: #E7D1FC;
+    --title-icon-color: #fff;
+
+    /* Transition */
+    --tran-05: all 0.5s ease;
+    /* transition: transition-property transition-duration transition-timing-function*/
+    --tran-03: all 0.3s ease;
+    --tran-03: all 0.2s ease;
+}
+
+
+
+nav .logo-image {
+    min-width: 45px;
+}
+
+nav .logo-image img {
+    width: 40px;
+}

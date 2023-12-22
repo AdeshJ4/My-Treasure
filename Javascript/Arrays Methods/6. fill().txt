@@ -1,0 +1,10 @@
+fill()
+
+-> fill() method is used to fill whole array with specified element.
+-> overwrite the original array.
+
+
+let arr = [10, 20, 30, 40, 50, 60];
+arr.fill("ok", 2, 4);  ele, startPosition, endPosition
+// output:[10, 20, "ok", "ok", 50, 60];
+

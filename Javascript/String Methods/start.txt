@@ -1,0 +1,9 @@
+str.toUpperCase()
+str.toLowerCase()
+str.trim()
+str.substring(0, 1)     // accepts only +ve no
+str.slice(-6);          // accepts -ve number
+str.charAt(0);
+str.indexOf('str')
+str.split('')  
+str.replace(oldValue, newValue);

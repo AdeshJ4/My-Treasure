@@ -1,0 +1,40 @@
+map();
+-> Does not override original array.
+-> map() creates a new array from calling a function for every array element.
+
+
+// ex. 1
+const arr = [10, 20, 30];
+const newArr = arr.map((ele)=>{
+    return ele * 10;
+})  // [100, 200, 300];
+
+
+//update
+const arr = [
+  { id: 101, name: "John" },
+  { id: 102, name: "Jane" },
+  { id: 103, name: "Doe" }
+];
+const newArr = arr.map((ele)=>{
+    return ele.id === 103 ? {...ele, name: 'Adesh'} : ele ;
+});
+
+
+// ex.3
+const users = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Jane" },
+  { id: 3, name: "Doe" }
+];
+const onlyIds = users.map((ele)=>{
+    return ele.id;
+}); // Output: [1, 2, 3]
+
+
+
+// ex. 4
+const fruits = ["apple", "banana", "orange"];
+const indexedFruits = fruits.map((ele, index)=>{
+    return `${index + 1}. : ${ele}`
+}); //Output: ["1. apple", "2. banana", "3. orange"]

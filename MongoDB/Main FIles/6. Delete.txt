@@ -1,0 +1,172 @@
+Delete Database / Delete all collections: 
+----------------------------------------
+
+-> db.dropDatabase()
+
+
+
+Delete Collection: 
+-----------------
+
+-> db.tb1.drop()
+
+
+
+Delete First Document :
+----------------------
+
+-> db.tb1.deleteOne({})
+
+
+
+Delete All documnets: 
+---------------------
+
+-> db.tb1.deleteMany({})
+
+
+
+
+Delete One document according to condition:
+------------------------------------------
+
+-> db.tb1.deleteOne({id: 101})
+
+
+
+Delete All documents according to condition : 
+---------------------------------------------
+
+-> db.tb1.deleteMany({age: {$gt: 24}})
+-> db.tb1.deleteMany({_id: {$exists: true}})
+
+
+
+Delete all documents whose id is greater than 102 "and" age is less than 20.
+----------------------------------------------------------------------------
+
+-> db.tb1.deleteMany({id: {$gt: 102}, age: {$lt: 20}})
+-> db.tb1.deleteMany({$and: [{id: {$gt: 102}}, {age: {$lt: 20}}]})
+
+
+-> db.tb1.deleteMany({id: {$gt: 120}, age: {$lt: 20}})
+-> db.tb1.deleteMany({$and: [{id: {$gt: 120}}, {age: {$lt: 20}}]})
+
+
+
+
+
+
+
+
+deleteOne({id: 101})
+deleteMany()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

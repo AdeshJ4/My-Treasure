@@ -1,0 +1,213 @@
+Question: write a function which accepts min and max value and print range of no.
+Input : arrayFromRange(1, 4)
+Output: [1, 2, 3, 4]
+Input : arrayFromRange(-10, -6)
+Output: [-10, -9, -8, -7, -6]
+
+
+function arrayFromRange(min, max){
+    const output = [];
+    for(let i=min; i<=max; i++){
+        output.push(i);
+    }
+
+    return output;
+}
+
+const res = arrayFromRange(1, 4);
+console.log(res)
+
+
+==============================================================================================================================
+
+Question : write replacement of includes() method.
+
+answer 1: 
+function includes (array, searchElement){
+    if(array.indexOf(searchElement) !== -1){
+        return true;
+    }
+    return false;
+}
+const res = includes([10, 20, 30], 100);
+
+
+answer 2: 
+function includes (array, searchElement){
+    for(let num of array){
+        if(num === searchElement)
+            return true;
+    }
+    return false;
+}
+const res = includes([10, 20, 30], 10);
+
+==============================================================================================================================
+
+Question: Write a JavaScript function named except that takes two arrays as arguments: array and excluded. The function should return 
+a new array containing elements from the array that are not present in the excluded array. The order of elements in the output array 
+should be the same as the order in the input array.
+Input: except([10, 20, 30, 40, 10], [10, 30])
+Output: [20, 40]
+
+function except(array, excluded){
+    const temp = [];
+    for(let num of array){
+        if(!excluded.includes(num)){
+            temp.push(num);
+        }
+    }
+    return temp;
+}
+const res = except([10, 20, 30, 40, 10], [10, 30]);
+console.log(res);
+
+
+
+
+==============================================================================================================================
+
+
+
+Question: code for removing duplicates values from array of numbers
+
+function removeDuplicates(array){
+    const temp = []; // 10 , 10
+    for(let num of array){
+        if(!temp.includes(num)){
+            temp.push(num);
+        }
+    }
+    return temp;
+}
+const res = removeDuplicates([10, 10, 20, 30, 40, 40, 50]);
+console.log(res);
+
+
+
+
+
+==============================================================================================================================
+
+
+// index => index of element
+// offset => position to move element if offset is 1 then move element to right if it is -ve then move it to left
+
+function move(array, index, offset){
+// 3 + 1 = 4
+    let position = index+offset
+    if(position >= array.length || position < 0){  // -1 >= 4
+        console.error('Invalid Error');
+        return ;
+    }
+    const temp = [...array];
+    const ele = temp.splice(index, 1)[0];  // splice method return array of deleted elements and we want to access first element.
+    temp.splice(index + offset , 0, ele);
+    return temp;
+}
+// move element at position 0 to 1 position right 
+const res = move([10, 20, 30, 40], 0, 0);
+
+console.log(res);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

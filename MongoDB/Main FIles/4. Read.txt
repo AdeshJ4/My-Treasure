@@ -1,0 +1,607 @@
+Reading Documents with Operator
+
+Accessing the Required Data Efficiently
+
+
+1. Methods, Filters, and operators
+2. Query Selectors 
+3. Projection Operator
+
+
+
+1. Methods, Filters, and operators:
+----------------------------------
+db.tb1.find({age: {$gt: 30}})
+
+
+
+Operators: 
+----------
+
+1. Read -> Query Selector & Projection Operator
+2. Update -> can update field and arrays
+
+There is no opetaors for Create and Delete because you can use above opearators for them.
+
+
+
+1. Query Selectors: 
+
+	- Comparison
+	- Evaluation
+	- Logical 
+	- Array
+	- Element
+	- Comments
+	- Geospatial
+
+
+2. Projection Operator: 
+
+	- $
+	- $elemMatch
+	- $meta
+	- $slice
+
+
+
+
+find() and findOne()
+--------------------
+
+-> db.tb1.find({runtime: 60})
+-> db.tb1.findOne({runtime: 60})
+
+
+
+
+Query Selectors
+---------------
+
+1. Comparison
+-------------
+
+For comparison of different BSON type values, see the specified BSON comparison order.
+
+1. $eq
+------
+-> Matches values that are equal to a specified value.
+-> db.tb1.find({age: {$eq: 21}})
+
+2. $ne
+------
+-> Matches all values that are not equal to a specified value.
+-> db.tb1.find({age: {$ne: 21}})
+
+3. $gt
+------
+-> Matches values that are greater than a specified value.
+-> db.tb1.find({age: {$gt: 21}})
+
+4. $lt
+------
+-> Matches values that are less than a specified value.
+-> db.tb1.find({age: {$lt: 21}})
+
+5. $gte
+-------
+-> Matches values that are greater than or equal to a specified value.
+-> db.tb1.find({age: {$gte: 21}})
+
+6. $lte
+-------
+-> Matches values that are less than or equal to a specified value.
+-> db.tb1.find({age: {$lte: 21}})
+
+7. $nin
+-------
+-> Matches none of the values specified in an array.
+
+8. $in
+------
+-> Matches any of the values specified in an array.
+
+
+
+
+Data: 
+-----
+
+{
+        "id": 1,
+        "url": "http://www.tvmaze.com/shows/1/under-the-dome",
+        "name": "Under the Dome",
+        "type": "Scripted",
+        "language": "English",
+        "genres": [
+            "Drama",
+            "Science-Fiction",
+            "Thriller"
+        ],
+        "status": "Ended",
+        "runtime": 60,
+        "premiered": "2013-06-24",
+        "officialSite": "http://www.cbs.com/shows/under-the-dome/",
+        "schedule": {
+            "time": "22:00",
+            "days": [
+                "Thursday"
+            ]
+        },
+
+
+
+
+Q1] rating is greater than 7.
+-> db.tb1.find({"rating.average": {$gt: 7}})
+
+Q2] find all documents whose genre is "Drama".
+-> db.tb1.find({generes: "Drama"})
+
+Q3] find all documents whose schedule days is "Thursday".
+-> db.tb1.find({"schedule.days": "Thursday"})
+
+Q4] find all documents whose genre is "only contain" "Drama" and not other thing.
+-> db.tb1.find({generes: ["Drama"]}) 
+
+Q5] find all documents whose age is 21 or 23.
+-> db.tb1.find({age: {$in : [21, 23]}})
+	simple: age=21 or age=23 
+
+Q6] find all documents whose age is not 21 or 23
+-> db.tb1.find({age: {$nin: [21, 23]}})
+
+
+
+
+
+2. Logical
+
+1. $and
+-> Joins query clauses with a logical AND returns all documents that match the conditions of both clauses.
+-> All conditions must be true.
+-> db.tb1.find({$and: [{id: 101}, {name: "Adesh"}, {age: 21}]})  // one way
+-> db.tb1.find({name: "Adesh", age: 21})	// second way  (Don't use)
+
+2. $not
+-> Inverts the effect of a query expression and returns documents that do not match the query expression.
+-> Not use often.
+-> db.tb1.find({runtime: {$not: {$eq: 60}}})  ===  db.tb1.find({runtime: {$ne: 60}})
+
+3. $nor
+-> Joins query clauses with a logical NOR returns all documents that fail to match both clauses.
+-> the documents except having id 101, name = "Adesh", age = 21 all documents will returned.
+-> db.tb1.find({$nor: [{id: 101}, {name: "Adesh"}, {age : 21}]})
+
+4. $or
+-> Joins query clauses with a logical OR returns all documents that match the conditions of either clause.
+-> If any condition match the result than that result is returned.
+-> db.tb1.find({$or: [{id: 101}, {name: "Adesh"}, {age: 22}]})
+
+
+
+
+
+Q1] find all documents who constain both id=101 and name="Adesh".
+-> db.tb1.find({$and: [{id: 101}, {name: "Adesh"}]})
+
+Q2] find all documents whose genre contain both "Drama" and "Comdedy".
+-> db.tb1.find({$and: [{genre: "Drama"}, {genre: "Comedy"}]})
+
+Q3] find all documents who either contain name="Adesh" or age = 22
+-> db.tb1.find({$or: [{name:"Adesh"}, {age:21}]})
+
+Q4] find all documents whose age is not 60.
+-> db.tb1.find({age: {$not: {$eq: 60}}})
+
+Q5] find all documents whose name is not "Adesh" and age is not 21
+-> db.tb1.find({$and: [{name: {$ne: "Adesh"}}, {age: {$ne: 21}}]})
+-> db.tb1.find({$nor: [{name: "Adesh"}, {age: 21}]})
+
+
+
+
+3. Element
+----------
+
+1. $exists
+-> Matches documents that have the specified field.
+-> check wheter documnet have specified field or not if yes then show me.
+
+2. $type
+-> Selects documents if a field is of the specified type.
+
+
+
+Q1] Count documents who have "age" field.
+-> db.tb1.find({age: {$exists: true}}).count()
+
+Q2] count documents who have "age" field and that age must be greater than 30.
+-> db.tb1.find({age: {$exists: true, $gt: 30}}).count()
+-> db.tb1.find({$and: [{age: {$exists: true}}, {age: {$gt: 30}}]}).count()
+
+Q3] count all documents who has a "age" field and its must contain some value(value must not be "null")
+-> db.tb1.find({age: {$exists: true, $ne: null}}).count();
+-> db.tb1.find({$and: [{age: {$exists: true}}, {age: {$ne: null}}]})
+
+Q4] count all documents whose type is "number" for given field.
+-> db.tb1.find({age: {$type: "number"}})
+
+Q5] Count all documnets whose type is "number" & "string" for given field.
+-> db.tb1.find({age: {$type: ["number", "string"]}})
+
+
+
+
+4. Evaluation
+-------------
+
+1. $expr
+-> Allows use of aggregation expressions within the query language.
+-> this is useful when you want to compare two fields inside of a one documnt and then find all documents where this comaparison returns a certain result
+	
+
+2. $jsonSchema
+-> Validate documents against the given JSON Schema.
+
+3. $mod
+-> Performs a modulo operation on the value of a field and selects documents with a specified result.
+
+4. $regex
+-> Selects documents where values match a specified regular expression.
+-> it is not good for performace. instead use "text index".
+
+5. $text
+-> Performs text search.
+
+6. $where
+-> Matches documents that satisfy a JavaScript expression.
+
+
+
+
+
+Q1] Find all documents which contain "desh" in their name field.
+-> db.tb1.find({name: {$regex: /desh/}});
+
+Q2] find all documnets where "volume" is greater than "target" (both have the same document).
+-> db.tb1.find({$expr: {$gt: ["$volume", "$target"]}})
+
+Q3] if the volume is above 190, the difference to target has to be at least 10
+
+
+
+
+
+
+
+5. Array
+--------
+
+1. $all
+-> Matches arrays that contain all elements specified in the query.
+
+2. $elemMatch
+-> Selects documents if element in the array field matches all the specified $elemMatch conditions.
+
+3. $size
+-> Selects documents if the array field is a specified size.
+
+
+ 
+
+Q1] find all documents whose hobbies have size 1(only have one element).
+-> db.users.find({hobbies: {$size: 1}})
+
+Q2] find all documents which contain ["action", "comedy"] genre. but problem is that suppose there are two documents and both
+	these documnents contain only ["action", "comedy"] genre but the sequnce of ["action", "comedy"] genre is different in bot documnets
+	like in first document it is : ["action", "comedy"] 
+	and in second document it is : ["comedy", "action"] 
+	so if you serch : db.tb1.find({genre: ["action", "comedy"]}) then it will return : only one document which is 1st document.
+	so in order to solve this problem we use "$all" operator.
+
+-> db.tb1.find({genre: {$all: ["action", "comedy"]}})
+
+
+Q3] Applying filter on Single document in array.
+-> db.tb1.find({hobbies: {$eleMatch: {title: {$eq: "Sports"}, frequncy: {$gt: 3}}}})
+-> db.tb1.find({hobbies: {$elemMatch: {$and: [{name:'Processor', value: 'Intel'}, {name: 'RAM', value: '8GB'}]}}})
+
+
+
+
+Understanding Cursors:
+---------------------
+
+
+find() method return cursor object.
+if we have a client communication with mongodb server we potentially get 1000s of or even millions of 
+documnts with find() and these results we have to fetched from the database then they have to be sent over 
+the wire and then they have to be loaded into memory in your client appliation.
+and this all procedyre is not optimal because chances are you will not need all thousnds of documents at the 
+same time and therefore find() gives you cursor.
+
+A cursor is basically a pointer which has the query you wrote stored and which can therfore quickly go to the 
+database and say "hey give me the next batch". and indeed you work with batches od data then 
+You fetch the data one by one, so one  document by a time.
+
+-> const dataCursor = db.movies.find();
+	dataCursor.next();
+	dataCursor.hasNext();
+
+
+sorting the cursor : 
+--------------------
+
+1  :  Ascending
+-1 :  descending
+
+-> db.movies.find().sort({"id": -1})
+-> db.movies.find().sort({"rating.average": 1, runtime: -1})
+
+
+skip element(pagination)
+------------------------
+-> db.tb1.find().skip(2)
+
+
+limit the data: 
+---------------
+-> db.tb1.find().skip(2).limit(2)
+
+
+
+How to use projection to shape a result : 
+----------------------------------------
+
+Projection our data means displying data which we want to show.
+so we just want name, and age only and not address.
+
+-> db.users.find({}, {name: 1, age: 1, _id: 0});
+-> db.users.find({}, {"image.medium": 1})
+
+Q] Project the array which contain only wanted value and not others.
+-> db.movies.find({genres: "Drama"}, {"$genres.$": 1})
+
+
+Projection Operators
+--------------------
+
+1. $
+-> Projects the first element in an array that matches the query condition.
+
+2. $elemMatch
+-> Projects the first element in an array that matches the specified $elemMatch condition.
+
+3. $meta
+-> Projects the document's score assigned during $text operation.
+
+4. $slice
+-> Limits the number of elements projected from an array. Supports skip and limit slices.
+-> with the help of slice operator we can omit the first 2, 3, 4 documents and display the next 2, 3, 4 documents
+
+
+Q1] we have more than 3 elemets in a array inside a document, but i want first two elements of a array.
+
+-> db.tb1.findOne({id: 101}, {name: 1, genres: {$slice: 2}})
+
+
+Q2] we have more than 3 elemets in a array inside a document, omit the first elemet and display the next 3 elements.
+
+-> db.tb1.findOne({}, {name: 1, genres: {$slice: [1, 3]}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

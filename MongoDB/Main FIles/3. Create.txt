@@ -1,0 +1,195 @@
+Diving Deeper into CREATE
+
+A closer look at creating and importing Documents.
+
+
+
+	for importing data from outside: 
+
+-> mongo import -d cars -c carList  -- drop --jsonArray 
+
+
+
+
+
+
+
+
+ordered false: 
+
+if some documents are alredy inserted and you tried to insert that documnents once 
+again with the same ids then they mongodb give  error but the dcuments before that 
+"repeted document" are inserted and after that "repeted document" ids are not inserted.
+so to stop that behaviour you have to add a setting : -
+Note : value of ordered is bydefault : true.
+
+-> db.products.insertMany([{_id: 101, name: "Adesh"}, {_id: 102, name: "Ram"}, {_id: 103, name: "Krishna"}], {ordered: false})
+
+
+
+
+
+
+WriteConcern : 
+--------------
+
+-> There is 2nd option we can specify on insertOne and insertManyand that is "writeConcern".
+-> we have a "client" and "mongoDB server".
+
+
+		Client (eg. Shell/) ---------->  MongoDB Server (mongod)
+
+
+	the client would be Shell or yout application using mongodb driver. The mongoDB server is what
+	you start with mongoDB excutable. 
+
+-> Now lets say we want to insert one document in there and it would also be true for insertMany 
+ 	and for update so on, so for all the write operations because its the write concern option we 
+	are talking about.
+-> In the mongoDb server we have a so-called storage engine. this is the engine being responsible 
+	for really writing our data into the disk and also for managing it in memory.
+-> So your "write" might first end up in memory here and there it manages the data which it needs 
+	to access with high frequecy because that is faster than working with the disk. of cource your 
+	"write" is also scheduled to  then end up on the disk that is not the thing. so it will also
+	eventually store your data on the disk.
+
+
+
+	Client (eg. Shell/) ---------->  MongoDB Server (mongod)  ----->  Storage Engine
+																								|
+																					  ----------------						
+																					  |					  |
+																					Memory			Data on Disk
+
+
+	
+-> Now you can configure a so-called "write" concern on all the write operations like insertOne 
+	with an additional argument the write concern argument which is in turn a document where you
+	can set settings like that : 
+		
+
+									{	w:	1, j:	udefined	}
+
+
+
+	The "w" simply means "write" and the no here indicates to how many instances in case you are 
+	using multiple instances on the server. so on how many instancs you want this write to be 
+	"acknowldege". 
+	
+	with "w: 1" which is default, you are basically saying  hey my mongoDB server 
+	should have accepted that write so the storage engine is aware of it and will eventually write 
+	it to the disk.
+	w:1 simply means i need 	to be sure that the server acknowledge this, 
+	W:0 you will get "acknowledge : false" so you will get different result without "objectId"
+		 because the server hasn't really registered this write yet, you just sent the request and 
+	    immediately return you don't wait for a response of this request.So storage engine have no 
+		 chance to store it in memory and generate that objectId and therefore you get back 
+		 "acknowledge : false" because you sent the request you don't even know if it reached the 
+		 server. This is super fast because you don't have to wait for any responses here for any 
+		 Id generation but obiously it tell you nothing about whether this successed or not.
+		 it can be used like for data where it is ok for you if some data does not end up in a 
+		 database so if you log some value every second about an appliation and you don't care if a 
+		 couple of seconds get lost.
+
+	
+-> The j stands for the "journal". The jouranl is an "additional file" which the storage engine 
+	manages which is like a "Todos" file.
+
+	
+
+
+	Client (eg. Shell/) ---------->  MongoDB Server (mongod)  ----->  Storage Engine
+																								|
+																		----------------------------------
+																		|					  |					  |
+															 		 Memory			  Journal		   Data on Disk
+
+
+
+
+	The jouranl can be kept to save operations that the storage engine needs to-do that have not
+	been completed yet like the write.
+	Storage Engine aware of the write and it doen't need to keep a journal for that. Then why ?	
+ 	The idea of the journal file which is a real file on the disk is just that storage engine 
+	aware of this and if the server should go down for some reason or anything else happens that 
+	file is still there and if you restart the server or if it recovers basically storage engine 
+	can look into that file and see what it needs to do and that is of cource a nice backup because
+	the memory might have been wiped by then. 
+	so your write could be lost if it is not written to the real data file. It is like a back up 
+	to do list.
+
+-> Now the question is why do we write it in the jouranal and not directly into the database files?
+	because writing into the database files simply is more performance heavy, the journal is like 
+	a single line which describes the write operation, writing into the database files is ofcource a 
+	complex task because there you need to find the right position to insert it, and if you have 
+	indexes then we have to update this also, so it simply takes longer, and adding a to-do in a
+	journal is faster.
+
+	Still that also takes longer than not using the journal and the default is that the journal is
+	not getting used with j undefined and that simply mean that the storage engine will eventually 
+	handle this write and also write it to the journal but you don't have that information yet, you
+	don't know if it has been stored in the journal yet. if the write succeeded yet if the write 
+	has been done on the  disk you don't know any of that you just know that the server is aware 
+	of your write 
+
+-> Now you can set different options {	j:	true	}. 
+	Now what you are saying is hey please only report a success for this write to me after it has 
+	been both acknowledge and been saved to the journal, so now we have a greater security  that 
+	this will happen and succesed even if the server should face issues right now.
+
+-> Obviously enabling the journal confirmation means that your writes will take longer because you
+	don't just tell the server abut them but you also need to wait for the server to store that 
+	write opeartion in the journal but you get the higher security that the write also succeeded.
+
+-> Now we have third option which is : 
+
+
+											{	wtimeout: 200	}
+
+	
+	Now this simply means which timeframe do you give your server to report a success for this
+	write before you cancel it.
+	So if you have some issues with the network connection or anything like that, you might simply 
+	timeout here.
+	 
+
+	
+					db.tb1.insertOne({name: "User"}, {writeConcern: {w:1, j: true}})
+
+			
+
+
+
+
+
+
+
+
+What is Atomicity ? 
+-------------------
+
+whole document will succeed or whole document will failed.
+It is based only for document level.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

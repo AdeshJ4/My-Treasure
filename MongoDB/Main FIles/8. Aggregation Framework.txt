@@ -1,0 +1,713 @@
+Aggregation Framework : 
+-----------------------
+
+-> Rtriving data Efficiently and In a Structured Way.
+-> You need a bit more power for retrieving your data.
+-> It is alternative to find() method.
+-> Aggregation framework is all about building a pipeline of steps that runs on the data that is retived from your collection.
+
+-> Aggregate runs on the server and simply gets the data in the client
+
+
+-> Aggregations operations process data records and return computed results
+-> Aggregation operations group values from multiple documents together, and can perform a variety of operations on the grouped 
+   data to return a single result. 
+-> In SQL count(*) and with group by is an equivalent of MongoDB aggregation.
+-> It is similar to the aggregate function(min, max,avg, count, sum) of SQL.
+
+
+
+
+MongoDB provides three ways to perform aggregation
+
+1> Aggregation pipeline
+2> Map-reduce function
+3> Single-purpose aggregation
+
+
+
+
+
+
+
+
+
+
+
+
+# How does the MongoDB Aggregation Framework work?
+--------------------------------------------------
+
+The purpose of MongoDB’s Aggregation Framework is to design a pipeline consisting of multiple stages for 
+processing documents. 
+You start with your collection's data and after each stage of the pipeline you are closer to the end result 
+which will be the desired documents.
+
+Each stage performs an operation on the documents
+There are several operations that can be conducted. For example, a stage can filter, group, or even 
+calculate values on the data. 
+After each stage, the outputted documents are passed into the next stage and so on until no stages are left.
+
+
+You can repeat same stage once again.
+
+#What are the most common MongoDB aggregation operations?
+---------------------------------------------------------
+
+There are approximately 38 aggregation stages available in the MongoDB framework at the time of this writing.
+
+
+$project : Reshapes each document in the stream, such as by adding new fields or removing existing fields. 
+			 For each input document, outputs one document.
+
+$match 	  : Filters the document stream to allow only matching documents to pass unmodified into the next 
+			 pipeline stage. $match uses standard MongoDB queries. For each input document, outputs either one 
+			 document (a match) or zero documents (no match).
+			 match is similar to find.
+
+#group	  : The group statge allow you to group your data by a certain field or by multiple fields 
+
+			_id: defines by which fields you want to group the documents. it basically allow you to define 
+				  multiple fields by which you want to group. for ex you want to group the documents ewhose 
+				  state is "Maharashtra" so here "state" is a field in a dcument.
+
+	
+
+
+
+
+
+
+
+											Questions
+	
+
+Q1] Group the peoples according to state and count the total no of peoples in each state.
+-----------------------------------------------------------------------------------------
+db1> db.tb1.aggregate([ 							
+							{ 
+								$group: { 
+											_id: { state: "$location.state" }, 
+											totalpersons: { $count: {} }
+										 } 
+							}
+						])
+
+
+check the result of above query by regular query: 
+
+db1> db.tb1.find({$and: [{"location.state": {$eq: "calvados"}}, {gender: "female"}]}).count()
+
+
+
+
+
+Q2] Group the peoples according to state and count the total no of females in each state.
+-----------------------------------------------------------------------------------------
+
+db1> db.tb1.aggregate([ 
+							{ 
+								$match: {gender: "female"} 
+							}, 
+							{ 
+								$group: { 
+											_id: { state: "$location.state" }, 
+											totalpersons: { $count: {} } 
+										 } 
+							}
+						])
+
+
+check the result of above query by regular query: 
+
+db1> db.tb1.find({$and: [{"location.state": {$eq: "calvados"}}, {gender: "female"}]}).count()
+
+
+
+
+
+
+Q3[ Calculate the average of each group.
+---------------------------------------------------------------
+
+{ "_id" : 1, "item" : "abc", "price" : 10, "quantity" : 2, "date" : ISODate("2014-01-01T08:00:00Z") }
+{ "_id" : 2, "item" : "jkl", "price" : 20, "quantity" : 1, "date" : ISODate("2014-02-03T09:00:00Z") }
+{ "_id" : 3, "item" : "xyz", "price" : 5, "quantity" : 5, "date" : ISODate("2014-02-03T09:05:00Z") }
+{ "_id" : 4, "item" : "abc", "price" : 10, "quantity" : 10, "date" : ISODate("2014-02-15T08:00:00Z") }
+{ "_id" : 5, "item" : "xyz", "price" : 5, "quantity" : 10, "date" : ISODate("2014-02-15T09:12:00Z") }
+
+
+db.sales.aggregate(
+   [
+     {
+       $group:
+         {
+           _id: { item: "$item"},
+           avgAmount: { $avg: { $multiply: [ "$price", "$quantity" ] } },
+           avgQuantity: { $avg: "$quantity" }
+         }
+     }
+   ]
+)
+
+
+{ "item" : "xyz", "avgAmount" : 37.5, "avgQuantity" : 7.5 }
+{ "item" : "jkl", "avgAmount" : 20, "avgQuantity" : 1 }
+{ "item" : "abc", "avgAmount" : 60, "avgQuantity" : 6 }
+
+
+
+
+
+Q4] Sort the data according to totalPersons means show the states first which are having more persons in ascending orders.
+------------------------------------------------------------------------------------------------------------------------
+sorting is done on fileds of previous stage.
+
+
+db.tb1.aggregate([
+	{$match: {gender: "female"}},
+	{$group: {_id: {state: "$location.state"}, totalPersons: {$sum: 1}}},
+	{$sort: {totalPersons: -1}}
+]);
+
+-> Output: 
+   -------
+[
+  { _id: { state: 'midtjylland' }, totalPersons: 33 },
+  { _id: { state: 'nordjylland' }, totalPersons: 27 },
+  { _id: { state: 'australian capital territory' }, totalPersons: 24 },
+  { _id: { state: 'syddanmark' }, totalPersons: 24 },
+  { _id: { state: 'new south wales' }, totalPersons: 24 },
+  { _id: { state: 'south australia' }, totalPersons: 22 },
+  { _id: { state: 'hovedstaden' }, totalPersons: 21 },
+  { _id: { state: 'danmark' }, totalPersons: 21 },
+  { _id: { state: 'queensland' }, totalPersons: 20 },
+  { _id: { state: 'overijssel' }, totalPersons: 20 },
+  { _id: { state: 'sjælland' }, totalPersons: 19 },
+  { _id: { state: 'nova scotia' }, totalPersons: 17 },
+  { _id: { state: 'canterbury' }, totalPersons: 16 },
+  { _id: { state: 'yukon' }, totalPersons: 16 },
+  { _id: { state: 'gelderland' }, totalPersons: 16 },
+  { _id: { state: 'northwest territories' }, totalPersons: 16 },
+  { _id: { state: 'northern territory' }, totalPersons: 15 },
+  { _id: { state: 'bayern' }, totalPersons: 15 },
+  { _id: { state: 'tasmania' }, totalPersons: 15 },
+  { _id: { state: 'zeeland' }, totalPersons: 14 }
+]
+
+
+
+
+
+
+
+
+Q5] $project: 
+-------------
+
+we have name object field and we have to create new field having name "fullName" and concat the sub fields of 
+name field also sort them according to fullName.
+
+-> db.tb1.aggregate([{$project: { _id: 0, gender: 1, fullName: { $concat: ["$name.first", " ", "$name.last"]}}}])
+Input Sample: 
+{
+  gender: 'male',
+  name: { title: 'mr', first: 'victor', last: 'pedersen' },
+  dob: { date: '1959-02-19T23:56:23Z', age: 59 },
+  phone: '23138213',
+}
+
+Output: 
+[
+  { gender: 'male', fullName: 'victor pedersen' },
+  { gender: 'male', fullName: 'carl jacobs' },
+  { gender: 'male', fullName: 'zachary lo' },
+  { gender: 'male', fullName: 'harvey chambers' },
+  { gender: 'male', fullName: 'gideon van drongelen' },
+  { gender: 'female', fullName: 'پریا پارسا' },
+  { gender: 'female', fullName: 'maeva wilson' },
+  { gender: 'male', fullName: 'elijah lewis' },
+  { gender: 'female', fullName: 'olav oehme' },
+  { gender: 'female', fullName: 'madeleine till' },
+  { gender: 'female', fullName: 'shona kemperman' },
+  { gender: 'female', fullName: 'louise graham' },
+  { gender: 'male', fullName: 'isolino viana' },
+  { gender: 'female', fullName: 'mestan kaplangı' },
+  { gender: 'female', fullName: 'katie welch' },
+  { gender: 'female', fullName: 'sandra lorenzo' },
+  { gender: 'male', fullName: 'بنیامین سالاری' },
+  { gender: 'female', fullName: 'andreia arnaud' },
+  { gender: 'female', fullName: 'anaëlle adam' },
+  { gender: 'female', fullName: 'anne ruiz' }
+]
+
+covert whole text in capital case.
+----------------------------------
+-> db.tb1.aggregate([{$project: { _id: 0, gender: 1, 
+				fullName: { $concat: [{$toUpper: "$name.first"}, " ", {$toUpper: "$name.last"}]}}}])
+
+Convert only first alphabate in capital of each word.
+-----------------------------------------------------
+
+db.persons.aggregate([
+    {
+      $project: {
+        _id: 0,
+        gender: 1,
+        fullName: {
+          $concat: [
+            { $toUpper: { $substrCP: ['$name.first', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.first',
+                1,
+                { $subtract: [{ $strLenCP: '$name.first' }, 1] }
+              ]
+            },
+            ' ',
+            { $toUpper: { $substrCP: ['$name.last', 0, 1] } },
+            {
+              $substrCP: [
+                '$name.last',
+                1,
+                { $subtract: [{ $strLenCP: '$name.last' }, 1] }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]).pretty();
+
+
+
+
+
+
+Q6] Calculate the total no peoples from each Year.
+
+-> db.tb1.aggregate([
+    { $project: {birthDate: toDate("$dob.date")}},
+    { $group: { _id: { birthDate: {$isoYear: "$birthDate"}}, numPersons: {$count: {}}}},
+    { $sort: { birthDate: 1}}
+]);
+
+
+
+
+
+
+
+Pushing elements into newly created Arrays: 
+-------------------------------------------
+
+
+{  name: 'Max',    hobbies: [ 'Sports', 'Cooking'		   ],  age: 29 }
+{  name: 'Manu',   hobbies: [ 'Eating', 'Data Analytics'  ],  age: 30 }
+{  name: 'Maria',  hobbies: [ 'Cooking','Skiing'          ],  age: 29 }
+
+
+db1> db.tb2.aggregate([{$group: {_id: {age: "$age"}, allhobbies: {$push: "$hobbies"}}}])    // array inside array
+
+[
+  { _id: { age: 29 },allHobbies: [ [ 'Sports', 'Cooking' ], [ 'Cooking', 'Skiing' ] ] },
+  { _id: { age: 30 }, allHobbies: [ [ 'Eating', 'Data Analytics' ] ] }
+]
+
+
+db1> db.tb2.aggregate([{$unwind: "$hobbies"}, { $group: { _id: { age: "$age" }, allHobbies: {$push: "$hobbies"} } }])
+
+
+[
+  { _id: { age: 30 }, allHobbies: [ 'Eating', 'Data Analytics' ] },
+  {_id: { age: 29 },allHobbies: [ 'Sports', 'Cooking', 'Cooking', 'Skiing' ]}
+]
+
+
+
+Eliminating Duplicate values (addToSet):
+----------------------------------------
+
+In the above set  we get repeateed elemets inside array like "Cooking" so we can eleminate that using "addToSet" instead of "push".
+"addToSet" avoids the duplicate values. 
+
+db1> db.tb2.aggregate([ { $unwind: "$hobbies" }, { $group: { _id: { age: "$age" }, allHobbies: { $addToSet: "$hobbies" } } }])
+[
+  { _id: { age: 29 }, allHobbies: [ 'Cooking', 'Sports', 'Skiing' ] },
+  { _id: { age: 30 }, allHobbies: [ 'Eating', 'Data Analytics' ] }
+]
+
+
+
+Using Projection with Array: 
+---------------------------
+
+Data : 
+
+[
+  {
+    _id: ObjectId("63fb4ba2917761901d09d01d"),
+    name: 'Max',
+    hobbies: [ 'Sports', 'Cooking' ],
+    age: 29,
+    examScores: [
+      { difficulty: 4, score: 57.9 },
+      { difficulty: 6, score: 62.1 },
+      { difficulty: 3, score: 88.5 }
+    ]
+  },
+  {
+    _id: ObjectId("63fb4ba2917761901d09d01e"),
+    name: 'Manu',
+    hobbies: [ 'Eating', 'Data Analytics' ],
+    age: 30,
+    examScores: [
+      { difficulty: 7, score: 52.1 },
+      { difficulty: 2, score: 74.3 },
+      { difficulty: 5, score: 53.1 }
+    ]
+  },
+  {
+    _id: ObjectId("63fb4ba2917761901d09d01f"),
+    name: 'Maria',
+    hobbies: [ 'Cooking', 'Skiing' ],
+    age: 29,
+    examScores: [
+      { difficulty: 3, score: 75.1 },
+      { difficulty: 8, score: 44.2 },
+      { difficulty: 6, score: 61.5 }
+    ]
+  }
+]
+
+
+
+Q1] get the first array element:
+--------------------------------
+db1> db.tb2.aggregate([
+... 		{$project: {_id: 0, examScore: {$slice: ["$examScores", 1]}}}  // $slice: ["array_Name", No_of_elemt]
+	])
+
+
+[
+  { examScore: [ { difficulty: 4, score: 57.9 } ] },
+  { examScore: [ { difficulty: 7, score: 52.1 } ] },
+  { examScore: [ { difficulty: 3, score: 75.1 } ] }
+]
+
+
+
+
+Q2] get the first array element:
+--------------------------------
+
+db1> db.tb2.aggregate([ { $project: { _id: 0, examScores: { $slice: ["$examScores", -2] } } }])  // -2, -1 = last 2 elemts
+[
+  {
+    examScores: [ { difficulty: 6, score: 62.1 }, { difficulty: 3, score: 88.5 } ]
+  },
+  {
+    examScores: [ { difficulty: 2, score: 74.3 }, { difficulty: 5, score: 53.1 } ]
+  },
+  {
+    examScores: [ { difficulty: 8, score: 44.2 }, { difficulty: 6, score: 61.5 } ]
+  }
+]
+
+
+
+Q3] get me second element of the array 
+--------------------------------------
+
+db1> db.tb2.aggregate([
+... {$project: {_id: 0, examScore: {$slice: ["$examScores", 1, 1]}}}   // $slice: ["array_Name", Start_pos ,No_of_elemt]  -> index starts from 0
+... ])
+[
+  { examScore: [ { difficulty: 6, score: 62.1 } ] },
+  { examScore: [ { difficulty: 2, score: 74.3 } ] },
+  { examScore: [ { difficulty: 8, score: 44.2 } ] }
+]
+
+
+
+
+Q4] Getting Length Of the array ($size: "$nameOfArray"): 
+--------------------------------
+
+db1> db.tb2.aggregate([ {$project: {_id: 0, numExam: {$size: "$examScores"}}}])
+[ { numExam: 3 }, { numExam: 3 }, { numExam: 3 } ]
+
+
+
+
+
+
+
+we want to transform examScore to be an array where we only see scores higher than 60.
+
+
+db1> db.tb2.aggregate([ { $project: {_id: 0, examScores: {$filter:{ input: "$examScores", as: "ele", cond: { $gt: ["$$ele.score", 60]}}}}}])
+[
+  {
+    examScores: [ { difficulty: 6, score: 62.1 }, { difficulty: 3, score: 88.5 } ]
+  },
+  { examScores: [ { difficulty: 2, score: 74.3 } ] },
+  {
+    examScores: [ { difficulty: 3, score: 75.1 }, { difficulty: 6, score: 61.5 } ]
+  }
+]
+
+
+
+Applying multiple Operations to our Array.
+-----------------------------------------:
+
+db1> db.tb2.aggregate([
+... { $unwind: "$examScores"},
+... { $project: {_id: 0,name: 1, age: 1, score: "$examScores.score"}},
+... { $sort: {score: -1}}
+... ])
+
+-> 
+
+[
+  { name: 'Max', age: 29, score: 88.5 },
+  { name: 'Maria', age: 29, score: 75.1 },
+  { name: 'Manu', age: 30, score: 74.3 },
+  { name: 'Max', age: 29, score: 62.1 },
+  { name: 'Maria', age: 29, score: 61.5 },
+  { name: 'Max', age: 29, score: 57.9 },
+  { name: 'Manu', age: 30, score: 53.1 },
+  { name: 'Manu', age: 30, score: 52.1 },
+  { name: 'Maria', age: 29, score: 44.2 }
+]
+
+
+
+
+
+db.tb2.aggregate([
+  { $unwind: "$examScores" },
+  { $project: { _id: 1, name: 1, age: 1, score: "$examScores.score" } },
+  { $group: { _id: "$_id", name: {$first: "$name"}, maxScore: { $max: "$score" } } },
+  { $sort: { maxScore: -1 } },
+]);
+
+
+-> 
+
+[
+  {
+    _id: ObjectId("63fb4ba2917761901d09d01d"),
+    name: 'Max',
+    maxScore: 88.5
+  },
+  {
+    _id: ObjectId("63fb4ba2917761901d09d01f"),
+    name: 'Maria',
+    maxScore: 75.1
+  },
+  {
+    _id: ObjectId("63fb4ba2917761901d09d01e"),
+    name: 'Manu',
+    maxScore: 74.3
+  }
+]
+
+
+
+
+
+
+$bucket: 
+--------
+
+-> The bucket stage allows you to output your data in, well in bucket.
+-> Categorizes incoming documents into groups, called buckets, based on a 
+	specified expression and bucket boundaries and outputs a document per each 
+	bucket.
+-> Each output document contains an _id field whose value specifies the inclusive
+	lower bound of the bucket.
+-> The output option specifies the fields included in each output document.
+
+
+
+db1> db.tb1.aggregate([ { $bucket: { groupBy: '$dob.age', boundaries: [18, 30, 40, 50, 60, 120], output: { numPersons: { $sum: 1 }, averageAge: { $avg: '$dob.age' } } } }])
+[
+  { _id: 18, numPersons: 868, averageAge: 25.101382488479263 },
+  { _id: 30, numPersons: 910, averageAge: 34.51758241758242 },
+  { _id: 40, numPersons: 918, averageAge: 44.42265795206972 },
+  { _id: 50, numPersons: 976, averageAge: 54.533811475409834 },
+  { _id: 60, numPersons: 1328, averageAge: 66.55798192771084 }
+]
+
+db1> db.tb1.find({"dob.age": {$lt: 30}}).count()
+868
+db1> db.tb1.find({"dob.age": {$lt: 40}}).count()
+1778 (1778-868 = 910)
+db1> db.tb1.find({"dob.age": {$gt: 60}}).count()
+1222
+db1> db.tb1.find({"dob.age": {$gte: 60}}).count()
+1328
+db1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

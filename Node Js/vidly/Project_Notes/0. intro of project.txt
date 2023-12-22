@@ -13,7 +13,54 @@ creates its renal which contain customer details and which movie he rented.
 4. "bcrypt": "^5.1.1",
 5. "nodemon": "^3.0.1"
 
- 
+
+features: 
+-> Implementing user authentication and authorization as well as role-based access control for enhanced account management.
+-> Integrating with a MongoDB database to store and retrieve video rental information efficiently.
+-> Designing and implementing a RESTful API to facilitate seamless communication between the frontend and backend.
+-> Utilizing the Express.js framework and middleware concept for building robust and scalable backend applications.
+
+-> Implementing role-based access control to manage user permissions and enhance system security.
+-> Implementing custom validation to ensure data integrity and prevent errors in user inputs.
+-> Conducting Create, Read, Update, and Delete operations for effective data management.
+-> Employing asynchronous programming techniques to optimize performance and responsiveness.
+-> Leveraging middleware for handling tasks such as logging, error handling, and request processing.
+
+
+key features of the Node.js Vidly project:
+
+1. **User Authentication:**
+   - Implementing secure user authentication for enhanced account management.
+
+2. **CRUD Operations:**
+   - Conducting Create, Read, Update, and Delete operations for effective data management.
+
+3. **RESTful API Design:**
+   - Designing and implementing a RESTful API to facilitate seamless communication between the frontend and backend.
+
+4. **Database Integration:**
+   - Integrating with a database to store and retrieve video rental information efficiently.
+
+5. **Middleware Implementation:**
+   - Leveraging middleware for handling tasks such as logging, error handling, and request processing.
+
+6. **Custom Validation:**
+   - Implementing custom validation to ensure data integrity and prevent errors in user inputs.
+
+7. **Security Measures:**
+   - Incorporating security measures to protect against common web vulnerabilities.
+
+8. **Express Framework:**
+   - Utilizing the Express.js framework for building robust and scalable backend applications.
+
+9. **Role-Based Access Control:**
+   - Implementing role-based access control to manage user permissions and enhance system security.
+
+10. **Asynchronous Programming:**
+    - Employing asynchronous programming techniques to optimize performance and responsiveness.
+
+
+
 
 
 -> Basically in this project i have created 5 APIs. which are as follows: 

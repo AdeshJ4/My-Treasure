@@ -1,0 +1,48 @@
+forEach(): 
+
+-> The forEach() method call a function for each element in an array.
+-> unlike map and filter it doesn't create new array.
+-> forEach() modify the Original Array.
+-> The forEach() method is useful when you want to perform an action for each element in an array without creating a new array.
+-> It's often used when you need to iterate over elements but don't need to transform or filter the array.
+-> return value of a forEac() is undefined.
+
+
+ex.1
+const arr1 = [10, 20, 30, 40, 50, 60];
+arr1.forEach((ele, index)=>{
+    console.log(index, ele);
+});
+
+ex.2
+const arr2 = [
+    {id: 101, name: 'Adesh'},
+    {id: 102, name: 'Akshay'},
+    {id: 103, name: 'Amar'},
+]
+arr2.forEach((ele, index)=>{
+    console.log(index, ele.name);
+});
+
+ex.3: Modifying original array
+const arr1 = [10, 20, 30, 40, 50, 60];
+arr1.forEach((ele, index, array)=>{
+    array[index] = ele*10;
+}); //output: [ 100, 200, 300, 400, 500, 600 ]
+
+
+ex. 4
+const arr2 = [
+    {id: 101, name: 'Adesh'},
+    {id: 102, name: 'Akshay'},
+    {id: 103, name: 'Amar'},
+]
+arr2.forEach((ele, index, array)=>{
+    array[index] = {...ele, age: 0}
+})
+output:
+// [
+//     { id: 101, name: 'Adesh', age: 0 },
+//     { id: 102, name: 'Akshay', age: 0 },
+//     { id: 103, name: 'Amar', age: 0 }
+// ]

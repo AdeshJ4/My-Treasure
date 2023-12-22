@@ -1,0 +1,432 @@
+add a new field name:
+--------------------
+
+-> db.users.updateOne({id: 101}, {$set: {age: 21}});
+
+
+add multiple fields: 
+-------------------
+
+-> db.user.updateOne({id: 101}, {$set: {name: "Adesh", age: 21}}})
+
+
+Update value of existing field:
+-------------------------------
+
+-> db.user.updateOne({id: 101}, {$set: {age: 21}})
+
+
+
+replace array with another array:
+---------------------------------
+I/p -> {hobbies: ["A", "V", "M"]}
+-> db.user.updateOne({id: 101}, {$set: {hobbies: [{name: "Swimming"}, {name: "Reding"}]}})
+
+
+
+Update Many documents:
+--------------------
+
+-> db.users.updateMany({"hobbis.title": "Sports"}, {$set: {isSporty: true}})  // it sets the "isSporty" field to true in the main document.
+
+
+
+
+increment age by 1 and add another property: 
+-------------------------------------------
+
+-> db.users.updateOne({id: 101}, {$inc: {age: 2}, $set: {address: "Pune"}})
+
+
+decrement age by 1 : 
+-------------------------------------------
+
+-> db.users.updateOne({id: 101}, {$inc: {age: -1}})
+
+
+
+Finding & Updating Specific Fields
+----------------------------------
+
+db.users.updateMany({
+    "hobbies.frequency": {$gt: 2}
+},
+{
+	$set: {
+     	   "hobbies.$[el].name": "Adesh",
+        	   "hobbies.$[e].age": 21
+    	      }
+},
+{
+	arrayFilters: [
+        {
+            "el.frequency": {$gt: 2
+            }
+        },
+        {
+            "e.title": {$eq: "Cooking"
+            }
+        }
+    ]
+})
+
+
+Adding element to the Array:
+----------------------------
+-> db.users.updateOne({name: "max"}, {$push: {hobbies: {title: "Anime", frequency: 5}}});   // here hobbies contain multiple documents. This will not overwright existing elements.
+-> db.users.updateOne({name:"Adesh"}, {$push: {hobbies: {$each: [{title: "Anime"}, {title: "Manga"}]}}}) 
+-> db.users.updateOne({name: "Chris"}, {$push: {hobbies: "Anime"}});      // here hobbies contain multiple elements. This will not overwright existing elemnts
+-> db.users.updateOne({name: "Adesh"}, {$push: {hobbies: {$each: ["Anime", "Manga"]}}})
+-> db.users.updateOne({name: "max"}, {$addToSet: {hobbies: {title: "Anime", frequency: 5}}});   // here hobbies contain multiple documents. This will not overwright existing elements.
+
+sort the documents/elements before updating it:
+----------------------------------------------
+-> db.users.updateOne({name: "Chris"}, {$push: {hobbies: {$each: [{title: "Anime", no: 2}, {title: "manga", no: 1}], $sort: {no: 1}}})
+	
+sort the documents/elements before updating it and update/insert only first two sorted elements/documents(Please count previous documents/elemnts in slice operator):
+---------------------------------------------------------------------------------------------------------
+-> db.users.updateOne({id: 101}, {$push: {hobbies: {$each: [{title: "Z", no:3}, {title: "X", no: 1}, {title: "Y", no : 2}], $sort: {no: 1}, $slice: 2 }}})
+
+
+
+what is diiference between "$push" and "$addToSet" ? 
+----------------------------------------------------
+
+-> with the help of push we can add duplicae data but with addToSet we can't.
+-> "$addToSet" adds only unique values.
+
+
+
+
+Removing Elements from Arrays : 
+-------------------------------
+
+-> db.users.updateOne({id: 101}, {$pull: {hobbies: {title: "Swimming"}}}) // remove all nested documents inside array which contain Hobbies as "Swimming"
+
+Remove the last or first element from the array:
+--------------------------------------
+0 -> first element
+1 -> last element 
+-> db.users.updateOne({id: 101}, {$pop: {hobbies: 1}})
+
+
+
+
+$currentDate
+
+-> Sets the value of a field to current date, either as a Date or a Timestamp.
+
+$inc
+
+-> Increments the value of the field by the specified amount.
+-> db.users.updateOne({id: 101}, {$inc: {age: 2}, $set: {address: "Pune"}})
+-> db.users.updateOne({id: 101}, {$inc: {age: -1}})
+
+
+$min
+
+-> Only updates the field if the specified value is less than the existing field value.
+-> specified valuse should be less than existing field value.
+-> db.tb1.updateOne({id: 101}, {$min: {age : 21}})
+
+
+$max
+
+Only updates the field if the specified value is greater than the existing field value.
+-> specified value should be gretaer than existing value.
+
+
+$mul
+
+-> Multiplies the value of the field by the specified amount.
+-> db.tb1.updateOne({id: 101}, {$mul: {age: 2}})
+
+
+$rename
+
+-> Renames a field.
+-> db.tb1.updateOne({id: 101}, {$rename: {name: "fname"}})
+-> db.tb1.updateMany({}, {$rename: {age: "totAge"}})
+
+$set
+
+-> Sets the value of a field in a document or add a field in document.
+
+$setOnInsert
+
+-> Sets the value of a field if an update results in an insert of a document. Has no effect on update operations that modify existing documents.
+
+$unset
+
+-> Removes the specified field from a document.
+-> remove a field.
+-> db.tb1.updateOne({id: 103}, {$unset: {isOk: ""}})
+-> db.tb1.updateMany({}, {$unset: {isOk: ""}})
+
+
+$upsert: 
+
+-> if the document is not found to be updated then insert it.
+-> the filter filter object({id: 101}) will be added automatically. 
+-> db.tb1.updateOne({id: 101}, {$set: {name: "Adesh", age: 21, hobbies: [{title: "Sports"}, {title: "Reading"}]}}, {upsert: true})
+
+
+
+
+
+Array Opearations :
+-------------------
+
+1. hobbies is array and in that we have multiple documents. and we have to make changes in only in that nested document. we don't want to overwright whole
+   array we just want to add a extra field in selected nested documents inside that array.
+
+{
+  id: 101,
+  name: 'Chris',
+  hobbies: [
+    {
+      title: 'Sports',
+      frequency: 5,
+    },
+    {
+      title: 'Cooking',
+      frequency: 3
+    }
+  ],
+
+}
+
+
+-> db.tb1.updateOne({hobbies: {$eleMatch: {title: "Sports", frequency: {$gte: 3}}}}, {$set: {"hobbies.$.highFrequency": 10}})
+
+{
+  id: 101,
+  name: 'Chris',
+  hobbies: [
+    {
+      title: 'Sports',
+      frequency: 5,
+      highFrequency: 10  <---- This is the end result, here we added new field after query. (only in this field)
+    },
+    {
+      title: 'Cooking',
+      frequency: 3
+    }
+  ],
+
+}
+
+
+
+-> if we want to replace only selected nested document with another document inside that array. see above I/P:
+
+-> db.tb1.updateOne({hobbies: {$eleMatch: {title: "Cooking", frequency: {eq: 3}}}}, {$set: {"hobbies.$": ["Sport", "Cooking"]}}) 
+{
+  id: 101,
+  name: 'Chris',
+  hobbies: [
+    {
+      title: 'Sports',
+      frequency: 5,
+      highFrequency: true  <---- This is the end result, here we added new field after query. (only in this field)
+    },
+    {
+      title: 'Cooking',
+      frequency: 3
+    }
+  ],
+
+}
+
+
+
+Input : 
+-------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Reading',
+      frequency: 3        <---------- You have to add new field below this field
+    }
+  ]
+}
+
+
+output: 
+-------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Reading',
+      frequency: 3,
+      name: 'Adesh'   <-----   Added field
+    }
+  ]
+}
+
+
+Query : 
+-------
+-------
+-> db.tb1.updateOne({$and: [{id: {$eq: 101}}, {hobbies: {$elemMatch: {title: "Reading", frequency: 3}}}]}, {$set: {"hobbies.$.name": "Adesh"}})
+
+
+
+
+
+Input : 
+------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Swimming',
+      frequency: 2
+    }
+  ]
+}
+
+Output: 
+-------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Swim',
+      frequency: 2
+    }
+  ]
+}
+
+
+
+Query: 
+------
+
+-> db.tb1.updateOne({$and: [{id: 101}, {hobbies: {$eleMatch: {title: "Swimming", frequency: 2}}}]}, {$set: {"hobbies.$.title": "Swim"}})
+
+
+
+Input: 
+------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Reading',
+      frequency: 3,
+      name: 'Adesh'         <------------ Remove Property
+    }
+  ]
+}
+
+
+Output:
+-------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Reading',
+      frequency: 3
+    }
+  ]
+}
+
+
+
+Query: 
+
+-> db.tb1.updateOne({$and: [{id: 101}, {hobbies: {$eleMatch: {title: "Reading", frequency: 3}}}]}, {$unset: {"hobbies.$.name": ""}});
+
+
+
+
+
+
+
+
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Reading',
+      frequency: 3
+    },
+    {
+      title: 'Swimming',
+      frequency: 2
+    }
+  ]
+}
+
+
+Output:
+-------
+
+{
+  id: 101,
+  hobbies: [
+    {
+      title: 'Reading',
+      frequency: 3
+    },
+    [
+      'Anime',
+      'Manga'
+    ]
+  ]
+}
+
+
+
+Query: 
+------
+
+-> db.tb1.updateOne({$and: [{id: 101}, {hobbies: {$elematch: {title: "Swimming", frequency: 2}}}]}, {$set: {"hobbies.$": ["Anime", "Manga"]}})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

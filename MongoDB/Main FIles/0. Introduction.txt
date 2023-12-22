@@ -1,0 +1,21 @@
+MongoDB is a document-based NoSQL database where data is organized in collections that are made up of JSON documents. 
+As with any database, MongoDB has a language that a user can use to access data. 
+In MongoDB’s case, this language is the MongoDB Query Language or simply, MQL. 
+Whether MQL or SQL, database queries can start off simple, but as a database scales more complex queries arise.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
