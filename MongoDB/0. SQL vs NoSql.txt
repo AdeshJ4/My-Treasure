@@ -1,60 +1,28 @@
-insertOne()
-insertMany()
-
+MongoDB is a NoSQL database that stores data in a flexible, JSON-like format called BSON (Binary JSON). MongoDB is designed to handle a variety of data types and is particularly well-suited for storing unstructured or semi-structured data. Here are the main data types that MongoDB supports:
 
 1. **String:** This is the most commonly used data type to store textual data.
-db.tb4.insertOne({id: 101, name: 'Adesh'})
-
 
 2. **Integer:** Used to store whole numbers.
-db.tb4.insertOne({id: 101, age: 22})
-
 
 3. **Double:** Used to store floating-point numbers.
-db.tb4.insertOne({id: 101, price: 12.05})
-
 
 4. **Boolean:** Stores either true or false.
-db.tb4.insertOne({isOk: true})
-
 
 5. **Arrays:** Allows you to store multiple values in a single field.
-db.tb4.insertOne({id: 101, hobbies: ['h1', 'h2']})
-
 
 6. **Object:** Used for embedded documents or sub-documents within a document.
-db.tb4.insertOne({id: 102, address: {ciy: 'Pune',  village: 'Palgad'}})
-
 
 7. **Null:** Represents a null or non-existent value.
-db.tb4.insertOne({id: 101, age: null});
-
 
 8. **Date:** Stores the current date or a specific date.
-db.tb4.insertOne({id: 102, birth_date: new Date()});
-db.tb4.insertOne({id: 102, birth_date: ISODate('2001-06-22')});
-db.tb4.insertOne({id: 102, birth_date: ISODate("2023-01-01T12:00:00Z")});
-
 
 9. **Timestamp:** Typically used to store the creation time of a document.
-db.tb4.insertOne({ "id": 102, "createdAt": new Timestamp() })
-
 
 10. **Binary Data:** Can store binary data, such as images or documents.
-db.tb4.insertOne({ "id": 102, "img": new BinData(0, "base64-encoded-binary-data") })
-
 
 11. **ObjectId:** A special 12-byte identifier typically employed as the primary key for a document.
-db.tb4.insertOne({"_id": ObjectId("61f39f009f3b0a68d62f9b8c"), name: 'Adesh'});
-db.tb4.insertOne({"_id": 101, name: 'Adesh'});
 
-
-12. **`Regular Expression`:** Allows you to store regular expressions for pattern matching.
-{ "regexPattern": { "$regex": "^prefix", "$options": "i" } }
-
-
-
-
+12. **Regular Expression:** Allows you to store regular expressions for pattern matching.
 
 13. **Geospatial Data Types:** MongoDB supports geospatial data types like Point, LineString, and Polygon for geospatial queries.
 

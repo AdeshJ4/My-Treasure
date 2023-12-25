@@ -1,20 +1,23 @@
-function unionArray(arr1, arr2) {
-  const arr = [...arr1, ...arr2];
-  const uniqueArr = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    let duplicate = false;
-    for (let j = 0; j < uniqueArr.length; j++) {
-      if (arr[i] === arr[j]) {
-        duplicate = true;
-        break;
+function bubbleSort(arr){
+  let count = 0;
+  for(let i=0; i<arr.length-count; i++){
+    let sorted = false;
+    for(let j=1; j<arr.length-i; j++){
+      if(arr[j-1] < arr[j]){  // 50 > 40
+        [arr[j], arr[j-1]] = [arr[j-1], arr[j]];
+        sorted = true;
       }
     }
-    if (!duplicate) {
-      uniqueArr.push(arr[i]);
-    }
+    count++;
+    if(!sorted){
+      return
+    };
   }
-  return uniqueArr;
 }
-const unionArr = unionArray([10, 20, 30], [20, 30, 40]);
 
+
+const arr = [50, 40, 30, 20, 10];
+console.log('Before: ', arr);
+bubbleSort(arr)
+console.log('After: ', arr);
+// [ 50, 40, 30]

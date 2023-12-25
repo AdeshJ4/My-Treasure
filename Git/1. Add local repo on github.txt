@@ -1,0 +1,37 @@
+git remote add origin https://github.com/your-username/repository-name.git
+git push -u origin master  # If you are on the "master" branch
+
+
+create a new repository on the command line
+
+echo "# useMe" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/AdeshJ4/useMe.git
+git push -u origin main
+
+
+
+
+push an existing repository from the command line
+
+git remote add origin https://github.com/AdeshJ4/useMe.git
+git branch -M main
+git push -u origin main
+
+
+
+
+Error: i am getting this error : ! [rejected]        main -> main (non-fast-forward)
+
+To resolve this issue, you have a few options:
+
+
+git pull origin main
+git push -f origin main
+
+
+
+

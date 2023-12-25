@@ -1,2 +1,0 @@
--> cdn stands for content delivery network.
--> it allow you to access requested recourses from nearest server which increase your speed of fetching data.

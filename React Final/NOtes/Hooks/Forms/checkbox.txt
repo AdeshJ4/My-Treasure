@@ -1,0 +1,19 @@
+import { useState } from "react";
+
+const list = ["todo 1", "todo 2", "todo 3", "todo 4"];
+
+const Compo2 = () => {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleOnChanged = (e) => {
+    setIsChecked(e.target.checked);
+  };
+  return (
+    <>
+      <input type="checkbox" value="panner" onChange={handleOnChanged} />Panner
+      {isChecked && <div>Checkbox is checked</div>}
+    </>
+  );
+};
+
+export default Compo2;

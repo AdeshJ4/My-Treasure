@@ -1,8 +1,19 @@
-1. What is ReactJS?
-
--> React is a JavaScript library for building user interfaces.
--> React is used to build single-page applications.
--> React allows us to create reusable UI components.
--> It was developed and is maintained by Facebook, and it is widely used by developers to create interactive and efficient user interfaces.
-
-
+0:30 difference between state and props
+1:25 creating a new react project with "create-react-app"
+3:20 what is "create-react-app" doing. overview over default files created by it.
+8:32 types of components in react
+9:40 what is jsx
+12:20 creating state using useState hook
+12:56 how to drink water from an empty bottle
+14:06 normal variable vs useState variable
+22:30 demo of using props
+26:15 building a carousel
+29:45 ways of exporting (default vs named export)
+32:20 styling in react (inline inside jsx, css separate file, tailwind)
+34:30 installing tailwind
+51:37 getting rid of the same network calls using map inside jsx and dynamic className
+59:00 what is CDN (content delivery network)
+1:00:35 why use key with map
+1:03:20 useEffect hook
+1:09:28 react component lifecycle
+1:10:55 moving hardcoded data in separate constants fil
