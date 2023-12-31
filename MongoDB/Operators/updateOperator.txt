@@ -1,8 +1,8 @@
 1. $set
 
 -> operator replaces the value of a field with the specified value.
+-> $set field is used to update the value of a field 
 -> If the field does not exist, $set will add a new field with the specified value.
-
 
 2. $unset
 

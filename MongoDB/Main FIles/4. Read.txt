@@ -21,7 +21,7 @@ Operators:
 1. Read -> Query Selector & Projection Operator
 2. Update -> can update field and arrays
 
-There is no opetaors for Create and Delete because you can use above opearators for them.
+There is no operator for Create and Delete because you can use above operators for them.
 
 
 
@@ -128,21 +128,36 @@ Data:
                 "Thursday"
             ]
         },
-
-
-
+}
 
 Q1] rating is greater than 7.
 -> db.tb1.find({"rating.average": {$gt: 7}})
 
 Q2] find all documents whose genre is "Drama".
--> db.tb1.find({generes: "Drama"})
+-> db.tb1.find({genres: "Drama"})
 
 Q3] find all documents whose schedule days is "Thursday".
 -> db.tb1.find({"schedule.days": "Thursday"})
+-> db.tb1.find({"schedule.days": {$eq: 'Thursday'}})
 
 Q4] find all documents whose genre is "only contain" "Drama" and not other thing.
--> db.tb1.find({generes: ["Drama"]}) 
+I/P: 
+db.users.insertMany([
+    {id: 1, genres: ["Drama", "Horror", "Romance", "sci-fi"]},
+    {id: 2, genres: ["Drama", 101]},
+    {id: 3, genres: ["Drama", "Horror",]},
+    {id: 4, genres: ["Drama", "Romance"]},
+    {id: 5, genres: ["Drama"]},
+]);
+o/p: 
+[
+  {
+    _id: ObjectId("658e5455b90f695d7996d51f"),
+    id: 5,
+    genres: [ 'Drama' ]
+  }
+]
+Query: db.tb1.find({genres: ["Drama"]}) 
 
 Q5] find all documents whose age is 21 or 23.
 -> db.tb1.find({age: {$in : [21, 23]}})
@@ -206,7 +221,7 @@ Q5] find all documents whose name is not "Adesh" and age is not 21
 
 1. $exists
 -> Matches documents that have the specified field.
--> check wheter documnet have specified field or not if yes then show me.
+-> check whether document have specified field or not if yes then show me.
 
 2. $type
 -> Selects documents if a field is of the specified type.

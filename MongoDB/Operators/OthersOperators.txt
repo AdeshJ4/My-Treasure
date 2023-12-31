@@ -10,7 +10,6 @@ db.collectionName.find({ fieldName: { $exists: true } })
 // Find documents where the "fieldName" does not exist
 db.collectionName.find({ fieldName: { $exists: false } })
 
-db.tb1.find({age: {$exists: true}})
 
 
 2. $type
@@ -41,15 +40,38 @@ db.addressBook.find( { "zipCode" : { $type : "string" } } );
 3. $expr: 
 
 -> useful when you need to compare fields from the same document or perform more complex comparisons
--> find all documents where "age" is greater than "target" (both have the same document).
+-> find all documents where "age" is greater than "target" (both fields are in the same document).
 -> db.tb1.find({$expr: {$eq: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$ne: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$lt: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$gte: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$lte: ["$age", "$target"]}})
-
 -> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})
+Question: find documents where the total revenue is greater than $10,000.
+hint: calculate total revenue by multiplying (quantity * price) and then compare it with 10000
+input: 
+[
+    { "_id": 1, "product": "Laptop", "quantity": 10, "price": 1200 },
+    { "_id": 2, "product": "Smartphone", "quantity": 15, "price": 800 },
+    { "_id": 3, "product": "Tablet", "quantity": 5, "price": 500 }
+]
+output: 
+[
+  { _id: 1, product: 'Laptop', quantity: 10, price: 1200 },
+  { _id: 2, product: 'Smartphone', quantity: 15, price: 800 }
+]
+query: 
+db.tb1.aggregate([
+    {
+        $match: {
+            $expr: {
+                $gt: [{$multiply: ['$quantity','$price']}, 10000]
+            }
+        }
+    }
+])
+
 
 
 4. $regex
@@ -61,21 +83,88 @@ db.addressBook.find( { "zipCode" : { $type : "string" } } );
 -> Regular expression queries without an index can be resource-intensive and may not scale well as the 
 dataset grows.
 
+Input : 
+
+db.tb10.insertMany([
+    {_id: 1, name: 'abc'},
+    {_id: 2, name: 'ABC'},
+    {_id: 3, name: 'abcd'},
+    {_id: 4, name: 'xyz'},
+    {_id: 5, name: 'XYZ'},
+    {_id: 6, name: 'xyza'},
+    {_id: 7, name: 'mno'},
+    {_id: 8, name: 'MNO'},
+    {_id: 9, name: 'amnop'},
+    {_id: 10, name: 'a bcd e'},
+    {_id: 11, name: 'abcde'},
+])
+
+
 1. Find documents where "fieldName" starts with "abc" or "ABC" (case-insensitive)
 -> db.t1.find({name: {$regex: /^abc/i}});
+[
+    {_id: 1, name: 'abc'},
+    {_id: 2, name: 'ABC'},
+    {_id: 3, name: 'abcd'},
+]
 
-2. Find documents where "fieldName" contains "xyz" or "XYZ" anywhere in the string (case-insensitive)
--> db.t1.find({name: {$regex: /xyz/i}})
+
+2. Find documents where "fieldName" contains "mno" or "MNO" anywhere in the string (case-insensitive)
+-> db.t1.find({name: {$regex: /mno/i}})
+[
+    {_id: 7, name: 'mno'},
+    {_id: 8, name: 'MNO'},
+    {_id: 9, name: 'amnop'},
+]
+
 
 3. Find documents where "fieldName" ends with "xyz" (case-insensitive)
 -> db.tb1.find({name: {$regex: /xyz$/i}})
+[
+    {_id: 4, name: 'xyz'},
+    {_id: 5, name: 'XYZ'},
+]
 
-4. Find documents where "fieldName" contains the whole word "word" (case-insensitive)
--> db.tb1.find({name: {$regex: /\bword\b/i}})
 
-5. Find documents where "fieldName" does not contain "123" (case-insensitive)
--> db.tb1.find({name: {$not: /123/i}})
+4. Find documents where "fieldName" contains the whole word "mno" (case-insensitive)
+-> db.tb1.find({name: {$regex: /\bmno\b/i}})
+-> db.tb1.find({name: {$regex: /^mno$/i}})
+[ 
+    { _id: 7, name: 'mno' }, 
+    { _id: 8, name: 'MNO' } 
+]
 
+
+
+
+
+=================================================================
+
+$ifNull operator: 
+-> if our array contain null value or document don't have any array field then it will give you error.
+-> to solve this we use $ifNull operator.
+-> this line will give you error: sizeOfTags1: {$size: '$tags'},
+so use : sizeOfTags: {$size: {$ifNull:['$tags', []]}},
+
+data: 
+[
+    {_id: 1, age: 21, tags: [10, 20]},
+    {_id: 2, age: 22, tags: [10, 20, 30]},
+    {_id: 3, age: 23, tags: [10, 20, 30, 40, 50]},
+    {_id: 4, age: 24, tags: null},
+    {_id: 5, age: 25},
+]
+
+db.tb2.aggregate([
+    {
+        $project: {
+            _id: 1,
+            age: 1,
+            tags: 1,
+            sizeOfTags: {$size: {$ifNull:['$tags', []]}},   // if null then use [].
+        }
+    }
+])
 
 
 

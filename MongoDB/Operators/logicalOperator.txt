@@ -4,6 +4,7 @@
 -> in $and operator we have array of conditions.
 -> The $and operator is used to combine multiple conditions, and there is no strict limit on the number of 
 conditions you can include.
+-> In the second query, MongoDB implicitly uses the $and operator to combine the conditions. 
 db.tb1.find({$and: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
 db.tb1.find({id: 101, name: "Adesh", age: 21})
 
@@ -16,7 +17,6 @@ array are true.
 -> The $or operator is used to combine multiple conditions, and there is no strict limit on the number of 
 conditions you can include.
 db.tb1.find({$or: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
-
 
 
 3. $not: 
@@ -33,5 +33,6 @@ documents where age is not equal to 20.
 4. $nor: 
 
 -> This operator return documents that do not match any of the specified conditions.
+-> invert result of each condition
 -> db.tb1.find({$nor: [{id: 101}, {name: "Adesh"}, {age : 21}]})
 -> the documents except having id 101, name = "Adesh", age = 21 all documents will returned.

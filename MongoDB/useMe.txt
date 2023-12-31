@@ -1,0 +1,20 @@
+-> string
+starts with 
+ends with 
+contain anywhere in string   - mno MNO aMNOb
+contain as a whole word      - mno MNO
+$eq
+$ne
+$in
+$nin
+
+
+-> number (Integer, double)
+
+
+
+
+
+
+
+

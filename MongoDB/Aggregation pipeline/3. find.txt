@@ -1,0 +1,37 @@
+return all documents: 
+db.users.aggregate([
+    {
+        $match: {}
+    }
+]);
+
+
+return all documents according to condition: 
+db.users.aggregate([
+    {
+        $match: {
+            age: {$gt: 23}   // return all documents where age greater than 23
+        }
+    }
+])
+
+
+return first Document
+db.users.aggregate([
+    {
+        $limit: 1
+    }
+])
+
+
+return first document according to condition: 
+db.users.aggregate([
+    {
+        $match: {
+            age: {$gt: 23}   // return documents whose age is greater than 23
+        }
+    },
+    {
+        $limit: 1
+    }
+])

@@ -122,7 +122,7 @@ and on the right side we have : libuv library
 -> whenever you execute async method it is off loaded to the libuv.
 -> libuv then run the task using native async mechanism of operating system.
 -> and if that is not possible it will utilized its thread pool to run that task ensuring the main thread is not block
-(main thread resides in call stack).
+(main thread resides i+n call stack).
 
 
 

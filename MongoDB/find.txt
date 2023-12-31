@@ -2,6 +2,20 @@ There are 2 methods to find and select data from a MongoDB collection,
 
 1. find()
 2. findOne().
+3. findOneAndDelete()
+4. findOneAndReplace()
+5. findOneAndUpdate()
+
+
+db.users.find()
+db.users.find({age: {$gt: 22}})
+
+db.users.findOne()
+db.users.findOne({_id: 101})
+
+db.users.findOneAndDelete({_id: 101}, {projection: {_id: 0, name: 1}})
+db.users.findOneAndReplace({_id: 101}, {_id: 101, name: 'Adesh'}, {projection: {_id: 0, name: 1}, {returnDocument: 'after'}})
+db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {returnDocument: 'after'}, {projection: {_id: 0, name: 1}})
 
 
 1. find()
@@ -10,8 +24,8 @@ There are 2 methods to find and select data from a MongoDB collection,
 -> This method accepts a query object.
 -> if query object is pass then selected documents will be returned who match the 
     query object.
-
-
+-> db.users.find()
+-> db.users.find({age: {$gt: 22}})
 
 
 2. findOne()
@@ -19,15 +33,17 @@ There are 2 methods to find and select data from a MongoDB collection,
 -> findOne() method return only first document.
 -> This method also accepts query object
 -> If left empty, it will return the first document it finds.
-
+-> db.users.findOne()
+-> db.users.findOne({_id: 1})
 
 
 
 3. findOneAndDelete() and findOneAndReplace(): 
 
--> findOneAndDelete is focused on deleting a document, while findOneAndReplace is focused on replacing a document with a new one.
+-> findOneAndDelete is focused on deleting a document, while findOneAndReplace is focused on replacing a 
+document with a new one.
 -> findOneAndDelete: Returns the deleted document or null if no document is found.
--> findOneAndReplace: By default, returns the original document before replacement.
+-> findOneAndReplace: By default, returns the deleted document.
 
 // Delete a document where the 'username' is 'john_doe'
 db.tb1.findOneAndDelete({name: 'john_doe'});
@@ -45,6 +61,10 @@ db.tb1.findOneAndReplace({ status: 'active' }, { username: 'new_username', statu
 
 4. findOneAndUpdate()
 
--> 
+-> will find and update document according to query object and return original document.
+-> The option { returnDocument: "before" } ensures that the method returns the original document before the 
+update.
+
+db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'new Name', age: 22}}, {returnDocument: 'after'})
 
 

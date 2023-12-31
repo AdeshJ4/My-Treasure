@@ -1,0 +1,145 @@
+CREATE 
+
+-> The aggregation pipeline in MongoDB is primarily used for querying and transforming data rather than 
+creating new documents. 
+-> Creating documents in MongoDB is typically done using the insertOne or insertMany 
+methods, not through the aggregation pipeline.
+
+-> In MongoDB aggregation, you can use the $project stage to create or reshape documents by including or 
+excluding fields, creating new fields, or applying expressions to existing fields.
+
+->  The $project stage allows you to shape the output documents of the aggregation pipeline.
+
+
+Example 1: Include and Exclude Fields for next stage
+
+db.tb1.aggregate([
+    {
+        $project : {
+            name: 1, 
+            age: 1,
+            _id: 0
+        }
+    }
+])
+output: 
+[
+  { name: 'Alice', age: 30 },
+  { name: 'Bob', age: 25 },
+]
+
+
+Example 2: Create a New Field for next stage and not in database.
+
+db.tb1.aggregate([
+    {
+        $project: {
+            fullName: {$concat: ['$firstName', ' ', '$lastName']}
+        }
+    }
+])
+output: 
+[
+  {_id: 1, fullName: 'Adesh Jadhav'},
+  {_id: 1, fullName: 'Amar Singh'},
+]
+
+
+
+db.tb1.aggregate([
+    {
+        $match: {
+            _id: 1
+        }
+    },
+    {
+        $set: {
+            price: 500
+        }
+    }
+])
+
+=======================================================================================================
+
+difference between $addFields and $project.
+
+Both $addFields and $project is used to create new fields.
+Nut there is difference between them.
+
+
+data: 
+[
+  { _id: 1, age: 21, tags: [ 10, 20 ] },
+  { _id: 2, age: 22, tags: [ 10, 20, 30 ] },
+  { _id: 3, age: 23, tags: [ 10, 20, 30, 40, 50 ] },
+  { _id: 4, age: 24, tags: null },
+  { _id: 5, age: 25 },
+  { _id: 6, age: 26, tags: null }
+]
+
+1. using $project
+
+db.tb2.aggregate([
+    {
+        $project: {
+            sizeOfTags: {$size: {$ifNull: ["$tags", []]}}
+        }
+    }
+])
+output: 
+[
+  { _id: 1, sizeOfTags: 2 },
+  { _id: 2, sizeOfTags: 3 },
+  { _id: 3, sizeOfTags: 5 },
+  { _id: 4, sizeOfTags: 0 },
+  { _id: 5, sizeOfTags: 0 },
+  { _id: 6, sizeOfTags: 0 }
+]
+
+
+2. using $addFields
+db.tb2.aggregate([
+    {
+        $addFields: {
+            sizeOfTags: {
+                $size: {$ifNull: ["$tags", []]}
+            }
+        }
+    }
+])
+output: 
+[
+  { _id: 1, age: 21, tags: [ 10, 20 ], sizeOfTags: 2 },
+  { _id: 2, age: 22, tags: [ 10, 20, 30 ], sizeOfTags: 3 },
+  { _id: 3, age: 23, tags: [ 10, 20, 30, 40, 50 ], sizeOfTags: 5 },
+  { _id: 4, age: 24, tags: null, sizeOfTags: 0 },
+  { _id: 5, age: 25, sizeOfTags: 0 },
+  { _id: 6, age: 26, tags: null, sizeOfTags: 0 }
+]
+
+
+db.tb2.aggregate([
+    {
+        $addFields: {
+            sizeOfTags: {
+                $size: {$ifNull: ['$tags', []]}
+            }
+        }
+    },
+    {
+        $group: {
+            _id: null,
+            averageTags: {$avg: '$sizeOfTags'}
+        }
+    }
+])
+
+
+
+
+
+
+
+
+
+

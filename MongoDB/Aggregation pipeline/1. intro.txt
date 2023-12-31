@@ -1,0 +1,194 @@
+The MongoDB Aggregation Pipeline
+--------------------------------
+
+An aggregation pipeline consists of one or more stages that process documents:
+
+Each stage performs an operation on the input documents. 
+For example, a stage can filter documents, group documents, and calculate values.
+
+The documents that are output from a stage are passed as a input to the next stage.
+
+An aggregation pipeline can return results for groups of documents. For example, return the total, average, 
+maximum, and minimum values.
+
+Note: 
+Aggregation pipelines run with the db.collection.aggregate() method do not modify documents in a collection, 
+unless the pipeline contains a $merge or $out stage.
+
+
+
+$match (aggregation): 
+
+-> The `$match` stage filters documents based on specified condition(s), allowing only matching documents to 
+proceed to the next pipeline stage.
+-> To optimize the pipeline place $match as early in the aggregation Pipeline
+-> The $match query syntax is identical to the read operation query syntax;
+
+
+
+db.users.aggregate([
+    {
+        $match: {name: {$eq: 'India'}}  // only return documents which has name = 'India'
+    }
+])
+
+db.users.aggregate([
+    {
+        $match: {name: 'India'}   // only return documents which has name = 'India'
+    }
+])
+
+db.users.aggregate([
+    {
+        $match: {age: {$gt: 22}}   // only return documents where age gt 22
+    }
+])
+
+db.users.aggregate([
+    {
+
+        $match: {age: {$in: [20, 30, 40]}}
+    }
+])
+
+==================================================================
+
+$group (aggregation)
+
+-> The $group stage groups documents by a group key and applies accumulator expressions to perform 
+computations on grouped data, producing a result set with aggregated information.
+-> A group key is often a field, or group of fields. The group key can also be the result of an expression. 
+Use the _id field in the $group pipeline stage to set the group key.
+
+
+
+// count the total number of documents in the aggregation pipeline
+db.users.aggregate([
+    {
+        $group:{_id: null, totalCount: {$sum: 1}}   // each time increment document by 1 number
+    }
+]);
+
+
+// we are grouping documents by the "category" field 
+db.users.aggregate([
+  {
+    $group: {
+      _id: "$category",   // category is field name
+    }
+  }
+]);
+output: 
+[ { _id: 'Furniture' }, { _id: 'Stationery' }, { _id: 'Electronics' } ]
+
+
+// grouping documents by the "category" field & count the number of documents in each group.
+db.products.aggregate([  
+    { $group: {_id: '$category', totalCount: {$sum:1}}  }  
+])
+output: 
+[
+  { _id: 'Electronics', totalCount: 3 },
+  { _id: 'Stationery', totalCount: 2 },
+  { _id: 'Furniture', totalCount: 2 }
+]
+
+
+db.products.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalCount: {$sum: 1},  
+      totalQuantity: { $sum: "$quantity" },
+      averagePrice: { $avg: "$price" }
+    }
+  }
+]);
+output: 
+[
+  {
+    _id: 'Electronics',
+    totalCount: 3,
+    totalQuantity: 23,
+    averagePrice: 700
+  },
+  {
+    _id: 'Stationery',
+    totalCount: 2,
+    totalQuantity: 80,
+    averagePrice: 12.5
+  },
+  {
+    _id: 'Furniture',
+    totalCount: 2,
+    totalQuantity: 5,
+    averagePrice: 225
+  }
+]
+
+
+
+
+
+// project the data
+db.users.aggregate([
+    {
+        $group: {_id: null, avgAge: {$avg: '$age'}}
+    },
+    {
+        $project: {_id: 0}
+    }
+])
+[ { totalCount: 516 } ]
+
+
+
+
+
+
+multi stage pipeline
+
+db.users.aggregate([
+    {
+        $match: {
+            isActive: true
+        }
+    },
+    {
+        $group: {
+            _id: '$company.location.country',
+            totalCount: {$count: {}} 
+        }
+    },
+    {
+        $sort: {
+            totalCount: -1
+        }
+    },
+    {
+        $limit: 3
+    },
+    {
+        $project: {
+            _id: 0
+        }
+    }
+])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

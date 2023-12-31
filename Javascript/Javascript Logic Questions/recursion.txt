@@ -1,0 +1,71 @@
+JavaScript Recursion: 
+
+-> Recursion is a process of calling itself. 
+-> A function that calls itself is called a recursive function.
+
+syntax: 
+function fun(){
+	fun();
+}
+fun();
+ouput: RangeError: Maximum call stack size exceeded
+
+
+-> A recursive function must have a condition to stop calling itself. Otherwise, the function is called indefinitely.
+-> Once the condition is met, the function stops calling itself. This is called a base condition
+-> To prevent infinite recursion, you can use if...else statement (or similar approach) where one branch makes the recursive call, and the other doesn't.
+
+syntax: 
+function fun(){
+	if(condition){
+		// stop calling recursion()
+	}
+	fun();
+}
+fun();
+
+
+example 1: Print Numbers
+function countDown(num){
+    // base condition
+    if(num <= 0){
+        return;
+    }
+    console.log(num);
+    num--;
+    countDown(num);
+}
+countDown(4);
+
+countDown(4) prints 4 and calls countDown(3)
+countDown(3) prints 3 and calls countDown(2)
+countDown(2) prints 2 and calls countDown(1)
+countDown(1) prints 1 and calls countDown(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

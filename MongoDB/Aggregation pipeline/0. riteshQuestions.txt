@@ -1,0 +1,550 @@
+display all users: 
+db.users.aggregate([{$match:{}}])
+
+Q1. COunt No of documents or create a api which return total Active users 
+db.users.aggregate([
+    {
+        $match: { isActive: true}
+    },
+    {
+        $count: 'totalCount'
+    }
+])
+output: 
+[ { TotalCOunt: 516 } ] 
+
+db.users.aggregate([
+    {
+        $match: { isActive: true}
+    },
+    {
+        $group: { _id: null, totalCount: {$sum: 1}}
+    }
+])
+output: 
+[ { _id: null, totalCount: 516 } ]
+
+
+// $count Returns the number of documents in a group
+// $count is functionally equivalent to using { $sum : 1 } within the $group stage.
+// $count does not accept any parameters.
+db.users.aggregate([
+    {
+        $match: { isActive: true}
+    },
+    {
+        $group: { _id: null, totalCount: {$count: {}}}
+    }
+])
+output: 
+[ { _id: null, totalCount: 516 } ]
+
+=======================================================================================================
+
+Q2.calculate Avg age according to gender and also count total no of each gender
+
+db.users.aggregate([
+    {
+        $group:{
+            _id: '$gender',
+            totalCount: {$sum: 1},  //totalCount: {$count: {}}, 
+            avgAge: {$avg: '$age'}
+        }
+    }
+])
+output: 
+[
+  { _id: 'female', totalCount: 507, avgAge: 29.81854043392505 },
+  { _id: 'male', totalCount: 493, avgAge: 29.851926977687626 }
+]
+======================================================================================================
+
+Q3. find documents where the total revenue is greater than $10,000.
+hint: calculate total revenue by multiplying (quantity * price) and then compare it with 10000
+input: 
+[
+    { "_id": 1, "product": "Laptop", "quantity": 10, "price": 1200 },
+    { "_id": 2, "product": "Smartphone", "quantity": 15, "price": 800 },
+    { "_id": 3, "product": "Tablet", "quantity": 5, "price": 500 }
+]
+output: 
+[
+  { _id: 1, product: 'Laptop', quantity: 10, price: 1200 },
+  { _id: 2, product: 'Smartphone', quantity: 15, price: 800 }
+]
+query: 
+db.tb1.aggregate([
+    {
+        $match: {
+            $expr: {
+                $gt: [{$multiply: ['$quantity','$price']}, 10000]
+            }
+        }
+    }
+])
+explanation: 
+Document 1: $quantity * $price = 10 * 1200 = 12000
+Document 2: $quantity * $price = 15 * 800 = 12000
+Document 3: $quantity * $price = 5 * 500 = 2500
+Now, the $expr part compares the calculated revenue with 10000:
+Document 1: 12000 > 10000 (True)
+Document 2: 12000 > 10000 (True)
+Document 3: 2500 > 10000 (False)
+
+
+=========================================================================================================
+
+Q4: List 5 most common favoriteFruit;
+
+db.users.aggregate([
+    {
+        $group: {
+            _id: '$favoriteFruit',
+            totalCount: {$count: {}}
+        }
+    },
+    {
+        $sort: {
+            totalCount: -1
+        }
+    },
+    {
+        $limit: 1
+    }
+])
+
+
+=========================================================================================================
+
+Q5. Find total no of female and males.
+
+db.users.aggregate([
+    {
+        $group: {
+            _id: '$gender',
+            totalCount: {$count: {}}   // {$sum: 1}
+        }
+    }
+])
+output: 
+[
+  { _id: 'male', totalCount: 493 },
+  { _id: 'female', totalCount: 507 }
+]
+
+=========================================================================================================
+
+Q6. Find total no of female and males also calculate avg age in that group
+
+db.users.aggregate([
+    {
+        $group:{
+            _id: '$gender',
+            totalCount: {$count: {}},
+            avgAge: {$avg: '$age'}
+        }        
+    }
+])
+output: 
+[
+  { _id: 'male', totalCount: 493, avgAge: 29.851926977687626 },
+  { _id: 'female', totalCount: 507, avgAge: 29.81854043392505 }
+]
+
+
+=========================================================================================================
+
+Q7 Which country has the highest number of active users? 
+
+
+db.users.aggregate([
+    {
+        $match: {
+            isActive: true
+        }
+    },
+    {
+        $group: {
+            _id: '$company.location.country',
+            totalCount: {$count: {}} 
+        }
+    },
+    {
+        $sort: {
+            totalCount: -1
+        }
+    }
+])
+
+
+=========================================================================================================
+
+Q8 List all unique eye colors present in the collection
+
+db.users.aggregate([
+    {
+        $group: {
+            _id: '$eyeColor',
+            totalCount: {$sum: 1}
+        }
+    }
+]);
+
+
+=========================================================================================================
+
+Q9 What is the average number of tags per user?
+Data: 
+db.tb1.insertMany([
+    {_id: 1, age: 21, tags: [10, 20]},
+    {_id: 2, age: 22, tags: [10, 20, 30]},
+    {_id: 3, age: 23, tags: [10, 20, 30, 40, 50]},
+    {_id: 4, age: 24, tags: [10, 20]},
+    {_id: 5, age: 25, tags: [10]},
+])
+answer: 
+db.users.aggregate([
+  {
+    $project: {
+      numberOfTags: { $size: "$tags" }
+    }
+  },
+  {
+    $group: {
+      _id: null,
+      averageTagsPerUser: { $avg: "$numberOfTags" }
+    }
+  }
+]);
+
+solution 1: using $size,  
+Note: since i don't want to filter or group documents, i just want to create a new field for next stage which 
+contain size of tags in each document so i used $project. 
+step 1. create new field called 'numberOfTags' which contain no of tags in each element/size of tags array.
+db.tb1.aggregate([
+    {
+        $project: {
+            numberOfTags: {$size: '$tags'}
+        }
+    }
+])
+[
+  { _id: 1, numberOfTags: 2 },
+  { _id: 2, numberOfTags: 3 },
+  { _id: 3, numberOfTags: 5 },
+  { _id: 4, numberOfTags: 2 },
+  { _id: 5, numberOfTags: 1 }
+]
+Note: Note: age and tags fields are not included in next stage. if you want them then add them in $project.
+2. now calculate avg of numberOfTags by using $avg operator.
+db.users.aggregate([
+    {
+        $addFields: {
+            numberOfTags: {$size: {$ifNull: ['$tags', []]}}
+        }
+    },
+    {
+        $group: {
+            _id: null,
+            averageTags: {$avg: '$numberOfTags'} 
+        }
+    },
+    {
+        $project: {
+            _id: 0     // exclude _id field.
+        }
+    }
+])
+
+output: [ {averageTags: 3.556 } ]
+
+
+
+
+solution 2 : using $unwind
+Data: 
+[
+    {_id: 1, age: 21, tags: [10, 20]},
+    {_id: 2, age: 22, tags: [10, 20, 30]},
+    {_id: 3, age: 23, tags: [10, 20, 30, 40, 50]},
+    {_id: 4, age: 24, tags: [10, 20]},
+    {_id: 5, age: 25, tags: [10]},
+]
+step 1: unwind the arrays
+db.users.aggregate([
+    {
+        $unwind: '$tags'
+    }
+])
+output: 
+[
+  { _id: 1, age: 21, tags: 10 },
+  { _id: 1, age: 21, tags: 20 },
+  { _id: 2, age: 22, tags: 10 },
+  { _id: 2, age: 22, tags: 20 },
+  { _id: 2, age: 22, tags: 30 },
+  { _id: 3, age: 23, tags: 10 },
+  { _id: 3, age: 23, tags: 20 },
+  { _id: 3, age: 23, tags: 30 },
+  { _id: 3, age: 23, tags: 40 },
+  { _id: 3, age: 23, tags: 50 },
+  { _id: 4, age: 24, tags: 10 },
+  { _id: 4, age: 24, tags: 20 },
+  { _id: 5, age: 25, tags: 10 }
+]
+step 2: group according to _id field
+db.users.aggregate([
+    {
+        $unwind: '$tags'
+    },
+    {
+        $group: {
+            _id: '$_id',
+            numberOfTags: {$count: {}}
+        }
+    }
+])
+output: 
+[
+  { _id: 1, totalCount: 2 },
+  { _id: 2, totalCount: 3 },
+  { _id: 5, totalCount: 1 },
+  { _id: 4, totalCount: 2 },
+  { _id: 3, totalCount: 5 }
+]
+
+Step 3: Now calculate avg of totalCount
+db.tb1.aggregate([
+    {
+        $unwind: '$tags'
+    },
+    {
+        $group: {
+            _id: '$_id',
+            totalCount: {$sum: 1}
+        }
+    },
+    {
+        $group: {
+            _id: null,
+            averageTags: {$avg: '$totalCount'}
+        }
+    },
+    {
+        $project: {
+            _id: 0,    // exclude _id
+        }
+    }
+])
+
+[ { averageTags: 2.6 } ]
+
+
+
+solution 3: only in one stage
+
+db.tb2.aggregate([
+    {
+        $group:{
+            _id: null,
+            averageTags: {
+                $avg: {
+                    $size: {
+                        $ifNull: ['$tags', []]
+                    }
+                }
+            }
+        }
+    }
+])
+
+[ { _id: null, averageTags: 1.6666666666666667 } ]
+
+
+
+
+
+
+=========================================================================================================
+
+Q9 How many users have 'Drama' ?
+
+db.tb1.insertMany([
+    {_id: 1, name: 'movie1', tags: ['Drama', 'horror', 'Romance', 'Thriller', 'science']},
+    {_id: 2, name: 'movie2', tags: ['Drama', 'horror', 'Romance', 'Thriller', ]},
+    {_id: 3, name: 'movie3', tags: ['Drama', 'horror', 'Romance', ]},
+    {_id: 4, name: 'movie4', tags: ['Drama', 'horror']},
+    {_id: 5, name: 'movie5', tags: ['Drama']},
+    {_id: 6, name: 'movie6', tags: null},
+    {_id: 7, name: 'movie7', tags: ['Anime']}
+])
+
+// contain only Drama as a single field
+db.tb1.aggregate([
+    {
+        $match: {
+            tags: ['Drama']   
+        }
+    }
+])
+[ { _id: 5, name: 'movie5', tags: [ 'Drama' ] } ]
+
+// return documents where tags contain 'Thriller'
+db.tb1.aggregate([
+    {
+        $match: {
+            tags: 'Thriller'
+        }
+    }
+])
+[
+  {
+    _id: 1,
+    name: 'movie1',
+    tags: [ 'Drama', 'horror', 'Romance', 'Thriller', 'science' ]
+  },
+  {
+    _id: 2,
+    name: 'movie2',
+    tags: [ 'Drama', 'horror', 'Romance', 'Thriller' ]
+  }
+]
+
+// count total documents
+db.tb1.aggregate([
+    {
+        $match: {
+            tags: 'Thriller'
+        }
+    },
+    {
+        $count: 'Total Documents: '
+    }
+])
+[ { 'Total Documents: ': 2 } ]
+
+
+
+// return documents which contain both 'Thriller', 'Romance'
+db.tb1.aggregate([
+    {
+        $match:{
+            tags: {
+                $all: ['Thriller', 'Romance']
+            }
+        }
+    }
+])
+[
+  {
+    _id: 1,
+    name: 'movie1',
+    tags: [ 'Drama', 'horror', 'Romance', 'Thriller', 'science' ]
+  },
+  {
+    _id: 2,
+    name: 'movie2',
+    tags: [ 'Drama', 'horror', 'Romance', 'Thriller' ]
+  }
+]
+
+
+
+=========================================================================================================
+
+Q10 What are the names and ages of users who are inactive and have 'velit' as a tag?
+
+db.users.aggregate([
+  {
+    $match: {
+      $and: [
+        { isActive: false },
+        { tags: { $all: ['velit'] } }
+      ]
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      age: 1
+    }
+  },
+  {
+    $count: 'TotalCount'
+  }
+]);
+db.users.find({isActive: false, tags: {$all: ['velit']}}, {name: 1, age: 1, _id: 0}).count()
+
+
+
+
+=========================================================================================================
+
+Q10. How many users have 'Phone no starting with '+1 (940)'
+
+
+db.users.aggregate([
+  {
+    $match: {
+      'company.phone': { $regex: /^\+1 \(940\)/ }
+    }
+  }
+]);
+
+
+=============================================================================================
+
+
+Q11 latest registered users: 
+db.users.aggregate([
+    {
+        $sort: { 'registered': -1}
+    },
+    {
+        $project: {
+            _id: 0,
+            registered: 1
+        }
+    },
+    {
+        $limit: 5
+    },
+])
+[
+  { registered: ISODate("2018-04-14T03:16:20.000Z") },
+  { registered: ISODate("2018-04-11T12:52:12.000Z") },
+  { registered: ISODate("2018-04-11T07:18:42.000Z") },
+  { registered: ISODate("2018-04-09T04:54:20.000Z") },
+  { registered: ISODate("2018-04-09T03:38:27.000Z") }
+]
+
+
+
+=============================================================================================
+
+
+
+Q Categories users by their favoriteFruit
+
+
+db.users.aggregate([
+    {
+        $group: {
+            _id: '$favoriteFruit',
+            totalCount: {$count: {}}
+        }
+    }
+])
+
+
+
+
+
+
+
+
+
+
+
+
