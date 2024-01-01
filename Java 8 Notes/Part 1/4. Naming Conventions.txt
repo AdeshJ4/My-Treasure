@@ -1,0 +1,37 @@
+packages: java.awt, java.io, javax.swing
+Interface and class : String, HelloWorld, DataInputStream, ActionListener
+methods : fun(), print()
+variables: age, fname
+constanats: PI, MAX_VALUE
+keywords: public, void, static
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

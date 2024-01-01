@@ -1,0 +1,286 @@
+Control Statements: 
+
+1. if-else statements
+2. switch statements
+2. while loop
+3. do while loop
+4. for loop
+5. for-each loop
+6. break statement
+7. continue statement
+8. return statement
+
+
+
+switch statement: 
+int num = 100;
+switch (num){
+	case 10:    
+		System.out.println("Its 10");
+		break;
+	case 20: 
+		System.out.println("Its 20");
+		break;
+	default: 
+		System.out.println("Nothing");
+---------------
+
+if-else condition.
+if(10>51)
+	System.out.println("Correct");
+else if(10>5)    
+	System.out.println("Correct");
+else
+	System.out.println("Not Correct");
+
+----------------
+
+while loop: 
+//code: 1
+int x=1;
+while(x<=10){
+  sout(x);
+  x++;
+}
+// code 2 : infinite loop
+int x=0;
+while(x<10){
+  sout(x);
+}
+
+-----------------------
+
+do-while Loop:
+int x=0;
+do{
+  sout(x); 
+  x++;
+}while(x<10);
+
+
+-----------------------
+
+
+for loop: 
+// code 1
+for(int i=1; i<=10; i++){
+	sout(i);
+}
+// code 2
+int i=1;
+for(; i<=10; ){
+	System.out.println(i);
+	i++;
+}
+// code 3 : infinite loop
+int i=0;
+for( ; ; ){
+	sout(i);
+	i++;
+}
+
+
+
+-------------------
+
+
+for-each loop: 
+
+-> for each loop is used to iterate over elements in an array or a collection.
+-> collections: Stack, LinkedList, Vector, ArrayList
+
+// code 1: array
+int[] arr = {10, 20, 30, 40, 50};
+for(int num : arr){
+	sout(num);
+}
+// code 2: ArrayList collection
+List<String> names = new ArrayList<>();
+names.add("Alice");
+names.add("Bob");
+names.add("Charlie");
+// Using for-each loop to iterate over list elements
+for (String name : names) {
+System.out.println(name);
+}
+
+
+
+
+-----------------------------------------
+
+
+break statement: 
+
+-> block is used inside a loop to come out of it.
+-> block is used inside a switch to come out of it.
+-> break can be used in nested blocks to go to tthe end of the block.
+
+// single for loop
+for(int i=1; i<10; i++){
+	if(i==5)
+	   break;
+	
+	sout(i);  // 1, 2, 3, 4
+}
+
+// nested for loop
+for (int i=1; i<=10; i++){
+	System.out.println("i : " + i);
+	for(int j=0; j<10; j++){
+		if(j == 5){
+			break;
+		}
+	System.out.println("j : " + j);
+	}
+}
+
+
+// nested blocks
+public static void main(String[] args) {
+        boolean x = true;
+        b1:{
+            b2:{
+                b3:{
+                    System.out.println("Block 3");
+                    if(x) break b2;
+                }
+                System.out.println("Block 2");
+            }
+            System.out.println("Block 1");
+        }
+
+        System.out.println("Outside of all blocks");
+    }
+output: 
+Block 3
+Block 1
+Outside of all blocks
+
+
+
+--------------------------------------
+
+
+continue statements: 
+
+-> continue statement is used inside a loop.
+-> when continue is executed, subsequent statements in the loop are not executed and control of execution goes to the next repetition of the loop.
+
+for (int i=0; i<=5; i++){
+	if(i==3)
+		continue;
+	System.out.println(i);
+}
+output: 
+0
+1
+2
+4 <---- 3 is missing
+5
+
+
+
+------------------------------------------
+
+
+
+return statement: 
+
+-> return statement is used in a method to come out of it to the calling method.
+-> The firest method that is executed in a java program by the JVM is main() method.
+return 1;
+return true;
+return (x+y);
+
+//code 1: terminate the application using return
+main(){
+   if(true)  return;
+}
+// code 2: terminate the application using System.exit(0)
+main(){
+   if(true)  System.exist(0);
+}
+// code 2: terminate the application using System.exit(1)
+main(){
+   if(true)  System.exist(1);
+}
+
+difference between System.exist(0) & System.exist(1)
+-> exist() is a static method of System class.
+-> Bith 0 and 1 is used to terminate the application
+-> 0 represent normal termination
+-> 1 represent termination due to some error.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,162 @@
+Data types are divided into two groups: 
+
+
+1. Primitive data types -  byte, short, int, long, float, double, boolean and char
+2. Non-primitive data types - String, Arrays and Classes, Interfaces, Enum
+
+
+
+1. Primitive data types -  byte, short, int, long, float, double, boolean and char
+==================================================================================
+
+
+Integer Data Type: 
+==================
+1. byte -> 1byte -> -128 to +127
+2. short -> 2bytes -> -32768 to +32767
+3. int -> 4bytes -> −2^31 to 2 ^31
+4. long -> 8bytes -> -2^63 to 2^63
+
+Note: write l or L at the end of long value. otherwise JVM will allocate 2bytes of memory instead of 8bytes.
+
+
+Float Data type: 
+================
+1. float -> 4bytes -> Sufficient for storing 6 to 7 decimal digits
+2. double-> 8 bytes -> Sufficient for storing 15 decimal digits
+
+Note: at the end of float write F. otherwise JVM will asume float to be double. ex. float num = 1.25f;
+
+
+Character Data type: 
+==================
+char: 2 bytes -> Stores a single character/letter or ASCII(American Standard Code for Information Interchange) values. -> range: (0 to 65655)
+ex. 
+char ch = 'A';
+char letterA = 65;
+char letterB = 66;
+char letterC = 67;
+System.out.println("A: " + letterA);
+System.out.println("B: " + letterB);
+System.out.println("C: " + letterC);
+
+Note : All characters on the keyboard are translated into integer values called ASCII. 
+ASCII range: (0 to 65535)
+
+
+Boolean Data Type: 
+=================
+boolean: 1 bit -> Stores true or false values
+
+
+
+
+
+
+
+
+
+
+2. Non-primitive data types - String, Arrays and Classes, Interfaces, Enum: 
+============================================================================
+Non-primitive data types are also known as reference types. They do not store the actual data but store references (memory addresses) to the location where the data is stored. Common non-primitive types include classes, interfaces, arrays, and enumerated types.
+
+They are more complex and flexible than primitive types
+They can have methods and be used to create complex data structures
+Objects of non-primitive types are stored in the heap memory.
+
+like date objects, mail messages these are complex objects.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+what is diiference between Primitive data types and Non-primitive data types in java
+======================================================================================
+
+Java is strictly "pass-by-value." In Java, when you pass a primitive data type to a method, a copy of the value is passed.
+ When you pass an object, the reference to the object is passed by value.
+
+
+-> The major difference is that, inside a primitive data type we store a simple values like number, boolean, float etc.
+but inside a non primitive data type or reference datatype we store references (memory addresses)  where the data is stored.
+
+
+public class HelloWorld {
+    int num1;
+
+    public HelloWorld(int num1) {
+        this.num1 = num1;
+    }
+
+    public static void main(String[] args){
+        HelloWorld obj1 = new HelloWorld(10);
+        HelloWorld obj2;
+        
+        obj2 = obj1;
+        obj2.num1++;
+        System.out.println("obj1: " + obj1.num1);
+        System.out.println("obj2: " + obj2.num1);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

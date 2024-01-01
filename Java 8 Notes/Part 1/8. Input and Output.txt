@@ -1,0 +1,88 @@
+-> A stream required to accept input from the keyboard.
+-> A stream represent flow of data from one place to another place.
+-> A stream is always required if we want to move data from one place to another.
+
+-> Basically there are two types of streams are there; 
+1. Input stream
+2. output stream
+
+-> Input stream receives or read data from some other places.
+-> Output stream sends or write data.
+
+-> All Streams are represent by classes in java.io (i/p & o/p) 
+
+
+We use InputStreamReader  that can read data from the keyboard
+We use BufferedReader as it has got methods to read data properly.
+
+Now connect InputStreamReader to BufferReader: 
+InputStreamReader obj = new InputStreamReader(System.in);
+BufferedReader br = new BufferedReader(obj); 
+
+System.in: This represent InputStream object which by default represent standard input device, i.e keyboard.
+
+Now we can read data comming from the keyboard using readLine() and read().
+
+
+
+
+Scanner class: 
+--------------
+The Scanner class in Java is part of the java.util package 
+The Scanner class in Java is commonly used to take input from the user. It provides convenient methods to read various types of input, such as integers, floating-point numbers, strings, and more, from different sources like the console or files.
+
+nextInt(): Scans the next token of the input as an int.
+nextLong(): Scans the next token of the input as a long.
+nextDouble(): Scans the next token of the input as a double.
+nextFloat(): Scans the next token of the input as a float.
+nextByte(): Scans the next token of the input as a byte.
+nextShort(): Scans the next token of the input as a short.
+nextBoolean(): Scans the next token of the input as a boolean.
+next(): read word
+nextLine(): read whole sentence 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

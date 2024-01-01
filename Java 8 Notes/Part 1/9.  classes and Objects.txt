@@ -1,0 +1,56 @@
+
+class and objects: 
+-------------------
+
+-> Classes and Objects are reference types.
+
+
+
+Objects: 
+
+-> The entire OOP methodology has been derived from a single root concept called 'object'. 
+-> An object is anything that really exists in the world.
+-> Objects are created on heap memory by JVM at run time.
+For example, a table, a ball, a car, a dog, a person, etc., every thing will come under objects. 
+-> Then what is not an object? If something does not really exist, then it is not an object. For example, our thoughts, imagination, plans, ideas etc., are not objects, because they do not physically exist.
+-> Every object has properties(variables) and can perform certain actions(methods). 
+For example, let us take a person whose name is 'Raju'. Raju is an object because he exists physically. He has properties like name, age, gender, etc. These properties can be represented by variables in our programming. 
+For example,
+String name;
+int age: 
+char gender: M/F
+Similarly, Raju can perform some actions like talking, walking, eating and sleeping. 
+These actions are performed by methods (functions). 
+So an object contains variables and methods.
+
+
+class: 
+
+-> Collection of objects is called class. It is a logical entity.
+-> A class is a blueprint or a template that defines the structure and behavior of objects.
+-> It specifies the fields (data members) and methods (functions) that objects of the class will have.
+-> When you create an object of a class, you are essentially instantiating that class.
+-> Class doen't consume memory.
+-> when we create a object of class than memory is assigned to a class 
+It is possible that some objects may have similar properties and actions. Such objects belong to same category called a 'class'. 
+For example, not only Raju, but also Ravi, Sita, Vijay, etc., persons have same properties and actions. So they are all objects of same class, 'Person'. Now observe that the 'Person' will not exist physically but only Raju, Ravi, Sita etc. exist physically.
+
+-> a "building sketch" is class and real building is object. using that single sketch builder can build lots of buildings.
+
+class : Fruit
+Objects: banana, cherry, Apple
+
+class : Flower
+Objects: Lotus, Rose
+
+
+
+Person raju = new Person();
+
+Here raju is a variable of a class Person and stores reference number of a object returned by JVM.
+
+
+
+
+
+

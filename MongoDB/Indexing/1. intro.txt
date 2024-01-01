@@ -1,0 +1,619 @@
+Collscan -> scan like linear search means search document one by one.
+IXScan -> Indexing scan -> Fast -> 
+
+When you create an index on a field, MongoDB stores a 'data structure' that contains the indexed values along 
+with references to the corresponding documents. The index does not store complete documents; instead, it 
+stores the values of the indexed field in a sorted order, and each value is associated with a reference 
+(or pointer) to the document that contains that value.
+
+Specifically, for a single-field index on the "age" field, MongoDB will store the distinct age values in 
+sorted order, and for each unique age value, it will maintain references to the documents in the collection 
+where that age value is present.
+
+Here's a simplified example to illustrate the concept:
+
+Suppose you have the following documents in your "users" collection:
+
+{ "_id": 1, "name": "Alice", "age": 25 }
+{ "_id": 2, "name": "Bob", "age": 30 }
+{ "_id": 3, "name": "Charlie", "age": 25 }
+
+If you create an index on the "age" field, MongoDB's index data structure might look like this:
+
+Age Index:
+25 -> [1, 3]   // References to documents with age=25   [1, 3] are _id numbers
+30 -> [2]      // Reference to the document with age=30
+
+
+In this example, the "Age Index" is sorted by age values, and each age value is associated with references to the documents that have that age value. When you query for a specific age, MongoDB can use this index to quickly locate the relevant documents without having to scan the entire collection.
+
+Keep in mind that the actual data structures used by MongoDB for indexing are more sophisticated, and the example above is simplified for illustrative purposes. MongoDB uses B-tree or hashed indexes, depending on the type of index and other factors, to efficiently support a wide range of query patterns.
+
+
+if you create a index on a field like 'name' then it create a separate data structure where we stored all 
+sorted values of name field. then if you search for a given name then index scan will be done not a collscan.
+mongodb will search that name inside special data structure.   
+-> Index scan apply binary search because data is already sorted.
+
+-> Indexing also helps in sorting.
+because of index data is already sorted so $sort operator will not sort data from starting instead it will
+take of that sorted data.
+
+-> Indexes are stored in a B-tree data structure.
+-> It stores 
+    1. Index keys
+    2. Pointers to the documents in the collection.
+
+
+The trade off: 
+
+Storage space: 
+-> jitna jyada Indexes tayar karoge utna jyada space lagega.
+-> If you create multiple indexes then space required to store that index will also increases.
+
+write performance:
+-> write means when you insert document inside a collection.
+-> when you insert a new document in a collections that document goes inside our collection as well as it also
+goes inside B-tree which stored sorted data according to index.  
+B-Tree has to perform sorting again to place that new document which takes time.
+-> if your operation is read then its ok.
+-> If there is collect where insert/write operations are more then creating more indexes will be dangerous.
+
+
+
+
+db.collection.find({}).explain()
+db.collection.find({}).explain('executionStats')
+
+without index:
+db.collection.find({}).explain('executionStats')
+myDB> db.users.find({age: {$gt: 20}}).explain('executionStats')
+{
+  explainVersion: '1',
+  queryPlanner: {
+    winningPlan: {
+      stage: 'COLLSCAN',
+      filter: { age: { '$gt': 20 } },
+      direction: 'forward'
+    },
+    rejectedPlans: []
+  },
+  executionStats: 
+    nReturned: 954,                     <--------------
+    totalDocsExamined: 1000,            <--------------
+    executionTimeMillis: 0,
+    executionStages: {
+      stage: 'COLLSCAN',                <--------------
+      filter: { age: { '$gt': 20 } },
+      direction: 'forward',
+    }
+},
+
+after applying index : 
+myDB> db.users.find({age: {$gt: 20}}).explain('executionStats')
+{
+  explainVersion: '1',
+  queryPlanner: {
+    winningPlan: {
+      stage: 'FETCH',               <--------------------------
+      inputStage: {
+        stage: 'IXSCAN',            <--------------------------
+        keyPattern: { age: 1 },     <--------------------------
+        indexName: 'age_1',         <--------------------------
+        isMultiKey: false,
+        multiKeyPaths: { age: [] },
+        indexVersion: 2,
+        direction: 'forward',
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    nReturned: 954,             <--------------------------
+    totalDocsExamined: 954,     <--------------------------
+    executionTimeMillis: 1,
+    executionStages: {
+      stage: 'FETCH',           <--------------------------
+      nReturned: 954,
+      inputStage: {
+        stage: 'IXSCAN'         <--------------------------,
+        direction: 'forward',
+      }
+    }
+  },
+  command: { find: 'users', filter: { age: { '$gt': 20 } }, '$db': 'myDB' },
+}
+
+
+1. create index
+myDB> db.users.createIndex({age: 1})
+age_1
+Note: You can create multiple indexes on the same field.
+db.users.createIndex({age: -1});  // descending 30-20-10
+db.users.createIndex({age: 1});   // ascending order 10-20-30
+db.users.getIndexes()
+[
+    {v:2, key:{_id: 1}, name: '_id_'},
+    {v:2, key:{age: -1}, name: 'age_-1'},
+    {v:2, key:{age: 1}, name: 'age_1'},
+]
+
+2. get Index
+myDB> db.users.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { age: 1 }, name: 'age_1' }
+]
+_id field have by default index on it.
+
+3. drop index
+myDB> db.users.dropIndex('age_1')
+{ nIndexesWas: 2, ok: 1 }
+
+
+
+
+
+
+
+when not to use indexing in mongodb?
+
+1. When the collection is small
+2. When the collection is frequently updated (write operation are more)
+3. When the queries are complex (complex queries contain multiple fields -> multiple indexes - more storage)
+4. When the collection is large ( more documents -> will take more space in index )
+
+
+
+
+
+
+
+Types of indexes: 
+
+1. Single field index
+2. Compound indexes
+3. Text indexes
+
+
+1. Single field index: 
+db.users.createIndex({age: 1})  // field_Name: order(1: ascending, -1: descending)
+
+
+
+2. Compound Indexes: 
+db.users.createIndex({age: 1, gender: 1})   // order matters
+age_1_gender_1
+db.users.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { age: 1, gender: 1 }, name: 'age_1_gender_1' }
+]
+first data will be sorted according to age then by gender.
+all documents having age=30 will be sorted by gender. 'F' comes first than 'M'
+then documents having age=31 will be sorted by gender. and this goes on
+data: 
+[
+    {age: 31, gender: 'M'},
+    {age: 31, gender: 'F'},
+    {age: 30, gender: 'M'},
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 29, gender: 'F'},
+    {age: 29, gender: 'F'},
+]
+after applying index: 
+[
+    {age: 29, gender: 'F'},
+    {age: 29, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'M'},
+    {age: 31, gender: 'F'},
+    {age: 31, gender: 'M'},
+]
+
+db.users.createIndex({gender: 1, age: 1});  // order matters
+gender_1_age_1
+first data will be sorted according to gender then by age.
+all documents having gender='F' will be sorted by age.
+then documents having gender='M' will be sorted by age.
+data: 
+[
+    {age: 31, gender: 'M'},
+    {age: 31, gender: 'F'},
+    {age: 30, gender: 'M'},
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 29, gender: 'M'},
+    {age: 29, gender: 'F'},
+]
+after applying index: 
+[
+    {age: 29, gender: 'F'},  // F = 29-30-31
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 31, gender: 'F'},
+    {age: 29, gender: 'M'},  // M = 29-30-31
+    {age: 30, gender: 'M'},
+    {age: 31, gender: 'M'},
+]
+
+
+myDB> db.users.find({age: {$gt: 39}, gender: 'male'}).count()
+21
+myDB> db.users.find({gender: 'male', age: {$gt: 39}}).count()
+21
+myDB> db.users.find({age: {$gt: 38}}).count()
+103
+myDB> db.users.find({gender: 'male'}).count()
+493
+
+without indexing
+myDB> db.users.find({age: {$gt: 39}, gender: 'male'}).explain('executionStats')
+{
+  executionStats: {
+    stage: 'COLLSCAN',
+    nReturned: 21,
+    totalDocsExamined: 1000,
+  },
+}
+
+with indexing : age_1_gender_1
+myDB> db.users.find({age: {$gt: 39}, gender: 'male'}).explain('executionStats')
+{
+  executionStats: {
+    stage: 'IXSCAN',
+    nReturned: 21,
+    totalDocsExamined: 21,
+    indexName: 'age_1_gender_1'
+    }
+}
+
+with indexing : age_1_gender_1
+myDB> db.users.find({gender: 'male', age: {$gt: 39}}).explain('executionStats')
+{
+  executionStats: {
+    stage: 'IXSCAN',
+    nReturned: 21,
+    totalDocsExamined: 21,
+    indexName: 'age_1_gender_1'
+  }
+}
+
+with indexing : age_1_gender_1
+myDB> db.users.find({age: {$gt: 38}}).explain('executionStats')
+{
+    executionStages: {        
+        stage: 'IXSCAN',
+        nReturned: 103,
+        docsExamined: 103,
+        indexName: 'age_1_gender_1',
+    }
+}
+
+with indexing : age_1_gender_1
+myDB> db.users.find({gender: 'male'}).explain('executionStats')
+{
+  executionStats: {
+        stage: 'COLLSCAN',
+        nReturned: 493,
+        totalDocsExamined: 1000
+  }
+}
+
+Note: here MongoDB applied 'COLLSCAN' even though we have index. 
+because first data is sorted according to age then according to gender.
+gender did its sorting in each age group, like in 'age=30 group' 'gender sorting' is done. in 'age=31 group'
+'gender sorting' is done.
+so there is no use of index.
+data with index: age_1_gender_1: 
+[
+    {age: 29, gender: 'F'},
+    {age: 29, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'F'},
+    {age: 30, gender: 'M'},
+    {age: 31, gender: 'F'},
+    {age: 31, gender: 'M'},
+]
+
+
+
+
+
+
+
+unique constraint: 
+==================
+db.users.createIndex({name: 1}, {unique: true})
+-> this stores unique names.
+-> It will not store duplicate name data.
+
+
+
+
+
+
+
+partial indexing: 
+================
+ex.1
+-> db.users.createIndex({age: 1}, {partialFilterExpression: {age: {$gt: 22}}})
+-> the given query creates an index on the "age" field and it includes only documents in the ascending order 
+inside index where the "age" field has a value greater than 22.
+
+ex.2
+-> db.users.createIndex({name: 1}, {partialFilterExpression: {gender: {$exists: true}}});
+-> the given query creates an index on the "name" field but only includes documents in the ascending order
+inside index where the "gender" field exists. 
+
+
+
+
+
+
+
+
+Delete index after given time: 
+===============================
+only works on date field and on single field index
+db.users.createIndex({dob: 1}, {expireAfterSeconds: 3600})
+
+
+
+
+
+
+
+
+
+
+What is covered query: 
+=========================
+->  A covered query is a query in which 
+    1. All the fields in the query(inside query object) are part of an index.
+    2. All the fields returned in the query are in the are in the same index.
+    3. that means required data is present in the index
+-> Covered queries are faster than other queries.
+
+db.tb1.find({name: 'Adesh'}, {_id: 0, name: 1})
+
+in this query we have index on 'name' field also we are returning only 'name'.
+so it will not check associated reference document to that index.
+we all know that inside a index we stored index value[10,20,30] as well as reference document to that index.
+if we write query like this: 
+db.users.find({name: 'Adesh'});
+even we have index on a name field, we have to go in our collection to return all other fields related to that
+name field. but if we write query like in 1st example then we don't have go inside collections to return all
+fields of that name.
+the data retrieval can be accomplished solely from index without the need to access the actual documents in 
+the collection. In other words, all the information required to satisfy the query is present in the index 
+itself.
+
+age field have index store on it. age_1.
+here i am returning only age. so we have 'covered query'
+myDB> db.users.find({age: {$gt: 39}}, {_id: 0, age:1}).explain('executionStats')
+{
+    winningPlan: {
+      stage: 'PROJECTION_COVERED',    <-------------------------------
+      transformBy: { _id: 0, age: 1 },
+      inputStage: {
+        stage: 'IXSCAN',        <--------------------------------------
+      }
+    },
+}
+
+age field have index store on it. age_1
+here i am returning all fields. so we don't have covered query
+myDB> db.users.find({age: {$gt: 39}}).explain('executionStats')
+{
+    winningPlan: {
+      stage: 'FETCH',   <-------------------------------
+      inputStage: {
+        stage: 'IXSCAN', <-------------------------------
+      }
+      }
+}
+
+
+
+
+
+
+
+
+
+
+Winning Plan : 
+
+In MongoDB, when you execute a query, the database engine generates an execution plan to determine how to 
+retrieve the requested data most efficiently. The "winning plan" refers to the selected execution plan that 
+MongoDB chooses based on its query planner's analysis of available indexes, statistics, and other factors.
+
+To view the winning plan for a query, you can use the explain method. 
+The explain method provides information about the query execution, including the selected plan, index usage, 
+and other details.
+db.collection.find({ age: 25 }).explain("executionStats");
+
+ex: 
+which index will be used for same query.
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { age: 1 }, name: 'age_1' }
+  { v: 2, key: { age: 1, name: 1}, name: 'age_1_name_1' }
+]
+
+here we have two indexes on the same field. 
+1. age_1
+2. age_1_name_1
+
+so which index will be applied on bellow query: 
+db.users.find({age: 21})
+
+so for this scenarios mongodb : 
+
+if we have multiple indexes corresponding to given query as show on above examples, then mongodb will collect
+some random documents before the execution of the query and perform performance testing related to that indexes.
+which index is giving best performance? that index is going to be stored inside a winning plan and rejected 
+index will be goes inside a rejected plan.
+
+It stores that winning plan in cache.
+if second time this query executed then mongodb will not check performance again, instead it checks cache.
+
+myDB> db.users.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { age: 1, gender: 1 }, name: 'age_1_gender_1' },
+  { v: 2, key: { age: 1 }, name: 'age_1' }
+]
+myDB> db.users.find({age: {$gt: 38}}).explain('executionStats')
+{
+    winningPlan: {
+      stage: 'FETCH',
+      inputStage: {
+        stage: 'IXSCAN',
+        indexName: 'age_1_gender_1',  <--------------------------
+      }
+    },
+    rejectedPlans: [
+      {
+        stage: 'FETCH',
+        inputStage: {
+          stage: 'IXSCAN',
+          indexName: 'age_1',  <-------------------------------
+        }
+    }
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+Multi Key Index
+
+-> A multi key index is an index that can be created on an array field.
+-> MongoDB will create separate index for each value of array element.
+-> so it can quickly look up document that match a specific value.
+-> Space will be more compared to normal index.
+-> Keep in mind that using multikey indexes comes with certain considerations, such as increased index size 
+and potential performance impacts during updates to the array field.
+
+db.movies.insertMany([
+    {_id: 1, name: 'A', hobbies: ['Drama', 'Romance']},
+    {_id: 2, name: 'B', hobbies: ['Anime']},
+    {_id: 3, name: 'C', hobbies: ['Hentai', 'Anime']},
+    {_id: 4, name: 'D', hobbies: ['Drama', 'Romance', 'Thriller']}
+]);
+
+so if i create a index on 'hobbies' then mongodb will create index entry on 'Drama', 'Romance' and so on..
+
+myDB> db.movies.createIndex({hobbies: 1})
+hobbies_1
+
+myDB> db.movies.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { hobbies: 1 }, name: 'hobbies_1' }
+]
+
+myDB> db.movies.find({hobbies: 'Anime'}).explain('executionStats')
+{
+    executionStages: {
+      stage: 'FETCH',
+        stage: 'IXSCAN',
+        nReturned: 2,
+        indexName: 'hobbies_1',  <-----------------------------
+      }
+}
+
+
+
+
+
+
+=============================================================================================================
+
+
+
+
+
+
+
+Text Index: 
+============
+
+
+-> Single Text Index per collection.
+-> Tokenization and stemming
+-> Relevance score
+
+db.bio.insert([
+    {_id: 1, name: 'Adesh', bio: 'I am youtuber'},
+    {_id: 2, name: 'Akshay', bio: 'I am youtuber and actor'},
+    {_id: 3, name: 'Manoj', bio: 'student'},
+    {_id: 4, name: 'Ram', bio: 'swimmer'},
+    {_id: 5, name: 'Swarali', bio: 'youtuber'}
+])
+
+db.users.createIndex({name: "text"})  -> name_text
+db.users.createIndex({name: 'text', bio: 'text'})  -> name_text_bio_text
+
+myDB> db.bio.createIndex({name: 'text', bio: 'text'})
+name_text_bio_text
+myDB> db.bio.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { _fts: 'text', _ftsx: 1 },
+    name: 'name_text_bio_text',
+    weights: { bio: 1, name: 1 },
+    default_language: 'english',
+    language_override: 'language',
+    textIndexVersion: 3
+  }
+]
+
+myDB> db.bio.find({$text: {$search: 'youtube'}})
+[
+  { _id: 5, name: 'Swarali', bio: 'youtuber' },
+  { _id: 1, name: 'Adesh', bio: 'I am youtuber' },
+  { _id: 2, name: 'Akshay', bio: 'I am youtuber and actor' }
+]
+
+
+myDB> db.bio.find({$text: {$search: 'youtube and actor'}})
+[
+  { _id: 2, name: 'Akshay', bio: 'I am youtuber and actor' },
+  { _id: 5, name: 'Swarali', bio: 'youtuber' },
+  { _id: 1, name: 'Adesh', bio: 'I am youtuber' }
+]
+
+// exclude actor
+myDB> db.bio.find({$text: {$search: 'youtube -actor'}})
+[
+  { _id: 5, name: 'Swarali', bio: 'youtuber' },
+  { _id: 1, name: 'Adesh', bio: 'I am youtuber' }
+]
+
+myDB> db.bio.find({$text: {$search: 'student Ram'}})
+[
+  { _id: 4, name: 'Ram', bio: 'swimmer' },
+  { _id: 3, name: 'Manoj', bio: 'student' }
+]
+
+
+// check score of query
+db.bio.find({$text: {$search: 'student Adesh'}}, {hamaraScore: {$meta: 'textScore'}})
+[
+  { _id: 1, name: 'Adesh', bio: 'I am youtuber', hamaraScore: 1.1 },
+  { _id: 3, name: 'Manoj', bio: 'student', hamaraScore: 1.1 }
+]
