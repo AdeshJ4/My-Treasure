@@ -1,0 +1,18 @@
+-- 12 hours with AM/PM
+-- select id, TIME_FORMAT (order_time, "%r") AS Formatted_Time FROM demo;
+
+-- 24 hours with AM/PM
+-- select id, TIME_FORMAT (order_time, "%T %p") AS Formatted_Time FROM demo;  
+
+-- 24 hour format - hours
+-- select id, TIME_FORMAT (order_time, "%H") AS Item_OrderHour FROM demo;  
+
+-- 12 hour format - hours
+-- select id, TIME_FORMAT (order_time, "%h") AS Item_OrderHour FROM demo;  
+
+-- Get only minute part
+-- select id, TIME_FORMAT (order_time, "%i") AS Item_OrderMinute FROM demo;  
+
+-- Get only second part
+-- select id, TIME_FORMAT (order_time, "%S") AS Item_OrderMinute FROM demo;  
+

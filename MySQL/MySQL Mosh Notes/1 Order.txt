@@ -1,0 +1,5 @@
+Select
+from
+where
+order by
+limit

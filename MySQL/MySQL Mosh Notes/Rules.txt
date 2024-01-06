@@ -1,0 +1,11 @@
+This must be order
+
+select * 
+from table_name
+where col_name = value
+order by col_name;
+
+
+
+
+ 

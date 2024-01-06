@@ -1,5 +1,6 @@
 every() 
 
+-> return true/false
 -> every() method checks if all the array elements pass the given test or not
 -> return true if all elements pass the test otherwise false.
 -> some() method also similar to this method but it return true if at least one element pass the test.

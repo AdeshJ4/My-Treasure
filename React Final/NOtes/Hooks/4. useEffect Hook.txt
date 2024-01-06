@@ -171,12 +171,13 @@ export default App;
 
 
 
-update the document title when certain data changes:
+DOM manipulation
 ----------------------------------------------------
 
+
+// document.title
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
 const UseMe = () => {
   const [users, setUsers] = useState([]);
 
@@ -203,7 +204,6 @@ const UseMe = () => {
       console.log("error: ", err);
     }
   }
-
   return <>
     {users ? (
       <ul>
@@ -215,7 +215,26 @@ const UseMe = () => {
   </>;
 };
 
-export default UseMe;
+
+
+// document.body.style.background
+const App = () => {
+  const [backgroundColor, setBackgroundColor] = useState('white');
+  const [inputColor, setInputColor] = useState('');
+
+  useEffect(() => {
+    // Update the background color when the inputColor state changes
+    document.body.style.backgroundColor = backgroundColor;
+  }, [backgroundColor]); // Only re-run the effect when backgroundColor changes
+
+  return (
+    <div>
+      <input type="text" value={inputColor} onChange={(e)=>setInputColor(e.target.value)}/>
+      <button onClick={()=> setBackgroundColor(inputColor)}>Change Color</button>
+    </div>
+  );
+};
+
 
 
 
@@ -330,7 +349,7 @@ export default UseMe;
 
 How to fetch data in react js : 
 
-There are mainly two ways of fetching data in ract: 
+There are mainly two ways of fetching data in react: 
 
 1. Fetch API: 
 2. Using Axios:

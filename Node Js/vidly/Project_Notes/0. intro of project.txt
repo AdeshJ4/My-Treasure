@@ -73,6 +73,52 @@ key features of the Node.js Vidly project:
 
 
 
+REST API:(Representational State Transfer Application Programming Interface)
+-----------------------------------------------------------------------------
+-> we use Node js to build backend services also call APIs.
+-> REST stands for Representational state transfer and it is a thesis which is provided by student in his university.
+-> REST is use for building 'http services' that client can access.
+-> HTTP services refer to the communication and exchange of data between clients (such as web browsers) and servers over the 
+Internet using the HTTP protocol.
+-> RESTful APIs use HTTP methods (GET, POST, PUT, DELETE) to perform CRUD (Create, Read, Update, Delete) operations on 
+resources.
+
+APIs : 
+-> API Stands for "Application Programming Interface".
+-> The API acts as middleware or bridge between the frontend(client-side applications) and backend(server-side applications or 
+services).
+-> It defines a set of rules and protocols, structured way for how the frontend can communicate with the backend
+-> When the frontend needs to interact with the backend, it sends API requests. These requests specify the desired action (e.g., 
+fetching data, updating records) and may include additional information.
+-> In the backend, The backend processes these requests, performs the necessary operations, and sends back API responses containing 
+the results.
+> In summary, APIs serve as a bridge between the frontend and backend, allowing them to communicate in a standardized and structured 
+manner.
+
+
+HTTP Verbs and Resource URIs:
+-----------------------------
+GET /users/1 - Retrieve user with ID 1.
+GET /users - Retrieve a list of users.
+POST /users - Create a new user.
+PUT or PATCH /users/1 - Update user with ID 1.
+DELETE /users/1 - Delete user with ID 1.
+
+Status codes: 
+-------------
+200 -> Success/OK  (The HTTP status code 200 represents success which means the page you have requested has been fetched.)
+201 -> Created
+400 -> Bad Request  (When the client sends a requests and the server is not able to understand anything, it displays a 400 HTTP status 
+code.)
+401 -> unauthorized (This HTTP status code requires user authentication.)
+403 -> Forbidden (The HTTP status code 403 implies that the request is understood by the server, but still refuses to fulfill it.)
+404 -> Not Found (404 HTTP Status code appears when you request a URL and then the server has not found anything.)
+500 -> Internal server error (A valid request was made by the client but the server failed to complete the request) 
+
+
+
+
+
 1. Customer API : 
 
 -> Inside a customer api i have different route handlers to handle different kinds of requests.
@@ -114,16 +160,22 @@ deleting a genre
 3. create rental 
 
 
+
+
+
 5. User API: 
 
 -> user api is most important api because in this api i implement logic of authentication and authorization
 -> User api  have most important route handlers.
 
-we have two route handlers in this api : 
+we have three route handlers in this api : 
 1. route handler for register User
 2. route handler for login user
+3. route handler for getting current user.
 
-authentication: 
+
+
+authentication: Login endpoint
 -> In the authentication part we are checking the employees is valid employees or not 
 -> it contain checking email id and password of the employee. 
 -> if the user is valid then we are going to give access to the application.
@@ -132,7 +184,10 @@ authentication:
 -> in this route handler, we are going to store a password of a employee in a database.  we are not going to store original p/w
 in the database instead we are going to hashed the password convert it into a encrypted text and that encrypted p/w is 
 
-login user: 
+register endpoint: 
+-> The concept of authentication is not specifically for registering users, but rather for verifying the identity of individuals 
+or entities accessing a system or service. Authentication is a process used to confirm that a user, application, or system is who 
+or what it claims to be.
 
 
 authorization: 
@@ -142,22 +197,113 @@ authorization:
 -> In the authorization part we are checking the employee have access to a particular api end point or not.
 -> like some endpoint are very important like deleting a movie, deleting a customer, deleting a genre, deleting a rental as well as
 deleting a user, so basically all the deleting operations are very important and only be accessible by admin.
+-> So all delete endpoints are not accessible by employee, they are accessible for admin only.
+Note: 
+----
+for ADMIN we have to specify the "isAdmin" property from database. 
+whichever user you want to make Admin you have to add "isAdmin" property inside database for that user.
+for normal employee we  don't have "isAdmin" property.
 
 
 
 
 
 
+JSON Web Token (JWT):
+---------------------
+
+-> A JSON Web Token is a JSON object encoded as a long string. 
+Ex. token looks like this :  
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkZXNoIiwiZW1haWwiOiJhZGVqYWQxMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE2Nzg3NzA2NTUsImV4cCI6MTY3ODc3MDk1NX0.0CmG7Ykj69lK0EbUtShPBbAV6pyKefSYKRZNUqJGTZU"
+-> We use them to identify user's identity and any relevant user roles or permissions.
+In our ex t check user is normal employee or admin.
+-> It’s similar to a passport or driver’s license. It includes a few public properties about a user in its payload. 
+like _id, username, isAdmin, etc
+-> After registering and logging you get jwt token.
+-> With the help of this token we can access endpoints or services.
+-> The user can send this token with a requests to prove their identity.
+-> It's important to note that while JWTs can carry information about the user's roles and permissions, the actual authorization logic 
+(deciding whether a user can perform a specific action) is typically handled by the server 
+-> The token is made up of three parts: a header, a payload, and a signature. 
+
+1. HEADER: ALGORITHM & TOKEN TYPE
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+
+2. PAYLOAD:DATA
+{
+  "user": {
+    "id": 1,
+    "username": "Adesh",
+    "email": "adejad1234@gmail.com"
+  },
+  "iat": 1678770655,
+  "exp": 1678770955
+}
+
+3. VERIFY SIGNATURE
+
+HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),your-256-bit-secret) secret base64 encoded
 
 
 
+// creation of token: 
+-> The token is created using a secret key that only the server knows, which ensures that the data cannot be tampered with or modified.
+This signature is created by combining the header, payload and secret key using a cryptographic algorithm.
+-> The jwt.sign() function is typically used to create a JSON Web Token (JWT). It takes a set of claims (payload), a secret key, and 
+optional configuration parameters as inputs. 
+code: 
+userSchema.methods.generateToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, userName: this.name, isAdmin: this.isAdmin }, 
+    config.get("jwtPrivateKey"),
+    { expiresIn: "2 days" }
+  );
+ 
+  return token;
+};
 
 
 
+-> Once the token is created, it can be sent to the client and stored in a cookie or local storage. On subsequent requests, the 
+client can send the token back to the server in the HTTP headers to authenticate and authorize the user.
+-> The user can send this token with a requests to prove their identity.
+we use jwt.verify method to verify the user rights, permissions, role.
+code : 
+const decoded = jwt.verify(token, config.get("jwtPrivateKey"));
+
+// send token to user
+const token = userAvailable.generateToken();
+res.status(200).send(token);
+
+Normal employee don't have "isAdmin" property, only Admin have "isAdmin" property.
+-> These properties cannot be tampered because doing so requires re-generating the digital signature. 
+-> When the user logs in or registered,  we generate a JWT on the server and return it to the client. 
+-> We store this token on the client and send it to the server every time we need to call an API endpoint that is only accessible 
+to authenticated users.
+-> To generate JSON Web Tokens in an Express app use jsonwebtoken package.
 
 
 
+Admin JWT Token : 
+{
+  "_id": "659430af6bd39c8dc0e4ca83",
+  "userName": "User 1",
+  "isAdmin": true,
+  "iat": 1704210859,
+  "exp": 1704383659
+}
 
+
+Normal employee jwt token : 
+{
+  "_id": "659430af6bd39c8dc0e4ca84",
+  "userName": "User 2",
+  "iat": 1704210680,
+  "exp": 1704383480
+}
 
 
 

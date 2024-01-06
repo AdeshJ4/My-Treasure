@@ -6,7 +6,7 @@ operation is completed.
 
 -> This technique allows a function to call another function
 
--> A callback function can run after anther function has finished
+-> A callback function can run after another function has finished
 
 
 When to Use a Callback ?
@@ -71,7 +71,7 @@ function calculate(num1, num2, callback){
 	callback(res);
 }
 
-calculate(10, 10, (res)=log(res));
+calculate(10, 10, (res)=>log(res));
 
 output:
 --=----

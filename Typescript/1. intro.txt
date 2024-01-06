@@ -1,0 +1,707 @@
+Typescript (v:5.3.3)
+====================
+
+
+What is TypeScript?
+
+-> Typescript is programming language built on top of the js, so every js file is valid ts file.
+-> Typescript is programming language created at microsoft to address some shortcoming of javascript.
+-> we can think it like brother of js.
+-> Js is small brother without discipline and do whatever he likes.Typescript is like a kid with some discipline
+-> Typescript is javascript with type(data type) checking.
+-> with typescript we explicitly set the type of variable while the declarations.
+-> Then we pass our code to 'typescript compiler' and compiler will tell us if we are doing something wrong. so we can catch our 
+mistakes at compilation time.
+-> TypeScript is essentially JavaScript with static typing and some additional features that help us write more concise and robust 
+code.
+-> With TypeScript we can catch more bugs at compile time.
+-> We can use ts whenever we used js, like in frontend, backend.
+-> anything we do with js we can do with ts.
+-> Typescript: Medium to large projects
+-> Javascript: Simple projects
+-> To check version of typescript used this command : tsc -v
+
+-> Typescript add some cool features in js: 
+1. static typing 
+2. code completion
+3. Refactoring 
+4. Shorthand notations.`
+
+
+Static Type: C++, C#, Java
+-> we know the type of a variable at compile time or while coding.
+ex. int num = 10;  we can't set num to another type like string.
+
+Dynamic Type: Js, Python, Ruby
+-> The type of variable is dynamic. so it determine at runtime, and it also can change.
+ex. let num = 10; num = 'a';  perfectly fine
+so this variable don't have fix or static type. the type can change at runtime.
+what if we passes the variable in Math.round(num) which expects the number.then our application may misbehave or crash.
+so don't know about this issue until we run our code or unit tests.
+so we have to test every function with various edge cases to catch this kind of bugs.
+and this is the problem the typescript is solving.
+
+
+let x: number = 10;
+x = 'a';  XXXXX
+
+
+
+Drawbacks: 
+
+1. Compilation: 
+-> Browsers don’t understand TypeScript code. So we need to use the TypeScript compiler 
+to compile and translate (or transpile) our TypeScript code into regular JavaScript for 
+execution by browsers.
+this process is called 'Transpilation'
+
+2. More discipline while writing a code.
+
+
+
+
+
+
+
+Js: 
+number 
+string
+boolean
+null 
+undefined
+object
+
+ts: 
+any
+unknown
+never
+enum
+tuple
+
+
+any: 
+-> it represent any type of values.
+-> if we declare a variable and don't initialize it the typescript compiler assume this variable of type any.
+-> The any type can represent any kind of value. It’s something we should avoid as much as possible because it defeats the purpose of 
+using TypeScript in the first place. A variable of type any can take any kind of value!
+code : 
+let level;
+level = 10;
+level = 'a';
+-> for better practice you should avoid using 'any' operator.
+-> type any disables type checking:
+-> it comes at the cost of losing the benefits of static typing.
+code: 
+let dynamicValue: any = 42;
+console.log(dynamicValue);  // Output: 42
+dynamicValue = "Hello, TypeScript!";
+console.log(dynamicValue);  // Output: Hello, TypeScript!
+dynamicValue = [1, 2, 3];
+console.log(dynamicValue);  // Output: [1, 2, 3]
+
+
+
+tuple: 
+-> is fixed length array where each element has a particular type.
+-> for better practice store only two values inside a tuple.
+let arr : [number, string] = [1, 'Adesh'];  -> js-> let arr = [1, 'Adesh'];
+-> Internally tuple represent by plain javascript arrays.
+
+
+let isDone: boolean = false;
+let decimal: number = 6;
+let hex: number = 0xf00d;
+let binary: number = 0b1010;
+let octal: number = 0o744;
+let firstName: string = "John";
+let lastName: string = 'Doe';
+let nullValue: null = null;
+let undefinedValue: undefined = undefined;
+let sym1: symbol = Symbol("key1");
+
+const enum Size { small=1, Medium=2, Large=3};
+
+
+======================================================================================================================================
+
+
+
+enum: 
+=====
+-> it holds list of related constants.
+-> In the bellow example we have three constants : small, medium, large, which are grouped.
+code:
+const enum Size { Small = 1, Medium = 2, Large = 3};
+let tShirt1: Size = Size.Medium;
+let tShirt2: number = Size.Medium;
+tShirt1 = Size.Small;
+tShirt1 = 101;      // error  -> Only accept values from enum
+tShirt2 = 102;      // can accept outside values
+
+
+
+let tShirt1: Size = Size.Medium;
+-> This means that tshirt can only hold values that are part of the Size enum (i.e., Small, Medium, or Large). 
+If you try to assign any other numeric value or use a value that is not part of the Size enum, TypeScript will raise a type error.
+
+let tShirt: number = Size.Medium;
+-> This means you can later assign any numeric value to tShirt, not necessarily restricted to the values defined in the Size enum. 
+It lacks the type safety provided by explicitly using the Size enum type.
+
+======================================================================================================================================
+
+
+function: 
+=========
+function fun1(): void{
+    console.log('fun');
+}
+function fun2(): number {
+    return 0;
+}
+function fun3(n1: number, n2: number): number{
+    return n1*n2;
+}
+function fun4(n1: number, n2: number = 5){
+    return n1 * n2;
+}  // fun4(10)=> 10*5=> 50
+const fun1 = (): void => {
+    console.log('arrow function');
+}
+const fun2 = () : number => {
+    return 0;
+}
+const fun3 = (n1:number, n2: number=10): number => {
+    return n1 * n2;
+} 
+function fun (id: number | string): number | string {  // this function used union operator, so this function can return any one value from listed.
+    if(typeof id === 'number')
+        return 0;
+    else 
+        return 'End';
+}
+
+
+
+======================================================================================================================================
+
+
+objects: 
+========
+interface User{
+    id: number;
+    fullName : string;
+    faxNo?: number;
+    retireDate: Date;
+    retire(): void;
+    feedBack: (userData: string) => void;
+}
+const user: User = {
+    id: 101,
+    fullName: 'Adesh Jadhav',
+    retireDate: new Date(),
+    retire: function(){
+        console.log(this.retireDate.getFullYear());
+    },
+    feedBack: (userData: string) => {
+        console.log(userData);
+    }
+}
+user.faxNo = 9527370288;
+user.feedBack('He was really nice');
+
+
+======================================================================================================================================
+
+
+array: 
+======
+code 1: 
+let nums: number[] = [ 10, 20, 30];
+let fruits: string[] = ['Apple', 'Banana', 'Cherry'];
+code 2: 
+let anyArray = [];  // any -> avoid it
+anyArray[0] = 10;
+anyArray[1] = '20';
+
+console.log(anyArray);
+
+
+
+======================================================================================================================================
+
+
+Type Aliases: 
+=============
+type User = {
+    readonly id: number;
+    fname: string;
+    faxNo?: number;
+    retireDate: Date,
+    retire(): Date;
+    feedBack: (data: string)=> void;
+}
+
+const user1: User = {
+    id: 101,
+    fname: 'Adesh Jadhav',
+    retireDate: new Date(),
+    retire(){
+        return this.retireDate;
+    },
+    feedBack: (data: string)=>{
+        console.log(data);
+    }
+}
+const user2: User = {
+    id: 102,
+    fname: 'Akshay Pawade',
+    retireDate: new Date(),
+    retire(){
+        return this.retireDate;
+    },
+    feedBack: (data: string)=>{
+        console.log(data);
+    }
+}
+
+
+======================================================================================================================================
+
+Union Types:
+============
+-> type of a variable can be anything from provided types.
+code: 
+function kgToLbs(weight: number | string): number{
+    if(typeof weight === 'number')
+        return weight * 2.2;
+    return Number(weight) * 2.2;
+}
+
+let arr: (string | number )[] = [10, 'a', 20, 'b'];
+
+
+======================================================================================================================================
+
+
+Intersection types: 
+===================
+-> In intersection type a variable can contain two or more than two types.
+
+type Draggable = {
+    draw(): void;
+}
+
+type Resizable = {
+    resize: () => void;
+}
+
+type UIWidget = Draggable & Resizable;  // intersection 
+
+let obj: UIWidget = {
+    draw: function (){
+        console.log('Draggable');
+    },
+    resize: () => {
+        console.log('Resizable');
+    }
+}
+
+let obj1: Draggable = {
+    draw: function(){
+        console.log('Draggable');
+    }
+}
+
+let obj2: Resizable = {
+    resize: ()=>{
+        console.log('Resizable');
+    }
+}
+
+=================================================================================================================================
+
+Literal Types: 
+==============
+-> sometimes we want to limit the values assigned to a variable
+
+// Literal (exact, specific)
+type Quantity = 50 | 100;
+let quantity: Quantity = 100;  // can hold only 50 or 100;
+
+type Metric = 'cm' | 'inch';
+let metric: Metric = 'cm';   // can hold only cm or inch
+
+let num: 10 | 20 = 10;  // can hold only 10 or 20
+
+=================================================================================================================================
+
+Nullable Types: 
+==============
+
+-> if you passes null value instead of string in js code then it will give error at runtime.
+-> to prevent this, typescript give compilation time error if null is passed to a function.
+code: 
+function fun(fname: string){
+    log(fname.toUpperCase());
+}
+fun(null);  // compilation error;
+code 2: 
+function fun(fname: string | null){   // union operator
+    if(null)
+        log(fname.toUpperCase());
+    else
+        log('Null value is passed.');
+}
+fun(null);  // compilation error;
+
+
+
+=================================================================================================================================
+
+
+
+Optional Chaining: 
+=================
+type customer = {
+    id: number,
+    fname: string
+}
+
+function getCustomer(id: number): customer | null{
+    return id === 0? {id:101, fname: 'Adesh'}: null;
+}
+
+const customer = getCustomer(10);
+console.log(customer?.fname);
+
+
+
+=================================================================================================================================
+
+
+The Nullish Coaelscing Operator (??): 
+================================
+
+let speed = null;
+let obj = {
+    ride: speed ?? 30  // if speed is not null then use speed value otherwise use 30;
+}
+
+
+=================================================================================================================================
+
+
+Type Assertions:
+================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

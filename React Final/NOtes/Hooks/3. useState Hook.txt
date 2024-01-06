@@ -183,15 +183,7 @@ const Fun = () => {
 
 const Fun = () => {
   
-  const [bugs, setBugs] = useState([
-    {id: 101, title: 'Bug 1', fixed: false},
-    {id: 102, title: 'Bug 2', fixed: false},
-  ]);
-  
-  const fixedBug = () => {
-    // map method creates new array.
-    setBugs(bugs.map((bug)=>bug.id === 102 ? {...bug, fixed: true}: bug));
-  };
+
   
   console.log("Bug 1 fixed: " , bugs[0].fixed);
   console.log("Bug 2 fixed: " , bugs[1].fixed);

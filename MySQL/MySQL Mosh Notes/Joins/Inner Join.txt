@@ -1,0 +1,64 @@
+select *
+from orders
+join customers
+	on orders.customer_id = customers.customer_id;
+
+
+select orders.order_id, orders.order_date, orders.status, customers.first_name, customers.last_name
+from orders
+join customers
+	on orders.customer_id = customers.customer_id
+
+
+select o.order_id, o.order_date, o.status, c.first_name, c.last_name
+from orders o
+join customers c
+	on o.customer_id = c.customer_id
+
+
+getting data from tables which have different database
+------------------------------------------------------
+Database -> sql_store			table -> order_items
+Database -> sql_inventory		table -> products
+
+select *
+from sql_store.order_items oi
+join sql_inventory.products p
+on oi.product_id = p.product_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

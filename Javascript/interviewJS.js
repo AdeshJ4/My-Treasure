@@ -1,3 +1,6 @@
+//To Do List : 
+// 1. Garbage Collection in JavaScript
+
 // Q0] What is a first class function in Javascript?
 /*
 -> In JavaScript, functions are considered first-class citizens, which means they can be treated like any other variable 
@@ -6,10 +9,39 @@
 -> so we can assign a function to a variable using function expression syntax.
 -> we can pass a function as a argument to another function (concept of callback).
 -> we can return a function from another function (concept of closure)
--> we can store a function inside a data structure like array.
+-> we can store a function inside a data structure like array, object.
 -> Functions can be higher order function.
 
 
+-> we can store a function inside a data structure like array.
+const arr = [10, function fun1(){console.log('FUnction 1')}, square]
+function square(x) {
+  console.log('Square : ', (x*x));
+  return x * x;
+}
+arr[0]; 
+arr[2](5);
+
+
+-> we can store a function inside a data structure like object.
+const obj = {
+  id: 101,
+  fname: "Adesh",
+  fun1: function (msg) {
+    console.log(msg);
+  },
+  fun2: () => {
+    console.log(obj.id);
+    console.log(this.fname);  // no access
+  },
+  intro: function(){
+    console.log(this.id);
+    console.log(this.fname);
+  }
+};
+obj.fun1("function from object")
+obj.fun2();
+obj.intro()
 */
 
 
@@ -37,10 +69,18 @@ FUnction
 1. Primitive Types: 
 Primitive data types can store only a single value. To store multiple and complex values, non-primitive data types are used.
 
-i. String - It represents a series of characters and is written with quotes. A string can be represented using a single or a double quote.
+i. String - It represents a series of characters and is written with quotes. A string can be represented using a single or a double 
+quote.
 code: 
 var str = "Adesh Jadhav"; //using double quotes
 var str2 = 'John Doe'; //using single quotes
+Note: In JavaScript, strings are immutable. This means that once a string is created, its value cannot be changed. 
+Any operation that appears to modify a string actually creates a new string with the modified value, leaving the original string 
+unchanged.
+let fname ="Adesh";  
+fname="Ram";
+
+
 
 ii. Number - It represents a number and can be written with or without decimals.
 code:
@@ -48,14 +88,15 @@ var x = 3; //without decimal
 var y = 3.6; //with decimal
 
 
-iii. BigInt - This data type is used to store numbers which are above the limitation of the Number data type. It can store large integers .
+iii. BigInt - This data type is used to store numbers which are above the limitation of the Number data type. It can store large 
+integers .
 code: var bigInteger =  234567890123456789012345678901234567890;
 
 iv. Boolean - It represents a logical entity and can have only two values : true or false. 
 (5 === 5) //returns true
 
-v. Undefined - When a variable is declared but not assigned, it has the value of undefined and it’s type is also undefined. we can also 
-set the value of a variable as undefined.
+v. Undefined - When a variable is declared but not assigned, it has the value of undefined and it’s type is also undefined. 
+we can also set the value of a variable as undefined.
 code: 
 var x; // value of x is undefined
 var y = undefined; // we can also set the value of a variable as undefined
@@ -260,7 +301,7 @@ console.log('outside a function : ' , i); // i is not accessible
 -> Variables defined inside a function are not accessible (visible) from outside the function.
 -> if we pass variable define and initialized outside the function to inside a function through a parameter and if you changed its 
 value inside a function it will not affect the original variable, its value will be unaffected.
--> 
+
 code: 
 let num = 10;
 function add (num){
@@ -275,7 +316,6 @@ console.log('Outside a Function: ' +  num);  // 10
 3. Global Scope: 
 ----------------
 -> A variable declared outside a function, becomes GLOBAL.
--> Variables declared Globally (outside any function) have Global Scope.
 -> Global variables can be accessed from anywhere in a JavaScript program
 -> Variables declared with var, let and const are quite similar when declared outside a block.
 -> Global variables defined with the var keyword belong to the window object.
@@ -326,19 +366,19 @@ Scope Chain: JavaScript engine also uses Scope to find variables. Let’s unders
 variable in its outer scope again if js engine not found that variable then he is going to search it in outer scope of outer scope.
 
 ex. 
-var y = 24;
-function favFunction(){
-  var x = 667;
-  var anotherFavFunction = function(){
-    console.log(x); // Does not find x inside anotherFavFunction, so looks for variable inside favFunction, outputs 667
-  }
-  var yetAnotherFavFunction = function(){
-    console.log(y); // Does not find y inside yetAnotherFavFunction, so looks for variable inside favFunction and does not find it, so looks for variable in global scope, finds it and outputs 24
-  }
-  anotherFavFunction();
-  yetAnotherFavFunction();
+let y= 20;
+function mainFunction(){
+    let x = 10;
+    function fun1(){
+        console.log(x);
+    }
+    function fun2(){
+        console.log(y);
+    }
+    fun1();
+    fun2();
 }
-favFunction();
+mainFunction();
 
 ex. 2
 
@@ -425,6 +465,7 @@ console.log('3' + 2);         //  "32"
 console.log('3' + 2 + 5);         //  "325"
 console.log('2' + undefined); //  "2undefined"
 console.log('str' + null);    // "strnull"
+console.log('4' + false);// '4false'
 
 
 
@@ -494,6 +535,7 @@ console.log(Number("A"));           // NAN
 console.log(Number(null));          // 0
 console.log(Number(undefined));     // NAN
 console.log(Number(' '));           // 0
+console.log(Number(''));            // 0
 
 
 ii. Convert to String Explicitly
@@ -523,10 +565,10 @@ console.log(Boolean(undefined));  // false
 console.log(Boolean(null));       // false
 console.log(Boolean(NaN));        // false
 
+
 Truthy and falsy: 
 ----------------
-
--> All values except false, 0, 0n, -0, “”, null, undefined, and NaN are truthy values.
+-> All values except false, 0, 0n, -0, “”, null, undefined, NaN are truthy values.
 code: 
 
 var x = 0;
@@ -535,9 +577,9 @@ if(x) { console.log(x) }   // The code inside this block will not run since the 
 if(y) { console.log(y) }    // The code inside this block will run since the value of y is 23 (Truthy)
 
 
+
 Logical operators:
 ------------------
-
 Logical operators in javascript, unlike operators in other programming languages, do not return true or false. 
 They always return one of the operands.
 
@@ -1141,7 +1183,6 @@ window object.
 */
 
 // Q20] What is memoization?
-
 
 /*
 

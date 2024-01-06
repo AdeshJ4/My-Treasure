@@ -17,9 +17,10 @@ Authentication and Authorization:
 
 
 Token :
-------
+-------
 
--> In JWT (JSON Web Token), a token is a string that contains encoded information about a user or a client that is used for authentication and authorization purposes.
+-> In JWT (JSON Web Token), a token is a string that contains encoded information about a user or a client that is used for 
+authentication and authorization purposes.
 Ex. token looks like this :  
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkZXNoIiwiZW1haWwiOiJhZGVqYWQxMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE2Nzg3NzA2NTUsImV4cCI6MTY3ODc3MDk1NX0.0CmG7Ykj69lK0EbUtShPBbAV6pyKefSYKRZNUqJGTZU"
 
@@ -46,18 +47,14 @@ Ex. token looks like this :
 
 3. VERIFY SIGNATURE
 
-HMACSHA256(
-  base64UrlEncode(header) + "." +
-  base64UrlEncode(payload),
-  
-your-256-bit-secret
-
-) secret base64 encoded
+HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),your-256-bit-secret) secret base64 encoded
 
 
--> The token is signed using a secret key that only the server knows, which ensures that the data cannot be tampered with or modified. This signature is created by combining the header and payload with the secret key using a cryptographic algorithm.
+-> The token is signed using a secret key that only the server knows, which ensures that the data cannot be tampered with or modified.
+This signature is created by combining the header and payload with the secret key using a cryptographic algorithm.
 
--> Once the token is created, it can be sent to the client and stored in a cookie or local storage. On subsequent requests, the client can send the token back to the server in the HTTP headers to authenticate and authorize the user.
+-> Once the token is created, it can be sent to the client and stored in a cookie or local storage. On subsequent requests, the 
+client can send the token back to the server in the HTTP headers to authenticate and authorize the user.
 
 
 

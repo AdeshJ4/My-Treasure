@@ -1,0 +1,49 @@
+On clause as well as Using clause does the same work but if column names are same, go for the 
+USING clause. Otherwise, if columns names are not same, go for ON clause.
+
+ex
+
+SELECT s.SID, s.SNAME, a.CNAME, c.MAJOR
+FROM STUDENT s JOIN COLLEGE c
+ON s.SID = c.SID;
+
+SELECT SID, s.SNAME, a.CNAME, a.MAJOR
+FROM STUDENT s JOIN COLLEGE c
+USING (SID);
+
+USING clause:
+
+The USING clause is used if several columns share the "same name" but you don’t want to join using 
+all of these common columns. The columns listed in the USING clause can’t have any qualifiers in 
+the statement, including the WHERE clause:
+
+
+The ON clause
+
+The ON clause is used to join tables where the column names don’t match in both tables. 
+The join conditions are removed from the filter conditions in the WHERE clause:
+
+ex: 
+----
+select department_name, city
+from departments dept
+JOIN locations loc
+-- on dept.location_id = loc.id
+USING (location_id); -- specify the same column name 
+                     -- for both of the tables for the join
+select department_name, city
+from departments dept
+join locations loc
+on (dept.location_id = loc.id); -- specify different column name 
+                                -- for the tables for the join.
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,8 @@
 -> REST stands for Representational state transfer and it is a thesis which is provided by student in his university.
 -> REST is use for building 'http services' that client can access.
--> we simply use http protocol to provide support for CRUD operations.
--> RESTful APIs use standard HTTP methods (GET, POST, PUT, DELETE) to perform CRUD (Create, Read, Update, Delete) operations on 
+-> HTTP services refer to the communication and exchange of data between clients (such as web browsers) and servers over the 
+Internet using the HTTP protocol.
+-> RESTful APIs use HTTP methods (GET, POST, PUT, DELETE) to perform CRUD (Create, Read, Update, Delete) operations on 
 resources.
 -> RESTful APIs are stateless, meaning each request from a client to a server contains all the information needed to understand 
 and fulfill that request. There is no client state stored on the server between requests.
@@ -9,13 +10,16 @@ and fulfill that request. There is no client state stored on the server between 
 
 -> we use Node js to build backend services also call APIs.
 
+
+
+
+
 APIs : 
 
 -> API Stands for "Application Programming Interface".
 -> The API acts as middleware or bridge between the frontend(client-side applications) and backend(server-side applications or 
 services).
--> It defines a set of rules and protocols for how the frontend can communicate with the backend
--> It provides a structured way for the frontend to request specific operations from the backend.
+-> It defines a set of rules and protocols, structured way for how the frontend can communicate with the backend
 -> When the frontend needs to interact with the backend, it sends API requests. These requests specify the desired action (e.g., 
 fetching data, updating records) and may include additional information.
 -> In the backend, The backend processes these requests, performs the necessary operations, and sends back API responses containing 
@@ -24,12 +28,16 @@ the results.
 manner.
 
 
+
+
+
+
 HTTP Verbs and Resource URIs:
 -----------------------------
 
+GET /users/1 - Retrieve user with ID 1.
 GET /users - Retrieve a list of users.
 POST /users - Create a new user.
-GET /users/1 - Retrieve user with ID 1.
 PUT or PATCH /users/1 - Update user with ID 1.
 DELETE /users/1 - Delete user with ID 1.
 
@@ -39,12 +47,20 @@ Status codes:
 
 200 -> Success/OK  (The HTTP status code 200 represents success which means the page you have requested has been fetched.)
 201 -> Created
-400 -> Bad Request  (When the client requests a page and the server is not able to understand anything, it displays a 400 HTTP status 
+400 -> Bad Request  (When the client sends a requests and the server is not able to understand anything, it displays a 400 HTTP status 
 code.)
 401 -> unauthorized (This HTTP status code requires user authentication.)
 403 -> Forbidden (The HTTP status code 403 implies that the request is understood by the server, but still refuses to fulfill it.)
 404 -> Not Found (404 HTTP Status code appears when you request a URL and then the server has not found anything.)
 500 -> Internal server error (A valid request was made by the client but the server failed to complete the request) 
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,61 @@
+INNER JOIN == JOIN 
+------------------
+
+IMP
+----
+One record from Parent Table(Which contain primary key) can have multiple records in child table(
+which contain foreign key).
+ex.
+
+use sql_store;
+
+select *
+from products p
+inner join order_items o
+on p.product_id = o.product_id;
+
+
+select everything
+-----------------
+SELECT *
+FROM orders
+INNER JOIN customers
+ON orders.customer_id = customers.customer_id;
+
+select specific
+---------------
+select first_name, last_name, points, orders.customer_id, customers.customer_id
+from orders
+inner join customers 
+on orders.customer_id = customers.customer_id;
+
+
+Alias 
+-----
+select first_name, last_name, points, o.customer_id, c.customer_id
+from orders o
+inner join customers c
+on o.customer_id = c.customer_id;
+
+
+
+
+JOIN Three Tables
+-----------------
+SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName
+FROM (
+			(
+				Orders
+				INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+			)
+			INNER JOIN Shippers ON Orders.ShipperID = Shippers.ShipperID
+	);
+
+
+
+
+
+
+
+
+

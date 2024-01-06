@@ -1,0 +1,67 @@
+SQL DROP Database
+-----------------
+-> deletes the existing database "permanently" from the database system
+-> This statement deletes all the views and tables if stored in the database, so be careful while 
+   using this query in SQL.
+
+Syntax:
+-------
+-> DROP DATABASE Database_Name;
+
+
+Before deleting Database:
+-------------------------
+-> keep the backup of data of that database which you want to delete.
+-> Another most important point is that you cannot delete that database from the system which is 
+   currently in use by another database user. If you do so, then the drop statement shows the 
+   following error on screen:
+	Cannot drop database "name_of_the_database" because it is currently in use.  
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

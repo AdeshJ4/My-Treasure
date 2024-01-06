@@ -1,0 +1,29 @@
+	SELECT * 
+	FROM employees e
+	where salary > (
+		select avg(salary)
+		from employees
+		where office_id = e.office_id
+	);
+    
+    
+select office_id, count(*) , avg(salary) 
+from employees 
+group by office_id;
+    
+    
+select e1.* 
+from employees as e1 
+inner join 
+	(	select office_id, count(*), avg(salary) as sal
+		from employees
+		group by office_id) as e2 
+			on e1.office_id=e2.office_id
+		where e1.salary>e2.sal;
+
+
+
+
+select avg(salary) as avg_sal, count(*), office_id
+from employees
+group by office_id;

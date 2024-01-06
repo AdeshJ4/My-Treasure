@@ -6,10 +6,7 @@ function App() {
 
   async function fetchUsers(controller) {
     try {
-      const {data} = await axios.get(
-        "https://jsonplaceholder.typicode.com/users",
-        { signal: controller.signal }
-      );
+      const {data} = await axios.get("https://jsonplaceholder.typicode.com/users",{ signal: controller.signal });
       setUsers(data);
     } catch (err) {
       if(err instanceof CanceledError) return;
@@ -31,18 +28,18 @@ function App() {
     }
   }, [users]);
 
-  async function addUser(){
+  async function addUser (){
+    let originalUsers;
     try{
-      // update ui first
-      const newUser = {id: users.length + 1, name: 'Adesh Jadhav', username: 'AdeshJ4', email: 'jadhavadesh13061@gmail.com'};
+      const newUser = {id: users.length+1, name: 'Adesh Jadhav', username: 'AdeshJ4', email: 'jadhavades13061@gmail.com'};
+      originalUsers = [...users];
+      // ui update
       setUsers([...users, newUser]);
-
-      // update on server
+      // updated server
       await axios.post('https://jsonplaceholder.typicode.com/users/', newUser);
-    }  catch(err){
-      const originalUser = [...users];
-      setUsers(originalUser);
-      console.log(err.message);
+    }catch(err){
+      setUsers(originalUsers);
+      console.log("Error Message: ", err.message);
     }
   }
 
@@ -70,6 +67,8 @@ function App() {
       console.log(err.message);
     }
   }
+
+
   return (
     <>
       {users ? (
@@ -90,7 +89,7 @@ function App() {
                 <td>{user.name}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
-                <td>
+                <td style={{display:'flex', justifyContent: 'space-evenly'}}>
                       <button className="btn btn-primary " onClick={()=>updateUser(user)}>Update</button>
                       <button className="btn btn-outline-danger " onClick={()=>deleteUser(user)}>Delete</button>
                 </td>

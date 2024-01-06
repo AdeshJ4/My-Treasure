@@ -1,0 +1,82 @@
+* important points which are required to learn while creating a database
+-> unique name
+-> Database name should not be more than 128 characters
+-> SQL does not allow developers to create the database with the existing database name
+
+
+* List all Databases
+-> show databases;
+
+
+* Syntax of Create Database statement in MySQL
+-> CREATE DATABASE Student ;  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

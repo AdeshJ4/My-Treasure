@@ -1,0 +1,9 @@
+select  
+	invoice_total,
+	ceil(invoice_total), 
+    floor(invoice_total), 
+    truncate(invoice_total, 1),
+    abs(invoice_total),
+    rand(),
+    round(invoice_total, 0)
+from invoices;

@@ -1,0 +1,11 @@
+select 
+	count(*),
+    count(client_id),
+    count(distinct client_id),
+    min(invoice_total),
+    max(invoice_total),
+    avg(invoice_total),
+    avg(distinct invoice_total),
+    sum(invoice_total),
+    sum(distinct invoice_total)
+from invoices;

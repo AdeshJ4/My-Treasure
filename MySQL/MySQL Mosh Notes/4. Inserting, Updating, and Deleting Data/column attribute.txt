@@ -1,0 +1,5 @@
+PK -> Primary Key
+NN -> Not Null
+AI -> Auto Increment (generally used with PK. It takes value of last row and incremented by 1)
+
+

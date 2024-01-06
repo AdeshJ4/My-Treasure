@@ -1,0 +1,205 @@
+UNIO in Maths
+---------------
+UNIO => Skip the repeated part.
+A = {1, 2, 3, 4}
+B = {5, 6, 1, 2}
+A U B = {1, 2, 3, 4, 5, 6}
+
+
+UNIO in SQL
+-----------
+
+The UNION operator is used to combine the result-set of two or more SELECT statements.
+
+Every SELECT statement within UNION must have the same number of columns
+The columns must also have similar data types
+The columns in every SELECT statement must also be in the same order
+
+
+if data is repeated then it will skip that data
+it is same as UNION in maths
+
+ex.
+
+
+INSERT INTO Old_Employee (Employee_Id, Employee_Name, Emp_Age, Emp_Salary) 
+VALUES 
+	(101, 'Akhil', 28, 25000),  
+	(102, 'Abhay', 27, 26000),  	
+	(103, 'Sorya', 26, 29000),  
+	(104, 'Abhishek', 27, 26000),  
+	(105, 'Ritik', 26, 29000),  
+	(106, 'Yash', 29, 28000); 
+    
+INSERT INTO New_Employee (Employee_Id, Employee_Name, Emp_Age, Emp_Salary) 
+VALUES 
+	(201, 'Jack', 28, 45000),  
+	(202, 'Berry', 29, 35000),  
+	(105, 'Ritik', 26, 29000),  	
+	(203, 'Shyam', 27, 26000),  
+	(204, 'Ritika', 28, 38000),  
+	(106, 'Yash', 29, 28000);  
+
+
+-> SELECT * FROM db1.old_employee;
+# Employee_Id, 	Employee_Name, 	Emp_Age, 		Emp_Salary
+	'101', 		'Akhil', 			'28', 			'25000'
+	'102', 		'Abhay', 			'27', 			'26000'
+	'103', 		'Sorya', 			'26', 			'29000'
+	'104', 		'Abhishek', 		'27', 			'26000'
+	'105', 		'Ritik', 			'26', 			'29000'
+	'106', 		'Yash', 			'29', 			'28000'
+
+
+
+-> SELECT * FROM db1.new_employee;												
+# Employee_Id	Employee_Name	Emp_Age	Emp_Salary
+		201					Jack		 28				45000
+		202					Berry		 29				35000
+		105					Ritik		 26				29000
+		203					Shyam		 27				26000
+		204					Ritika		 28				38000
+		106					Yash		 29				28000
+
+
+
+UNION Query
+-----------
+SELECT * FROM Old_Employee
+UNION 
+SELECT * FROM New_Employee;  
+
+# Employee_Id	Employee_Name	Emp_Age	Emp_Salary
+		101				Akhil				28			25000
+		102				Abhay				27			26000
+		103				Sorya				26			29000
+		104				Abhishek			27			26000
+		105				Ritik				26			29000
+		106				Yash				29			28000
+		201				Jack				28			45000
+		202				Berry				29			35000
+		203				Shyam				27			26000
+		204				Ritika				28			38000
+
+
+
+
+Example of UNION with WHERE Clause
+----------------------------------
+
+SELECT * FROM Old_Employee WHERE Emp_Salary >= 29000
+UNION 
+SELECT * FROM New_Employee WHERE Emp_Salary >= 29000;
+
+
+
+
+Union ALL Operator in SQL
+-------------------------
+
+The SQL Union ALL Operator is same as the UNION operator, but the only difference is that 
+UNION ALL operator also shows the common rows in the result.
+
+
+SELECT * FROM Old_Employee
+UNION ALL
+SELECT * FROM New_Employee; 
+
+
+# Employee_Id	Employee_Name	Emp_Age	Emp_Salary
+		101				Akhil				28			25000
+		102				Abhay				27			26000
+		103				Sorya				26			29000
+		104				Abhishek			27			26000
+		105				Ritik				26			29000
+		105				Ritik				26			29000
+		106				Yash				29			28000
+		106				Yash				29			28000
+		201				Jack				28			45000
+		202				Berry				29			35000
+		203				Shyam				27			26000
+		204				Ritika				28			38000
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

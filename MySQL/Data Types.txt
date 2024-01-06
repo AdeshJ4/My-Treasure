@@ -1,0 +1,101 @@
+MySQL Data Types: 
+
+1. String Types
+2. Numeric Types.
+3. Date and Time Types
+4. Blob Types
+5. Special Types
+
+
+ex: 
+
+fname/lname: varchar(50)
+DOB: DATE
+phone: varchar(50)
+address: varchar(50)
+city: varchar(50)
+state: char(2)
+points: int(11)
+
+VARCHAR(50) means that the column can store variable-length character strings with a maximum length of 50 characters
+
+
+1. String Types
+---------------
+CHAR(size) - can contain letters, numbers, and special characters-> size 0 to 255
+VARCHAR(size) - can contain letters, numbers, and special characters-> max: 65,535 characters (~64kb)
+MEDIUMTEXT - max: 16MB -> used to store json objects 
+LONGTEXT - MAX 4gb
+TEXT(size) - MAX: 64KB,   Note: BUT WE USED VARCHAR because it can be index. we used index to speed up query
+TINYTEXT - Holds a string with a maximum length of 255 characters
+
+-> we use char to stored fixed length String like abbreviation of state.
+-> we use varchar to store variable length String like username, password, emails, addresses and son on.
+we can also used them to store numeric type like zip code and phone numbers, because we don't use these value in 
+mathematical operations.
+also these values contain hyphen to group values like (952-799-7825).
+
+varchar(50) -> for short string -> username, password
+varchar(255) -> address
+VARCHAR(50) means that the column can store variable-length character strings with a maximum length of 50 characters
+
+
+
+
+Numeric Data Types: 
+------------------
+
+1. TINYINT(size): 
+Signed range is from -128 to 127.
+Unsigned range is from 0 to 255.
+
+2. SMALLINT(size)
+Signed range is from -32768 to 32767
+Unsigned range is from 0 to 65535
+
+3. MEDIUMINT(size)
+Signed range is from -8388608 to 8388607
+Unsigned range is from 0 to 16777215.
+
+4. INT(size)
+Signed range is from -2147483648 to 2147483647
+Unsigned range is from 0 to 4294967295.
+
+5. BIGINT(size):
+Signed range is from -9223372036854775808 to 9223372036854775807
+Unsigned range is from 0 to 18446744073709551615
+
+
+
+
+
+Date and Time Data Types: 
+-------------------------
+
+DATE: 
+Format: YYYY-MM-DD. The supported range is from '1000-01-01' to '9999-12-31'
+
+DATETIME(fsp): 
+A date and time combination. Format: YYYY-MM-DD hh:mm:ss. 
+The supported range is from '1000-01-01 00:00:00' to '9999-12-31 23:59:59'.
+
+TIME(fsp):
+A time. Format: hh:mm:ss. The supported range is from '-838:59:59' to '838:59:59'
+
+YEAR:
+A year in four-digit format. Values allowed in four-digit format: 1901 to 2155,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

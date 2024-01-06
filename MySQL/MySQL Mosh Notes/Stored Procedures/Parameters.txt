@@ -1,0 +1,28 @@
+-- MySQL procedure parameter has one of three modes:
+
+-- 1. IN Parameter
+
+delimiter $$
+create procedure fun1(IN var1 int)
+begin 
+	select * from demo where id = var1;
+end$$
+delimiter ;
+
+-- 2. OUT Parameter
+
+delimiter $$
+create procedure fun2(out var1 int)
+begin 
+	select max(price) into var1 from demo;
+end $$
+delimiter ;
+
+-- 3. INOUT Parameter
+
+delimiter $$
+create procedure fun3(inout var1 int)
+begin 
+	select max(price) into var1 from demo where id = var1;
+end $$
+delimiter ;

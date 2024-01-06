@@ -1,0 +1,11 @@
+select * 
+from customers
+-- where points >= 1000 AND points <=3000; 
+where points between 1000 AND 3000;
+
+select *
+from customers
+-- where birth_date >= '1990-01-01' AND birth_date <= '2000-01-01';
+where birth_date between '1990-01-01' AND '2000-01-01';
+
+

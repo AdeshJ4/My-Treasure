@@ -1,0 +1,20 @@
+join table with itself so we can select name of each emplyee and their manager
+
+
+select *
+from employees e
+join employees m
+	on e.reports_to = m.employee_id;
+
+
+
+
+
+
+
+
+
+
+
+
+

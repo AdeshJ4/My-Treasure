@@ -1,0 +1,4 @@
+Drop multiple table at once by using single querry
+
+
+DROP TABLE IF EXISTS tb1, tb2, tb3;

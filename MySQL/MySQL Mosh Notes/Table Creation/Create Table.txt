@@ -1,0 +1,33 @@
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    column3 datatype,
+    ...
+    PRIMARY KEY (one_or_more_columns)
+);
+
+
+CREATE TABLE person (
+    id  PRINTIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    age INT,
+    salary DECIMAL(10,2),
+    is_student BOOLEAN
+);
+
+INSERT INTO person (name, age, salary, is_student) VALUES
+('John Doe', 30, 12345.67, TRUE);
+
+SELECT * FROM person;
+
+
+
+
+
+CREATE TABLE Persons (
+    PersonID int,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+);

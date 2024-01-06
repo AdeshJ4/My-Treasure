@@ -117,6 +117,8 @@ Third-party Middleware:
 and response statuses.
 3. rc : The rc npm package is used to load configuration settings from configuration files in a consistent and flexible manner. It's often used in Node.js applications to simplify the process of managing and accessing configuration parameters.
 4. debug: A tiny JavaScript debugging utility modelled after Node.js core's debugging technique. Works in Node.js and web browsers.
+5. compression: Using a compression package in Node.js is beneficial for optimizing the performance and efficiency of web applications by reducing the size of data sent between the server and clients. Compression is especially relevant when dealing with HTTP responses, as it can significantly improve the speed and reduce the bandwidth usage of your application. Here are some reasons why compression is important:
+
 
 
 

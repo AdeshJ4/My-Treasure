@@ -1,0 +1,21 @@
+How to insert multiple records in single querry
+-----------------------------------------------
+
+
+(For specific columns)
+
+1. Insert multiple data/rows/record in only one column (For specific columns):
+-> INSERT INTO customers (name) VALUES ('Adesh1'), ('Adesh2'), ('Adesh3'), ('Adesh4');
+
+2. Insert multiple data in multiple columns(For specific columns);
+-> insert into customers (first_name, last_name, address) 
+	values ('Add1', 'Hello1', 'Address1'), ('Add2', 'Hello2', 'Address2'); 
+
+
+
+(For All Columns);
+
+3. Insert multiple data in multiple columns(For All Columns);
+-> insert into customers values (default, 'Arjun', 'MA', '2021-02-12', '9527310255', 'Lotus','Pune','MH', default), 
+     					     (default, 'Anamica', 'MA', '2021-02-12', '9527310255', 'Lotus','Pune','MH', default);
+

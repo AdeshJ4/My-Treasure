@@ -1,0 +1,27 @@
+version: C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe  Ver 8.0.25 for Win64 on x86_64 (MySQL Community Server - GPL) 
+
+
+
+Download : MySQL by Jun Han (MySQLmanagement tool) extension
+Host : localhost
+username: root
+p/w: Adesh@2001
+port : 3306
+
+click on connect
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

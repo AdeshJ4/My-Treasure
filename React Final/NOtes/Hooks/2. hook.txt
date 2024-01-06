@@ -85,7 +85,7 @@ value inside this first variable.
 -> so react depends on the order of this elements in array and map these values properly to local variables in this function.and 
 that means we can't use hooks inside for loop, while loop etc.because if we does then it will impact order in which the state hook is 
 called.
-so to insure  the consistent order we can only call state hook at the top level of our component.
+so to insure  the consistent order we can only call state hook at the top level of our component.-
 
 
 

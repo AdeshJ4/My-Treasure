@@ -1,0 +1,67 @@
+-- add 1 year in current year
+select date_add(now(), interval 1 year);
+select year(now()) as current_year, year(date_add(now(), interval 1 year)) as next_year;
+
+-- subtract 1 year from current year
+select date_sub(now(), interval 1 year);
+select year(now()) as current_year, year(date_sub(now(), interval 1 year)) as previous_year;
+
+-- -------------------------------------------------------------------------------------------------------
+
+-- add 1 month in current month
+select date_add(now(), interval 1 month);
+select  month(now()) as current_month,  month(date_add(now(), interval 1 month)) as next_month;
+
+-- subtract 1 month from current month
+select date_sub(now(), interval 1 month);
+select month(now()) as current_month, month(date_sub(now(), interval 1 month)) as previous_month;
+
+-- --------------------------------------------------------------------------------------------------------
+
+-- add 1 day in current day
+select date_add(now(), interval 1 day);
+select day(now()) as current_day, day(date_add(now(), interval 1 day)) as tomarrow_date;
+
+-- subtract 1 day from current day
+select date_sub(now(), interval 1 day);
+select day(now()) as current_day, day(date_sub(now(), interval 1 day)) as yeasterday_date;
+
+-- --------------------------------------------------------------------------------------------------------
+
+-- calculate diiference between two dates
+select datediff(now(), '2001-06-22');  -- difference in days -- 7858
+
+-- --------------------------------------------------------------------------------------------------------
+
+-- calculate difference between two times
+select time_to_sec('9:02') -  time_to_sec('9:00');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

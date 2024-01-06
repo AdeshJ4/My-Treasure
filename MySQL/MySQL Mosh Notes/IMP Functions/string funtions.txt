@@ -1,0 +1,16 @@
+select 
+	client_id, 
+    name, 
+	length(name),
+    upper(name), 
+    lower(name),
+    ltrim(name),
+    rtrim(name),
+    trim(address),
+    left(name, 2),
+    right(name, 2),
+    substring(address, 2, 6),
+    locate('n',name),
+    replace(name, 'e', 'Z'),
+    concat(name, '' ,address)
+from clients;

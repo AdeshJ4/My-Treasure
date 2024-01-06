@@ -1,0 +1,128 @@
+***Select All Data***
+--> SELECT * FROM customers;
+----------------------------------------------------------------------------------------------------------------------
+***Select specific columns***
+--> SELECT first_name, city FROM customers;
+----------------------------------------------------------------------------------------------------------------------
+***Create new field in Output but not in database***
+select 
+	first_name,
+	last_name,
+    points,
+    (points + 10) AS discount_factor
+from customers;
+----------------------------------------------------------------------------------------------------------------------
+***Create new field in Output but not in database***
+select 
+	first_name,
+	last_name,
+   points,
+   (points + 10) AS 'discount factor'
+from customers;
+----------------------------------------------------------------------------------------------------------------------
+***Get Unique values (Not repeted)***
+-> select distinct col_name from table_name;
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

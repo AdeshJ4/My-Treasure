@@ -1,3 +1,91 @@
+Q] Reverse an array: 
+====================
+Input: [10, 20, 30, 40, 50]
+Output: [ 50, 40, 30, 20, 10 ]
+
+function reverseArray(arr){
+  let reverse = [];
+  for(let i = arr.length-1; i>=0; i--){
+    reverse.push(arr[i]);
+  }
+
+  return reverse;
+}
+
+
+=============================================================================================================================
+
+
+
+Q. Add elements of array: 
+
+1. using for loop
+function addElements(arr){
+  let sum = 0;
+  for(let num of arr){
+    sum+=num;
+  }
+
+  return num;
+}
+
+2. using foreach loop
+function addElements(arr){
+  let sum = 0;
+  arr.foreach(ele=>{
+    sum += ele;
+  })
+  return sum;
+}
+
+3. reduce() function
+
+function addElements(arr){
+  return arr.reduce((accumulator, curElement)=>{
+    return accumulator + curElement;
+  }, 0)
+}
+
+=============================================================================================================================
+
+Q] multiply elements of array
+
+1. reduce method
+function multiplyElements(arr){
+    return arr.reduce((accumulator, curElement)=>{
+        return accumulator * curElement;
+    }, 1);
+}
+
+2. using foreach()
+function multiply(arr){
+    let mul = 1;
+    arr.forEach(ele=>{
+        mul *= ele;
+    });
+    return mul;
+}
+
+=============================================================================================================================
+
+Q] dob property should not change
+const user = {
+    id: 101,
+    fullName: 'Adesh',
+    dob: '2001-06-22'
+}
+const propertyDescriptor = {
+    value: user.dob,
+    writable: false
+}
+Object.defineProperty(user, "dob", propertyDescriptor);
+user.dob = '2001-07-23';
+console.log(user);
+
+=============================================================================================================================
+
+
+
 Question 1 : Reverse each word of a sentence.
 
 INPUT : "Hey Adesh"
@@ -13,13 +101,20 @@ function reverseSentence(str){
 }
 let res = reverseSentence("Adesh Pramod Jadhav");   
 
+or 
+
+function reverseStr (str){
+    return str.split(' ').map(ele=> ele.split('').reverse().join('')).join(' ');
+}
+
+
 code 2: using loop
 INPUT : "Adesh Jadhav"
 OUTPUT: "hsedA vahdaJ"
 
 function reverseString(str) {
   let reverse = "";
-// R A M = 2, 1, 0
+  // R A M = 2, 1, 0
   for (let i = str.length - 1; i >= 0; i--) {
     reverse = reverse + str[i]; // M A  R
   }
@@ -27,6 +122,35 @@ function reverseString(str) {
 }  // hsedA vahdaJ
 
 
+
+============================================================================================================================
+
+Q] Count vowels: 
+
+function countVowels(str){
+    let vowels = 'aeiou';
+    let count = 0;
+    for(let ch of str){
+        if(vowels.indexOf(ch.toLowerCase()) !== -1)
+            count++;
+    }
+    return count;
+}
+
+
+
+count how many times a character occur in a string: 
+
+function countCharacter(str, target){
+  let count = 0;
+  for(let ch of str){
+    if(target.indexOf(ch.toLowerCase()) !== -1){
+      count++;
+    }
+  }
+
+  return count;
+}
 
 ============================================================================================================================
 
@@ -196,10 +320,6 @@ function reverseNum (num){
     }
     return reverse
 }
-
-const res = reverseNum(1234)
-
-
 
 
 ============================================================================================================================

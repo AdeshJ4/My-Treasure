@@ -1,0 +1,124 @@
+SQL FOREIGN KEY
+
+
+-> In the relational databases, a foreign key is a field or a column that is used to "establish" a 
+   "link" between two tables.
+-> The FOREIGN KEY constraint is used to prevent actions that would destroy links between tables.
+-> In simple words you can say that, a foreign key in one table used to "point" 'primary key' in 
+	another table.
+-> A FOREIGN KEY is a field (or collection of fields) in one table, that refers to the PRIMARY 
+	KEY in another table.
+-> The table with the foreign key is called the child table, and the table with the primary key 
+	is called the referenced or parent table
+-> MySQL allows us to add a FOREIGN KEY constraint on multiple columns in a table. The condition 
+	is that each Foreign Key in the child table must refer to the different parent table.
+
+
+
+Student Table
+----------------
+S_Id	  LastName		FirstName			CITY
+1		  MAURYA			AJEET				ALLAHABAD
+2		  JAISWAL		   RATAN				GHAZIABAD
+3		  ARORA			SAUMYA				MODINAGAR
+
+
+Order Table
+------------
+O_Id	OrderNo		S_Id
+1		99586465		2
+2		78466588		2
+3		22354846		3
+4		57698656		1
+
+
+
+Here you see that "S_Id" column in the "Orders" table points to the "S_Id" column in "Students" 
+table.
+
+The "S_Id" column in the "Students" table is the PRIMARY KEY in the "Students" table.
+The "S_Id" column in the "Orders" table is a FOREIGN KEY in the "Orders" table.
+
+
+
+
+Uses: 
+-> The foreign key constraint is generally prevents action that destroy links between tables.
+-> It also prevents invalid data to enter in foreign key column
+
+
+Difference between primary key and foreign key in SQL:
+---------------------------------------------------------
+
+
+Primary key cannot be null
+foreign key can be null.
+
+Primary key is always unique 
+foreign key can be duplicated.
+
+Primary key uniquely identify a record in a table
+foreign key is a field in a table that is primary key in another table.
+
+There is only one primary key in the table
+we can have more than one foreign key in the table.
+
+By default primary key adds a clustered index
+foreign key does not automatically create an index, clustered or non-clustered. -
+									You must manually create an index for foreign key.
+
+
+
+
+
+
+
+
+
+SQL FOREIGN KEY on CREATE TABLE
+----------------------------------
+CREATE TABLE Orders (
+    O_Id int NOT NULL,
+    O_name int NOT NULL,
+    s_id int,
+    PRIMARY KEY (O_Id),
+    FOREIGN KEY (s_id) REFERENCES student(s_id)
+);
+
+
+Naming of a FOREIGN KEY constraint
+----------------------------------
+CREATE TABLE Orders (
+    OrderID int NOT NULL,
+    OrderNumber int NOT NULL,
+    PersonID int,
+    PRIMARY KEY (OrderID),
+    CONSTRAINT FK_PersonOrder FOREIGN KEY (s_id)
+    REFERENCES student(s_id)
+);
+
+
+
+SQL FOREIGN KEY on ALTER TABLE
+--------------------------------
+ALTER TABLE Orders
+ADD FOREIGN KEY (s_id) REFERENCES student(s_id);
+
+
+
+DROP a FOREIGN KEY Constraint
+--------------------------------
+ALTER TABLE Orders
+DROP FOREIGN KEY FK_s_id;
+
+
+
+
+
+
+
+
+
+
+
+

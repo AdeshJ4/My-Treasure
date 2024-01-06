@@ -1,0 +1,53 @@
+SELECT * FROM db1.demo;
+
+alter table demo
+add column properties json;
+
+insert into demo values(default, '21:04:56', '2002', '{"weight": 10, "dimensions": [1,2,3], "manufacturer": {"name": "sony"}}');
+insert into demo values(default, '12:04:56', '2006', json_object("weight", 50, "dimesions", json_array(6,7, 8), "manufacturer", json_object('name', 'ONIDA')));
+
+update products
+set properties = json_object(
+	"weight", 10,
+    "dimesions", json_array(1,2,3),
+    "manufacturer", json_object('name', 'sony')
+)
+where product_id = 2;
+
+
+-- extract key or value from json
+select id , json_extract(properties, '$.weight') from demo where id = 9;
+
+
+
+-- (column pass operator(->))
+select id, properties -> '$.weight' as weight from demo where id=10;
+
+-- sometimes we don't want 'sony' just we want sony for comparison purpose so use (->>)
+select id, properties->> '$.manufacturer.name' from demo where id = 9; -- return sony
+
+select id, properties->> '$.manufacturer.name' 
+from demo 
+where properties->> '$.manufacturer.name'; -- return result based on comparisons
+
+
+
+-- add new property(age) and update old property(weight) inside json object 
+update demo
+set properties = json_set(
+	properties,
+    '$.weight', 100,
+    '$.age', 10
+)
+where id = 9;
+
+
+
+-- remove any property from json object
+update demo
+set properties = json_remove(
+	properties,
+    '$.age'
+)
+where id = 9;
+

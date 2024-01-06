@@ -1,0 +1,73 @@
+Note: It's preferred to use the "JOIN" clause instead of a "subquery" whenever possible. 
+----- It's because the execution speed of JOIN is faster and more optimized than a subquery.
+
+Definition :
+------------
+A subquery is a query within another query. The outer query is known as the main query, and the 
+inner query is known as a subquery.
+
+Important Rule:
+---------------
+
+-> A subquery can be placed in a number of SQL clauses like  SELECT clause, WHERE clause, FROM 
+	clause, HAVING clause.
+-> You can use Subquery with SELECT, UPDATE, INSERT, DELETE statements along with the operators 
+	like =, <, >, >=, <=, IN, BETWEEN, etc.
+-> Subqueries are on the right side of the comparison operator.
+-> Subqueries must be enclosed within parentheses.
+-> In the Subquery, "ORDER BY" command cannot be used. But "GROUP BY" command can be used to 
+	perform the same function as ORDER BY command.
+-> A subquery can have "only one column" in the SELECT clause, unless multiple columns are in the 
+	main query for the subquery to compare its selected columns.
+-> Subqueries that return more than one row can only be used with multiple value operators such as
+	 the IN operator.
+-> The BETWEEN operator cannot be used with a subquery. However, the BETWEEN operator can be used 
+	within the subquery.
+
+
+Subqueries with the SELECT Statement
+------------------------------------
+
+select *
+from emp 
+where id in (
+	select id 
+	from emp 
+	where salary > 90000
+);
+
+
+Subqueries with the INSERT Statement
+------------------------------------
+
+INSERT INTO tb1  
+   SELECT * FROM tb2   
+   WHERE ID IN (SELECT ID   
+   FROM tb2);  
+
+
+Subqueries with the UPDATE Statement
+------------------------------------
+Note : Both table must be different
+update tb2
+set salary = salary * 0.25 
+where id in (
+	select id 
+    from tb1
+    where age >= 25
+);
+
+Subqueries with the DELETE Statement
+------------------------------------
+Note : Both table must be different
+DELETE FROM tb2  
+WHERE AGE IN (SELECT AGE FROM tb1 
+WHERE AGE >= 26 );  
+
+
+
+
+
+
+
+

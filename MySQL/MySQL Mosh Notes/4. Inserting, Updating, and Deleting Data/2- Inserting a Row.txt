@@ -1,0 +1,89 @@
+There are two ways of inserting data 
+
+1. insert data in all columns.
+-> INSERT INTO customers VALUES('Adesh', 'Jadhav', 21, 'Pune');
+2. insert data in specified columns.
+-> INSERT INTO customers (f_name, l_name, age, city) VALUES('Adesh', 'Jadhav', 21, 'Pune');
+
+
+
+
+Corner case 1:
+
+if you want to add values in all columns and your first column is customer_id(primary key + Auto increment key)
+then you can write 'DEFAULT' in its place or you can write any random no but if you do this and bychance 
+there present record with that no then it will give you error so its better to write 'DEFAULT' in 
+primary key.
+
+Ignore above case if you are adding data in specific columns
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

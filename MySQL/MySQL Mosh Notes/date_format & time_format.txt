@@ -1,0 +1,21 @@
+select date_format(now(), '%y'); -- 22
+select date_format(now(), '%Y'); -- 2022
+select date_format(now(), '%m'); -- 09
+select date_format(now(), '%M'); -- September
+select date_format(now(), '%D'); -- 13th
+select date_format(now(), '%d'); -- 13
+select date_format(now(), '%a'); -- Tue
+select date_format(now(), '%M %Y');  -- 'September 2022'
+select date_format(now(), '%Y %M %D');  -- '2022 September 13th'
+
+select time_format(now(), '%h');  -- 9 (12 hour format)
+select time_format(now(), '%H');  -- 09 (24 hour format)
+select time_format(now(), '%i');  -- 20 (minute)
+select time_format(now(), '%s');  -- seconds
+select time_format(now(), '%p');  -- AM
+select time_format(now(), '%H:%i %p');  -- '09:22 AM'
+select time_format(now(), '%T');  -- '21:23:35'  print date in 24 hr format
+select time_format('24:12:45', '%T');  -- '21:23:35'  print date in 24 hr format
+
+
+

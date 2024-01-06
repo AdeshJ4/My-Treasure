@@ -1,0 +1,13 @@
+select 
+	'13:12:45' as date_,
+	time_format('13:12:45', '%h'),
+    time_format('13:12:45', '%H'),
+    time_format('13:12:45', '%i'),
+    time_format('13:12:45', '%s'),
+    time_format('11:12:45', '%p'),
+    time_format('13:12:45', '%T %p'),
+    time_format('11:12:45', '%T %p'),
+    time_format('14:12:45', '%r') 
+
+
+select time_format(col_name, '%h%H%i%s%p%T%r') from table_name;

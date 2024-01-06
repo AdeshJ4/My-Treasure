@@ -1,0 +1,126 @@
+SQL PRIMARY KEY
+-------------------------------
+-> The PRIMARY KEY constraint uniquely identifies each record in a table.
+-> Primary keys must contain UNIQUE values, and cannot contain NULL values.
+-> A table can have only "ONE primary key", and in the table this primary key can consist of 
+	single or multiple columns (fields).
+-> Primary key is made of single or multiple columns.
+-> A column or columns is called primary key (PK) that uniquely identifies each row in the table.
+-> When multiple columns are used as a primary key, it is known as composite primary key.
+-> In designing the composite primary key, you should use as few columns as possible. It is good 
+	for storage and performance both, the more columns you use for primary key the more storage 
+	space you require.
+	In terms of performance, less data means the database can process faster
+
+
+Points to remember for primary key:
+---------------------------------------------------------
+-> Primary key always has unique data(not repeating)
+-> A primary key cannot have null value
+-> There can be no duplicate value for a primary key
+-> A table can contain only one primary key
+-> A primary key length cannot be exceeded than 900 bytes
+
+
+
+
+SQL primary key for one column:
+------------------------------------
+CREATE TABLE students  
+(  
+S_Id int NOT NULL,  
+LastName varchar (255) NOT NULL,  
+FirstName varchar (255),  
+Address varchar (255),  
+City varchar (255),  
+PRIMARY KEY (S_Id)  
+)  
+
+
+SQL primary key for multiple columns:
+------------------------------------------------------
+CREATE TABLE students  
+(  
+S_Id int NOT NULL,  
+LastName varchar (255) NOT NULL,  
+FirstName varchar (255),  
+Address varchar (255),  
+City varchar (255),  
+CONSTRAINT pk_StudentID PRIMARY KEY (S_Id, LastName)  
+)  
+
+
+
+
+SQL primary key on ALTER TABLE
+------------------------------
+
+Primary key on one column:
+--------------------------
+ALTER TABLE students  
+ADD PRIMARY KEY (S_Id)  
+
+
+Primary key on multiple column:
+-------------------------------
+ALTER TABLE students  
+ADD CONSTRAINT pk_StudentID PRIMARY KEY (S_Id,LastName)  
+
+
+
+How to DROP a PRIMARY KEY constraint?
+---------------------------------------
+
+ALTER TABLE students  
+DROP PRIMARY KEY
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

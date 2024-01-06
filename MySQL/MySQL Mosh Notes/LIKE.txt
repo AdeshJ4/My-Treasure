@@ -1,0 +1,111 @@
+How to retrive rows that match specific string pattern.
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose last name starts with 'b'.
+select * 
+from customers
+where last_name like 'b%'; 
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose last name starts or ends or in between with 'b'.
+select * 
+from customers
+where last_name like '%b%'; 
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose last name ends with 'b'.
+select * 
+from customers
+where last_name like '%b'; 
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose last name has exactly 2 words and last character ends with
+ends with 'b'.
+select * 
+from customers
+where last_name like '_b'; 
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose last name has exactly 6 words and last character ends with
+ends with 'b'.
+select * 
+from customers
+where last_name like '_____b'; 
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose last name has exactly 6 words and first character starts with b
+and last character ends with y.
+select * 
+from customers
+where last_name like 'b____y'; 
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose address contain TRAIL OR AVENUE
+select * 
+from customers
+where address like '%TRAIL%' or 
+	   address like '%AVENUE%';
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose phone no ends with 9
+select *
+from customers
+where phone like '%9';
+------------------------------------------------------------------------------------------------------------------------
+eg. get customers whose phone no don't have 9 at the end
+select *
+from customers
+where phone NOT like '%9';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

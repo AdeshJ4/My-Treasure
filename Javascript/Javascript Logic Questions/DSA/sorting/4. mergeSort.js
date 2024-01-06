@@ -6,10 +6,12 @@ function mergeSort(arr) {
   let middle = Math.floor(arr.length / 2);
 
   let left = [];
-  for (let i = 0; i < middle; i++) left[i] = arr[i];
+  for (let i = 0; i < middle; i++) 
+    left[i] = arr[i];
 
   let right = [];
-  for (let i = middle; i < arr.length; i++) right[i-middle] = arr[i];
+  for (let i = middle; i < arr.length; i++) 
+    right[i-middle] = arr[i];
 
   mergeSort(left);
   mergeSort(right);

@@ -242,7 +242,6 @@ import { UserContext } from './Fun';
 
 const File2 = () => {
   const { users, createUser, updateUser, deleteUser } = useContext(UserContext);
-
   return (
     <>
       <ul>
@@ -259,7 +258,6 @@ const File2 = () => {
     </>
   );
 };
-
 export default File2;
 
 
@@ -269,6 +267,81 @@ export default File2;
 
 
 
+
+-> In React, data flow is typically unidirectional, meaning that the flow of data moves in one direction within the component tree. 
+-> this one-way flow helps in managing and debugging the application state more effectively
+
+Here's how the unidirectional data flow works in React:
+
+1. **Parent-to-Child:**
+   - Data is passed from a parent component to its child components through props.
+   - Parent components own the state and pass data down to their children as props.
+
+    // Parent Component
+    import React from 'react';
+    import ChildComponent from './ChildComponent';
+
+    const ParentComponent = () => {
+      const data = 'Hello from Parent';
+
+      return <ChildComponent message={data} />;
+    };
+
+    export default ParentComponent;
+
+
+
+    // Child Component
+    import React from 'react';
+
+    const ChildComponent = (props) => {
+      return <p>{props.message}</p>;
+    };
+
+    export default ChildComponent;
+
+
+2. **Child-to-Parent (Callback Props):**
+   - If a child component needs to communicate with its parent, the parent can pass callback functions to the child as props.
+   - The child invokes the callback, and the parent handles the state changes.
+
+// Parent Component
+import { useState, createContext } from "react";
+import Compo1 from "./Compo1";
+export const UserContext = createContext();
+const App = () => {
+  const [data, setData] = useState({
+    name: "Adesh",
+    age: 22,
+  });
+  const updateName = (value) => {
+    setData({ ...data, name: value });
+  };
+  return (
+    <UserContext.Provider value={{ data, updateName }}>
+      <Compo1 />
+    </UserContext.Provider>
+  );
+};
+export default App;
+
+
+
+// Child Component
+import { useContext } from "react";
+import { UserContext } from "./App";
+const Compo1 = () => {
+  const user = useContext(UserContext);
+  return (
+    <>
+      <h1>Name: {user.data.name}</h1>
+      <h1>Age: {user.data.age}</h1>
+
+      <button onClick={()=>user.updateName('Ram')}>Update Age</button>
+    </>
+  );
+};
+export default Compo1;
 
 
 

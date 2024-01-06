@@ -1,0 +1,21 @@
+Bellow two querries are same
+
+select * 
+from customers
+where state = 'VA' or state = 'GA' OR state = 'FL';
+
+select * 
+from customers
+where state in ('VA', 'GA', 'FL') ;
+
+------------------------------------------------------------------------------------------------
+
+***Peoples are not from VA, GA, FL***
+
+select * 
+from customers
+where state NOT IN ('VA', 'GA', 'FL') ;
+------------------------------------------------------------------------------------------------
+select *
+from products
+where quantity_in_stock in (49, 38, 72);

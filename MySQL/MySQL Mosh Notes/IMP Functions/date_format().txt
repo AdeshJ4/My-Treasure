@@ -1,0 +1,10 @@
+select 
+	invoice_date,
+	date_format(invoice_date, '%y') as y,
+    date_format(invoice_date, '%Y') as Y,
+    date_format(invoice_date, '%m') as m,
+    date_format(invoice_date, '%M') as M,
+    date_format(invoice_date, '%d') as d,
+    date_format(invoice_date, '%D') as D,
+    date_format(invoice_date, '%d-%M-%Y') as dMY
+from invoices;

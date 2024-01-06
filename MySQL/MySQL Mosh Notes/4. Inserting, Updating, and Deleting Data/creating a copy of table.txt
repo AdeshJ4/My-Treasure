@@ -1,0 +1,40 @@
+How to copy data from one table to another
+
+--> 
+
+CREATE TABLE orders_archived AS 
+SELECT * FROM orders
+
+
+--> Explanation
+
+Here "orders_archived" is copy table name and "orders" is original table
+in "orders_archived" table we don't have primary key & Auto increment key
+
+
+when we create a new table using this technique, mysqll will not assign any primary key or auto increment key
+to new table, we have to assign it explicitly 
+
+
+
+subquerry:
+
+-> subquerry is a select statement part of another sql statement
+-> we can also use subquerry inside insert statement, it is very powerful technique.
+-> example 1: 
+	here we have separate select statement that can be inserted inside insert querry: 
+	-> select * from orders where order_date < '2019-01-01';
+	Here is full querry with insert statement
+	-> insert into orders_archived select * from orders where order_date < '2019-01-01';
+-> example 2:
+	CREATE TABLE orders_archived AS SELECT * FROM orders;	
+
+
+
+
+
+
+
+
+
+

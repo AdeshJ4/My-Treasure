@@ -1,0 +1,23 @@
+Null --> Absence of value
+
+get the customers who don't give "phone no" means the "phone no" field is null
+select *
+from customers 
+where phone is null;
+
+
+get the all customers phone field which don't have any null value.
+select *
+from customer 
+where phone IS NOT NULL;
+
+
+
+//orders which not shipped yet so we can see them
+//orders which not shipped yet don't have any "shipper_id"
+select *
+from orders 
+where shipper_id is null;
+
+
+

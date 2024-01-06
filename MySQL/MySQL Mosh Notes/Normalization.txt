@@ -1,0 +1,81 @@
+What is Normalization ?
+-----------------------
+
+-> Normalization is the process of organizing the data in the database.
+-> Normalization is used to minimize the redundancy from a relation or set of relations. 
+-> It is also used to eliminate undesirable characteristics like Insertion, Update, and Deletion 
+	Anomalies.
+-> Normalization divides the larger table into smaller and links them using relationships
+-> The normal form is used to reduce redundancy from the database table
+
+
+
+Types of Normal Forms:
+----------------------
+
+
+1. First Normal Form (1NF)
+-> A relation will be 1NF if it contains an atomic value.
+
+2. Second Normal Form (2NF)
+-> In the 2NF, relational must be in 1NF.
+
+3. Third Normal Form (3NF)
+-> A relation will be in 3NF if it is in 2NF and not contain any transitive partial dependency
+
+4. Fourth normal form (4NF)
+-> A relation will be in 4NF if it is in Boyce Codd normal form and has no multi-valued dependency
+
+5. Fifth normal form (5NF)
+-> A relation is in 5NF if it is in 4NF and not contains any join dependency and joining should 
+	be lossless.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

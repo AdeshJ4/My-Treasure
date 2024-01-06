@@ -1,0 +1,192 @@
+RegExp -> Regular expression
+
+1] ^ beginning
+2] $ ebd
+3] | logical OR
+4] [a-f]
+
+
+
+//get all last_names who has b in there word
+select * 
+from customers
+where last_name regexp 'b';
+
+
+//last name must end with 'b'
+select * 
+from customers
+-- where last_name like '%b';
+where last_name regexp 'field$';
+
+
+//last name must start with 'b'
+select * 
+from customers
+-- where last_name like 'b%';
+where last_name regexp '^b';
+
+
+'|' -> represent multiple search pattern
+ select *
+ from customers
+ where last_name like '%field%' or
+	   last_name like '%mac%'
+		last_name like '%rose%';
+ -- where last_name regexp 'field|mac|rose';
+ 
+
+
+select *
+from customers
+-- where last_name regexp 'field$|^mac|^rose';
+where last_name like '%field' OR
+	  last_name like 'mac%' OR
+      last_name like 'rose%';
+      
+
+get customes whose last_name contain 'ge', 'ie', 'me' means before 'e'  there must be 'g'
+or 'i' or 'm'
+select *
+from customers
+where last_name regexp '[gim]e'
+
+get customes whose last_name contain 'eg', 'ei', 'em' means after 'e'  there must be 'g'
+or 'i' or 'm'
+select *
+from customers
+where last_name regexp 'e[gim]'
+
+
+get customes whose last_name contain 'ae', 'be', 'ce', 'de', 'ee', 'fe' means before 'e'  
+there must be 'a', 'b', 'c', 'd', 'e', 'f'
+select *
+from customers
+where last_name regexp '[a-f]e'
+
+
+
+
+
+
+Get the customers whose
+--first names are ELKA or AMBUR
+--last names end with EY or ON
+--last names start with MY or contains SE
+--last names contain B followed by R or U
+
+
+-- Get the customers whose
+-- first names are ELKA or AMBUR
+-- select *
+-- from customers
+-- where first_name regexp 'ELKA|AMBUR';
+
+
+-- last names end with EY or ON
+-- select *
+-- from customers
+-- where last_name regexp 'EY$|ON$';
+
+
+-- last names start with MY or contains SE
+-- select *
+-- from customers
+-- where last_name regexp '^MY|SE';
+
+-- last names contain B followed by R or U
+-- select *
+-- from customers
+-- where last_name regexp 'B[RU]';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

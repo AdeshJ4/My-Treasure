@@ -1,0 +1,401 @@
+SQL Constraints
+---------------
+
+create table tb1 (
+	id int,
+    city varchar(10),
+    age int,
+    Order_id int,
+    constraint PK_tb1 primary key(id),
+    constraint FK_tb1 foreign key(order_id) references parent(Order_id),
+    constraint CHK_Person check (age>=18 AND city='Pune'),
+    constraint UK_Key unique(id),
+);
+
+-> SQL constraints are used to specify rules for data in a table.
+
+-> Constraints can be specified when the "table is created with the CREATE TABLE statement", 
+	or "after the table is created with the ALTER TABLE statement".
+
+-> Constraints are used to limit the type of data that can go into a table.
+
+-> Constraints in SQL can be categorized into two types:
+
+	1. Column Level Constraint:
+	-> Column Level Constraint is used to apply a constraint on a single column.
+	2. Table Level Constraint:
+	-> Table Level Constraint is used to apply a constraint on multiple columns.
+
+
+Syntax
+------
+
+CREATE TABLE table_name(
+	col1 datatype constraints,
+	col2 datatype constraints,
+	col3 datatype constraints
+);
+
+
+-> The following constraints are commonly used in SQL:
+	
+	1. NOT NULL - Ensures that a column cannot have a NULL value
+	------------------------------------------------------------
+	CREATE TABLE Persons (
+    	ID int NOT NULL,
+    	LastName varchar(255) NOT NULL,
+    	FirstName varchar(255) NOT NULL,
+    	Age int
+	);
+	
+	ALTER TABLE Persons
+	MODIFY COLUMN Age int NOT NULL;
+
+
+	2. UNIQUE - Ensures that all values in a column are different
+	-------------------------------------------------------------
+	
+	-> The NOT NULL is a constraint in SQL which does not allow you to insert NULL values in the 
+		specified column
+	-> The column with the unique constraint will always contain a unique value.
+	-> The UNIQUE constraint ensures that all values in a column are different.
+	-> Both the UNIQUE and PRIMARY KEY constraints provide a guarantee for uniqueness for a column 
+		or set of columns.
+	-> A PRIMARY KEY constraint automatically has a UNIQUE constraint.
+	-> However, you can have many UNIQUE constraints per table, but only one PRIMARY KEY constraint
+		per table.
+	-> You can insert "NULL values" into columns with the UNIQUE constraint because NULL is the 
+		absence of a value, so it is never equal to other NULL values and not considered a duplicate
+		value. This means that it's possible to insert rows that appear to be duplicates if one of 
+		the values is NULL .
+	->	You can create unique key using two or more columns. 
+
+		//remember this 
+		CREATE TABLE tb1 (
+    		ID int NOT NULL,
+    		name varchar(255) NOT NULL,
+    		CONSTRAINT UC_Person UNIQUE (ID,name)
+		);
+
+		CREATE TABLE tb1 (
+    		ID int NOT NULL,
+    		name varchar(255) NOT NULL,
+    		CONSTRAINT UC_Person UNIQUE (ID)
+		);
+
+		// don't use this but 
+		CREATE TABLE tb1 (
+			ID int NOT NULL unique, 
+			name varchar(255) NOT NULL
+		);  
+
+		//
+		CREATE TABLE tb1 (
+			ColumnName1 datatype, 
+			ColumnName2 datatype,
+			ColumnNameN datatype, 
+			UNIQUE (ColumnName1, ColumnName 2)
+		);  
+	
+		ALTER TABLE tb1
+		ADD CONSTRAINT UC_x UNIQUE (ID,LastName);
+
+		ALTER TABLE tb1
+		ADD CONSTRAINT UC_Person UNIQUE (ID);
+
+		ALTER TABLE tb1
+		DROP INDEX UC_Person;
+
+
+
+
+
+		3. Primary Key
+		---------------------------------------------------------------------------------------
+
+		-> PRIMARY KEY - A combination of a NOT NULL and UNIQUE.
+		-> The PRIMARY KEY constraint uniquely identifies each record in a table.
+		-> A PRIMARY KEY constraint automatically has a UNIQUE constraint.
+		-> Primary keys must contain UNIQUE values, and cannot contain NULL values.
+		-> A table can have only ONE primary key and in the table, this primary key can consist of 
+			single or multiple columns (fields).
+		-> When multiple columns are used as a primary key, it is known as composite primary key
+
+		create table tb1(
+			id int primary key,  // 1st way
+			primary key(id),	  // 2nd way
+			constraint PK_TB1 primary key(id) //3rd way
+		);
+
+		CREATE TABLE tb1(
+			id int not null primary key,
+			name varchar(20) not null
+		);
+		
+		CREATE TABLE tb1(
+			id int not null,
+			name varchar(20) not null,
+			primary key(id)
+		);
+		
+		CREATE TABLE tb1(
+			id int unique,
+			name varchar(20) not null,
+			CONSTRAINT PK_Person PRIMARY KEY (ID)
+		);
+			
+		CREATE TABLE tb1(
+			id int unique,
+			name varchar(20) not null,
+			CONSTRAINTS PK_Person PRIMARY KEY (id, name)
+		);
+		Note: In the example above there is only ONE PRIMARY KEY (PK_Person). However, the VALUE of the 
+			   primary key is made up of TWO COLUMNS (ID + LastName).
+
+		ALTER TABLE tb1
+		ADD CONSTRAINT PK_Person PRIMARY KEY (ID,NAME); 
+
+		ALTER TABLE tb1
+		ADD CONSTRAINT PK_Person PRIMARY KEY (ID); 
+
+		ALTER TABLE Persons
+		ADD PRIMARY KEY (ID);
+
+		ALTER TABLE tb1
+		DROP PRIMARY KEY;
+
+		
+
+		4. FOREIGN KEY
+		--------------------------------------------------------------------------------------------------
+		
+		-> A foreign key is a key used to link two tables together. This is sometimes also called as a 
+			referencing key.
+		-> The FOREIGN KEY constraint is used to prevent actions that would destroy links between tables
+		-> A FOREIGN KEY is a field (or collection of fields) in one table, that refers to the PRIMARY KEY 
+			in another table.
+		-> The table with the foreign key is called the child table, and the table with the primary key is 
+			called the referenced or parent table.
+		-> The FOREIGN KEY constraint prevents invalid data from being inserted into the foreign key column, 
+			because it has to be one of the values contained in the parent table.
+		-> In SQL, we can create a relationship between two tables using the FOREIGN KEY constraint.
+
+		Child -> 	Table which contain foreign key
+		Parent -> Table which contain primary key
+
+		//create table
+		create table tb1(
+			id int primary key,
+			order_id int,
+			foreign key(order_id) references parent(order_id),  //1st way
+			constraint FK_TB1 foreign key(order_id) references parent(order_id)  //2nd way  -> automatically generate foreign key name like "child_ibfk_1"
+		);
+		
+		create table child(
+			id int,
+    		personId int,
+    		constraint PK_Child PRIMARY KEY(id),
+    		constraint FK_Child FOREIGN KEY(personId) references parent(personId)
+		);
+
+		create table child(
+			Dept_ID INT NOT NULL, 
+			Dept_Name VARCHAR(40), 
+			Emp_ID INT NOT NULL, 
+    		PRIMARY KEY(Dept_ID),
+    		FOREIGN KEY(Emp_ID) REFERENCES parent(Emp_ID)  //automatically generate foreign key name like "child_ibfk_1"
+		);  
+
+		// Add constraint after creating table
+		ALTER TABLE tb1
+		ADD CONSTRAINT FK_Order FOREIGN KEY(order_id) REFERENCES Order(order_id) 
+	
+		ALTER TABLE tb1
+		ADD FOREIGN KEY(Order_id) REFERENCES Order(Order_id) //automatically generate foreign key name like "child_ibfk_1"
+
+		//Drop Constraint
+		alter table child
+		drop foreign key child_ibfk_1;
+
+		// Example
+		-- Inserting record in table with no foreign key first
+		INSERT INTO Customers
+		VALUES
+		(1, 'John', 'Doe', 31, 'USA'),
+		(2, 'Robert', 'Luna', 22, 'USA');
+
+		-- Insertion Success
+		INSERT INTO Orders
+		VALUES
+		(1, 'Keyboard', 400, 2),
+		(2, 'Mouse', 300, 2),
+		(3, 'Monitor', 12000, 1);
+
+		-- Insertion Error because customer with id of 7 does not exist
+ 		INSERT INTO Orders
+		VALUES (4, 'Keyboard', 400, 7);
+
+		//example 2
+
+		
+		create table us1 (
+			id_us1 int primary key
+		);
+
+		create table us2(
+			id_us2 int primary key
+		);
+
+		create table tb(
+			id_tb int primary key,
+   	 		seller int,
+    		buyer int,
+    		constraint FK1_us1 foreign key(seller) references us1(id_us1),
+   	 		constraint FK2_us2 foreign key(buyer) references us2(id_us2)
+		);
+
+
+
+
+
+		5. CHECK 
+		
+		-> Ensures that the values in a column satisfies a specific condition.
+		-> If you define a CHECK constraint on a column it will allow only certain values for this 
+			column
+
+		CREATE TABLE tb1(
+			id int primary key,
+			city varchar(20) not null,
+			age int,
+			check (age >= 18)  							//1st way -> Don't use this way 
+			check (age >= 18 AND city="Pune") 			//2nd way -> Don't use this way 
+			constraint CHK_Person CHECK(age >= 18)	//3rd way -> use this way 
+		);
+
+		ALTER TABLE tb1									-> Don't use this way		
+		ADD CHECK ( age >= 18 AND city='Pune')
+
+		ALTER TABLE tb1									-> use this way
+		ADD CONSTRAINT CHK_Person CHECK (age >= 18)
+
+		ALTER TABLE Persons
+		DROP CHECK CHK_PersonAge;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,58 @@
+how to insert record in multiple tables
+
+
+
+-- PARENT TABLE
+INSERT INTO orders (customer_id, order_date, status)
+values(3, '2001-01-22', 1);
+
+-- CHILD TABLE
+INSERT INTO order_items 
+VALUES	
+	(last_insert_id(),3,2,4.95),
+    (last_insert_id(),3,2,5.95);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

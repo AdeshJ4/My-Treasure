@@ -2,11 +2,38 @@ forEach():
 
 -> The forEach() method call a function for each element in an array.
 -> unlike map and filter it doesn't create new array.
+-> return value of a forEach() is undefined.
 -> forEach() modify the Original Array.
 -> The forEach() method is useful when you want to perform an action for each element in an array without creating a new array.
 -> It's often used when you need to iterate over elements but don't need to transform or filter the array.
--> return value of a forEac() is undefined.
+-> forEach() is suitable for scenarios where you simply want to perform some operation or action on each element of the array, 
+but you don't need to create a new array with modified values or filter out specific elements based on some condition.
+-> It's focused on performing a side effect for each element, such as logging each element, updating external variables, or 
+interacting with the DOM.
+-> Similarly, forEach() doesn't filter elements based on a condition. If you need to filter elements, you would typically use the 
+filter() method.
 
+
+ex.0
+// Using forEach to update an external variable
+let sum = 0;
+numbers.forEach((number) => {
+    sum += number;
+});
+
+// add elements of Array
+let arr = [10, 20, 30, 40, 50];
+let sum = 0;
+arr.forEach(ele=>{
+  sum = sum + ele;
+}) // 150
+
+// multiply elements of array
+let arr = [1, 2, 3, 4, 5];
+let multiply = 1;
+arr.forEach(ele=>{
+  multiply = multiply * ele;
+}); // 120
 
 ex.1
 const arr1 = [10, 20, 30, 40, 50, 60];
@@ -37,12 +64,14 @@ const arr2 = [
     {id: 102, name: 'Akshay'},
     {id: 103, name: 'Amar'},
 ]
+let count = 0;
 arr2.forEach((ele, index, array)=>{
-    array[index] = {...ele, age: 0}
+    count++;
+    array[index] = {...ele, age: count}
 })
 output:
-// [
-//     { id: 101, name: 'Adesh', age: 0 },
-//     { id: 102, name: 'Akshay', age: 0 },
-//     { id: 103, name: 'Amar', age: 0 }
-// ]
+[
+  { id: 101, name: 'Adesh', age: 1 },
+  { id: 102, name: 'Akshay', age: 2 },
+  { id: 103, name: 'manoj', age: 3 }
+]

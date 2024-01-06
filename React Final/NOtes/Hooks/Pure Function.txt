@@ -5,16 +5,14 @@ Keeping components pure:
 
 Pure function:
 
--> pure function is function that Given the same input always return the same result.
+-> pure function is a function which receives same i/p every time and gives same o/p every time and has no side effects.
+-> so if you called a function 10 times and every time we get the same output we say function is pure but if we get different output 
+then we say the function is impure.
 
--> so if you called a function 10 times and every time we get the same output we say function is pure but if we get different output then we say the function is impure.
-
--> const res = myFun(10);
-   // res = 'a'
-
--> React is designed aroud this concept. 
--> it expects every component which we create to be pure function.
--> so  if we given same input like a same props it will always return the same JSX .and this is for performance reason. so if the inputs of components haven't change react can skip  re-rendering of that component.
+-> React is designed around this concept. 
+-> React expects every component which we create to be pure function.
+-> so  if we given same input like a same props it will always return the same JSX .and this is for performance reason. so if the 
+inputs of components haven't change react can skip  re-rendering of that component.
 
 -> But how we can keep our component pure.
 answer for this is "keep changes out of the render phase."
@@ -54,8 +52,8 @@ Count: 0
 
 example of impure function: 
 -------------------------
-let count = 0;
 
+let count = 0;
 const Fun = () => {
   count++;
   return(
@@ -88,8 +86,6 @@ Count: 6
 
 
 
-
-
 -> so to keep our component pure we should keep changes out of render phase.
 -> we should not change any object that existed before rendering. like count variable here 
 
@@ -107,7 +103,8 @@ const Fun = () => { // render phase
 
 
 -> But note that it is totally fine to update an object that we create as a part of rendering.
-for example if we move this declaration down now we declaring count variable as a part of rendering and it is totally fine to update it here.
+for example if we move this declaration down now we declaring count variable as a part of rendering and it is totally fine to update 
+it here.
 
 code : 
 

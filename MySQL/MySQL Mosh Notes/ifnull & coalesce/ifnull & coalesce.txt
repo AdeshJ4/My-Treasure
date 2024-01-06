@@ -1,0 +1,22 @@
+use sql_store;
+
+select * from orders;
+
+select 
+	order_id,
+    ifnull(shipper_id, 'Not assigned') as shipper
+from orders;
+
+-- if value inside shipper col is null then return value inside comments col  and if 
+-- comments col also have null value then pass 'not assigned'
+
+select 
+	order_id,
+    coalesce(shipper_id, comments, 'Not Assigned') as shipper
+from orders;
+
+select 
+	concat(first_name, ' ', last_name),
+    coalesce(phone, 'UNKNOWN') as phone
+from customers;
+

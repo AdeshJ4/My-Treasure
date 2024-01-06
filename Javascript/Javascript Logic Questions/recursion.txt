@@ -8,7 +8,7 @@ function fun(){
 	fun();
 }
 fun();
-ouput: RangeError: Maximum call stack size exceeded
+output: RangeError: Maximum call stack size exceeded
 
 
 -> A recursive function must have a condition to stop calling itself. Otherwise, the function is called indefinitely.

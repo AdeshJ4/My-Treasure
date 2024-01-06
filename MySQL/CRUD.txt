@@ -1,0 +1,38 @@
+Some of The Most Important SQL Commands
+SELECT - extracts data from a database
+UPDATE - updates data in a database
+DELETE - deletes data from a database
+INSERT INTO - inserts new data into a database
+CREATE DATABASE - creates a new database
+ALTER DATABASE - modifies a database
+CREATE TABLE - creates a new table
+ALTER TABLE - modifies a table
+DROP TABLE - deletes a table
+CREATE INDEX - creates an index (search key)
+DROP INDEX - deletes an index
+
+
+
+
+1. Show Databases: 
+-> SHOW DATABASES;
+
+2. Create a Database:
+-> CREATE DATABASE STUDENT;
+
+3. Select a Database:
+-> USE MYDB;
+
+4. Show Tables:
+->SHOW TABLES;
+
+
+5. Create Table: 
+CREATE TABLE Student(
+    StudentID int PRIMARY KEY AUTO_INCREMENT,
+    StudentName VARCHAR(20),
+    address varchar(255),
+    age TINYINT UNSIGNED,   // 0 to 255
+    salary DECIMAL(10, 2),   -- Decimal with 10 total digits and 2 decimal places
+    
+)

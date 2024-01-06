@@ -1,0 +1,79 @@
+ACID Properties in DBMS
+
+
+A = Atomicity
+C = Consistency
+I = Isolation
+D = Durability
+
+
+1) Atomicity: The term atomicity defines that the data remains atomic. 
+				 It means if any operation is performed on the data, either it should be performed 
+or executed completely or should not be executed at all. It further means that the operation 
+should not break in between or execute partially.
+
+--------------------------------------------------------------------------------------------------
+
+2) Consistency: The word consistency means that the value should remain preserved always. 
+					In DBMS, the integrity of the data should be maintained, which means if a change 
+in the database is made, it should remain preserved always. In the case of transactions, the 
+integrity of the data is very essential so that the database remains consistent before and after 
+the transaction. The data should always be correct.
+The Database must be consistent before and after the trannsaction.
+
+--------------------------------------------------------------------------------------------------
+
+3) Isolation: The term 'isolation' means separation. In DBMS, Isolation is the property of a 
+				 database where no data should affect the other one and may occur concurrently.
+It means if two operations are being performed on two different databases, they may not affect 
+the value of one another.
+Any changes that occur in any particular transaction will not be seen by other transactions until 
+the change is not committed in the memory.
+
+Example: account A is making T1 and T2 transactions to account B and C, but both are 
+executing independently without affecting each other. It is known as Isolation.
+
+--------------------------------------------------------------------------------------------------
+
+4) Durability: Durability ensures the permanency of something. In DBMS, the term durability 
+					ensures that the data after the successful execution of the operation becomes 
+permanent in the database. The durability of the data should be so perfect that even if the 
+system fails or leads to a crash, the database still survives.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

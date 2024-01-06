@@ -1,0 +1,62 @@
+MySQL SELF JOIN
+---------------
+
+-> A SELF JOIN is a join that is used to join a table with itself
+-> there is a need to combine data with other data in the same table itself. In that case, we 
+	use Self Join.
+-> We can perform Self Join using "table aliases". 
+	The table aliases allow us "not to use the same table name twice" with a single statement. 
+	If we use the same table name more than one time in a single query without table aliases, 
+	it will throw an error.
+-> The table aliases allow us to use the temporary name of the table that we are going to use 
+	in the query
+-> Suppose we have a table named "student" that is going to use twice in the single query. 
+	To aliases the student table, we can write it as:
+		Select * 
+		FROM student AS S1   
+		INNER JOIN student AS S2;  
+
+
+
+use sql_hr;
+
+select e.first_name, e.job_title, m.first_name as manager
+from employees e
+inner join employees m
+	on e.reports_to = m.employee_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
