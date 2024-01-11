@@ -136,22 +136,25 @@ Fetching Commits for repo1
 
 
 
-Callback Hell / Chrimas tree problem: 
+Callback Hell / christmas tree problem: 
 -------------------------------------
 
-Callback Hell, also known as the "Pyramid of Doom," is a term used to describe a situation where a series of nested callbacks make the code difficult to read, understand, and maintain. It usually occurs when dealing with asynchronous operations using callbacks, and as the number of nested callbacks increases, the code becomes deeply indented and less readable.
+Callback Hell, also known as the "Pyramid of Doom," is a term used to describe a situation where a series of nested callbacks make 
+the code difficult to read, understand, and maintain. 
+It usually occurs when dealing with asynchronous operations using callbacks, and as the number of nested callbacks increases, 
+the code becomes deeply indented and less readable.
 
 
-getUser(101, (res1)=>{  					// asynchronous operation 1
-    getRepositories(res1.gitHubUsername, (res2)=>{		// asynchronous operation 2
-        getCommits(res2[0], (res3)=>{				// asynchronous operation 3
-            console.log(res3);
+getUser(101, (user)=>{  					// asynchronous operation 1
+    getRepositories(user.gitHubUsername, (repos)=>{		// asynchronous operation 2
+        getCommits(repos[0], (commits)=>{				// asynchronous operation 3
+            console.log(commits);
         })
     })
 });
 
 
--> supposw we have function called getUser which is fetching user from database.
+-> suppose we have function called getUser which is fetching user from database.
 -> inside callback function of getUser we are calling getRepositories function.
 -> getRepositories function fetching the repos of user.
 -> inside callback function of getRepositories we are calling getCommits fucntion.

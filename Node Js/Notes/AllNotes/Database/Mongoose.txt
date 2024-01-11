@@ -1,7 +1,12 @@
 -> Mongoose give us simple api to work with mongodb database.
--> Mongoose is build top og the mongodb database.
+-> Mongoose is build top of the mongodb database.
 -> Mongoose is an ODM(Object data Modeling) library, which means it allows you to define schemas (blueprints for document) and 
 models (constructors for creating documents based on those schemas).
+-> Mongoose wraps the MongoDB driver with additional functionality and features.
+-> it provides higher-level, more user-friendly interface for interacting with MongoDB compared to the native MongoDB driver
+-> While Mongoose uses the MongoDB driver under the hood, it introduces its own set of methods and features, making it easier to 
+work with MongoDB in a Node.js application.
+
 
 Schema : 
 
@@ -69,13 +74,18 @@ const course = new Course({
 
 Mongoose Methods: 
 
-1. Create (Insert) -    create()
+1. Create (Insert) -    create(), save()
 2. Read (Find) -        find(), findOne(), findById()
 3. Update -             updateOne(), updateMany(), findOneAndUpdate(), findByIdAndUpdate()
 4. Delete -             deleteOne(), deleteMany(), findOneAndDelete(), findByIdAndDelete()
 
 
+MongoDB Methods:
 
+1. Create : insertOne() insertMany()
+2. Read : find(), findOne(), findOneAndDelete(), findOneAndReplace(), findOneAndUpdate()
+3. Update : updateOne(), updateMany()
+4. Delete: deleteOne(), deleteMany()
 
 
 

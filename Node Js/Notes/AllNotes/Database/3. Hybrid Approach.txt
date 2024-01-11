@@ -1,13 +1,14 @@
 3. Hybrid Approach
 
--> lets imagine each author docuent have 50 properties we don't want to duplicate all these properties inside a course document.
--> so we can have seprate collection of author and course, but instead of using reference of author document inside course document we can embedded author docment inside a course document but not the complete representation of that author perhaps we just need some imp properties from author document like its name , contact info.
+-> lets imagine each author document have 50 properties we don't want to duplicate all these properties inside a course document.
+-> so we can have separate collection of author and course, but instead of using reference of author document inside course document 
+we can embedded author document inside a course document but not the complete representation of that author perhaps we just need some 
+imp properties from author document like its name , contact info.
 -> SO with hybrid approach our course document will look like this: 
 let author = {
 	name: 'Mosh',
 	50+ properties
 }
-
 let course = {
 	author: {	
 		id: 'ref',	// reference to author document incase in future if we have detailed info about author
@@ -15,9 +16,9 @@ let course = {
 	}
 }
 
-
-->  with this approach we can quikly read course document along with his author, so we can optimised our query performance, but we don't have to store all the properties od an authoer inside a course document
--> This approach is particurely useful if you wanna have snapshot of your data at a point in a time
+->  with this approach we can quickly read course document along with his author, so we can optimized our query performance, 
+but we don't have to store all the properties of an author inside a course document
+-> This approach is particularly useful if you wanna have snapshot of your data at a point in a time
 -> imagine you are building e commerce application there we will have collections like orders products, shopping cart and so on 
 -> In each order we need to store a snapshot of product because we wanna know price of product at a give point of time 
 

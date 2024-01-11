@@ -1,3 +1,7 @@
+`formState` provides access to the form's state, and `errors` specifically allows you to access and display validation errors 
+for form fields when using `useForm()` in React Hook Form.
+
+
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -41,8 +45,10 @@ export default Form;
 *** Optional Chaining ***
 -----------------------
 
--> Optional chaining is a feature in JavaScript that allows you to safely access properties and methods of an object without worrying about whether those properties or the object itself exist. 
--> It helps prevent errors, like "Cannot read property 'something' of undefined," that can occur when you try to access properties on objects that might be null or undefined
+-> Optional chaining is a feature in JavaScript that allows you to safely access properties and methods of an object without worrying 
+about whether those properties or the object itself exist. 
+-> It helps prevent errors, like "Cannot read property 'something' of undefined," that can occur when you try to access properties 
+on objects that might be null or undefined
 
 
 ex> 

@@ -98,11 +98,12 @@ this doesn't block the execution of the program.
 5. console.log('Third);
 
 
-Step 1 : The main thread of execution always starts in the global() scope. global() function is pushed to the stack.
+Step 1 : The main thread of execution always starts in the global() scope. global() or global execution context function is pushed 
+to the stack.
 Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. 'First' is log to the console. 
 The log statement is popped out of stack.
 Step 3 : Execution comes to line two. The readFile() method gets pushed to the stack. readFile() is async operation thats why it 
-will be off loaded to 'libuv' section only callback function present inside readFile() will be handed over to libuv. 
+will be off loaded to 'libuv' section, only callback function present inside readFile() will be handed over to libuv. 
 readFile() without callback will remain inside call stack section. like : fs.readFile();
 Step 4 : Javascript then simply pops out fs.readFile() method from the call stack because its job is done as far as executing of 
 line 2 is concerned. remember we still have callback function of readFile() inside libuv section. In the background libuv starts 
@@ -128,7 +129,7 @@ Step 8 : The output will be 'First', 'Second', 'Third'.
 applications and microservices.
 -> we use single thread in Node js To maximize efficiency in handling I/O operations.
 -> This allows it to handle many concurrent requests without the overhead of managing multiple threads. 
-
+-> we don't have to explicitly use thread management to handle the threads.
 list of I/O operations: 
 -> In Node.js, I/O (Input/Output) operations are how you handle data exchange with external entities, such as files (CRUD operations)
 , networks(creating a http server), databases(executing queries), and more
@@ -138,9 +139,12 @@ list of I/O operations:
 // Q3] How is Node.js better than other frameworks most popularly used?
 
 /*
--> Node applications are Asynchronous by default 
+-> Node applications are Asynchronous by default.
+-> we don't have to explicitly use thread management to handle the threads.
+-> In node we have a single thread to handle all requests.
 -> Node.js provides simplicity in development because of its non-blocking I/O asynchronous operations and event-based model results 
 in short response time and concurrent processing, unlike other frameworks where developers have to use thread management. 
+-> NodeJS is an asynchronous event-driven JavaScript runtime environment designed to build scalable network applications.
 -> It runs on a chrome v8 engine which is written in c++ and is highly performant with constant improvement. 
 -> Also since we will use Javascript in both the frontend and backend the development will be much faster. 
 -> And at last, there are sample libraries so that we don’t need to write code form scratch
@@ -154,8 +158,9 @@ in short response time and concurrent processing, unlike other frameworks where 
 /*
 -> because of libuv library and its event loop.
 -> While Node.js itself is single-threaded, it leverages(borrow) the libuv library to handle asynchronous I/O operations.
--> Main thread/Only thread of node js is working on call stack. if we got any asynchronous tasks to execute then we move that tasks to
-libuv library. libuv library will execute that task using 'native async mechanism' of the operating system. if it is not possible then 
+-> The main thread of execution/single thread of node js is working on call stack. if we got any asynchronous tasks to execute 
+then we move that tasks to libuv library. 
+libuv library will execute that task using 'native async mechanism' of the operating system. if it is not possible then 
 it uses its own thread pool to execute that tasks.
 Libuv itself is multi-threaded and provides an event loop to handle asynchronous events.
 -> 
@@ -180,7 +185,23 @@ a queue is the first one to be removed).
 
 Event Loop: 
 
+
+libuv library: 
+
+-> on the right side we have libuv library.
+-> libuv is a C library
+-> whenever you execute async method it is off loaded to the libuv.
+-> Libuv provides the event loop that allows Node.js to perform non-blocking I/O operations asynchronously.
+-> 'Event loop' is a C program and is part of libuv.
+-> The event loop is at the core of Node.js, managing and dispatching events and tasks and callbacks from asynchronous 
+operations.
+-> libuv then run the task using 'native async mechanism' of operating system.
+-> and if that is not possible it will utilized its thread pool to run that task ensuring the main thread is not block
+(main thread resides in call stack).
+
 -> 'Event loop' is a C program and is part of libuv library.
+-> The event loop is at the core of Node.js, managing and dispatching events and tasks and callbacks from asynchronous 
+operations.
 -> The event loop is what allows Node.js to perform non-blocking I/O operations — despite the fact that JavaScript is single-threaded
 -> An event loop is an loop, which waits for tasks, executes them, and then sleeps until it receives more tasks.
 -> The event loop is like a manager that checks the event queue and decides which task to execute next.
@@ -217,7 +238,8 @@ f2();
 
 The call stack would look like:
 ------------------------------
-
+The main thread of execution always starts in the global() scope. global() or global execution context function is pushed 
+to the stack.
 -> suppose we have two functions f1() and f2(). we called f1() inside f2(). 
 Step 1: When the code loads in memory, the 'global execution context' gets pushed in the stack.
 Step 2: The f2() function gets called, and the 'execution context of f2()' gets pushed into the stack
@@ -230,7 +252,8 @@ Step 7: Now left is only 'global execution context' which at the end will be pop
 global execution context: 
 
 The global execution context is the outermost or top-level context in the JavaScript execution environment. When a JavaScript 
-program starts running, it creates a global execution context, which includes the following key components like Global Object, this etc.
+program starts running, it creates a global execution context, which includes the following key components like Global Object, 
+this etc.
 
 
 
@@ -474,15 +497,47 @@ code.)
 
 // Q11] Explain types of modules. 
 
+
+// Q12. explain 'process' object in short
+
 /*
 
+The `process` object in Node.js is a global object that provides information and control over the current Node.js process. It allows you to interact with the runtime environment and access various properties and methods. Here's a brief overview:
 
-*/
+1. **Process Information:**
+   - `process.pid`: Returns the process ID of the running Node.js process.
+   - `process.version`: Returns the Node.js version string.
+   - `process.platform`: Returns the operating system platform.
+   - `process.arch`: Returns the architecture of the operating system's CPU.
 
+2. **Environment Variables:**
+   - `process.env`: An object containing the user environment, providing access to environment variables.
 
+3. **Standard Input/Output Streams:**
+   - `process.stdout`: A writable stream representing standard output (console).
+   - `process.stdin`: A readable stream representing standard input.
+   - `process.stderr`: A writable stream representing standard error.
 
+4. **Exit and Uncaught Exception Handling:**
+   - `process.exit([code])`: Exits the current process with an optional exit code.
+   - `process.on('exit', callback)`: Event listener for the exit event.
+   - `process.on('uncaughtException', callback)`: Event listener for uncaught exceptions.
 
+5. **Event Emitter:**
+   - `process.emit(event[, args])`: Emits the specified event with optional arguments.
+   - `process.on(event, callback)`: Adds a listener for the specified event.
 
+6. **Memory Usage:**
+   - `process.memoryUsage()`: Returns an object describing the memory usage of the Node.js process.
+
+7. **Working Directory:**
+   - `process.cwd()`: Returns the current working directory of the Node.js process.
+
+8. **Command Line Arguments:**
+   - `process.argv`: An array containing command-line arguments passed to the Node.js process.
+
+These are just a few examples of what the `process` object provides. It is a versatile tool for managing and interacting with the runtime environment and controlling the behavior of a Node.js application.
+ */
 
 
 

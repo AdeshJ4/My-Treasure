@@ -28,7 +28,7 @@ const createCourse = async () => {
 logic and if the course document is not valid it give us error.
 -> we use Joi for validation
 -> so you must be thinking that we have two types of validation 1. mongoose validation 2.Joi validation then which one we should use ?
--> the ans is both this kind of validation support each other.so we use Joi in our RESTful API we use it as a first attack. 
+the answer is both this kind of validation support each other. so we use Joi in our RESTful API we use it as a first attack. 
 to make sure the data client sending is valid data.
 -> but you still need mongoose kind of validation to make sure that the data we save to database is in the right shape. because it 
 is possible that client send us a valid course in the body of the request but when we create course object in our http service 
@@ -78,7 +78,7 @@ const createCourse = async () => {
     tags: ["Database", "Backend"],
     books: {
       type: Array,
-      required: true, // 
+      required: true, 
       validate: {
         validator: function(array){
           return array.length > 0;

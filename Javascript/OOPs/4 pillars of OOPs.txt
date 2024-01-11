@@ -49,6 +49,17 @@ Function overloading:
 parameters 
 -> In Function Overloading “Function” name should be the same and the arguments should be different.
 -> JavaScript Does not support Function Overloading
+-> When you define multiple functions that have the same name, the last one defined will override all the previously defined ones and 
+every time when you invoke a function, the last defined one will get executed
+
+
 
 
 method overriding: 
+
+-> If subclass (child class) has the same method as declared in the parent class, it is known as method overriding in Java.
+Note: both method must have same name, the same parameters or signature, and the same return type
+
+
+
+

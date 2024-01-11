@@ -1,6 +1,6 @@
 -> Middleware function is basically a function that takes a request object and either returns a response to the client or passes 
 control to another middleware function.
--> Middleware allow programmer to add functionality to the request response cycle such as authentication,  logging, error handling 
+-> Middleware allow programmer to add functionality to the request response cycle such as authentication, logging, error handling 
 and many more.
 -> Middleware functions are invoked in the order they are defined and are capable of modifying the request and response objects, 
 as well as passing control to the next middleware function in the stack.
@@ -86,13 +86,13 @@ Built in Middleware functions:
 -> In Express.js, the `express.json()` middleware is used to parse incoming JSON data from HTTP requests. 
 -> The `express.json()` middleware parses the JSON data and makes it available as a JavaScript object in the `req.body` property. 
 so you don't have to manually parse the incoming data using `JSON.parse()`. 
-->it also performs error handling. If the incoming data is not valid JSON, it will catch the parsing error and send an HTTP 400 Bad
+-> it also performs error handling. If the incoming data is not valid JSON, it will catch the parsing error and send an HTTP 400 Bad
 Request response, which helps prevent your application from crashing due to malformed JSON.
 
 
 2. app.use(express.urlencoded({ extended: true }));
 
--> This middleware function parses incoming requests with URL encoded payloads that is request with body like	this : "key=value&key=value".
+-> This middleware function parses incoming requests with URL encoded payloads that is request with body like	this:"key=value&key=value".
 -> Now this is more of a traditional approach. Its not something tht we use that often these days.
 -> Basically if you have an HTML form with inputs fields and post that form to the server the body of the request will looks 
 like this "key=value&key=value".
@@ -112,13 +112,27 @@ like this "key=value&key=value".
 Third-party Middleware: 
 =======================
 
+nodemon 
+express
+mongoose
+dotenv
+debug
+compression
+config
+helmet
+
+
+
 1. helmet : Helps secure your app by setting various HTTP Headers.
 2. morgan : "Morgan" is a middleware for logging HTTP requests in Node.js, providing insights into server activity, request details, 
 and response statuses.
 3. rc : The rc npm package is used to load configuration settings from configuration files in a consistent and flexible manner. It's often used in Node.js applications to simplify the process of managing and accessing configuration parameters.
 4. debug: A tiny JavaScript debugging utility modelled after Node.js core's debugging technique. Works in Node.js and web browsers.
-5. compression: Using a compression package in Node.js is beneficial for optimizing the performance and efficiency of web applications by reducing the size of data sent between the server and clients. Compression is especially relevant when dealing with HTTP responses, as it can significantly improve the speed and reduce the bandwidth usage of your application. Here are some reasons why compression is important:
-
+5. compression: Using a compression package in Node.js is beneficial for optimizing the performance and efficiency of web 
+applications by reducing the size of data sent between the server and clients. 
+Compression is especially relevant when dealing with HTTP responses, as it can significantly improve the speed and reduce the 
+bandwidth usage of your application. Here are some reasons why compression is important:
+6.dotenv: is used to load environment variables from a file named .env into process.env
 
 
 

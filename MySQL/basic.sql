@@ -329,3 +329,40 @@ select c.customerName as name from customers as c;
 
 
 
+SHOW TABLES;
+
+
+SELECT * FROM CUSTOMERS;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

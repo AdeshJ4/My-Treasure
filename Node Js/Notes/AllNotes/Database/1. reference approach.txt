@@ -1,23 +1,23 @@
 1. Using references (Normalization)
 
--> for understaning this concept suppose we have two collections : 1. Courses 2. Authors
--> Each course object should have author name. for that we store id of author document from author collection inside a course document. so here we are using reference. 
--> In relatonal databases we have this concept of relationship which enforeces data integrity but in mongodb or nosql databases we don't have relationship. even though we are setting id of author document inside a course document there will be no association or no relatonship between these two documents(author document and course document) in the database.
+-> for understating this concept suppose we have two collections : 1. Courses 2. Authors
+-> Each course object should have author name. for that we store id of author document from author collection inside a course document. 
+so here we are using reference. 
+-> In relational databases we have this concept of relationship which enforces data integrity but in mongodb or nosql databases we 
+don't have relationship. even though we are setting id of author document inside a course document there will be no association or 
+no relationship between these two documents(author document and course document) in the database.
 -> in another world we can set invalid id of a author document inside a course document and mongodb doesn't care about it.
 
 ex 1: if we have single author 
 let author = {
 	name: 'Mosh'
 };
-
 let course = {
 	author: {
       		type: mongoose.Schema.Types.ObjectId,
       		ref: "Author",
     	},
 };
-
-
 ex 2: if we have multiple authors 
 let course = {
 	author: ['id1', 'id2'],
@@ -28,20 +28,27 @@ let course = {
 
 
 
+
+
 1st approach advantage and disadvantages
--> In 1st approach we have single place to define a author which is inside a author collection. if tomarrow i decided to change name of author from 'A' to 'B' there is single place that i need to modify. and all courses which are referencing that author will see updated author.
--> so in 1st approach we have consistency 
+-> In 1st approach we have single place to define a author which is inside a author collection. if tomorrow i decided to change 
+name of author from 'A' to 'B' there is single place that i need to modify. and all courses which are referencing that author will 
+see updated author.
+-> so in 1st approach we have consistency. 
 -> However when we query a course document we need to do extra query to load related author from author collection. 
 
 2nd approach advantage and disadvantages
--> in this approach we can easily load course document with author document withount extra query to author collection because author is inside acourse document.
--> However with this approach tomarrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple course documents that need to updated and if our update operation doen't complete successfully it is possible that we have some documents which are not updated. so will end up with unconsistent data.
+-> in this approach we can easily load course document with author document without extra query to author collection because author 
+is inside a course document.
+-> However with this approach tomorrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple 
+course documents that need to updated and if our update operation doesn't complete successfully it is possible that we have some 
+documents which are not updated. so will end up with unconsistent data.
 
 Summary : 
 -> 1st approach gives us consistency 
 -> 2nd approach gives us performance
--> Each approach have strenght and wicknesses.
--> which approach you use is really depends on your application and its querring requirements.
+-> Each approach have strength and weaknesses.
+-> which approach you use is really depends on your application and its querying requirements.
 -> so thats why we have to do trade off between to approaches, we can't have both at the same time.
 
 
@@ -49,25 +56,29 @@ Summary :
 
 
 
-code : 
 
+code : 
 const mongoose = require("mongoose");
+
 const connectDB = async () => {
   try {
     const connect = await mongoose.connect("mongodb://127.0.0.1/playGround");
-    console.log("Database is connected");
-    console.log("Host : ", connect.connection.host);
-    console.log("Name: ", connect.connection.name);
+    console.log("Database is connected..");
+    console.log("Host Name: ", connect.connection.host);
+    console.log("DB Name: ", connect.connection.name);
   } catch (err) {
     console.log("Database is not connected");
-    console.log("Error: ", err.message);
+    console.log("DB Error: ", err.message);
     process.exit(1);
   }
 };
+
 connectDB();
 
-const Course = mongoose.model("Course", new mongoose.Schema({
-    name: String,
+const Course = mongoose.model(
+  "Course",
+  new mongoose.Schema({
+    courseName: String,
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Author",
@@ -79,43 +90,57 @@ const Author = mongoose.model(
   "Author",
   new mongoose.Schema({
     name: String,
-    bio: String,
-    website: String,
+    phone: String,
+    email: String,
   })
 );
 
-async function createAuthor(name, bio, website) {
-  const author = new Author({
+async function createAuthor(name, phone, email) {
+  const author = await Author.create({
     name,
-    bio,
-    website,
+    phone,
+    email,
   });
-
-  const result = await author.save();
-  console.log(result);
+  console.log(author);
 }
+// createAuthor('Adesh', '9527370288', 'adejad1234@gmail.com');
+// createAuthor('Mosh', '7721031355', 'mosh1234@gmail.com');
 
-async function createCourse(name, authorId) {
-  const course = new Course({
-    name,
+
+async function createCourse(courseName, authorId) {
+  const course = await Course.create({
+    courseName,
     author: authorId,
   });
 
-  const result = await course.save();
-  console.log(result);
+  console.log(course);
 }
+// createCourse('Node Course', '659cdcd840ba68543b42a4b7');
+// createCourse('React Course', '659cdcd840ba68543b42a4b6');
+// createCourse('MongoDB Course', '659cdcd840ba68543b42a4b6');
+// createCourse('MYSQL Course', '659cdcd840ba68543b42a4b6');
+
 
 async function listCourses() {
-  const courses = await Course
-    .find()
-    .populate('author')
-    // .populate("author", "name -_id");
+  const courses = await Course.find().populate("author");
+  // .populate("author", "name -_id");
   // .select({ name: 1, author: 1, category: 1, _id: 0 });
   console.log(courses);
 }
 
-// createAuthor('Mosh', 'My bio', 'My Website');
 
-// createCourse('Node Course', '6560a5b7c3c6fafcfa2b52cf');
 
-listCourses();
+// checking changes of author are visible in courses or not. and changes are visible
+async function changeAuthorEmail() {
+  try {
+    const author = await Author.findByIdAndUpdate("659cdcd840ba68543b42a4b6", {
+      name: "Adesh",
+      phone: "9527370288",
+      email: "jadhavadesh13061@gmail.com",
+    }, {new : true});
+
+    console.log(author);
+  } catch (err) {
+    console.log(err.message);
+  }
+}

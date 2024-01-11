@@ -3,7 +3,7 @@
 -> This movie rental application only runs locally on a video store.
 -> The peoples which are going to use this application are the employees of that video store.
 -> Its like application which we see in a dmart like shops.
--> Basically peoples who want to rent a movie will come to this movie shop and with this application we can register the user and 
+-> Basically peoples who want to rent a movie will come to this movie shop and with this application we can register the customer and 
 creates its renal which contain customer details and which movie he rented.
 
 -> The technology i used in this application are : 
@@ -178,13 +178,14 @@ we have three route handlers in this api :
 authentication: Login endpoint
 -> In the authentication part we are checking the employees is valid employees or not 
 -> it contain checking email id and password of the employee. 
--> if the user is valid then we are going to give access to the application.
+-> if the user is valid then we are going to provide json web token.
 -> so here for comparing passwords we use 'bcrypt' package.
 -> if the employee is not register then we are going to register it using registerUser route handler.
--> in this route handler, we are going to store a password of a employee in a database.  we are not going to store original p/w
-in the database instead we are going to hashed the password convert it into a encrypted text and that encrypted p/w is 
+
 
 register endpoint: 
+-> in this route handler, we are going to store a password of a employee in a database.  we are not going to store original p/w
+in the database instead we are going to hashed the password convert it into a encrypted text and that encrypted p/w is stored
 -> The concept of authentication is not specifically for registering users, but rather for verifying the identity of individuals 
 or entities accessing a system or service. Authentication is a process used to confirm that a user, application, or system is who 
 or what it claims to be.
@@ -219,7 +220,7 @@ Ex. token looks like this :
 In our ex t check user is normal employee or admin.
 -> It’s similar to a passport or driver’s license. It includes a few public properties about a user in its payload. 
 like _id, username, isAdmin, etc
--> After registering and logging you get jwt token.
+-> After logging you get jwt token.
 -> With the help of this token we can access endpoints or services.
 -> The user can send this token with a requests to prove their identity.
 -> It's important to note that while JWTs can carry information about the user's roles and permissions, the actual authorization logic 

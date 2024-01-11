@@ -1,6 +1,6 @@
 zod is schema based validation library.
 
-install => npm i zod
+install => c
 -> Now we want to integrate react-hook-form with zod.
 install => npm i @hookform/resolvers
 -> This library includes resolvers for various schema based validation libraries like zod, joi, and so on..

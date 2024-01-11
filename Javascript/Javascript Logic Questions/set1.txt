@@ -283,6 +283,15 @@ OUTPUT: 21
 INPUT: 123
 OUTPUT: 321
 
+let num = 10;
+let str = num.toString();
+let reverse = "";
+for (let i = str.length - 1; i >= 0; i--) {
+  reverse += str[i];
+}
+console.log(reverse);
+
+
 code 1: using split(), reverse(), join(), Number()
 function reverseNumber(num){ 
     return Number(num.toString().split('').reverse().join(''));
@@ -337,6 +346,17 @@ function palindrome(str){
     return str === reverse;
 }
 
+function palindrome(str) {
+  let reverseStr = "";
+  for (let i = str.length - 1; i >= 0; i--) {
+    reverseStr += str[i];
+  }
+
+  if (reverseStr === str) {
+    return true;
+  }
+  return false;
+}
 
 
 ============================================================================================================================
@@ -352,7 +372,25 @@ function alphabeticalOrder(str){
     return str.split('').sort().join('');
 }
 
+function alphabeticalOrder(str){
+    for(let i=0; i<str.length; i++){
+        let isSorted = false;
+        for(let j=1; j<str.length-i; j++){
+            if(str[j] < str[j-1]){ 
+                [str[j], str[j-1]] = [str[j-1],str[j]]
+                isSorted = true;
+            }
+        }
 
+        if(!isSorted){
+            return;
+        }
+    }
+}
+let str = 'dcbaA1223'
+let newStr = str.split('');
+alphabeticalOrder(newStr);
+console.log(newStr.join(''));
 
 
 ============================================================================================================================
@@ -532,9 +570,10 @@ function onlyGender(array){
 Question 17 : return elements from array which contain gender="M" 
 INPUT: [
     {id: 101, fname: 'Adesh', gender: 'M'},
-    {id: 102, fname: 'Akshay', gender: 'M'},
-    {id: 103, fname: 'Manoj', gender: 'F'}, 
-]
+    {id: 102, fname: "Manoj", gender: "Unknown" },
+    {id: 103, fname: 'Sita', gender: 'F'}, 
+    {id: 104, fname: 'Ram', gender: 'M'},
+];
 OUTPUT: [
     {id: 101, fname: 'Adesh', gender: 'M'},
     {id: 102, fname: 'Akshay', gender: 'M'},
@@ -561,7 +600,7 @@ function onlyGender(array){
 Question 18 : return elements from array which don't contain gender="M" 
 INPUT: [
     {id: 101, fname: 'Adesh', gender: 'M'},
-    {id: 102, fname: "Manoj", gender: "Unknown" }
+    {id: 102, fname: "Manoj", gender: "Unknown" },
     {id: 103, fname: 'Sita', gender: 'F'}, 
 ]
 OUTPUT: [
@@ -628,7 +667,6 @@ function mostFrequentElementOfArray(array) {
   let maxValue = 0;
   let maxProperty = [];
   for (let key in obj) {    // 1>2, 2>2
-
     if (obj[key] > maxValue) {
       maxValue = obj[key];
       maxProperty = [key]; // p
@@ -726,22 +764,21 @@ Question 22 : union of two arrays:
 INPUT: [10, 20, 30] [20, 30, 40];
 OUTPUT: [10, 20, 30, 40];
 
-function unionArray(arr1, arr2) {
+function unionArray(arr1, arr2){
   const arr = [...arr1, ...arr2];
-  const uniqueArr = [];
+  let uniqueArr = [];
 
-  for (let i = 0; i < arr.length; i++) {
-    let duplicate = false;
-    for (let j = 0; j < uniqueArr.length; j++) {
-      if (arr[i] === arr[j]) {
-        duplicate = true;
+  for(let i=0; i<arr.length; i++){
+    let isDuplicate = false;
+    for(let j=0; j<uniqueArr.length; j++){
+      if(arr[i] === uniqueArr[j]){
+        isDuplicate = true;
         break;
       }
     }
-    if (!duplicate) {
+
+    if(!duplicate){
       uniqueArr.push(arr[i]);
     }
   }
-  return uniqueArr;
 }
-const unionArr = unionArray([10, 20, 30], [20, 30, 40]);

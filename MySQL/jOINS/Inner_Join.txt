@@ -1,0 +1,85 @@
+Join: 
+-> A JOIN clause is used to combine rows from two or more tables, based on a related column between them.
+
+
+Inner Join: 
+
+-> The INNER JOIN selects records that have matching values in both tables that match the specified condition.
+-> MySQL assumes it as a default Join, so it is optional to use the Inner Join keyword with the query.
+
+
+
+
+
+
+
+
+CREATE DATABASE OK;
+SHOW DATABASES;
+USE OK;
+SHOW TABLES;
+CREATE TABLE STUDENT (
+    STUDENT_ID INT PRIMARY KEY,
+    STUDENT_NAME VARCHAR(50),
+    CITY VARCHAR(50),
+    TECH_ID INT
+);
+
+CREATE TABLE TECHNOLOGIES (
+    TECH_ID INT PRIMARY KEY AUTO_INCREMENT,
+    TECH_NAME VARCHAR(50)
+);
+
+
+INSERT INTO TECHNOLOGIES 
+VALUES  
+    (101, 'React Js'),
+    (102, 'Node Js'),
+    (103, 'MongoDB'),
+    (104, 'MySQL');
+
+INSERT INTO STUDENT
+VALUES 
+    (101, 'Adesh Jadhav', 'Pune', 104),
+    (102, 'Pramod Jadhav', 'Pune', 101),
+    (103, 'Rohini Jadhav', 'Pune', 103),
+    (104, 'Akshay Pawade', 'Pune', 102),
+    (105, 'Manoj Sahu', 'Pune', 104);
+
+
+SELECT * FROM STUDENT;
+SELECT * FROM TECHNOLOGIES;
+
+SELECT STUD.STUDENT_ID, STUD.STUDENT_NAME, TECH.TECH_ID,TECH.TECH_NAME 
+FROM STUDENT AS STUD INNER JOIN TECHNOLOGIES AS TECH
+ON STUD.STUDENT_ID = TECH.TECH_ID;
+
+SELECT STUD.STUDENT_ID AS STUD_ID, STUD.STUDENT_NAME AS STUD_NAME, TECH.TECH_NAME AS TECH_NAME
+FROM STUDENT AS STUD INNER JOIN TECHNOLOGIES AS TECH
+ON STUD.TECH_ID = TECH.TECH_ID;
+
+
+
+
+
+SELECT * FROM STUDENT;
+101,Adesh Jadhav,Pune,104
+102,Pramod Jadhav,Pune,101
+103,Rohini Jadhav,Pune,103
+104,Akshay Pawade,Pune,102
+105,Manoj Sahu,Pune,104
+
+
+SELECT * FROM TECHNOLOGIES;
+101,React Js
+102,Node Js
+103,MongoDB
+104,MySQL
+
+
+SELECT STUD.STUDENT_ID, STUD.STUDENT_NAME, TECH.TECH_ID,TECH.TECH_NAME 
+FROM STUDENT AS STUD INNER JOIN TECHNOLOGIES AS TECH
+ON STUD.STUDENT_ID = TECH.TECH_ID;
+
+
+

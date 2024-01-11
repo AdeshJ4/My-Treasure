@@ -104,24 +104,42 @@ var y = undefined; // we can also set the value of a variable as undefined
 vi. null - The null value represents the intentional absence of any object value.
 code: let num = null;
 
-vii. Symbol - It is a new data type introduced in the ES6 version of javascript.	
-Symbols are immutable (cannot be changed) and are unique. 
-You use the Symbol() function to create a Symbol.
-code 1 : 
+vii. symbol:
+-> It is a new data type introduced in the ES6 version of javascript.
+-> It is used to create unique identifiers
+-> Symbols are immutable (cannot be changed) and are unique. 
+-> Symbols are often used to add unique property keys to an object that won't collide with other keys that might add to the object.
+-> You use the Symbol() function to create a Symbol.
+-> symbol is not a constructor. so you can't use new keyword.
+-> Every symbol is guaranteed to be unique, even if it has the same description.
+This makes symbols useful for creating hidden or private properties.
+
+code 0 : 
+const id = new Symbol("Hey");  // error	-> don't use new keyword
+
+code 1:
 const x = Symbol('hey');
 console.log(x); // Symbol(hey)
+
 code 2: 
 Symbol("foo") === Symbol("foo"); // false
-Access Symbol Description we use 'description' property.
-code : console.log(x.description);
-Symbols are often used to add unique property keys to an object that won't collide with other keys that might add to the object.
-code: 
-let id = Symbol("id");
-let person = {
-    name: "Jack",
-    [id]: 123 // not "id": 123    // adding symbol as a key
+
+code 3: 
+to Access Symbol Description we use 'description' property.
+console.log(x.description);
+
+code 4: 
+const id = Symbol();
+const fname = Symbol();
+console.log(id.description); // undefined
+console.log(fname.description);  // undefined
+const obj = {
+  [id]: 101,
+  [fname]: 'Adesh',
 };
-console.log(person); // {name: "Jack", Symbol(id): 123}
+console.log(obj[id]);  // 101
+console.log(obj[fname]);  // "Adesh"
+
 
 
 
@@ -198,6 +216,7 @@ the current scope which can be current script or the current function and this d
 -> but it is applicable to "var" keyword only, and not for "let" & "const".
 -> if you talked about "let" keyword you have to first declare the let variable then and only then you can use it.
 -> const keyword must be initialized at the time of declaration.
+-> class declarations are not hoisted
 -> JavaScript in strict mode does not allow variables to be used if they are not declared.
 
 x = 5;  // initialization
@@ -585,7 +604,8 @@ They always return one of the operands.
 
 OR ( || ) operator - If the first value is truthy, then the first value is returned. Otherwise, always the second value gets returned.
 
-AND ( && ) operator - If both the values are truthy, always the second value is returned. If the first value is falsy then the first value is returned or if the second value is falsy then the second value is returned.
+AND ( && ) operator - If both the values are truthy, always the second value is returned. If the first value is falsy then the first
+value is returned or if the second value is falsy then the second value is returned.
 
 
 console.log( 0 || "Adesh Pramod Jadhav");   // "Adesh Pramod Jadhav"
@@ -723,6 +743,16 @@ this:
 which is "window" object in the browser and "global" in node.
 -> in case of constructor function, we all know that we create object using new operator. so new operator create a new empty object 
 like this {} and set "this" to point newly created object.
+-> 
+without using strict mode the value of a "this" inside a standalone function refer to global object but using strict mode the 
+value of a this keyword inside a standalone function will refer 'undefined', this is because
+we don't have to accidently over right the value of global object
+code: 
+"use strict";
+function fun(){
+  console.log(this);
+}
+fun(); // undefined
 
 
 ex
@@ -779,10 +809,14 @@ const obj = {
 obj.showTags();
 
 o/p-> 
+Window:
 Window {window: Window, self: Window, document: document, name: '', location: Location, …} 'a'
 Window {window: Window, self: Window, document: document, name: '', location: Location, …} 'b'
 Window {window: Window, self: Window, document: document, name: '', location: Location, …} 'c'
-
+Node js: 
+global 'a'
+global 'b'
+global 'c'
 
 
 "this" from callback function of forEach refer to window/global object.
@@ -853,6 +887,8 @@ obj.showTags();
 
 ex. 3 : using arrow function
 
+->  you can use an arrow function, which does not have its own this context and inherits it from the surrounding scope 
+(in this case, the showTags method):
 -> The good thing about arrow function is that they inherit "this" value from containing function in below ex that function is 
 showTags().
 
@@ -878,7 +914,7 @@ obj.showTags()
 
 1. call()
 
--> The call() method calls the function directly and sets "this" to the first argument passed to the call method and subsequent 
+-> The call() method calls the function directly and sets value of "this" to the first argument passed to the call method and subsequent 
 arguments are passed to the function as individual parameters.
 -> NOTE: The call method doesn’t return a new function.
 
@@ -918,7 +954,7 @@ person.intro.call({planet: 'Earth'}, 'India');  //Name: undefined city: India pl
 
 2. Apply() Method: 
 
--> The apply() method calls the function directly and sets this to the first argument passed to the apply method
+-> The apply() method calls the function directly and sets value of 'this' to the first argument passed to the apply method
 -> it takes an array of elements as the second argument, where each element of the array corresponds to an argument passed to the 
 function.
 -> In the apply method, we pass arguments in the form of an array this is only the primary difference between call and apply.
@@ -926,13 +962,18 @@ function.
 
 ex.1
 
+ex.1
 const sum = function(a, b, c) {
   return a + b + c;
 };
-
 const result = sum.apply(null, [1, 2, 3]);
 console.log(result); // Output: 6
 
+ex.2
+function addition(n1, n2, n3){
+    console.log(this.operation, (n1+n2+n3));
+}
+addition.apply({operation: 'Addition'}, [10, 20, 30]);
 
 
 ex.2
@@ -964,9 +1005,12 @@ greetJohn(); // Output: Hello John
 */
 
 
-// Q13] What is an Immediately Invoked Function(Self Invoking Functions ) in JavaScript?
+// Q13] What is an Immediately Invoked Function Expression(Self Invoking Functions ) in JavaScript?
 
 /*
+-> IIFE stands for "Immediately Invoked Function Expression." 
+-> It is a JavaScript design pattern where a function is defined and executed immediately after its creation. 
+-> The primary purpose of IIFE is to create a new scope for variables to avoid polluting the global scope.
 -> An Immediately Invoked Function also called self invoked function or IIFE is a function that runs as soon as it is defined.
 -> two sets of parentheses()() are used to execute this function.
 -> In the first parenthesis we define the body of the function.
@@ -1066,9 +1110,11 @@ map((item, index)=><li key={index}>{item.name}</li>)
 // Q16] Explain Closures in JavaScript.
 
 /*
--> Function have a specialty, variables declare inside a function are destroyed when function completes its execution.
+-> variables declare inside a function are local to that function and they are created when function starts its execution and 
+they are destroyed when function completes its execution.
 -> Closures is  ability of a outer function to store the variables and functions that are declared inside it,
 instead of destroying them after execution, it saves them in the memory so that inner function can access them.
+-> we create a closure by returning inner function from outer function.
 ex: 
 function outerFunction() {
   let num = 0;
@@ -1084,6 +1130,11 @@ closure1();  // 3
 
 -> Therefore outerFunction(), instead of destroying the value of 'num' after execution, saves the value in the memory for further 
 reference. when we called innerFunction(), instead of starting num from 0 it starts from previous value.
+
+In this example, `outerFunction()` returns `innerFunction`, creating a closure. Now, even after `outerFunction` has finished 
+executing, the returned `innerFunction` still has access to `num`. This encapsulation allows you to create and use functions 
+with persistent state, making closures powerful for certain programming patterns.
+
 */
 
 
@@ -1259,12 +1310,12 @@ Types of Errors:
 1. Compile-time errors
 
 -> Compile-time errors are the errors that occurred during compilation time.
--> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the compiler
+-> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the 
+compiler
 ->The compiler will not allow to run the program until all the errors are removed from the program.
 ex . 
-compile time errors like you spell variable name wrongly or you forget to end parenthesis, Undefined Variable, Incorrect Function Definition, Missing Import Statement, Incorrect Loop Syntax.
-
-
+compile time errors like you spell variable name wrongly or you forget to end parenthesis, Undefined Variable, Incorrect Function 
+Definition, Missing Import Statement, Incorrect Loop Syntax.
 
 
 2. Runtime errors
@@ -1292,10 +1343,10 @@ JavaScript try...catch Statement :
 -> The try...catch statement is used to handle the exceptions. 
 Its syntax is:
 try {
-    // body of try
+     body of try
 } 
 catch(error) {
-    // body of catch  
+    body of catch  
 }
 
 
@@ -1434,6 +1485,7 @@ function add (...theArgs){ // theArgs is array and in js arrays are objet thats 
     for (let num of theArgs)
         sum +=num
 
+    console.log(Array.isArray(theArgs));  // true
     console.log(typeof theArgs);
     console.log('First Element: ', theArgs[0]); 
     console.log('Sum : ', sum);
@@ -1488,7 +1540,7 @@ Destructing Arrays::
 
 ex. 1
 const arr = [10, 20, 30, 40, 50];
-const [ , , thirty, ...rest] = arr;  // rest is spread operator
+const [ , , thirty, ...rest] = arr;  // rest is spread operator and it is array
 
 ex. 2
 function calculate(a, b){
@@ -1694,6 +1746,7 @@ const p1 = new Person('Adesh', 22); //The example above uses the Person class to
 
 */
 
+
 // Q26] What are arrow functions?
 
 /*
@@ -1736,7 +1789,6 @@ const person2 = {
 */
 
 
-
 // Q27] Explain difference between synchronous and asynchronous architecture and different ways of handling asynchronous code ?
 
 // refer Asynchronous javascript folder
@@ -1748,21 +1800,44 @@ const person2 = {
 /*
 
 -> ES6 supports class concept 
--> object can be created using class 
--> classes are nothing but syntactic sugars for constructor functions.
--> They provide a new way of declaring constructor functions in javascript. 
--> JavaScript Classes are basically a blueprint or template of the object
+-> classes are new way to create a objects.
+-> classes are nothing but syntactic sugars for constructor functions. They provide a new way of declaring constructor functions in 
+javascript.
+-> Classes are a template or blueprint for creating objects
 -> classes are not hoisted. A class cannot be used before it is declared.
--> All classes must follow the strict mode(‘use strict’) of javascript. An error will be thrown if the strict mode rules are not 
-followed.
--> to access parent class variable inside a child class we can use "this.parentClassVariableName" and to access parent class
-methods we can use super keyword like "super.parentClassMethod"
+-> The body of a class is executed in strict mode even without the "use strict" directive. means you don't have to define "use strict"
+explicitly.
 -> Classes we have in js are not classes like we have inside c#., java
 -> typeof Classes are 'function', they are constructor functions. typeof constructor function is also function.
+-> classes are examples of encapsulation because class contain data(variables) and code(functions) and wrap them in a single unit.
+-> Classes in JS are built on prototypes 
+-> Classes are in fact "special functions", and just as you can define function expressions and function declarations, a class can 
+be defined in two ways: a class expression or a class declaration.
 
-The Constructor Method::
--> The constructor method is called automatically when a new object is created. It is used to initialize object properties
-If you do not define a constructor method, JavaScript will add an empty constructor method.
+// class Declaration syntax
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
+// class Expression syntax: the class is anonymous but assigned to a variable
+const Rectangle = class {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+
+// class Expression syntax: the class has its own name
+const Rectangle = class Rectangle2 {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+
 
 
 Instance Methods / class Methods::
@@ -1774,25 +1849,275 @@ class ClassName {
   method_1() { ... }
 }
 
-Static Methods::
--> static method is a method that belongs to a class rather than an instance of the class.
--> Unlike instance methods, which are called on an instance of the class, static methods are called on the class itself. 
--> They are defined using the static keyword in the class definition.
--> They can be useful for tasks that are related to the class rather than to a particular instance.
+instance variable: 
+->  They are variables declared within a class but outside of any methods.
+-> Its a duty of a programmer to initialize instance variable.
+-> If you don't initialize instance variable then value will be undefined.
+-> There are several way to initialize instance variables. like code 3
+-> you can use constructor to initialize the instance variables.
 
--> Syntax
-class ClassName {
-  constructor() { ... }
-  static method_1() { ... }
-  method_2() { ... }
+code 1: 
+class Person{
+  // instance variable
+  fname;   
+  age;
+  display(){
+    console.log(this.fname, this.age);
+  }
 }
-className.static_method_1();
+const obj1 = new Person();
+obj1.display()  // undefined undefined
+
+code 2: 
+class Person{
+  // instance variable
+  fname = 'Adesh; 
+  age = 22;
+  display(){
+    console.log(this.fname, this.age);
+  }
+}
+const obj1 = new Person();
+obj1.display()  // Adesh 22
+
+code 3: 
+class Person{
+  fname;   
+  age;
+  display(){
+    console.log(this.fname, this.age);
+  }
+}
+const obj1 = new Person();
+obj1.fname = 'Adesh';
+obj1.age = 22;
+obj1.display()  // Adesh 22
+
+code 4:
+class Person{
+  fname;   // it ok if you did not write like this, you can omit this part and only write constructor
+  age;
+  constructor(fname, age){
+    this.fname = fname;
+    this.age = age;
+  }
+
+  display(){
+    console.log(this.fname, this.age);
+  }
+}
+const obj1 = new Person('Adesh', 22);
+obj1.display()  // Adesh 22
+
+Static Methods::
+-> Static methods are used to create utility functions
+-> we are not working with particular object.
+In JavaScript, when you define a static method in a class using the static keyword, it means that the method is associated with the 
+class itself rather than with instances of the class. As a result, static methods cannot access or interact with instance-specific 
+properties or methods.
+-> They can be useful for tasks that are related to the class rather than to a particular instance.
+-> Static methods are often used for utility functions that don't depend on the state of a particular instance but are relevant to 
+the class as a whole.
+-> Math is a class and it have static methods like rounds(), floor(), sqrt() etc. we are accessing these methods without creating 
+object of Math class like "new Math()". so round(), floor() are utility functions.
+-> In computer science and programming, a utility function generally refers to a function that provides common, reusable functionality 
+that is not tied to a specific object or context. Utility functions are often used to perform tasks that are needed across different
+parts of a program. In JavaScript, utility functions can cover a wide range of functionalities.
+code 1: Example of a utility class with static method
+class Utility {
+  static generateUniqueId() {
+    // Logic to generate a unique ID
+    return Math.random().toString(36).substring(2);
+  }
+  static capitalizeFirstLetter(str) {
+    // Example: Capitalize the first letter of a string
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  function square(number) {
+    // Example: Calculate the square of a number
+    return number * number;
+  }
+  static isValidEmail(email) {
+    // Example: Check if a given email is valid
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+  static arrayContainsElement(arr, element) {
+    // Example: Check if an array contains a specific element
+    return arr.includes(element);
+  }
+  static formatDate(date) {
+    // Example: Format a date as "YYYY-MM-DD"
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  static parse(jsonString) {
+    const data = JSON.parse(jsonString);
+    return new Person(data.fname, data.age);
+  }  //const obj1 = Utility.parse('{"fname": "Adesh", "age": 22}');
+}
+-> These examples demonstrate different types of utility functions, and their purpose is to provide commonly needed functionality 
+that can be reused across various parts of your JavaScript code.
 
 
-Class Inheritance::
--> A class can inherit properties and methods from parent class by using the 'extend' keyword.
--> to access parent class variable inside a child class we can use "this.parentClassVariableName" and to access parent class
-methods we can use super keyword like "super.parentClassMethod"
+
+
+this in class::
+===============
+
+-> Inside a instance method "this" refers to the instance itself. 
+code 1:
+class Person {
+  constructor(fname, age) {
+    this.fname = fname;
+    this.age = age;
+  }
+  display() {
+    console.log(this);
+  }
+}
+const obj1 = new Person("Adesh", 22);
+const obj2 = new Person("Akshay", 23);
+obj1.display(); //  Person { fname: 'Adesh', age: 22 }
+obj2.display(); //  Person { fname: 'Akshay', age: 23 }
+
+-> inside a static method, the 'this' keyword refers to the class itself, not an instance. 
+Static methods cannot access instance-specific properties or methods.
+code 0:
+class Person{
+  constructor(fname, age){
+    this.fname = fname;
+    this.age = age;
+  }
+  static display(){
+    console.log(this);
+  }
+}
+Person.display();
+
+output: 
+class Person{
+  constructor(fname, age){
+    this.fname = fname;
+    this.age = age;
+  }
+
+  static display(){
+    console.log(this);
+  }
+}
+
+code 1: 
+class MyClass {
+  constructor(fname) {
+    this.fname = fname;
+  }
+  static staticMethod() {
+    console.log(this.fname); // This will result in an error -> undefined
+  }
+}
+const instance = new MyClass(42);
+MyClass.staticMethod(); // This will result in an error -> undefined
+
+
+code 2: 
+class Person {
+  constructor(fname, age){
+    this.fname = fname;
+    this.age = age;
+  }
+  static callMe(obj){
+    console.log(obj.fname, obj.age);
+  }
+}
+const obj = new Person('Adesh', 22);
+Person.callMe(obj);  //Adesh 22
+
+explanation: 
+-> Even though it's a static method, it accepts an argument (obj) which is an instance of the Person class. This is allowed 
+because static methods in JavaScript can still receive arguments, including instances of the class.
+-> So, while static methods cannot directly access instance-specific properties or methods using 'this' keyword, they can still 
+receive instances as arguments and work with the properties of those instances passed to them. This allows for some flexibility 
+in using static methods with instances if needed.
+
+
+
+how to  make members of a class private in javascript?
+=======================================================
+1. Using WeakMap for Private Members (ES6 and later):
+2. Using Symbols (ES6 and later):
+
+
+
+2. Using Symbols (ES6 and later): 
+-> Every symbol is guaranteed to be unique, even if it has the same description.This makes symbols useful for creating hidden 
+or private properties.
+-> every time we call symbol function we get a new unique value/symbol. and we can use this unique value/symbol as a property name
+for an object.
+*how to make method private: 
+Step 1: add another symbol like : 
+const _intro = Symbol();
+Step 2: so instead of using name like intro we use symbol. In ES6 we have new feature called computed properties name. 
+so we can add brackets, and inside this bracket we add an expression. when expression is evaluated the resulting value will be 
+used as the name of the property or method. so here we add [_intro], so this expression or symbol will be evaluated and we will get 
+unique value or unique identifier and because we put this inside a [] that unique identifier will be used as thee name of the method
+
+code: 1
+const _id = Symbol();
+const _fname = Symbol();
+const _draw = Symbol();
+class Person {
+  constructor(id, fname) {
+    this[_id] = id; // this._id = id;
+    this[_fname] = fname; // this._name = name;
+  }
+  [_draw]() {
+    console.log(this[_id], this[_fname]);
+    // Perform other operations using this[_id] and this[_fname]
+  }
+}
+const obj = new Person(101, "Adesh");
+console.log(obj); // Person { [Symbol()]: 101, [Symbol()]: 'Adesh' }
+console.log(obj[_id]); // 101
+console.log(obj[_fname]); // 'Adesh'
+console.log(obj._id);  // undefined   <- when we say properties are not visible outside, this is what we are going to say interviewer 
+console.log(obj._fname); // undefined <--This is we are going to show interviewer
+obj[_draw](); // Logs: 101 Adesh
+// Using Object.getOwnPropertySymbols to access properties
+const keys = Object.getOwnPropertySymbols(obj);
+console.log(obj[keys[0]]); // 101
+console.log(obj[keys[1]]); // 'Adesh'
+
+
+
+
+
+
+
+
+
+
+
+
+
+Class Inheritance:
+-> A class can inherit properties and methods from parent class by using the 'extends' keyword.
+-> in order to access all properties of parent class we must have to define super() method inside a child class constructor,
+if you don't define super() then this error will occur : "ReferenceError: Must call super constructor in derived class before 
+accessing 'this' or returning from derived constructor".
+-> To access super class methods inside child class use 'super' keyword. but to access super class variables use this keyword. 
+eg. 
+super.parentMethod();
+this.parentVariable;   -> Note you can't access parent class variables with super keyword. eg.super.parentVariable > error.
+
+The Constructor Method::
+-> constructor must have exact name as 'constructor'.
+-> The constructor method is called automatically when a new object is created. It is used to initialize object properties
+If you do not define a constructor method, JavaScript will add an empty constructor method.
+
 
 class Parent {
     constructor(fname){
@@ -1816,6 +2141,7 @@ obj1.bioData()
 
 
 Method overriding: 
+-> Javascript support method overriding.
 -> method overriding occurs when a subclass (child class) has the same method as the parent class. 
 class Person{
     constructor(fname){
@@ -1839,12 +2165,66 @@ const p1 = new Child('Adesh', 22);
 p1.display();
 
 
-
 Function overloading: 
--> Function overloading is a feature of object-oriented programming where two or more functions can have the same name but different 
-parameters 
--> In Function Overloading “Function” name should be the same and the arguments should be different.
 -> JavaScript Does not support Function Overloading
+-> Function overloading is a where two or more functions can have the same name but different parameters
+-> When you define multiple functions that have the same name, the last one defined will override all the previously defined ones 
+and every time when you invoke a function, the last defined one will get executed.
+
+function fun(n1){
+  console.log('1st');
+}
+function fun(n1, n2){
+  console.log('2nd');
+}
+fun(10);  //output: 2nd
+
+
+
+Getters and Setters: 
+-> JavaScript Accessors (Getters and Setters)
+-> ECMAScript 5 (ES5 2009) introduced Getter and Setters
+-> Classes also allows you to use getters and setters.
+-> It can be smart to use getters and setters for your properties, especially if you want to do something special with the value 
+before returning them, or before you set them.
+-> To add getters and setters in the class, use the get and set keywords.
+-> even if the getter is a method, you do not use parentheses when you want to get the property value
+-> The name of the getter/setter method cannot be the same as the name of the property,
+-> Many programmers use an underscore character _ before the property name to separate the getter/setter from the actual property
+like _carName and get carName
+
+code 1: in objects: 
+const obj = {
+  tags: ["A", "B", "C"],
+  get display() {
+    if (this.tags.length === 0) {
+      return undefined;
+    } else {
+      return this.tags[this.tags.length - 1];
+    }
+  },
+};
+console.log(obj.display);
+
+
+code 2: In classes
+class Person {
+  _msg = "hello world";
+  get msg() {
+    return this._msg;
+  }
+  set msg(x) {
+    this._msg = `hello ${x}`;
+  }
+}
+const obj = new Person();
+console.log(obj.msg); // "hello world"
+obj.msg = "Adesh";
+console.log(obj.msg); // "hello Adesh"
+
+
+
+
 
 
 */

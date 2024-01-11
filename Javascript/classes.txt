@@ -1,44 +1,19 @@
--> IN ES6 there is new way of creating objects and implements inheritance that is using 'classes'.
--> Classes we have here are not classes like we have inside c#., java
--> There is just a syntactical sugar over prototypical inheritance and constructor function.
--> constructor() from class is used to initialized objects.
--> just like constructor function we have.
--> All methods we define inside class are added inside prototype of object.
--> typeof Classes are 'function', they are constructor functions. typeof constructor function is also function.
-
-// constructor function
-function Person1(fname, age){
-    this.fname = fname,
-    this.age = age,
-    this.intro = function (){
-        console.log(`Name: ${fname} Age: ${age}`);
-    }
-}
-
-// class
-class Person {
-    constructor(fname, age){
-        this.fname = fname;
-        this.age = age;
-        this.move = function(){  // this method is not added inside prototype of object
-            log('Move');
-        }
-    }
-
-    draw(){  // this method added inside prototype of object
-        console.log(`Name: ${this.fname} Age: ${this.age}`);
-    }
-}
-
-const p1 = new Person('Adesh', 22);
-const p2 = new Person1('Akshay', 23)
-p1.draw()
-p2.intro()
 
 
-===================================================================================================
 
-2. Resetting a constructor: 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

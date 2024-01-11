@@ -77,8 +77,8 @@ Built-in modules :
 -> http module is built on top of TCP (Transmission Control Protocol). 
 -> with the help of http module we can easily create HTTP server that can listen for incoming requests, handle those requests, and 
 send back responses on a given port and with this we can easily create a backend server for our client application.
--> for creating 'http server' we use 'http.createServer()' method which creates an instance of 'http.Server'. This method takes a callback 
-function that will be invoked for each incoming HTTP request. 
+-> for creating 'http server' we use 'http.createServer()' method which creates an instance of 'http.Server'. 
+This method takes a callback function that will be invoked for each incoming HTTP request. 
 -> http.createServer() is implemented inside 'http.Server' class and this http.Server class is provided by http module. 
 -> When you create an HTTP server using the http module, it uses the lower-level 'net module' which creates 'TCP Server' to handle 
 'TCP connections'.
@@ -86,9 +86,6 @@ function that will be invoked for each incoming HTTP request.
 -> The 'http.Server' class inherits from 'net.Server' class which is part of the core 'net module'. 
 -> 'net.Server' is EventEmitter.
 -> In http module we have to write multiple if statements for checking multiple urls. To solve this problem we use Express js.
-
-
-
 
 
 
@@ -270,7 +267,7 @@ vi. list all files from current directory
 
 
 -> The URL module splits up a web address into readable parts.
--> we use "url.parse()" method and it will parse your web address into readble parts like hostname, pathname, query object.
+-> we use "url.parse()" method and it will parse your web address into readable parts like hostname, pathname, query object.
 
 code: 
 
@@ -328,11 +325,11 @@ http.createServer(function (req, res) {
   });
 }).listen(8080);
 
-Remember to initiate the file: (Initiate demo_fileserver.js:) C:\Users\Your Name>node demo_fileserver.js
-
 visit following two websites: 
 1.http://localhost:8080/summer.html	
 2.http://localhost:8080/winter.html
+Remember to initiate the file: (Initiate demo_fileserver.js:) C:\Users\Your Name>node demo_fileserver.js
+
 
 
 

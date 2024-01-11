@@ -1,7 +1,7 @@
 2. Using Embedded Documents (DeNormalization)
-
--> There is another approach instead of having differnet collection for storing authors we can embedded an author document inside a course document.
--> so basically we are embedding one document inside another document. and this we called denormalization.
+-> There is another approach instead of having different collection for storing authors we can embedded an author document inside a 
+course document.
+-> so basically we are embedding one document inside another document. and this we called demoralization.
 
 ex: 
 
@@ -14,21 +14,25 @@ let course = {
 }
 
 
-
 1st approach advantage and disadvantages
--> In 1st approach we have single place to define a author which is inside a author collection. if tomarrow i decided to change name of author from 'A' to 'B' there is single place that i need to modify. and all courses which are referencing that author will see updated author.
--> so in 1st approach we have consistency 
+-> In 1st approach we have single place to define a author which is inside a author collection. if tomorrow i decided to change 
+name of author from 'A' to 'B' there is single place that i need to modify. and all courses which are referencing that author will 
+see updated author.
+-> so in 1st approach we have consistency. 
 -> However when we query a course document we need to do extra query to load related author from author collection. 
 
 2nd approach advantage and disadvantages
--> in this approach we can easily load course document with author document withount extra query to author collection because author is inside acourse document.
--> However with this approach tomarrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple course documents that need to updated and if our update operation doen't complete successfully it is possible that we have some documents which are not updated. so will end up with unconsistent data.
+-> in this approach we can easily load course document with author document without extra query to author collection because author 
+is inside a course document.
+-> However with this approach tomorrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple 
+course documents that need to updated and if our update operation doesn't complete successfully it is possible that we have some 
+documents which are not updated. so will end up with unconsistent data.
 
 Summary : 
 -> 1st approach gives us consistency 
 -> 2nd approach gives us performance
--> Each approach have strenght and wicknesses.
--> which approach you use is really depends on your application and its querring requirements.
+-> Each approach have strength and weaknesses.
+-> which approach you use is really depends on your application and its querying requirements.
 -> so thats why we have to do trade off between to approaches, we can't have both at the same time.
 
 

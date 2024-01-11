@@ -36,3 +36,19 @@ CREATE TABLE Student(
     salary DECIMAL(10, 2),   -- Decimal with 10 total digits and 2 decimal places
     
 )
+
+
+
+
+
+CREATE: 
+
+-> Database
+-> Table
+-> Records
+
+
+
+
+
+

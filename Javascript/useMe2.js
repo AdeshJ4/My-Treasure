@@ -1,17 +1,23 @@
-let y= 20;
+const _id = Symbol();
+const _fname = Symbol();
+const _intro = Symbol();
 
-function mainFunction(){
-    let x = 10;
-    function fun1(){
-        console.log(x);
-    }
-    function fun2(){
-        console.log(y);
+class Person {
+    constructor(id, fname){
+        this[_id] = id;
+        this[_fname] = fname;
     }
 
-    fun1();
-    fun2();
+    [_intro](){
+        console.log(this[_id], this[_fname]);
+    }
 }
 
+const obj = new Person(101, 'Adesh');
 
-mainFunction();
+// console.log(obj[_id]);
+console.log(obj._id);  // undefined
+console.log(obj._fname); // undefined
+// console.log(obj[_fname]);
+// obj[_intro]();
+

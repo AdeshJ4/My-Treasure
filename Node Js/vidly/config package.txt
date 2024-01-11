@@ -1,4 +1,5 @@
--> we used to this package to store configuation setting of our application in json files or environment variables and overridig those setting in each environemnt(dev/prod).
+-> we used to this package to store configuation setting of our application in json files or environment variables and overridig 
+those setting in each environment (dev/prod).
 
 -> for ex in development environment we are going to use different database or mail server
 
@@ -6,7 +7,7 @@
 
 -> we should not store the application secrets in this configuration file 
 for ex you should not store the p/w of your database or mail server
-because because when you checking your sorce code to a repository that p/w or that secret is visible to anyone who has access to that repo.
+because when you checking your source code to a repository that p/w or that secret is visible to anyone who has access to that repo.
 
 
 -> always store your secrets inside .env file and add that file in .gitignore
@@ -22,6 +23,10 @@ CONNECTION_STRING=mongodb://127.0.0.1/vidly
 ACCESS_TOKEN_SECRET_KEY=SECRETKEYISBEHAPPY
 
 
+I have two DB_Connection_String, one for local database and one for online cluster 
+for local DB_Connection_String: mongodb://127.0.0.1/vidly
+for online cluster DB_Connection_String: mongodb+srv://admin:admin@adeshcluster.aw42eyd.mongodb.net/vidly?retryWrites=true&w=majority
+so what changes i have to make in following files.
 
 custom-environment-variables.json:
 ----------------------------------
