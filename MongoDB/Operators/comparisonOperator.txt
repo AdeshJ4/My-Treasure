@@ -4,6 +4,7 @@
 -> db.voters.find({age: {$eq: 18}})
 -> db.voters.find({age: 18})
 
+
 2. $ne
 
 -> This operator return documents if the given field value is not equal to specified value. 
@@ -44,7 +45,5 @@
 
 -> This operator returned documents if the value of the given field is not in specified array.
 -> db.sales.find({category: {$nin: ['Cloth', 'Books']}})
-
-
 
 

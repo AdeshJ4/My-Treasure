@@ -1,4 +1,12 @@
 1. $exists: 
+2. $type
+3. $expr: 
+4. $regex
+5. $ifNull operator: 
+
+
+
+1. $exists: 
 
 -> if you want to know that given field is exists in document or not we use $exists operator.
 -> This operator takes boolean value as a input.
@@ -34,7 +42,6 @@ db.addressBook.find( { "zipCode" : { $type : "double" } } )
 
 db.addressBook.find( { "zipCode" : { $type : 2 } } );
 db.addressBook.find( { "zipCode" : { $type : "string" } } );
-
 
 
 3. $expr: 
@@ -73,12 +80,11 @@ db.tb1.aggregate([
 ])
 
 
-
 4. $regex
 
 -> it stands for regular expression
--> it has a pattern and according to that pattern it finds the documents.
--> ex. pattern for string that starts with abc or ends with xyz or have mno in between text.
+-> it accepts pattern and according to that pattern it finds the documents.
+-> ex. pattern for string like, str starts with, str ends with, str contain word like and s on..
 -> it is not good for performance. instead use "text index".
 -> Regular expression queries without an index can be resource-intensive and may not scale well as the 
 dataset grows.
@@ -98,7 +104,6 @@ db.tb10.insertMany([
     {_id: 10, name: 'a bcd e'},
     {_id: 11, name: 'abcde'},
 ])
-
 
 1. Find documents where "fieldName" starts with "abc" or "ABC" (case-insensitive)
 -> db.t1.find({name: {$regex: /^abc/i}});
@@ -135,12 +140,10 @@ db.tb10.insertMany([
 ]
 
 
-
-
-
 =================================================================
 
 $ifNull operator: 
+-> MongoDB has an $ifNull function within its aggregation framework.
 -> if our array contain null value or document don't have any array field then it will give you error.
 -> to solve this we use $ifNull operator.
 -> this line will give you error: sizeOfTags1: {$size: '$tags'},
@@ -165,6 +168,3 @@ db.tb2.aggregate([
         }
     }
 ])
-
-
-

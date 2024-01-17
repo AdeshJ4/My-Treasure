@@ -6,6 +6,12 @@
 4. $unwind
 5. $ifNull
 6. $push
+7. $addToSet
+8. $pop
+9. $pull
+10.$each
+11.$slice
+
 
 data: 
 
@@ -48,16 +54,21 @@ data:
 
 
 Note : You can access array elements like objects means using dot notation.
+    "hobbies": [
+      { "title": "Reading", "description": "Enjoys reading books" },
+      { "title": "Sports", "description": "Plays various sports" },
+      { "title": "Music", "description": "Loves listening to music" }
+    ]
 eg. db.tb1.find({'hobbies.title': {$eq: 'Sports'}});
-
 
 
 
 1. $all :
 ---------
+
 -> $all operator used on the array.
--> $all operator accepts array of elements and return all documents where the given array field contain all 
-elements specified in '$all operator array', given array element may contain other elements.
+-> $all operator returns documents if the array field of a document contain all values specify inside a $all operator.
+-> given array element may contain other elements but must contain specified element.
 
 ex. 1
 Find products that have both "Intel Processor" and "256GB SSD" features.
@@ -76,8 +87,6 @@ O/P:
     {id: 4, productName: 'Bike', features: [ 'Intel Processor', '256GB SSD' ]},
 ]
 Query : db.tb1.find({features: {$all : ["Intel Processor", "256GB SSD"]}});
-
-
 
 ex.2 if arrays contain nested elements 
 I/P
@@ -103,7 +112,6 @@ I/P
 ]
 Query: db.tb1.find({features: {$all: [{ name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" }]}})
 
-
 Note: if you want documents only with specified elements then use: 
 db.users.find({hobbies: ["Swimming"]})
 // return only documents which has single hobbies elements
@@ -112,69 +120,98 @@ db.users.find({hobbies: ["Swimming"]})
 
 2. $elemMatch
 
--> This operator return documents if returned array elements satisfy the condition specify by the $elemMatch 
-operator.
--> $elemMatch works on array.
+-> this operator return documents which contain 'array field' and 'at least one element' of array field should 
+'satisfy all conditions' specify by the $elemMatch operator.
+-> all specified conditions are satisfied by a single array element.
 
 ex.1:
-
+find user who has grade above 91 or grade array must contain grade element $gte 90
 I/P: 
+[
+  { _id: 1, name: 'Alice', grades: [ 85, 90, 88 ] },
+  { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] }
+]
+Query> db.tb1.find({grades: {$elemMatch: {$gt: 90}}})
+[ { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] } ]
+
+
+example 3: 
+hobbies is array, and each element of hobbies contain title and frequency.
+find all users which have hobby of 'Sports' and frequency gte 3.
+that means you have to check each element of array that it contains title='Sports' and frequency>=3.
+array element should contain both title: 'Sports' and frequency: 3
+eg> 
+correct array element: 
 {
-  "_id": 1,
-  "name": "Alice",
-  "grades": [85, 90, 88]
-}
-{
-  "_id": 2,
-  "name": "Bob",
-  "grades": [92, 87, 95]
+  title: 'Sports',
+  frequency: 3
 }
 
-Query: 
-find user who has grade above 91;
--> db.tb1.find({grades: {$elemMatch: {$eq: 91}}})
-
-
-ex.2
-
-I/P: 
+Data: 
+db.tb1.insertMany([
   {
-    _id: 1,
-    productName: "Laptop",
-    features: [
-      { name: "Processor", value: "Intel" },
-      { name: "RAM", value: "8GB" },
-      { name: "Storage", value: "256GB SSD" }
-    ]
+    "name": "Max",
+    "hobbies": [
+      {
+        "title": "Sports",
+        "frequency": 3
+      },
+      {
+        "title": "Cooking",
+        "frequency": 6
+      }
+    ],
+    "phone": 131782734
   },
-
--> db.find({features: {$elemMatch: {$and: [{name: 'Processor', value: 'Intel'}, {name: 'RAM', value: '8GB'}]}}})
--> db.tb1.find({features: {$elemMatch: {name: 'Processor', name: 'Intel'}}})
-
-Query: 
-
--> give me products which has processor of Intel and RAM of 8GB.
-db.t1.find({
-  features: {
-    $elemMatch: {
-      $and: [
-        { name: "Processor", value: "Intel" },
-        { name: "RAM", value: "8GB" }
-      ]
-    }
+  {
+    "name": "Manuel",
+    "hobbies": [
+      {
+        "title": "Cooking",
+        "frequency": 5
+      },
+      {
+        "title": "Cars",
+        "frequency": 2
+      }
+    ],
+    "phone": "012177972",
+    "age": 30
+  },
+  {
+    "name": "Anna",
+    "hobbies": [
+      {
+        "title": "Sports",
+        "frequency": 2
+      },
+      {
+        "title": "Yoga",
+        "frequency": 3
+      }
+    ],
+    "phone": "80811987291",
+    "age": null
+  },
+  {
+    "name": "Chris",
+    "hobbies": ["Sports", "Cooking", "Hiking"]
   }
-})
-
--> Give me products which has processor of 'Intel'
-db.t1.find({
-    features: {
-        $elemMatch: {
-            name: 'Processor',
-            value: 'Intel'
-        }
-    }
-})
-
+]
+);
+Query:  db.tb1.find({hobbies: {$elemMatch: {$and: [{title: 'Sports'}, {frequency: {$gte: 3}}]}}})
+output: 
+[
+  {
+    _id: ObjectId("65a37b7e4a21c3f9948b4b18"),
+    name: 'Max',
+    hobbies: [
+      { title: 'Sports', frequency: 3 },
+      { title: 'Cooking', frequency: 6 }
+    ],
+    phone: 131782734
+  }
+]
 
 
 =============================================================================================================
@@ -183,11 +220,11 @@ db.t1.find({
 
 3. $size: 
 ---------
--> the size operator returns the documents if the given array field has the same length size to that value 
-specified in size operator.
+-> the size operator returns the documents which contain array field and size of that array field equal to the value specified 
+inside $size operator.
 -> size operator only takes number and not another document with operator.
 eg. find({hobbies: {$size: {$gt: 3}}}) // not acceptable
--> return me all documents who has hobbies elements equal to 3.
+eg.return me all documents who has hobbies elements equal to 3.
 -> db.tb1.find({hobbies: {$size: 3}})
 
 
@@ -199,8 +236,21 @@ eg. find({hobbies: {$size: {$gt: 3}}}) // not acceptable
 
 -> The $unwind operator is typically used in the context of aggregation queries rather than basic find 
 queries.
--> It's specifically designed for cases where you have documents with arrays, and you want to perform 
+-> It's specifically designed for cases where you have documents with array field, and you want to perform 
 operations on each element of the array independently.
+db.users.aggregate([
+  {
+    $unwind: '$tags'
+  },
+  {
+    $match: {
+      'tags': {
+        $gt: 5
+      }
+    }
+  }
+]);
+
 
 Data: 
 [
@@ -215,7 +265,8 @@ db.users.aggregate([
   {
     $unwind: '$tags'
   }
-])
+]);
+
 output: 
 [
   { _id: 1, age: 21, tags: 10 },
@@ -246,7 +297,6 @@ value.
 db.tb1.updateOne({_id: 1}, {$push: {fruits: 'Apple'}})
 { "_id": 1, "name": "John", "fruits": ["apple"] }
 
-
 Append a Value to an Array
 { _id: 1, scores: [ 44, 78, 38, 80 ] } 
 db.students.updateOne({_id: 1}, {$push: {scores: 10}})
@@ -258,37 +308,79 @@ Append a Value to Arrays in Multiple Documents
    { _id: 1, scores: [ 45, 78, 38, 80, 89 ] } ,
    { _id: 2, scores: [ 45, 78, 38, 80, 89 ] } ,
 ]
-db.tb1.updateMany({}, {$push: {scores: 10}})
+db.tb1.updateMany({}, {$push: {scores: 95}})
 [
    { _id: 1, scores: [ 44, 78, 38, 80, 89, 95 ] },
    { _id: 2, scores: [ 45, 78, 38, 80, 89, 95 ] }
 ]
 
+=============================================================================================================
 
-Append Multiple Values to an Array
--> Use $push with the $each modifier to append multiple values to the array field.
+$each: 
+
+-> $each operator is used with $push and $addToSet operator.
+-> $each operator is used to Append Multiple Values to an Array
 { _id: 1, scores: [ 44, 78, 38, 80 ] } 
-db.tb1.updateOne({_id: 1, $push: {scores: {$each: [10, 20, 30]}}})
+db.tb1.updateOne({_id: 1}, {$push: {scores: {$each: [10, 20, 30]}}})
+{ "_id": 1, "scores": [ 44, 78, 38, 80, 10, 20, 30 ] }
+  
+
+=============================================================================================================
+
+$addToSet: 
+
+-> The $addToSet operator in MongoDB is used to add unique elements to an array.
+-> prevent duplication elements.
+
+db.tb1.updateOne(
+  { _id: 1 },
+  { $addToSet: { scores: { $each: [10, 20, 30] } } }
+)
 
 
+=============================================================================================================
+
+$pull: 
+
+-> This operator is used to remove all instances of specified value.
+
+ex.1: remove all occurrences of specified value from array.
+{ "_id": 1, "grades": [85, 90, 92, 85, 88] }
+Query> db.users.updateOne({_id: 1}, {$pull: {grades: 85}})
+{ "_id": 1, "grades": [90, 92, 88] }
+
+ex.2: remove all occurrences of multiple specified value from array.
+{ "_id": 1, "grades": [85, 90, 92, 85, 88] }
+Query> db.users.updateOne({_id: 1}, {$pull: {grades: {$in: [85, 88]}}})
+{ "_id": 1, "grades": [90, 92] }
+
+ex.2: remove all occurrences of specified value according to condition.
+{ "_id": 1, "grades": [85, 90, 92, 85, 88] }
+Query> db.users.updateOne({_id: 1}, {$pull: {grades: {$gt: 86}}})
+{ "_id": 1, "grades": [85, 85] }
+
+=============================================================================================================
 
 
+$pop: Removes the first or last element of an array.
+
+db.users.updateOne({ _id: 1 }, { $pop: { marks: 1 } }) // removes the last element
+db.users.updateOne({ _id: 1 }, { $pop: { marks: -1 } }) // removes the first element
+
+=============================================================================================================
 
 
+$slice: $slice is used in combination with $push to control the size of the array.
 
+ex. 1 store only last five elements inside array.
+{  "_id": 1, "grades": [10, 20, 30, 40, 50] }
+Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: -5 } } })
+{  "_id": 1, "grades": [30, 40, 50, 60, 70] }
 
-
-
-
-
-
-
-
-
-
-
-
-
+ex.2  store only first three elements inside array.
+{  "_id": 1, "grades": [10, 20, 30, 40, 50] }
+Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: 3 } } })
+{  "_id": 1, "grades": [10, 20, 30] }
 
 
 

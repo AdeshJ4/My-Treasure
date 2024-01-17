@@ -1,5 +1,11 @@
 Create: 
 
+-> How to create a database
+-> How to create a collection
+-> How to create a documents.
+
+
+
 -> To insert a document we have two methods: 
 
 1. insertOne()
@@ -17,6 +23,9 @@ db.tb1.insertOne({name: 'Adesh'})
 3. Create Documents
 db.tb1.insertOne({name: 'Adesh', age: 22, CGPA: 8.81, passesOut: true})
 db.tb1.insertMany([{name: 'Adesh'}, {name: 'Ram'}])
+
+
+
 
 
 

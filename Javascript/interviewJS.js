@@ -2051,6 +2051,11 @@ how to  make members of a class private in javascript?
 2. Using Symbols (ES6 and later):
 
 
+1. Using WeakMap for Private Members (ES6 and later):
+-> 
+
+
+
 
 2. Using Symbols (ES6 and later): 
 -> Every symbol is guaranteed to be unique, even if it has the same description.This makes symbols useful for creating hidden 

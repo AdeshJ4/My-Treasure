@@ -1,4 +1,6 @@
-MongoDB is a NoSQL database that stores data in a flexible, JSON-like format called BSON (Binary JSON). MongoDB is designed to handle a variety of data types and is particularly well-suited for storing unstructured or semi-structured data. Here are the main data types that MongoDB supports:
+MongoDB is a NoSQL database that stores data in a flexible, JSON-like format called BSON (Binary JSON). MongoDB is designed to 
+handle a variety of data types and is particularly well-suited for storing unstructured or semi-structured data. Here are the 
+main data types that MongoDB supports:
 
 1. **String:** This is the most commonly used data type to store textual data.
 

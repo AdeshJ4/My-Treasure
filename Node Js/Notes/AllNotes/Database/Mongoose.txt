@@ -1,9 +1,9 @@
--> Mongoose give us simple api to work with mongodb database.
 -> Mongoose is build top of the mongodb database.
+-> Mongoose give us simple api to work with mongodb database.
+-> Mongoose wraps the MongoDB driver with additional functionality and features.
 -> Mongoose is an ODM(Object data Modeling) library, which means it allows you to define schemas (blueprints for document) and 
 models (constructors for creating documents based on those schemas).
--> Mongoose wraps the MongoDB driver with additional functionality and features.
--> it provides higher-level, more user-friendly interface for interacting with MongoDB compared to the native MongoDB driver
+-> it provides more user-friendly interface for interacting with MongoDB compared to the native MongoDB driver
 -> While Mongoose uses the MongoDB driver under the hood, it introduces its own set of methods and features, making it easier to 
 work with MongoDB in a Node.js application.
 
@@ -11,9 +11,13 @@ work with MongoDB in a Node.js application.
 Schema : 
 
 -> In mongoose we have this concept called schema.
+-> schema is like blueprints for document.
 -> this is specific to mongoose its not a part of a mongodb.
--> we use the schema in mongoose to define shape of a  documents in mongodb.
--> we use it to define what are the properties we have in this document.
+-> we use the schema in mongoose to define shape of a  documents like which properties we want inside a documents, that properties you 
+define inside a schema.
+-> If you try to insert a empty document inside a database. mongodb will insert that document without any error and warning.
+so in summary mongodb don't care about what are you inserting inside a database.
+to prevent this behavior we use schema.
 -> this schema define shape of course document in mongodb database.
 -> here we are creating instance of Schema class.
 

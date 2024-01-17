@@ -378,15 +378,10 @@ console.log("Architecture: " + os.arch());
 ===============
 
 -> url : https://www.w3schools.com/nodejs/ref_path.asp
-
 -> The Path module provides a way of working with directories and file paths.
 
-
-
+syntax:
 var path = require('path');
-var filename = path.basename('/Users/demo_path.js');
-console.log(filename);  //demo_path.js
-
 
 Method	                   Description
 
@@ -423,22 +418,27 @@ console.log('Clean Path : ', cleanPath);
 =================
 
 -> The Events module provides a way of working with events.
--> Event is basically a signal that indicates something has happened in your application. Like when a connection is made or a 
-file is opened.
--> Every action on a computer is an event. 
--> EventEmitter is a class and we have to create its object in order to access all properties.
-var events = require('events');
-var eventEmitter = new events.EventEmitter();
+-> It enables developers to create, emit, and listen for custom events within their applications.
+-> Event is basically a signal that indicates something has happened in your application and you have to handle that event. 
+Like when a connection is made or a file is opened. Every action on a computer is an event. 
 -> lots of node class/modules raises different kinds of events and in your code you have respond to that events.
--> for ex in node we have a class called 'http.Server' which we can use to build the http server. so we listen on a given port and 
+for ex in node we have a class called 'http.Server' which we can use to build the http server. so we listen on a given port and 
 every time we receive a request on that port that http.Server class raises an event. our job is to respond to that event which 
 basically involves reading that request and returning the right response.
+-> The core of the "Events" module is the EventEmitter class. 
+-> we create Instances of EventEmitter class so that we can emit events with the help of event() method as well as we can register 
+events with the help of addListener() and on() method to respond to those events.
+
+var events = require('events');
+var eventEmitter = new events.EventEmitter();
+
+
 -> In the example below we have created a function that will be executed when a "scream" event is fired.
 -> To fire an event, use the emit() method.
 
--> we use on() or addListener() to define a event and as a second argument we give a callback fuction which will be executed when this
+-> we use on() or addListener() to define a event and as a second argument we give a callback function which will be executed when this
 event is executed.
--> To execute a event we use emit() method which takes a event name as a argument and called assocaiated callback function og that event.
+-> To execute a event we use emit() method which takes a event name as a argument and called associated callback function og that event.
 code : 
 
 var events = require('events');
@@ -453,12 +453,13 @@ eventEmitter.emit('scream');  // signalling event happened.
 
 Method			        Description
 
-addListener()		    Adds the specified listener
-emit()			        Call all the listeners(event handlers) registered with the specified name
-on()			          Adds the specified listener(event handler)
+addListener()		    register the 'event handler' with event
+emit()			        used to fire an event by calling all the listeners(event handlers) registered with the specified name
+on()			          register the 'event handler' with event
 
 on() and addListener() are basically same, but quite often we used on() method.
-on() or addListener() must be define before emit() method. emit() method iterate over all on() methods.
+on() or addListener() must be define before emit() method. 
+emit() method iterate over all on() methods.
 
 
 

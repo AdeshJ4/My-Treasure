@@ -1,4 +1,4 @@
--> The useEffect Hook allows you to perform side effects in your components.
+-> The useEffect Hook allows you to perform 'side effects' in your components.
 
 -> Some examples of side effects are: fetching data, directly updating the DOM, and timers, store data in local storage.
 
@@ -237,8 +237,6 @@ const App = () => {
 
 
 
-
-
 Ex 3 : Timer
 ------------
 
@@ -303,9 +301,7 @@ const UseMe = () => {
   useEffect(() => {
   // AbortController allow us to cancel or abort asynchronous operations like fetch request or dom manipulation or any operation that might takes long time to complete
     const controller = new AbortController();
-
     fetchUsers(controller);
-
     return () => controller.abort();
   }, []);
 

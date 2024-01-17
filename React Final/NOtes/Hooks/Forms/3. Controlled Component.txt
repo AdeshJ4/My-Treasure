@@ -28,8 +28,8 @@ code :
 
 -> Now we have single source for storing the name of the person 
 -> Now we referred this input field as a controlled component.
--> because its state internally controlled by react. this means that the value of input field is not managed by DOM but instead it 
-stored and updated in the component state
+-> because its state internally controlled by react. this means that the value of input field is not managed 
+by DOM but instead it stored and updated in the component state
 
 
 

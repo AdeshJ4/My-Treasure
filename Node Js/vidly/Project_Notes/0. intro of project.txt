@@ -1,8 +1,7 @@
--> sir i have created a project having name "Vidly"  which is a 'movie rental application' which runs locally on a video store.
--> with the help of this application we can rent a movie from a movie rental video store.
--> This movie rental application only runs locally on a video store.
+-> Name of the project is "Vidly"  which is a 'movie rental application' which runs 'locally on a video store'.
+-> with the help of this application we can rent a movie for a specific time from a movie rental video store.
 -> The peoples which are going to use this application are the employees of that video store.
--> Its like application which we see in a dmart like shops.
+-> This application is like a application you see in a dmart like shops or in groceries, ,hotels.
 -> Basically peoples who want to rent a movie will come to this movie shop and with this application we can register the customer and 
 creates its renal which contain customer details and which movie he rented.
 
@@ -16,48 +15,15 @@ creates its renal which contain customer details and which movie he rented.
 
 features: 
 -> Implementing user authentication and authorization as well as role-based access control for enhanced account management.
--> Integrating with a MongoDB database to store and retrieve video rental information efficiently.
--> Designing and implementing a RESTful API to facilitate seamless communication between the frontend and backend.
+-> Connect MongoDB database to store and retrieve employees details as well as customers details and video rental information
+related to customer.
+-> MVC Architecture
+-> Pagination
 -> Utilizing the Express.js framework and middleware concept for building robust and scalable backend applications.
-
 -> Implementing role-based access control to manage user permissions and enhance system security.
 -> Implementing custom validation to ensure data integrity and prevent errors in user inputs.
--> Conducting Create, Read, Update, and Delete operations for effective data management.
--> Employing asynchronous programming techniques to optimize performance and responsiveness.
--> Leveraging middleware for handling tasks such as logging, error handling, and request processing.
-
-
-key features of the Node.js Vidly project:
-
-1. **User Authentication:**
-   - Implementing secure user authentication for enhanced account management.
-
-2. **CRUD Operations:**
-   - Conducting Create, Read, Update, and Delete operations for effective data management.
-
-3. **RESTful API Design:**
-   - Designing and implementing a RESTful API to facilitate seamless communication between the frontend and backend.
-
-4. **Database Integration:**
-   - Integrating with a database to store and retrieve video rental information efficiently.
-
-5. **Middleware Implementation:**
-   - Leveraging middleware for handling tasks such as logging, error handling, and request processing.
-
-6. **Custom Validation:**
-   - Implementing custom validation to ensure data integrity and prevent errors in user inputs.
-
-7. **Security Measures:**
-   - Incorporating security measures to protect against common web vulnerabilities.
-
-8. **Express Framework:**
-   - Utilizing the Express.js framework for building robust and scalable backend applications.
-
-9. **Role-Based Access Control:**
-   - Implementing role-based access control to manage user permissions and enhance system security.
-
-10. **Asynchronous Programming:**
-    - Employing asynchronous programming techniques to optimize performance and responsiveness.
+-> Did CRUD operations for effective data management.
+-> Use asynchronous programming techniques to optimize performance and responsiveness.
 
 
 
@@ -77,7 +43,7 @@ REST API:(Representational State Transfer Application Programming Interface)
 -----------------------------------------------------------------------------
 -> we use Node js to build backend services also call APIs.
 -> REST stands for Representational state transfer and it is a thesis which is provided by student in his university.
--> REST is use for building 'http services' that client can access.
+-> REST is use for create 'http services' that client can access.
 -> HTTP services refer to the communication and exchange of data between clients (such as web browsers) and servers over the 
 Internet using the HTTP protocol.
 -> RESTful APIs use HTTP methods (GET, POST, PUT, DELETE) to perform CRUD (Create, Read, Update, Delete) operations on 
@@ -152,7 +118,7 @@ deleting a genre
 
 4. Rental API
 
--> rental api is used to  manage a rental.
+-> rental api is used to manage a rental.
 -> like rental consists of customer details, movie details like this information
 -> The route handlers are : 
 1. get all rentals
@@ -213,16 +179,16 @@ for normal employee we  don't have "isAdmin" property.
 JSON Web Token (JWT):
 ---------------------
 
--> A JSON Web Token is a JSON object encoded as a long string. 
+-> A JSON Web Token is a 'JSON object' encoded as a long string. 
 Ex. token looks like this :  
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkZXNoIiwiZW1haWwiOiJhZGVqYWQxMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE2Nzg3NzA2NTUsImV4cCI6MTY3ODc3MDk1NX0.0CmG7Ykj69lK0EbUtShPBbAV6pyKefSYKRZNUqJGTZU"
--> We use them to identify user's identity and any relevant user roles or permissions.
-In our ex t check user is normal employee or admin.
+-> We use them to identify 'user's identity' and any relevant user roles or permissions.
+In our ex to check user is normal employee or admin.
 -> It’s similar to a passport or driver’s license. It includes a few public properties about a user in its payload. 
 like _id, username, isAdmin, etc
--> After logging you get jwt token.
--> With the help of this token we can access endpoints or services.
--> The user can send this token with a requests to prove their identity.
+-> After logging we generate jwt token on a server and sent to the client side and stored in a cookie or local storage. 
+Then user/employees can send this token with a requests to prove their identity.
+-> With the help of this token employee can access endpoints or services.
 -> It's important to note that while JWTs can carry information about the user's roles and permissions, the actual authorization logic 
 (deciding whether a user can perform a specific action) is typically handled by the server 
 -> The token is made up of three parts: a header, a payload, and a signature. 
@@ -251,8 +217,8 @@ HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),your-256-bit
 
 
 // creation of token: 
+-> This 'signature' is created by combining the header, payload and secret key using a cryptographic algorithm.
 -> The token is created using a secret key that only the server knows, which ensures that the data cannot be tampered with or modified.
-This signature is created by combining the header, payload and secret key using a cryptographic algorithm.
 -> The jwt.sign() function is typically used to create a JSON Web Token (JWT). It takes a set of claims (payload), a secret key, and 
 optional configuration parameters as inputs. 
 code: 

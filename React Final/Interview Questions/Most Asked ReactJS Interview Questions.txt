@@ -17,3 +17,127 @@
 1:03:20 useEffect hook
 1:09:28 react component lifecycle
 1:10:55 moving hardcoded data in separate constants fil
+
+
+
+Q1] What is React & SPA?
+
+-> React is a 'JavaScript library' created by Facebook to build single-page applications.
+-> React allows us to create reusable UI components.
+-> Current version of React.JS is V18.0.0 (April 2022).
+
+Q] Explain single page application
+
+-> Traditional websites load a new HTML page from the server every time you click a link or request a new 
+URL. This process involves a full page refresh, which can be slower and less interactive.
+
+-> In SPA, we initially load just one HTML page most of the time its a Home page. Then, SPA use JavaScript 
+to handle user interactions. 
+-> When you click on a link or a button to navigate to a different "page" like suppose from home page to 
+contact page, 
+then React uses a mechanism (such as AJAX requests) to fetch the data needed for the contact page.
+-> This data may include information for a new table, additional text, images, or any other content specific 
+to the contact page.
+-> when we talk about fetching data, we typically refer to retrieving the necessary information needed to 
+update the content of the page. This data can include various types of information such as text, images, 
+tables, etc. then question aries that why page is not reloaded? answer is that :-
+-> React uses a router (like React Router) to manage navigation within the application.
+When a user clicks on a link or interacts with the app to navigate to a different "page" (view), the router 
+'intercepts the request' and prevents the default browser navigation.
+This makes the user experience faster and smoother.
+
+   - SPAs are often used for applications where user interaction is a priority, such as social media sites, 
+   web-based email clients, project management tools, and online stores. They're excellent for creating 
+   highly interactive and engaging web experiences.
+
+   - SPAs introduce some challenges, like search engine optimization (SEO) difficulties (though these can be 
+   mitigated with proper techniques), and initial load times can be longer since the whole application code 
+   must be loaded upfront. Also, they may not work well on older web browsers.
+
+
+ex. Gmail, Facebook, Twitter, Google Maps, Github, Netflix, 
+
+
+
+Q] What are the differences between controlled and uncontrolled components?
+
+
+
+
+
+
+Q0] What is the virtual DOM and why we use it? 
+
+-> virtual DOM is a virtual representation of the real DOM is kept inside the memory and is 
+synced with the real DOM by a library such as 'ReactDOM'.
+
+Why we use: 
+-> DOM manipulation is an imp part of any web application
+-> The efficiency of the application gets affected when several DOM manipulations are being done
+-> Most JavaScript frameworks 'update the entire DOM' even when a 'small part of the DOM changes'.
+-> For example, consider a list that is being rendered inside the DOM. If one of the items in the list 
+changes, the entire list gets rendered again instead of just rendering the item that was changed/updated. 
+This is called 'inefficient updating'.
+-> To address the problem of inefficient updating, the react team introduced the concept of virtual DOM.
+
+working: 
+-> For every DOM object(html tag), there is a corresponding virtual DOM object(copy), which has the same 
+properties.
+-> The main difference between the real DOM object and the virtual DOM object is that any changes in the 
+virtual DOM object will not reflect on the screen directly.
+-> Whenever a 'JSX element' gets rendered, 'virtual DOM object' gets updated.
+-> React uses 'two virtual DOMs' to render the UI.
+-> One virtual DOM is used to store the 'current state of the objects' and the other used to store the 
+'previous state of the objects.'
+-> Whenever the virtual DOM gets updated, react compares the two 'virtual DOMs' and gets to know  which 
+'virtual DOM objects' were updated.
+-> After knowing which objects were updated, react renders only those objects inside the real DOM instead of 
+rendering the complete real DOM
+-> This way, with the use of virtual DOM, react solves the problem of inefficient updating.
+
+
+
+
+
+Q1] React JSX:
+==============
+
+-> JSX stands for JavaScript XML.
+-> JSX is an extension of the JavaScript language, and is translated into JavaScript at runtime. 
+-> JSX allows us to write HTML elements directly within the JavaScript code and place them in the DOM 
+without any createElement() and/or appendChild() methods.
+-> JSX converts 'HTML elements' into 'react elements'.
+-> Its not compulsory to use JSX, but JSX makes it easier to write React applications.
+-> Inside JSX you can write any valid 'JavaScript expression' inside curly braces { }.
+-> The HTML code must be wrapped in ONE top level element. Alternatively, you can use a "fragment" to wrap 
+multiple lines. This will prevent unnecessarily adding extra nodes to the DOM. A fragment looks like an 
+empty HTML tag: <></>.
+-> JSX follows XML rules.
+-> To write HTML on multiple lines, put the HTML inside parentheses:
+const myElement = (
+  <ul>
+    <li>Apples</li>
+    <li>Bananas</li>
+    <li>Cherries</li>
+  </ul>
+);
+-> some keywords are reserved in javascript, html, css, and they are 'class', 'for' and so on. 
+so these words you are not allowed to use it in JSX.
+so instead of them you can use: 
+class => className, for => htmlFor
+
+-> React supports if statements, but not inside JSX.
+if you want to use in JSX, you should put the if statements outside of the JSX, or you could use a ternary 
+expression instead:
+
+Without ternary: 
+let text = "Goodbye";
+if (x < 10) {
+  text = "Hello";
+}
+const myElement = <h1>{text}</h1>;
+
+with ternary: 
+const x = 5;
+const myElement = <h1>{(x < 10) ? "Hello" : "Goodbye"}</h1>;
+const root = ReactDOM.createRoot(document.getElementById('root'));

@@ -68,4 +68,105 @@ ES6 (ECMAScript 2015) introduced some new features and enhancements to JavaScrip
 explain set in javascript:
 ==========================
 
--> A JavaScript Set is a collection of unique values
+-> A JavaScript Set() is a collection of unique values no duplication
+-> typeof Set() is object.
+-> Set only expects an iterable (like an array or string). 
+-> we can store any type of values like primitive as well as reference type inside Set() using add() method, if you directly stores 
+non iterable value then it will give you error.
+-> Support only 'for-of' loop and not 'for-in' loop
+-> Does not supports array methods excepts 'forEach'. for that you have to convert this Set into array using method 'Array.from()'.
+-> In a Set you cannot directly update or modify individual elements like you can with an array. 
+However, you can achieve a similar effect by removing the old value and then adding the new value.
+-> In a Set, you can't directly access elements by index like mySet[0], as you would with an array because Set is not ordered like 
+an array.
+
+let mySet = new Set([10, 20, 'A', true]);          // Accepts
+let mySet = new Set('Adesh');                       // Accepts
+let mySet1 = new Set({id: 101, fname: 'Adesh'});   // not Accepts
+let mySet2 = new Set(10);                          // Not Accepts
+let mySet3 = new Set(true);                        // Not Accepts
+
+
+
+Q] What we can store inside a Set() object?
+--------------------------------------------
+-> we can store any type of values.
+-> like primitive as well as reference type.
+code: 
+// Adding values to the Set
+mySet.add(1);           // Number
+mySet.add("Hello");     // String
+mySet.add(true);        // Boolean
+mySet.add({ key: "value" });  // Object
+mySet.add([1, 2, 3]);   // Array
+mySet.add(function(){console.log('Gek')})
+console.log(mySet);
+output: 
+mySet:  Set(6) {
+  1,
+  true,
+  'Hello',
+  { id: 101 },
+  [ 10, 20 ],
+  [Function (anonymous)]
+}
+
+ex: unique values
+const arr = [10, 10, 10, 50];
+const set = new Set(arr);  // [10, 50];
+
+
+Essential Set Methods:
+
+Method	      Description
+new Set()	   Creates a new Set
+add()	         Adds unique new element to the Set
+delete()	      Accepts only Element not index
+has()	         check element exist or not -> return true / false
+forEach()	   Invokes a callback for each element in the Set, map, filter not works
+values()	      Returns an iterator with all the values in a Set
+size	         Returns the number of elements in a Set
+
+-> array methods excepts forEach will not work on Set.
+-> for that you have to convert this Set into array using method 'Array.from()'.
+const set = new Set([10, 20]);// set
+const arr = Array.from(set);  // set to array
+const newSet = new Set(arr);  // back to arr
+
+let mySet1 = new Set({id: 101, fname: 'Adesh'});
+let mySet2 = new Set(10);
+let mySet3 = new Set(true);
+
+
+
+Q] Explain Map() in javascript:
+-------------------------------
+-> `Map` is data structures for more advanced key-value mapping
+
+
+Essential Map Methods
+Method	      Description
+new Map()	   Creates a new Map
+set()	         Sets the value for a key in a Map
+get()	         Gets the value for a key in a Map
+delete()	      Removes a Map element specified by the key
+has()	         Returns true if a key exists in a Map
+forEach()	   Calls a function for each key/value pair in a Map
+entries()	   Returns an iterator with the [key, value] pairs in a Map
+size	         Returns the number of elements in a Map
+
+const myMap = new Map([
+  ["id", 101],
+  ["fname", "Adesh"]
+]);
+myMap.set("lname", "jadhav");   // add the property
+myMap.set("fname", "Akshay");   // modify the property
+myMap.delete("id");
+console.log(myMap.has("lname"));  // true
+console.log(myMap.size);  // 3
+console.log(myMap.get("fname")); // "Adesh"
+console.log(myMap);  //Map(3) { 'id' => 101, 'fname' => 'Akshay', 'lname' => 'jadhav' }
+console.log(myMap.entries());//[Map Entries] {[ 'id', 101 ],[ 'fname', 'Akshay' ],[ 'lname', 'jadhav' ]}
+myMap.forEach((value, key)=>{
+  console.log(value, key);
+})

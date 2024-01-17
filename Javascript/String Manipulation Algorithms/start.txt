@@ -7,3 +7,60 @@ str.charAt(0);
 str.indexOf('str')
 str.split('')  
 str.replace(oldValue, newValue);
+
+
+
+
+replace()
+->  replace() method is used to replace a 'specified substring' with 'another substring' in a given string.
+syntax:
+const newStr = str.replace(searchValue: string | RegExp, replaceValue: string)
+@param searchValue — A string or regular expression to search for.  eg."hello" or /Hello/g
+@param replaceValue — A string containing the text to replace. 
+eg.
+let str = "Hello, World! Hello, Universe!";
+let newString = str.replace("Hello", "Hi");
+console.log(newString);  // Hi, World! Hello, Universe!
+-> In this example, only the first occurrence of the substring "Hello" in the str is replaced with "Hi" to create 
+the newString. If you want to replace all occurrences, you can use a regular expression with the global (g) flag:
+eg.
+let str = "Hello, World! Hello, Universe!";
+let newString = str.replace(/Hello/g, "Hi");
+console.log(newString);  // Hi, World! Hi, Universe!
+
+
+
+trim(): 
+-> used to removes whitespace from both ends of a string.
+let str = ' Adesh ';
+console.log(str.trim()); // 'Adesh'
+
+substring():
+-> substring method used to extract elements from an string.
+-> you have to provide range.
+-> does not support -ve index.
+let str = "Adesh";
+console.log(str.substring(0));      // Adesh => Adesh
+console.log(str.substring(1));      // Adesh => desh
+console.log(str.substring(1, 4));   // Adesh => des -> last digit excluded
+
+splice(): 
+-> slice method used to extract elements from an array or string.
+-> you have to provide range.
+-> Support -ve indexes.
+
+string: 
+console.log(str.slice(0));      // Adesh => Adesh
+console.log(str.slice(1));      // Adesh => desh
+console.log(str.slice(1, 4));   // Adesh => des last digit excluded
+console.log(str.slice(-3));     // Adesh => esh return last three characters. 
+console.log(str.slice(-3, -1)); // Adesh => es
+console.log(str.slice(-4, -2)); // Adesh => de
+
+array: 
+let arr = [10, 20, 30, 40, 50];
+console.log(arr.slice(0));      // [10, 20, 30, 40, 50] => [10, 20, 30, 40, 50] -> return all array 
+console.log(arr.slice(1));      // [10, 20, 30, 40, 50] => [20, 30, 40, 50] -> return all elements from index 1
+console.log(arr.slice(0, 2));   // [10, 20, 30, 40, 50] => [10, 20] -> return numbers from index 0 to 1
+console.log(arr.slice(-3));     // [10, 20, 30, 40, 50] => [30, 40, 50] -> return last three digits
+console.log(arr.slice(-3, -1)); // [10, 20, 30, 40, 50] => [30, 40]

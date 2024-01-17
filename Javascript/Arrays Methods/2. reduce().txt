@@ -3,7 +3,7 @@
 reduce() Syntax:
 ----------------
 
--> arr.reduce(callback(accumulator, currentValue), initialValue)
+-> arr.reduce(callback(accumulator, currentValue), initialValue);
 
 
 reduce() Parameters:

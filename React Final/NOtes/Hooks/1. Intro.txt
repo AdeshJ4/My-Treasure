@@ -1,20 +1,6 @@
--> React is a JavaScript library for building user interfaces.
-
--> React is used to build single-page applications.
-
--> React allows us to create reusable UI components.
-
-"React allows us to create reusable UI components" means that with React, you can build pieces of your user interface (UI), like buttons, forms, or cards, as self-contained, independent units that you can easily use in different parts of your applx`ication.
-
-
-
-
-
--> React, sometimes referred to as a frontend JavaScript framework, is a JavaScript library created by Facebook
--> React is a tool for building UI components
-
-
-
+-> React is a 'JavaScript library' created by 'Facebook' to build 'single-page applications'.
+-> React allows us to create 'reusable UI components'.
+-> Current version of React.JS is V18.0.0 (April 2022).
 
 
 

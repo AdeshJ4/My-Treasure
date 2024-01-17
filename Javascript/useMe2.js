@@ -1,23 +1,8 @@
-const _id = Symbol();
-const _fname = Symbol();
-const _intro = Symbol();
+const myMap = new Map([
+  ["id", 101],
+  ["fname", "Adesh"],
+]);
 
-class Person {
-    constructor(id, fname){
-        this[_id] = id;
-        this[_fname] = fname;
-    }
-
-    [_intro](){
-        console.log(this[_id], this[_fname]);
-    }
-}
-
-const obj = new Person(101, 'Adesh');
-
-// console.log(obj[_id]);
-console.log(obj._id);  // undefined
-console.log(obj._fname); // undefined
-// console.log(obj[_fname]);
-// obj[_intro]();
-
+myMap.forEach((value, index) => {
+  console.log(value, index);
+});

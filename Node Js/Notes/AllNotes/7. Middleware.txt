@@ -1,13 +1,21 @@
+Middleware & Request Processing Pipeline:
+-----------------------------------------
+
 -> Middleware function is basically a function that takes a request object and either returns a response to the client or passes 
 control to another middleware function.
--> Middleware allow programmer to add functionality to the request response cycle such as authentication, logging, error handling 
-and many more.
+-> at runtime, when we receive a request on the server that request goes through a pipeline we call this pipeline "Request Processing 
+Pipeline".
+-> In this pipeline we have one or more middleware functions. Each middleware function either terminates the request response cycle 
+by returning a response object or it will pass control to another function.
+-> So every request that we get on the server will go through our middleware function.
+-> So an express application is essentially nothing but a bunch of middleware functions
 -> Middleware functions are invoked in the order they are defined and are capable of modifying the request and response objects, 
 as well as passing control to the next middleware function in the stack.
+-> Middleware allow programmer to add functionality to the request response cycle such as authentication, logging, error handling 
+and many more.
 -> if you use lots of middleware functions inside your request processing pipeline then it will slow down your application.
 -> Middleware can be defined globally, for all routes, or can be defined for specific routes or groups of routes. 
 -> So an express application is essentially nothing but a bunch of middleware functions
--> Middleware functions are called in sequence.
 -> app.use() method is used for adding middleware function.
 
 
@@ -26,15 +34,7 @@ res object to client. so it termites req-res cycle.
 
 
 
-Request Processing Pipeline:
-----------------------------
 
--> at runtime, when we receive a request on the server that request goes through a pipeline we call this pipeline "Request Processing 
-Pipeline".
--> In this pipeline we have one or more middleware functions. Each middleware function either terminates the request response cycle 
-by returning a response object or it will pass control to another function.
--> So every request that we get on the server will go through our middleware function.
--> So an express application is essentially nothing but a bunch of middleware functions
 
 
 
@@ -98,6 +98,12 @@ Request response, which helps prevent your application from crashing due to malf
 like this "key=value&key=value".
 -> So that's where you have URL encoded payload in the request.
 -> Now this middleware parse this body "key=value&key=value" and populates req.body like a json object.
+-> ex.
+app.use(express.urlencoded({ extended: true }));
+app.post('/submit', (req, res) => {
+  console.log(req.body); 
+  return res.send('Form submitted successfully!');
+});
 
 
 3. app.use(express.static('public'));
@@ -113,31 +119,37 @@ Third-party Middleware:
 =======================
 
 nodemon 
-express
-mongoose
+jsonwebtoken
 dotenv
-debug
-compression
-config
+express
 helmet
+compression
 
 
 
 1. helmet : Helps secure your app by setting various HTTP Headers.
-2. morgan : "Morgan" is a middleware for logging HTTP requests in Node.js, providing insights into server activity, request details, 
-and response statuses.
-3. rc : The rc npm package is used to load configuration settings from configuration files in a consistent and flexible manner. It's often used in Node.js applications to simplify the process of managing and accessing configuration parameters.
-4. debug: A tiny JavaScript debugging utility modelled after Node.js core's debugging technique. Works in Node.js and web browsers.
-5. compression: Using a compression package in Node.js is beneficial for optimizing the performance and efficiency of web 
-applications by reducing the size of data sent between the server and clients. 
-Compression is especially relevant when dealing with HTTP responses, as it can significantly improve the speed and reduce the 
-bandwidth usage of your application. Here are some reasons why compression is important:
+5. compression: optimizing the performance and efficiency of web applications by reducing the size of data sent between the server 
+and clients.improve the speed and reduce the bandwidth.
 6.dotenv: is used to load environment variables from a file named .env into process.env
 
 
 
 
+Third-party Middleware:
+nodemon: Nodemon is not exactly middleware but a utility that monitors changes in your Node.js application and automatically restarts the server during development. It's often used in development environments to enhance the development workflow.
+jsonwebtoken: This library is used for generating and verifying JSON Web Tokens (JWT), which are commonly used for authentication and information exchange between parties.
+dotenv: dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. It's commonly used to manage configuration settings in Node.js applications.
+helmet: Helmet is a set of middleware functions to help secure Express applications by setting various HTTP headers. It enhances security by mitigating common web vulnerabilities.
+compression: The compression middleware is used to compress HTTP responses, reducing the size of data sent over the network and improving application performance.
 
+Libraries/Frameworks:
+express: Express.js is a web application framework for Node.js. It provides a robust set of features, including routing, middleware support, and a simplified API for handling HTTP requests and responses.
+mongoose: Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js. It simplifies interactions with MongoDB by providing a schema-based solution for modeling application data.
+debug: The debug library provides a simple debugging utility for Node.js applications. It allows developers to selectively enable or disable debugging messages based on namespaces.
+config: The config library is used for managing configuration settings in Node.js applications. It allows developers to define configuration files for different environments and easily access configuration values.
+
+Others:
+joi: Joi is a powerful validation library for JavaScript that can be used for validating and sanitizing user input or other data in Node.js applications.
 
 
 

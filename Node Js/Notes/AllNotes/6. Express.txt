@@ -1,40 +1,47 @@
--> Express.js is a popular open-source web application framework for Node.js
--> Before express we have to create a server using http module.
--> to create a server wa have a method  inside http module called 'createServer()'.
--> In http module we have to write multiple if statements for checking multiple urls inside 'createServer()' method.
--> As we add more routes for our application we need to add more if blocks in the callback function of 
-createServer((req, res)=>{if()}) method.
-->  To solve this problem we use Express js.
--> A express framework gives our application a proper structure so we can easily add more routes while keeping our application 
-code maintainable.
--> There are lots of framework available for building web application and web server on top of node but the most popular one is 
-express.
--> Express is used in Node.js for building web applications and APIs. It simplifies the process of handling routes, requests, 
-and responses, making it easier and faster to create web services and applications.
+-> Express.js is a popular web application framework for Node.js.
+-> Express is commonly used for building RESTful APIs. 
+-> we used express over the http module because, In http module we have to used method called 'createServer()' fro crating a server.
+Inside this method we have to write multiple if statements for checking multiple urls.
+This make code messy as well as hard to understand, hard to maintain and hard to debug. 
+To solve this problem we use Express js.
+-> also there are other reasons such as : 
+express support middleware system, support various template engines as will as provide flexible and modular structure for 
+building RESTful APIs also it have Active Maintenance & Active Community. 
 
-Here are some of the key benefits of using Express.js:
 
-1. Flexibility: 
+The meaning of this lines:
+const express = require("express");
+const app = express();
 
-Express.js provides a flexible and modular structure for building web applications. It allows developers to easily add or remove
-features, such as middleware or plugins, to customize the application according to their needs.
+-> we import express module with the help of require() function.
+-> The 2nd line creates an instance of the Express application by calling the express function. 
+The app variable now represents your Express application. 
+This instance of app is where you'll define your routes, middleware, and other configurations for handling HTTP requests and 
+building your web application.
+
+
+
+for more reference: 
+
+3. Middleware:
+-> The http module in Node.js itself does not have built-in support for a middleware system like Express.js.
+-> Express js support middleware system.
+-> Express have built-in middleware such as express.json(), express.urlencoded({ extended: true }), express.static('public) as well 
+as user can create its own custom middleware function for authentication, logging,error handling or download Third-party Middleware
+like nodemon jsonwebtoken dotenv express helmet compression.
 
 2. Templating: 
-
 Express.js supports a variety of templating engines, such as EJS, Handlebars, and pug, which allow developers to generate dynamic
- HTML pages and views for their applications.
+HTML pages and views for their applications.
 
-3. Middleware: 
+1. Flexibility for APIs & Routing: 
+-> Express.js provides a flexible and modular structure for building RESTful APIs.
+-> Express.js provides a simple routing system for defining endpoints and handling HTTP requests.
+-> It supports various HTTP methods (GET, POST, PUT, DELETE, etc.) and allows you to create modular route handlers.
 
-Express.js provides a middleware system that allows developers to add functionality to the request/response cycle, 
-such as authentication, logging, error handling, and more. This makes it easy to add common features to an application without 
-having to write the code from scratch.
-
-
-4. Routing: 
-
-Express.js provides a simple and intuitive routing system for defining endpoints and handling HTTP requests. 
-This makes it easy to create RESTful APIs and web services.
+5.Active Maintenance & Active Community:
+Express is actively maintained, and updates are released regularly. 
+Express has a large and active community
 
 
 
