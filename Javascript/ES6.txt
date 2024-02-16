@@ -1,4 +1,5 @@
-ES6 (ECMAScript 2015) introduced some new features and enhancements to JavaScript, including new data types and improvements to existing ones. Here are some key data types and features introduced or enhanced in ES6:
+ES6 (ECMAScript 2015) introduced some new features and enhancements to JavaScript, including new data types and improvements to 
+existing ones. Here are some key data types and features introduced or enhanced in ES6:
 
 1. **`let` and `const` Declarations:**
    - ES6 introduced block-scoped variables using `let` and `const`. `let` allows for the declaration of variables with block scope, while `const` is used for constants.

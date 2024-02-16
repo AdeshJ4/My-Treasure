@@ -84,12 +84,266 @@ export default Form;
 
 
 
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useParams, useNavigate } from "react-router-dom";
+
+const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+const schema = z.object({
+  _id: z.string().refine((value) => objectIdPattern.test(value), {
+    message: "Invalid ObjectId format",
+  }),
+  title: z.string().min(2).max(100),
+  genreId: z.string(),
+  numberInStock: z
+    .number({ invalid_type_error: "numberInStock field is required" })
+    .min(0)
+    .max(255),
+  dailyRentalRate: z
+    .number({ invalid_type_error: "numberInStock field is required" })
+    .min(0)
+    .max(100),
+});
+
+const MovieForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(schema) });
+
+
+
+
+  // const mapToViewModel = (movie) => ({
+  //   _id: movie._id,
+  //   title: movie.title,
+  //   genreId: movie.genre._id,
+  //   numberInStock: movie.numberInStock,
+  //   dailyRentalRate: movie.dailyRentalRate,
+  // });
+
+
+
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="mb-3">
+          <label htmlFor="title" className="form-label">
+            Movie Name
+          </label>
+          <input
+            {...register("title")}
+            id="title"
+            type="text"
+            className="form-control"
+          />
+          {errors.title && (
+            <p className="text-danger">{errors.title.message}</p>
+          )}
+        </div>
+
+        {/* <div className="form-group mb-3">
+          <label htmlFor="genreId">Genre</label>
+          <select
+            {...register("genreId")}
+            name="genreId"
+            id="genreId"
+            className="form-control"
+          >
+            <option value="">Select Genre -- </option>
+            {genres.map((genre) => (
+              <option key={genre._id} value={genre._id}>
+                {genre.name}
+              </option>
+            ))}
+          </select>
+          {errors.genreId && (
+            <p className="alert alert-danger">{errors.genreId.message}</p>
+          )}
+        </div> */}
+
+        {/* <div className="mb-3">
+          <label htmlFor="numberInStock" className="form-label">
+            Number In Stock
+          </label>
+          <input
+            {...register("numberInStock", { valueAsNumber: true })}
+            id="numberInStock"
+            type="number"
+            className="form-control"
+          />
+          {errors.numberInStock && (
+            <p className="text-danger">{errors.numberInStock.message}</p>
+          )}
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="dailyRentalRate" className="form-label">
+            Daily Rental Rate
+          </label>
+          <input
+            {...register("dailyRentalRate", { valueAsNumber: true })}
+            id="dailyRentalRate"
+            type="number"
+            className="form-control"
+          />
+          {errors.dailyRentalRate && (
+            <p className="text-danger">{errors.dailyRentalRate.message}</p>
+          )}
+        </div> */}
+
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+      </form>
+    </>
+  );
+};
+
+export default MovieForm;
 
 
 
 
 
 
+
+
+// new Oe
+
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { getGenres } from "../services/genreService";
+import { getMovie, saveMovie } from "../services/movieService";
+
+
+const MovieForm = () => {
+  const [data, setData] = useState({
+    title: "",
+    genreId: "",
+    numberInStock: 0,
+    dailyRentalRate: 0,
+  });
+  const [genres, setGenres] = useState([]);
+  const { id } = useParams(); // Use useParams hook
+  const navigate = useNavigate();
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+
+  const populateGenres = async () => {
+    const { data: genresData } = await getGenres();
+    setGenres(genresData);
+  };
+
+  const populateMovie = async () => {
+    try {
+      const movieId = id;
+      if (movieId === "new") return;
+
+      const { data: movie } = await getMovie(movieId);
+      setData(mapToViewModel(movie));
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) navigate("*");
+    }
+  };
+
+  const fetchData = async () => {
+    await populateGenres();
+    await populateMovie();
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-3">
+        <label htmlFor="name" className="form-label">
+          Movie Name
+        </label>
+        <input
+          {...register("title", {
+            required: true,
+            minLength: 3,
+            maxLength: 20,
+          })}
+          type="text"
+          defaultValue=""
+          className="form-control"
+        />
+        {errors.title?.type === "required" && (
+          <p className="text-danger">The Name field is required.</p>
+        )}
+        {errors.title?.type === "minLength" && (
+          <p className="text-danger">
+            The name must be at least 3 character long
+          </p>
+        )}
+        {errors.title?.type === "maxLength" && (
+          <p className="text-danger">
+            The name must be at most 50 character long
+          </p>
+        )}
+      </div>
+
+      <div className="form-group mb-3">
+        <label className="form-label">Genre</label>
+        <select {...register("genreId")} className="form-control">
+          <option value="">Select Genre -- </option>
+          {genres.map((genre) => (
+            <option key={genre._id} value={genre._id}>
+              {genre.name}
+            </option>
+          ))}
+        </select>
+        {errors.genreId?.type === "required" && (
+          <p className="text-danger">The Genre field is required.</p>
+        )}
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="age" className="form-label">
+          Age
+        </label>
+        <input
+          type="number"
+          {...register("age", { required: true, min: 18, max: 99 })}
+          className="form-control"
+        />
+        {errors.age?.type === "required" && (
+          <p className="text-danger">The age field is required</p>
+        )}
+        {errors.age?.type === "min" && (
+          <p className="text-danger">The Age must be greater than 18.</p>
+        )}
+        {errors.age?.type === "max" && (
+          <p className="text-danger">The Age must be less than 130.</p>
+        )}
+      </div>
+
+      <button type="submit" className="btn btn-primary">
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export default MovieForm;
 
 
 

@@ -5,14 +5,11 @@ Keeping components pure:
 
 Pure function:
 
--> pure function is a function which receives same i/p every time and gives same o/p every time and has no side effects.
--> so if you called a function 10 times and every time we get the same output we say function is pure but if we get different output 
-then we say the function is impure.
-
+-> Pure function is a function, if you called pure function nth times then it will return you the same output and has no side effects.
 -> React is designed around this concept. 
 -> React expects every component which we create to be pure function.
 -> so  if we given same input like a same props it will always return the same JSX .and this is for performance reason. so if the 
-inputs of components haven't change react can skip  re-rendering of that component.
+inputs of components haven't change react can skip re-rendering of that component.
 
 -> But how we can keep our component pure.
 answer for this is "keep changes out of the render phase."
@@ -108,6 +105,7 @@ it here.
 
 code : 
 
+sol 1: 
 const Fun = () => {
   let count = 0;
   count++;
@@ -126,6 +124,23 @@ Count: 1
 
 
 
+
+sol 2:
+let count = 0;
+count++;
+const Fun = () => {
+  return(
+    <>
+      <h1>Count: {count}</h1>
+    </>
+  )
+}
+
+output: 
+
+Count: 1
+Count: 1
+Count: 1
 
 
 

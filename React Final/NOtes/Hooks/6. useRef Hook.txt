@@ -17,8 +17,9 @@ The useRef hook in React is primarily used for two main purposes:
 
 -> In general, we want to let React handle all DOM manipulation
 -> But there are some instances where useRef can be used without causing issues.
--> In React, we can add a ref attribute to an React element to access it directly in the DOM.
--> we can add a ref attribute and attach it to a React element, and then you can access and modify properties of the DOM element directly.
+-> In React, we can add a 'ref attribute' to an React element to access it directly in the DOM.
+-> we can add a ref attribute and attach it to a React element, and then you can access and modify properties of the DOM element 
+directly.
 
 
 
@@ -60,7 +61,7 @@ const Fun = () => {
   });
   return(
     <>
-      <h1>Count: {count.current}</h1>  {/* This will print 0 becase useEffect run aufter component rendered. */}
+      <h1>Count: {count.current}</h1>  {/* This will print 0 because useEffect run after component rendered. */}
     </>
   )
 }

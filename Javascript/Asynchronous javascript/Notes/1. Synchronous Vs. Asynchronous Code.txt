@@ -107,17 +107,15 @@ aspect:
 
 1. **Synchronous:** JavaScript executes code line by line, means in sequential manner. 
 Each operation is completed before moving on to the next one. 
-This synchronous behavior is suitable for many tasks, especially in the context of web development.
 
 2. **Single-Threaded:** JavaScript operates on a single thread, meaning it has only one execution context or "thread of execution." 
-This is primarily due to its origin as a language designed for web browsers. 
 In a single-threaded environment, only one set of instructions is executed at a time.
 
 3. **Blocking:** JavaScript is considered blocking because certain operations, especially I/O (Input/Output) operations, 
 can block the execution of the entire program. For example, if you perform a time-consuming task or fetch data from an external API, 
 the execution of your code can be blocked until that task is completed.
 
-However, it's important to note that JavaScript also has non-blocking features, particularly in the context of handling asynchronous 
+However, it's important to note that JavaScript also has 'non-blocking features', particularly in the context of handling asynchronous 
 operations. Asynchronous behavior is commonly achieved through features like callbacks, Promises, and async/await syntax. 
 These mechanisms allow JavaScript to perform tasks concurrently without waiting for each operation to complete before moving on to 
 the next one.

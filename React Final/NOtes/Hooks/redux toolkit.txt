@@ -1,7 +1,7 @@
 Redux: 
 
 -> Redux Toolkit is an official package from the creators of Redux that aims to simplify the process of working with Redux, making it more efficient and developer-friendly
--> Redux is an open source javascript library and state managenment tool for managing and centralizing application data and to easily pass data between components.
+-> Redux is an open source javascript library and state management tool for managing and centralizing application data and to easily pass data between components.
 -> Redux provides a store which makes the state inside components easier to maintain.
 -> Along with stores, react-redux introduces actions and reducers which work simultaneously with stores to make the state more predictable.
 
@@ -10,7 +10,7 @@ Redux ToolKit (RTK):
 
 -> Redux Toolkit is used for writing redux code but in a more concise way. 
 -> Redux Toolkit (RTK) solves problems that most of the developer’s face who used redux in a react application. 
--> RTK abstracts the basic redux code and provides us boilerplates that enable us to write redux code in less lines of code
+-> RTK abstracts the basic redux code and provides us boilerplate that enable us to write redux code in less lines of code
 
 
 Issues with basic Redux:
@@ -24,7 +24,7 @@ Reasons for preferring RTK(Redux ToolKit):
 
 Redux ToolKit solves various issues by providing a hook-based implementation of Redux 
 RTK gives the ability to write mutable state updates in the reducers.
-It also eliminates the use of extra coding by providing boilerplates.
+It also eliminates the use of extra coding by providing boilerplate.
 RTK also has the feature of RTK query which eliminates the use of Thunks and makes the query processing faster
 It also provides automatic support for Redux Dev-tools Extension and for immer.js library which is a great tool to deal with immutable objects. 
 You can also use the various predefined functions of Redux Toolkit which not only speeds up the process but also saves time.
@@ -107,6 +107,7 @@ src/
 
 
 
+reducers should be pure functions and not have side effects.
 
 
 

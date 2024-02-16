@@ -181,36 +181,56 @@ const Fun = () => {
 9 - Nested array operations
 ----------------------------
 
-const Fun = () => {
-    const [bugs, setBugs] = useState([
-    {id: 101, title: 'Bug 1', fixed: false},
-    {id: 102, title: 'Bug 2', fixed: false},
+const App = () => {
+  const [bugs, setBugs] = useState([
+    { id: 101, title: "Bug 1", status: "false" },
+    { id: 102, title: "Bug 2", status: "false" },
   ]);
-  
-  const fixedBug = () => {
-    // map method creates new array.
-    setBugs(bugs.map((bug)=>bug.id === 102 ? {...bug, fixed: true}: bug));
+
+  const addBug = () => {
+    setBugs([...bugs, { id: 103, title: "Bug 3", status: "true" }]);
   };
 
-  
-  console.log("Bug 1 fixed: " , bugs[0].fixed);
-  console.log("Bug 2 fixed: " , bugs[1].fixed);
-  
+  const addPropertyInBug = (id) => {
+    setBugs(
+      bugs.map((bug) => (bug.id === id ? { ...bug, developer: "Adesh" } : bug))
+    );
+  };
+
+  const updateBug = (id) => {
+    setBugs(
+      bugs.map((bug) => (bug.id === id ? { ...bug, status: "true" } : bug))
+    );
+  };
+
+  const deleteBug = (id) => {
+    setBugs(bugs.filter((bug) => bug.id !== id));
+  };
+
   return (
     <>
-      <h1>Bug 1: </h1>
-      <h3>id: {bugs[0].id}</h3>
-      <h3>title: {bugs[0].title}</h3>
+      <ul>
+        {bugs.map((bug) => (
+          <li key={bug.id}>
+            <h1>{bug.title}</h1>
+            <p>id: {bug.id}</p>
+            <p>title: {bug.title}</p>
+            <p>status: {bug.status}</p>
+            {bug.developer && <p>developer: {bug.developer}</p>}
+          </li>
+        ))}
+      </ul>
 
-      <h1>Bug 2: </h1>
-      <h3>id: {bugs[1].id}</h3>
-      <h3>title: {bugs[1].title}</h3>
+      <hr />
 
-      <button onClick={fixedBug}>Change Fixed</button>
-
+      <button onClick={addBug}>Add Bug</button>
+      <button onClick={() => addPropertyInBug(101)}>Property inside Bug</button>
+      <button onClick={() => updateBug(101)}>Update Fixed</button>
+      <button onClick={() => deleteBug(103)}>Delete Bug</button>
     </>
   );
 };
+
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

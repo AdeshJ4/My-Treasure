@@ -31,6 +31,11 @@ db.users.aggregate([
         $match: {name: {$eq: 'India'}}  // only return documents which has name = 'India'
     }
 ])
+output: 
+[
+  { _id: 4, name: 'India', category: 'Clothing' },
+  { _id: 5, name: 'India', category: 'Electronics' }
+]
 
 db.users.aggregate([
     {
@@ -51,15 +56,17 @@ db.users.aggregate([
     }
 ])
 
+
 ==================================================================
 
 $group (aggregation)
 
--> The $group stage groups documents by a group key and applies accumulator expressions to perform 
-computations on grouped data, producing a result set with aggregated information.
+-> $group stage Groups documents together based on a 'specified key' and allows you to perform aggregate functions(count, sum, max, min,
+ avg) on the grouped data.
 -> A group key is often a field, or group of fields. The group key can also be the result of an expression. 
-Use the _id field in the $group pipeline stage to set the group key.
-
+-> Use the '_id' field in the $group pipeline stage to set the group key.
+-> In $group, when you use '_id: null' within the $group stage, it means that you are grouping all the 
+documents in the collection together, treating them as a single group.
 
 
 // count the total number of documents in the aggregation pipeline
@@ -68,7 +75,6 @@ db.users.aggregate([
         $group:{_id: null, totalCount: {$sum: 1}}   // each time increment document by 1 number
     }
 ]);
-
 
 // we are grouping documents by the "category" field 
 db.users.aggregate([
@@ -127,9 +133,6 @@ output:
 ]
 
 
-
-
-
 // project the data
 db.users.aggregate([
     {
@@ -176,18 +179,257 @@ db.users.aggregate([
 ])
 
 
+========================================================================================================================
 
 
+$project: 
+-> Reshapes the documents by including/excluding fields, or renaming fields.
+
+// include or exclude a field.
+db.users.aggregate([
+    {
+        $match: {
+            _id: {$gt: 3} // return documents will all fields like {_id: 0, fname: 'Adesh', age: 4, school: 'GSM'}
+        }
+    },
+    {// input: {_id: 0, fname: 'Adesh', age: 4, school: 'GSM'}
+        $project: {
+            _id: 0 // except _id, all fields will returned like {fname: 'Adesh', age: 4, school: 'GSM'}
+        }
+    },
+    {// input: {fname: 'Adesh', age: 4, school: 'GSM'}
+        $project: {
+            fname: 1  // documents with only name field will be returned. eg: {fname: 'Adesh' } // other fields are not returned
+        }
+    }
+])
+
+// rename a field
+db.users.aggregate([
+    {
+        $match: {
+            _id: {$gt: 3} // output: {_id: 0, fname: 'Adesh', age: 4, school: 'GSM'}
+        }
+    },
+    {
+        $project: {
+            name: "$fname"  // {_id: 0, name: 'Adesh' }
+        }
+    }
+])
 
 
+========================================================================================================================
+
+$sort: 
+-> Sorts the documents based on specified criteria
+$sort: {
+    totalCount: -1  // descending order
+}
+
+========================================================================================================================
+
+$limit:
+-> Limits the number of documents passed to the next stage in the pipeline.
+eg> $limit: 3
+
+========================================================================================================================
+
+$skip:
+-> Skips a specified number of documents in the pipeline and returns the rest
+-> This is often used in conjunction with $limit to implement pagination.
+
+db.students.aggregate([
+  {
+    $skip: 2  // skip first two documents
+  }
+])
 
 
+========================================================================================================================
 
 
+4. $unwind 
+
+-> The $unwind operator is typically used in the context of aggregation queries rather than basic find 
+queries.
+-> It's specifically designed for cases where you have documents with array field, and you want to perform 
+operations on each element of the array independently.
+db.users.aggregate([
+  {
+    $unwind: '$tags'
+  },
+  {
+    $match: {
+      'tags': {
+        $gt: 5
+      }
+    }
+  }
+]);
+Data: 
+[
+    {_id: 1, age: 21, tags: [10, 20]},
+    {_id: 2, age: 22, tags: [10, 20, 30]},
+    {_id: 3, age: 23, tags: [10, 20, 30, 40, 50]},
+    {_id: 4, age: 24, tags: [10, 20]},
+    {_id: 5, age: 25, tags: [10]},
+]
+db.users.aggregate([
+  {
+    $unwind: '$tags'
+  }
+]);
+output: 
+[
+  { _id: 1, age: 21, tags: 10 },
+  { _id: 1, age: 21, tags: 20 },
+  { _id: 2, age: 22, tags: 10 },
+  { _id: 2, age: 22, tags: 20 },
+  { _id: 2, age: 22, tags: 30 },
+  { _id: 3, age: 23, tags: 10 },
+  { _id: 3, age: 23, tags: 20 },
+  { _id: 3, age: 23, tags: 30 },
+  { _id: 3, age: 23, tags: 40 },
+  { _id: 3, age: 23, tags: 50 },
+  { _id: 4, age: 24, tags: 10 },
+  { _id: 4, age: 24, tags: 20 },
+  { _id: 5, age: 25, tags: 10 }
+]
+
+========================================================================================================================
 
 
+$addFields:
+
+-> $addFields is used to update the value of an existing field or to add a new field
+
+eg1>
+db.users.aggregate([
+    {
+        $addFields: {
+            college: 'Raisoni'
+        }
+    }
+])
+
+eg2>
+db.users.aggregate([
+    {
+        $addFields: {
+            isAdult: {
+                $gte: ["$age", 25]
+            }
+        }
+    }
+])
+
+eg.3>
+db.books.aggregate([
+    {
+        $match: {
+            _id: 101   // o/p: {_id: 101, fname: 'Adesh', age: 22}
+        }
+    },
+    {
+        $addFields: { 
+            fname: "Ram"   // o/p: {_id: 101, fname: 'Ram', age: 22}
+        }
+    }
+])
+
+========================================================================================================================
+
+$first: 
+-> $first operator is used to project the value of the first element in an array
+
+========================================================================================================================
+
+$lookup:
+
+-> Performs a 'left outer join' to another collection in the same database to combine documents from two 
+collections based on a common field.
+-> LEFT (OUTER) JOIN: Returns all records from the left table, and the matched records from the right table
+
+authors
+[
+  { _id: 100, name: 'F. Scott Fitzgerald', birth_year: 1896 },
+  { _id: 101, name: 'George Orwell', birth_year: 1903 },
+  { _id: 102, name: 'Harper Lee', birth_year: 1926 }
+]
+books
+[
+  {
+    _id: 1,
+    title: 'The Great Gatsby',
+    author_id: 100,
+    genre: 'Classic'
+  },
+  {
+    _id: 2,
+    author_id: 101,
+    genre: 'Dystopian'
+  },
+  {
+    _id: 3,
+    title: 'To Kill a Mockingbird',
+    author_id: 102,
+    genre: 'Classic'
+  }
+]
+Query> db.books.aggregate([
+{
+$lookup: {
+    from: 'authors',
+    localField: "author_id",
+    foreignField: "_id",
+    as: "author_details"
+    }
+}
+])
+output: 
+[
+  {
+    _id: 1,
+    title: 'The Great Gatsby',
+    author_id: 100,
+    genre: 'Classic',
+    author_details: [ { _id: 100, name: 'F. Scott Fitzgerald', birth_year: 1896 } ]
+  },
+  {
+    _id: 2,
+    title: 'Nineteen Eighty-Four',
+    author_id: 101,
+    genre: 'Dystopian',
+    author_details: [ { _id: 101, name: 'George Orwell', birth_year: 1903 } ]
+  },
+  {
+    _id: 3,
+    title: 'To Kill a Mockingbird',
+    author_id: 102,
+    genre: 'Classic',
+    author_details: [ { _id: 102, name: 'Harper Lee', birth_year: 1926 } ]
+  }
+]
 
 
+db.books.aggregate([
+    {
+        $lookup:{
+            from: 'authors',
+            localField: "author_id",
+            foreignField: "_id",
+            as: "author_details"
+        }
+    },
+    {
+        $addFields: {
+            author_details: {
+                $first: "$author_details"
+            }
+        }
+    }
+])
 
 
 

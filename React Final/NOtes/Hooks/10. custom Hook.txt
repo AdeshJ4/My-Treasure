@@ -1,15 +1,43 @@
 React Custom Hooks:
 -------------------
-
 -> Hooks are reusable functions.
--> When you have component logic that needs to be used by multiple components, we can extract that logic to a custom Hook.
+-> When you have 'component logic' that needs to be used by multiple components, we can 'extract that logic' to a custom Hook.
 -> Custom Hooks start with "use". Example: useFetch.
 
 
 Example: 
 --------
+-> Suppose we have Home Component, inside that we are fetching the data.
+-> So this Fetch Logic may be needed by another components as well, so we extract that logic inside custom hook.
+-> we placed that logic inside a file and named that file 'useFetch.js'
+-> Because name of hook must be starts with "use" and since the logic is about fetching data. so named of custom hook is "useFetch.js"
 
 
--> Suppose we have Home Component inside that we are fetching the data.
--> The Fetch Logic may be needed in another component as well, so we extract that logic inside custom hook.
--> 
+
+App.jsx: 
+
+import useFetch from "./useFetch";
+const App = () => {
+  const [data] = useFetch("https://jsonplaceholder.typicode.com/users");
+  return <>{data && data.map((ele) => <li key={ele.id}>{ele.name}</li>)}</>;
+};
+export default App;
+
+
+
+useFetch.js
+import { useEffect, useState } from "react"
+import axios from 'axios';
+const useFetch = (url) => {
+    const [users, setUsers] = useState(null);
+    async function fetchUsers(){
+        const {data} = await axios.get(url)
+        setUsers(data);
+    }
+    useEffect(() => {
+        console.log('useEffect runs');
+        fetchUsers();
+    }, [url]);
+    return [users];
+}
+export default useFetch;

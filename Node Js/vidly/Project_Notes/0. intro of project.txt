@@ -26,9 +26,6 @@ related to customer.
 -> Use asynchronous programming techniques to optimize performance and responsiveness.
 
 
-
-
-
 -> Basically in this project i have created 5 APIs. which are as follows: 
 
 1. Customer APIs

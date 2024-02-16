@@ -1,7 +1,7 @@
--> The React useCallback Hook returns a memoized callback function.
--> with the help of this hook we can isolate resource intensive functions which are passed as a prop to child component so they will 
-not automatically run on every render when state of the parent component get changed, they will only changed when one of the dependency
-get changed.
+-> The React useCallback Hook returns a "memoized callback function".
+-> with the help of this hook we can 'isolate resource intensive functions' which are passed as a prop to child component so they will 
+not automatically recreated on every render when state of the parent component get changed, they will only changed when one of the 
+dependency get changed.
 -> Every time a component re-renders, its functions get recreated. Because of this, another nested component will re-render to stop 
 this we use useCallback hook.
 -> The useCallback Hook only runs when one of its dependencies update. This can improve performance.	
@@ -17,9 +17,24 @@ result when the same inputs given which helps prevent unnecessary renders.
 
 what is cached result ?
 =======================
-A cached result refers to the stored output or value of a computation or function call that has been previously calculated and saved 
-for future use. its a temporary data.
-
+A cached result is 'temporary data' which is used to store, "stored output" or "value of a computation" or "function call" that has 
+been previously calculated and saved for future use.
+ex> 
+function multiply(){
+    const cache = {};
+    return function (num){
+        if(num in cache){
+            console.log('Data coming from cache object');
+            console.log(cache[num]);
+        }else{
+            cache[num] = num * num;
+            console.log(cache[num]);
+        }
+    }
+}
+const res = multiply();
+res(10);
+res(10);
 
 
 
@@ -29,10 +44,14 @@ difference between memo and useCallback hook:
 -> Suppose we have two components 1. App.jsx  2. Todos.jsx
 -> Inside App component we have two states which are initialized using useState Hook. 1. count state  2. todos state
 -> so  we are passing todos state to todo component as a props.
--> so we use memo if we are just passing state from one compnet to another componet. to stop unnecessory re-rendring we use memo in todos component.
--> Now suppose inside App.jsx we write some event Handler related to todo compoent since there is a rule in react js which is the component which old the state is responsible for updating it. since inside our App componet we have todos state so our App componet is responsible for updating it.
--> so when the state of App component changes it will re-render Todo componet also, even we are using memo inside a Todo component.
--> The reason is that Every time a component re-renders, its functions get recreated. Because of this, the addTodo function has actually changed.
+-> so we use memo if we are just passing state from one component to another component. to stop unnecessary re-rendering we use memo 
+in todos component.
+-> Now suppose inside App.jsx we write some event Handler related to todo component since there is a rule in react js which is the 
+component which old the state is responsible for updating it. 
+since inside our App component we have todos state so our App component is responsible for updating it.
+-> so when the state of App component changes it will re-render Todo component also, even we are using memo inside a Todo component.
+-> The reason is that Every time a component re-renders, its functions get recreated. Because of this, the addTodo function has 
+actually changed.
 -> To fix this, we can use the useCallback hook to prevent the function from being recreated unless necessary.
 -> Now the Todos component will only re-render when the todos prop changes.
 

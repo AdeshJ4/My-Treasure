@@ -1,6 +1,9 @@
 -> The useEffect Hook allows you to perform 'side effects' in your components.
 
--> Some examples of side effects are: fetching data, directly updating the DOM, and timers, store data in local storage.
+-> When we talk about side effects in the context of React.js, we are referring to anything that is outside the scope of React. because react is designed around this concept called "Pure function".
+-> Pure function is a function, if you called pure function nth times then it will return you the same output and has no side effects.
+-> Side effects can include things like modifying variables outside of a function, fetching data(network requests), directly updating the DOM, and timers, store data in local storage.
+-> we must handle this side effects inside useEffect hook.
 
 -> useEffect accepts two arguments. The second argument is optional.
    useEffect(<function>, <dependency>)
