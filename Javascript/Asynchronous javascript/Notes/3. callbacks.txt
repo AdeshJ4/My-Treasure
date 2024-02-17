@@ -1,10 +1,10 @@
 JavaScript Callbacks:
 ---------------------
 
--> In JavaScript, callbacks are functions that are passed as arguments to other functions and are invoked when an asynchronous 
+-> callbacks are functions that are passed as arguments to other functions and are invoked when an asynchronous 
 operation is completed.
 
--> This technique allows a function to call another function
+-> Callbacks allows a function to call another function
 
 -> A callback function can run after another function has finished
 
@@ -146,7 +146,7 @@ the code becomes deeply indented and less readable.
 
 
 getUser(101, (user)=>{  					// asynchronous operation 1
-    getRepositories(user.gitHubUsername, (repos)=>{		// asynchronous operation 2
+    getRepositories({gitHubUsername}, (repos)=>{		// asynchronous operation 2
         getCommits(repos[0], (commits)=>{				// asynchronous operation 3
             console.log(commits);
         })
@@ -158,7 +158,7 @@ getUser(101, (user)=>{  					// asynchronous operation 1
 -> inside callback function of getUser we are calling getRepositories function.
 -> getRepositories function fetching the repos of user.
 -> inside callback function of getRepositories we are calling getCommits fucntion.
--> gettCommits function fetching the commits of that repo.
+-> getCommits function fetching the commits of that repo.
 -> inside callback function of getCommits we are logging commits of repo.
 
 
@@ -169,10 +169,6 @@ getUser(101, (user)=>{  					// asynchronous operation 1
 Named function to rescue
 ------------------------
 // mine
-
-console.log('Start');
-getUser(101, displayUser);
-console.log('End');
 
 // main functions
 function getUser(id, callback){
@@ -196,6 +192,9 @@ function getCommits (repos, callback){
     }, 2000);
 }
 
+console.log('Start');
+getUser(101, displayUser);
+console.log('End');
 
 // callback functions
 function displayUser(user){

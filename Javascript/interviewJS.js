@@ -14,34 +14,46 @@
 
 
 -> we can store a function inside a data structure like array.
-const arr = [10, function fun1(){console.log('FUnction 1')}, square]
-function square(x) {
-  console.log('Square : ', (x*x));
-  return x * x;
+const arr = [
+  function fun1() {
+    console.log("FUnction from arr");
+  },
+  () => {
+    console.log("Arrow function");
+  },
+  callMe,
+];
+function callMe() {
+  console.log("Outside function");
 }
-arr[0]; 
-arr[2](5);
-
+arr[0]();
+arr[1]();
+arr[2]();
 
 -> we can store a function inside a data structure like object.
 const obj = {
   id: 101,
   fname: "Adesh",
-  fun1: function (msg) {
-    console.log(msg);
+  fun1: function () {
+    console.log("Normal function 1", this.id);
   },
-  fun2: () => {
-    console.log(obj.id);
-    console.log(this.fname);  // no access
+  fun2(){
+    console.log("Normal function 2", this.fname);
   },
-  intro: function(){
-    console.log(this.id);
-    console.log(this.fname);
-  }
+  fun3 : ()=>{
+    console.log("Arrow function");
+  },
+  fun4 : outSide
 };
-obj.fun1("function from object")
+
+function outSide (){
+  console.log('Outside function');
+}
+
+obj.fun1();
 obj.fun2();
-obj.intro()
+obj.fun3();
+obj.fun4();
 */
 
 
@@ -90,7 +102,7 @@ var y = 3.6; //with decimal
 
 iii. BigInt - This data type is used to store numbers which are above the limitation of the Number data type. It can store large 
 integers .
-code: var bigInteger =  234567890123456789012345678901234567890;
+code: var bigInteger =  234567890123456789012345678901234567890n;
 
 iv. Boolean - It represents a logical entity and can have only two values : true or false. 
 (5 === 5) //returns true
@@ -105,14 +117,13 @@ vi. null - The null value represents the intentional absence of any object value
 code: let num = null;
 
 vii. symbol:
--> It is a new data type introduced in the ES6 version of javascript.
--> It is used to create unique identifiers
--> Symbols are immutable (cannot be changed) and are unique. 
--> Symbols are often used to add unique property keys to an object that won't collide with other keys that might add to the object.
--> You use the Symbol() function to create a Symbol.
--> symbol is not a constructor. so you can't use new keyword.
--> Every symbol is guaranteed to be unique, even if it has the same description.
-This makes symbols useful for creating hidden or private properties.
+-> It is a 'new data type' introduced in the 'ES6' version of javascript.
+-> It is used to create 'unique identifiers'.
+-> Symbols are 'immutable' (cannot be changed) and are 'unique'. 
+-> You use the 'Symbol() function' to create a Symbol.
+-> symbol is 'not a constructor'. so you can't use 'new keyword'.
+-> Every symbol is guaranteed to be unique, even if it has the same 'description'.
+This makes symbols useful for creating 'hidden or private properties'.
 
 code 0 : 
 const id = new Symbol("Hey");  // error	-> don't use new keyword
@@ -120,13 +131,10 @@ const id = new Symbol("Hey");  // error	-> don't use new keyword
 code 1:
 const x = Symbol('hey');
 console.log(x); // Symbol(hey)
+console.log(x.description); // hey
 
 code 2: 
 Symbol("foo") === Symbol("foo"); // false
-
-code 3: 
-to Access Symbol Description we use 'description' property.
-console.log(x.description);
 
 code 4: 
 const id = Symbol();
@@ -170,22 +178,39 @@ i. Object
 -> main purpose of object is to grouped related properties.
 -> In javascript objects are dynamic. once we create them we can add additional properties or can remove properties.
 code : 
-const person = {
-    fname: "Adesh",
-    age: 22,
-    location: {
-        street: "lohegaon"
-    },
-    intro(){
-        console.log(`fname: ${this.fname}`);
-    }
+const obj = {
+  id: 101,
+  fname: 'Adesh',
+  fun1 : function(){
+    console.log('Function 1');
+  },
+  fun2(){
+    console.log('Function 2');
+  },
+  fun3: () =>{
+    console.log('Function 3');
+  }
 }
+
+// add property
+obj.age = 22;
+obj['number'] = 24;
+
+// update property
+obj.id = 102;
+
+// delete property
+delete obj.fname;
+
+// read property
+console.log(obj.id);
+console.log(obj['id']);
 
 
 ii. Array: 
 
 -> Array store multiple elements which has different datatype inside a single variable.
-code : const arr = [10, 'A', true, Symbol('Hey'), undefined, null, 46316685164514n];
+code : const arr = [10, 'A', true, Symbol('Hey'), undefined, null, 46316685164514n, function fun1(){log("Hello")}, ];
 
 
 iii. Function
@@ -198,7 +223,7 @@ function sayMyName(fname){
 typeof of reference types :
 console.log(typeof ['A', 'B']);         // object
 console.log(typeof {1: 'A', 2: 'B'});   // object
-console.log(typeof fun);                // function -> special kind f object
+console.log(typeof fun);                // function -> special kind of object
 
 */
 
@@ -209,8 +234,8 @@ console.log(typeof fun);                // function -> special kind f object
 JavaScript Hoisting: 
 --------------------
 
--> Hoisting is JavaScript's default behavior of moving all declarations(function declaration, variable declaration) to the top of 
-the current scope which can be current script or the current function and this done by automatically by js engine.
+-> Hoisting is JavaScript's 'default behavior' of moving all declarations(function declaration, variable declaration) to the top of 
+the 'current scope' which can be 'current script' or the 'current function' and this done by automatically by 'js engine'.
 
 -> In JavaScript,variables can be used before declaration.
 -> but it is applicable to "var" keyword only, and not for "let" & "const".
@@ -237,7 +262,7 @@ function walk(){
 //Q3] Difference between “ == “ and “ === “ operators.
 
 /*
-Both are comparison operators. The difference between both the operators is that “==” is used to compare values whereas, 
+Both are 'comparison operators'. The difference between both the operators is that “==” is used to compare values whereas, 
 “ === “ is used to compare both values and types.
 
 code : 
@@ -266,8 +291,8 @@ JavaScript Scope :
 1. Block Scope
 --------------
 -> Before ES6 (2015), JavaScript had only Global Scope and Function Scope.
--> ES6 introduced two important new JavaScript keywords: let and const.
--> These two keywords provide Block Scope in JavaScript
+-> ES6 introduced two important new JavaScript keywords: 'let and const'.
+-> These two keywords provide 'Block Scope' in JavaScript
 -> Variables declared inside a { } block cannot be accessed from outside the block
 -> variable from outside of block can be accessible inside block and you can change its value inside a block.
 -> for loop, while loop, if statement provide block scope for a let, const.
@@ -314,21 +339,37 @@ console.log('outside a function : ' , i); // i is not accessible
 
 2. Function Scope: 
 -----------------
--> JavaScript has function scope: Each function creates a new scope.
--> Variables declared within a JavaScript function, become LOCAL to the function
+-> Variables define within a JavaScript function, become LOCAL to the function
 -> Local variables are created when a function starts, and deleted when the function is completed.
--> Variables defined inside a function are not accessible (visible) from outside the function.
--> if we pass variable define and initialized outside the function to inside a function through a parameter and if you changed its 
+case 1: Variables defined inside a function are not accessible outside.
+case 2: variable from outside of function can be accessible inside function and you can change its value inside a function.
+case 3: if we pass variable define and initialized outside the function to inside a function through a 'parameter' and if you changed its 
 value inside a function it will not affect the original variable, its value will be unaffected.
 
-code: 
-let num = 10;
-function add (num){
-  num++;
-  console.log('Inside a function: ', num);  // 11
+code : 
+case 1: 
+function fun(num) {
+  let num = 10;
 }
-add(num);
-console.log('Outside a Function: ' +  num);  // 10
+console.log(num);  //  NOT ACCESSIBLE
+
+case 2: 
+let num = 10;
+function fun() {
+  num++;
+  console.log('Inside a function', num);  // 11
+}
+fun();
+console.log('Outside a Function: ', num);  // 11
+
+case 3: 
+let num = 10;
+function fun(num) {
+  num++;
+  console.log('Inside a function', num); // 11
+}
+fun(num);
+console.log('Outside a Function: ', num); // 10
 
 
 
@@ -336,15 +377,11 @@ console.log('Outside a Function: ' +  num);  // 10
 ----------------
 -> A variable declared outside a function, becomes GLOBAL.
 -> Global variables can be accessed from anywhere in a JavaScript program
--> Variables declared with var, let and const are quite similar when declared outside a block.
--> Global variables defined with the var keyword belong to the window object.
-so don't use var keyword as a global variable since it modify or overwrite the properties of global object.
-if window object have the same name with global variable then global variable will overwrite the value of window object.
--> you can access and modify the value of a global variable inside a block scope like if, for, {}.
--> But you can't modify the value of a global variable inside a function, you ca access it but can't modify.
+-> Global variables defined with the var keyword belong to the global object.
+so don't define global variable with var keyword since it modify or overwrite the properties of global object.
+if global object have the same name with global variable then global variable will overwrite the value of window object.
 -> if we have local variable with the same name as global variable then function will give priority to the local variable which is 
 define inside it.
--> Global variables can be used modify by all other scripts(inside function and block scope) in the page
 -> Variables created without a declaration keyword (var, let, or const) are always global, even if they are created inside a function.
 ex .
 function fun(){
@@ -352,32 +389,6 @@ function fun(){
 }
 fun();
 console.log(num);  // 10
-
-
-ex .
-<script>
-var carName = "Volvo";
-// code here can use window.carName
-document.getElementById("demo").innerHTML = "I can display " + window.carName;
-</script>
-
--> if we have local variable with the same name as global variable then function will give priority to the local variable which is 
-define inside it.
-eg
-
-var name = "Adesh";   // global variable
-function fun(){ 
-	var name = "Ram";  // local variable
-	log(name); // Ram if local variable with same name not define then Adesh
-}
-fun();
-log(name);  // Adesh
-
-Automatically Global: 
--> If you assign a value to a variable that has not been declared, it will automatically become a GLOBAL variable.
-code: 
-num = 10;
-log(num) // num is var
 
 
 Scope Chain: JavaScript engine also uses Scope to find variables. Let’s understand that using an example:
@@ -423,8 +434,9 @@ page or close the window.
 
 // Q5] why it is bad to attach global variable define with 'var' to window object.
 /*
--> when we used var outside a function, this creates a global variable and attaches that global variable to the window  object in 
-the browser.
+Global variables defined with the var keyword belong to the global object.
+so don't define global variable with var keyword since it modify or overwrite the properties of global object.
+if global object have the same name with global variable then global variable will overwrite the value of window object.
 -> so in browser we have 'window' object which is a complex object with a lot of properties.and methods.
 -> var keyword attaches variable name to window object. so if you write window.myName it will log your name.
 eg.
@@ -1112,28 +1124,28 @@ map((item, index)=><li key={index}>{item.name}</li>)
 /*
 -> variables declare inside a function are local to that function and they are created when function starts its execution and 
 they are destroyed when function completes its execution.
--> Closures is  ability of a outer function to store the variables and functions that are declared inside it,
-instead of destroying them after execution, it saves them in the memory so that inner function can access them.
--> we create a closure by returning inner function from outer function.
+-> Closures is  ability of a 'outer function' to 'store the variables and its value, and functions' that are declared inside it,
+instead of destroying them after execution, it saves them in the memory so that 'inner function can access them'.
+-> we create a closure by returning 'inner function' from outer function.
 ex: 
-function outerFunction() {
+function outer() {
   let num = 0;
-  function innerFunction() {
+  function inner(){
     num++;
+    console.log(num);
   }
-  return innerFunction;
+  return inner;
 }
-const closure1 = outerFunction();
-closure1();  // 1
-closure1();  // 2
-closure1();  // 3
+const fun = outer();
+fun();
+fun();
+fun();
 
 -> Therefore outerFunction(), instead of destroying the value of 'num' after execution, saves the value in the memory for further 
 reference. when we called innerFunction(), instead of starting num from 0 it starts from previous value.
 
 In this example, `outerFunction()` returns `innerFunction`, creating a closure. Now, even after `outerFunction` has finished 
-executing, the returned `innerFunction` still has access to `num`. This encapsulation allows you to create and use functions 
-with persistent state, making closures powerful for certain programming patterns.
+executing, the returned `innerFunction` still has access to `num`.
 
 */
 
@@ -1143,8 +1155,8 @@ with persistent state, making closures powerful for certain programming patterns
 
 /*
 
--> It is a technique in functional programming, that transforms the function of multiple arguments into several functions which 
-takes in one parameter at a time
+-> It is a 'technique', that 'transforms the function of multiple arguments' into 'several functions' which 
+takes in one parameter at a time.
 
 ex.
 
@@ -1169,11 +1181,9 @@ one parameter at a time.
 
 Why is currying useful in JavaScript?
 --------------------------------------
--> It helps us to create a higher-order function
--> It reduces the chances of error in our function by dividing it into multiple smaller functions that can handle one responsibility.
--> It is very useful in building modular and reusable code
--> It helps us to avoid passing the same variable multiple times
--> It makes the code more readable
+-> Since we are dividing a function into a several function, it makes a function easy to read, maintain, debug.
+-> It makes the 'code more readable'
+-> It helps us to create a 'higher-order function'.
 */
 
 

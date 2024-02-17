@@ -1,12 +1,6 @@
 JavaScript Promises:
 --------------------
 
-
--> "Producing code" is code that can take some time. ex. calculate function 
--> "Consuming code" is code that must wait for the result. ex. display function
--> A Promise is a JavaScript object that links producing code and consuming code
-
-
 -> promise is javascript object which holds the eventual(result of period of time) result of an asynchronous operation.
 -> when asynchronous operation completes it can either return result in value or an error.
 -> A promise basically promise you that it will give the result of an asynchronous operation.
