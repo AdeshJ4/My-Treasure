@@ -29,7 +29,6 @@ example:
 function fetchUsers() {
   return fetch("https://jsonplaceholder.typicode.com/users");
 }
-
 fetchUsers()
   .then((res) => {
     return res.json();
@@ -40,6 +39,7 @@ fetchUsers()
   .catch((err) => {
     console.log(err);
   });
+Note: In this version, the try-catch block is removed, and instead, the error handling is done using the .catch() method
 
 
 

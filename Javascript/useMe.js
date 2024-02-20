@@ -1,24 +1,25 @@
-function p1() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject("rejected");
-      // resolve('resolved 1');
-    }, 2000);
+function fetchUsers(callback) {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        callback(null, data); // Call the callback with the data
+      })
+      .catch(error => {
+        callback(error, null); // Call the callback with the error
+      });
+  }
+  
+  // Example usage:
+  fetchUsers((error, data) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log(data);
+    }
   });
-}
-
-function p2() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("resolved 2");
-    }, 4000);
-  });
-}
-
-Promise.race([p1(), p2()])
-  .then((res) => {
-    console.log(res);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+  
