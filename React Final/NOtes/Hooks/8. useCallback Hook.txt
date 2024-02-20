@@ -1,11 +1,29 @@
--> The React useCallback Hook returns a "memoized callback function".
--> with the help of this hook we can 'isolate resource intensive functions' which are passed as a prop to child component so they will 
-not automatically recreated on every render when state of the parent component get changed, they will only changed when one of the 
+-> useCallback Hook returns a "memoized version of callback function".
+-> basically it is used to isolate 'resource intensive functions' which are passed as a prop to child component so they will not 
+automatically recreated on every render when state of the parent component get changed, they will only changed when one of the 
 dependency get changed.
 -> Every time a component re-renders, its functions get recreated. Because of this, another nested component will re-render to stop 
 this we use useCallback hook.
--> The useCallback Hook only runs when one of its dependencies update. This can improve performance.	
+-> The useCallback Hook only runs when one of its `dependencies update`. This can improve performance.	
 -> we use memo function along with useCallback hook.
+
+Extra Notes:
+1. Function recreated: When a function is recreated, it means that a new instance of the function is created every time the component 
+re-renders. This can happen when the dependencies array provided to useCallback changes, causing the callback function to be redefined.
+2. Function executed: When the function is executed, it means that it is actually being called and its code is being run.
+
+
+how can i know that function is recreated?
+-> When a function is recreated, its reference will change.
+-> You can track this by comparing the reference of the function before and after a render cycle.
+
+
+
+
+
+
+
+
 
 
 what is Memoization ?
@@ -35,133 +53,4 @@ function multiply(){
 const res = multiply();
 res(10);
 res(10);
-
-
-
-difference between memo and useCallback hook: 
-----------------------------------------------
-
--> Suppose we have two components 1. App.jsx  2. Todos.jsx
--> Inside App component we have two states which are initialized using useState Hook. 1. count state  2. todos state
--> so  we are passing todos state to todo component as a props.
--> so we use memo if we are just passing state from one component to another component. to stop unnecessary re-rendering we use memo 
-in todos component.
--> Now suppose inside App.jsx we write some event Handler related to todo component since there is a rule in react js which is the 
-component which old the state is responsible for updating it. 
-since inside our App component we have todos state so our App component is responsible for updating it.
--> so when the state of App component changes it will re-render Todo component also, even we are using memo inside a Todo component.
--> The reason is that Every time a component re-renders, its functions get recreated. Because of this, the addTodo function has 
-actually changed.
--> To fix this, we can use the useCallback hook to prevent the function from being recreated unless necessary.
--> Now the Todos component will only re-render when the todos prop changes.
-
-App.jsx:
---------
-
-import { useState, useCallback } from 'react';
-import Todo from './File2';
-
-const App = () => {
-  const [count, setCount] = useState(0);
-  const [todo, setTodos] = useState(['todo1', 'todo2'])
-
-  const addTodos = useCallback((value) => {
-    setTodos([...todo, value]);
-  }, [todo]);
-
-  return (
-    <>
-      <Todo todos={todo} addTodo={addTodos}/>
-      <h1>Count: {count}</h1>
-      <button onClick={()=>setCount(count+1)}>count increment</button>
-    </>
-  )
-}
-
-export default Fun
-
-
-
-Todo.jsx:
----------
-
-import {memo} from 'react'
-
-const Todo = ({todos, addTodo}) => {
-  console.log('todo component rendered');
-  return (
-    <>
-    <ul>
-      {
-        todos.map((todo, index)=><li key={index}>{todo}</li>)
-      }
-    </ul>
-    <button onClick={()=>addTodo('todo3')}>Add Todo</button>
-    </>
-  )
-}
-
-export default memo(Todo);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

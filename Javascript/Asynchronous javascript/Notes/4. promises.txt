@@ -25,6 +25,24 @@ successfully so here we have a value.
 in this we have an error object.
 
 
+example: 
+function fetchUsers() {
+  return fetch("https://jsonplaceholder.typicode.com/users");
+}
+
+fetchUsers()
+  .then((res) => {
+    return res.json();
+  })
+  .then((users) => {
+    console.log(users);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+
+
 
 Ex.
 --
@@ -91,33 +109,38 @@ function getCommits(repoName) {
 Promise.all([])
 ---------------
 
--> Promise.all is a method that takes an array of promises and returns a new promise.
--> This new promise contain array of the results when all promises are successfully fulfilled.
+-> when you have to run multiple promises parallelly/simultaneously with each other then we use Promise.all method.
+-> Promise.all takes an array of promises and returns a new promise.
+-> it will return you result when all promises get resolved, if any promise get rejected then it end result also rejected.
 -> Sometimes we have to run few asynchronous operations in parallel,and when they all complete you wanna do something after.
--> for example you may call different api like facebook api and twitter api and when the result of both asynchronous operations are ready then you are gonna return something to user.
+-> for example you may call different api like facebook api and twitter api and when the result of both asynchronous operations 
+are ready then you are gonna return something to user.
 
 code: 
 -----
 
-const p1 = new Promise((resolve, reject)=>{
-    setTimeout(()=>{
-        console.log('Async Operation 1...');
-        resolve({id: 101, name: 'Adesh'});
-    }, 2000)
-});
-
-let p2 = new Promise((resolve, reject)=>{
+function f1() {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-        console.log('Async Operation 2...');
-        resolve({id: 102, name: "Akshay"});
+      console.log("Async Operation 1...");
+      resolve({ id: 101, name: "Adesh" });
     }, 2000);
-})
+  });
+}
 
+function f2() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log("Async Operation 2...");
+    //   resolve({ id: 102, name: "Akshay" });
+    reject(new Error('Error in 2nd Promise'))
+    }, 4000);
+  });
+}
 
-Promise
-    .all([p1, p2])
-    .then((res)=>console.log(res))
-    .catch((err)=> console.log(err.message));
+Promise.all([f1(), f2()])
+  .then((res) => console.log(res))
+  .catch((err) => console.log(err));
 
 
 Output: 

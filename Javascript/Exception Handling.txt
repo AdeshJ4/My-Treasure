@@ -11,7 +11,8 @@ Types of Errors:
 -> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the compiler
 ->The compiler will not allow to run the program until all the errors are removed from the program.
 ex . 
-compile time errors like you spell variable name wrongly or you forget to end parenthesis, Undefined Variable, Incorrect Function Definition, Missing Import Statement, Incorrect Loop Syntax.
+compile time errors like you spell variable name wrongly or you forget to end parenthesis, Undefined Variable, Incorrect Function 
+Definition, Missing Import Statement, Incorrect Loop Syntax.
 
 
 
