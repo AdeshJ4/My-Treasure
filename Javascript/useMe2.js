@@ -1,8 +1,8 @@
-const myMap = new Map([
-  ["id", 101],
-  ["fname", "Adesh"],
-]);
+function fun(nums){
+  const [n1, n2, n3] = nums;
+  console.log(n1);
+  console.log(n2);
+  console.log(n3);
+}
 
-myMap.forEach((value, index) => {
-  console.log(value, index);
-});
+fun([10, 20, 30])

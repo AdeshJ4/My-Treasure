@@ -581,16 +581,19 @@ console.log(String(undefined)); // "undefined"
 console.log(String(true));      // "true"
 console.log(String(false));     // "false"
 console.log(String(NaN));       // "NaN"
+let num = 100;
+console.log(num.toString());
 
 
 iii. Convert to Boolean Explicitly
 To convert other data types to a boolean, you can use Boolean().
 code: 
-console.log(Boolean(1));          // true
-console.log(Boolean(25));         // true
 console.log(Boolean(0));          // false
+console.log(Boolean(1));          // true
+console.log(Boolean(-1));         // true
 console.log(Boolean(''));         // false
 console.log(Boolean(' '));        // true
+console.log(Boolean(true));       // true
 console.log(Boolean(false));      // false
 console.log(Boolean(undefined));  // false
 console.log(Boolean(null));       // false
@@ -616,13 +619,16 @@ They always return one of the operands.
 
 OR ( || ) operator - If the first value is truthy, then the first value is returned. Otherwise, always the second value gets returned.
 
-AND ( && ) operator - If both the values are truthy, always the second value is returned. If the first value is falsy then the first
+AND ( && ) operator - If both the values are truthy, always the second value is returned. 
+If both are falsy then 1st value is returned.
+If the first value is falsy then the first
 value is returned or if the second value is falsy then the second value is returned.
 
 
 console.log( 0 || "Adesh Pramod Jadhav");   // "Adesh Pramod Jadhav"
 console.log( 10 || "Adesh Pramod Jadhav");  // 10
 console.log( " " || "Adesh Pramod Jadhav"); // " "
+console.log(0 || "");  // empty string is returned
 
 
 console.log( 10 && "Adesh");    // "Adesh"
@@ -668,7 +674,7 @@ isNaN(undefined) // Returns true
 languages. 
 -> Note:
 In JavaScript, primitive data types (like numbers, strings) are passed by value and non-primitive data types like objects and arrays
-are passed by reference. Functions in JavaScript are references, but their behavior is more complex and involves both value and 
+are passed by reference. Functions are references, but their behavior is more complex and involves both value and 
 reference aspects.
 
 
@@ -742,6 +748,7 @@ console.log('After value: ' + obj.value);//  reference type are pass by referenc
 
 
  */
+
 
 // Q11] Explain “this” keyword: 
 
@@ -831,11 +838,15 @@ global 'b'
 global 'c'
 
 
+
+
+
 "this" from callback function of forEach refer to window/global object.
 why this is happing .
-because that callback function is inside a forEach method and not a inside a obj. so it acts as a regular function
+-> because that callback function is inside a forEach method and not a inside a obj. so it acts as a regular function
 and in case of regular function "this" refer to global object.
-
+-> callback function of forEach is just a function which is passed as a argument to another function, it is not a part of obj.
+so it don't have access to 'this' keyword.
 
 solution : 
 
@@ -926,8 +937,8 @@ obj.showTags()
 
 1. call()
 
--> The call() method calls the function directly and sets value of "this" to the first argument passed to the call method and subsequent 
-arguments are passed to the function as individual parameters.
+-> The call() method calls the function directly and sets value of "this" to the first argument passed to the call method and 
+subsequent arguments are passed to the function as individual parameters.
 -> NOTE: The call method doesn’t return a new function.
 
 Ex.1
@@ -975,11 +986,7 @@ function.
 ex.1
 
 ex.1
-const sum = function(a, b, c) {
-  return a + b + c;
-};
-const result = sum.apply(null, [1, 2, 3]);
-console.log(result); // Output: 6
+cz
 
 ex.2
 function addition(n1, n2, n3){
@@ -1283,30 +1290,6 @@ res(10);
 */
 
 
-// Q21] What is the difference between exec () and test () methods in javascript?
-
-/*
--> test () and exec () are RegExp expression methods used in javascript.
-
-exec () to search a string for a specific pattern, and if it finds it, it'll return the array which contain element, index at which
-given world found and input string. if he does not return it'll return null.
-
-code: 
-const regex = /z/;
-const str = 'Hello, world! Hello, world!';
-console.log(regex.exec(str)); // null
-
-
-test () to find a string for a specific pattern. It will return the Boolean value 'true' on finding otherwise return 'false'.
-
-code: 
-const regex = /z/;
-const str = 'Hello, world!';
-const isMatch = regex.test(str);
-console.log(isMatch); // Outputs: true
-
-*/
-
 // Q22 ] Exception handling 
 
 /*
@@ -1539,7 +1522,7 @@ const myUpdatedVehicle = {...obj1, ...obj2}
 */
 
 
-// Q24] Array vs Object Destructuring in JavaScript
+// Q24] Array and Object Destructuring in JavaScript
 
 /*
 -> Destructuring means extracting the only elements we need from array or objects which contain n no of elements.
@@ -1613,7 +1596,7 @@ You can create an object in three different ways:
 Example 1: Using object literal -> {}
 -------------------------------------
 -> syntax =>  const obj = {}
--> const x = {}  ==> converted to => const x = new Object();
+-> const x = {}  ==> converted to => const x = new Object({id: 101, fname: 'Adesh'});
 -> we used 'built in constructor function' called 'Object()'
 
 const person = { 
@@ -1636,6 +1619,7 @@ person.greet();
 console.log(person.score.maths);
 person['address'] = {city: 'pune', village: 'Palgad'};  // adding new property
 person.lname = 'Jadhav'; // adding a new property 
+delete obj.name;  // delete property
 console.log(person);
 
 

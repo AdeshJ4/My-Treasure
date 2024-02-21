@@ -12,9 +12,9 @@ Types of Errors:
 ->The compiler will not allow to run the program until all the errors are removed from the program.
 ex . 
 compile time errors like you spell variable name wrongly or you forget to end parenthesis, Undefined Variable, Incorrect Function 
-Definition, Missing Import Statement, Incorrect Loop Syntax.
-
-
+Definition, Missing Import Statement, Incorrect Loop Syntax.  
+Error in the syntax. For example, if you write consol.log('your result');, the above program throws a syntax error.The spelling of 
+console is a mistake in the above code.
 
 
 2. Runtime errors
@@ -23,15 +23,36 @@ Definition, Missing Import Statement, Incorrect Loop Syntax.
 -> These errors are not easy to detect as the compiler does not point to these errors.
 ex. 
 For example,
-calling an invalid function or a variable, 
+calling function or variable which not exists.
 errors such as division by zero, 
 determining the square root of a negative number.
 
 Exception: 
 
+-> an exception disrupts the normal flow of the program. It is an object which is thrown at runtime.
 -> These errors that occur during runtime are called exceptions
 -> When an error occurs, an exception is thrown, and the normal flow of the program is interrupted
 -> Exception handling allows developers to gracefully manage errors and prevent the program from crashing.
+
+Problem:
+function main(){
+  console.log('1');
+  nonExistFunction();   // exception occurred, and remaining code will not execute.
+  console.log('2');
+}
+main();
+
+solution:
+function main(){
+  console.log('1');
+  try{
+    nonExistFunction();    // handled exception, rest of code executed.
+  }catch(err){
+    console.log(err)
+  }
+  console.log('2');
+}
+main();
 
 
 

@@ -1,7 +1,17 @@
-console.log('Adesh' + 4);     //  "Adesh4"
-console.log('3' + 2);         //  "32"
-console.log('3' + 2 + 5);         //  "325"
-console.log('2' + undefined); //  "2undefined"
-console.log('str' + null);    // "strnull"
-console.log('4' + false);// '4false'
-  
+class Person {
+    constructor(id, fname, age){
+        this.id = id;
+        this.fname = fname;
+        this.age =age;
+    }
+
+    intro(){
+            console.log(this.id);
+            console.log(this.fname);
+            console.log(this.age);
+    }
+}
+
+const obj1 = new Person(101, "Adesh", 22);
+
+obj1.intro();
