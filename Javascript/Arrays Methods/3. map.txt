@@ -1,6 +1,9 @@
 map();
--> Does not override original array.
+-> Does not override original array but you can modify it.
 -> map() creates a new array from calling a function for every array element.
+-> If you want to do any arithmetic operation with each element of array then you can do it and return that result;
+->It crates a new Array.
+-> map() does not execute the function for empty elements.
 
 
 // ex. 1
@@ -38,3 +41,25 @@ const fruits = ["apple", "banana", "orange"];
 const indexedFruits = fruits.map((ele, index)=>{
     return `${index + 1}. : ${ele}`
 }); //Output: ["1. apple", "2. banana", "3. orange"]
+
+
+ex.5: Modifying original array
+
+1.
+const arr1 = [10, 20, 30, 40, 50, 60];
+arr1.map((ele, index, array)=>{
+    array[index] = ele*10;
+}); //output: [ 100, 200, 300, 400, 500, 600 ]
+
+2. adding property inside a object
+const arr = [
+  { id: 101, name: "Adesh" },
+  { id: 102, name: "Akshay" },
+  { id: 103, name: "Amar" },
+];
+let num = 10;
+arr.map((curEle, index, array) => {
+  num++;
+  array[index] = { ...curEle, age: num };
+});
+console.log(arr);

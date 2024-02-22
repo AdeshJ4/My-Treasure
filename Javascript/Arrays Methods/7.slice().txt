@@ -1,0 +1,11 @@
+-> The slice() method returns selected elements in an array, as a new array.
+-> The slice() method selects from a given start, up to a (not inclusive) given end.
+-> The slice() method does not change the original array
+
+ex.
+const arr = [10, 20, 30, 40, 50];
+arr.slice(0); // [ 10, 20, 30, 40, 50 ]
+arr.slice(2, 4); // [ 30, 40 ]
+arr.slice(-4, -2); // [ 20, 30 ]
+arr.slice(-4); // [ 20, 30, 40, 50 ]
+

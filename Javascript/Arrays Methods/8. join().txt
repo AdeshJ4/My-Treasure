@@ -1,10 +1,24 @@
-join()
+-> Both join() anf toString() are used to convert array into string with key difference that join accepts separator where toString()
+does not.
+
+
+1. join()
+=========
 
 -> The join() method returns an array as a string.
 -> The join() method does not change the original array
 -> Any separator can be specified. The default is comma (,).
 
-
 const arr = ['Apple', 'Banana', 'Cherry']
 let res1 = arr.join();  // Apple,Banana,Cherry
 let res2 = arr.join(' and '); // Apple and Banana and Cherry
+
+
+toString():
+===========
+
+-> The toString() method return as a string with array values separated by commas.
+-> The toString() method does not change the original array.
+
+const arr = ['Apple', 'Banana', 'Cherry']
+let str = arr.toString();  // Apple,Banana,Cherry

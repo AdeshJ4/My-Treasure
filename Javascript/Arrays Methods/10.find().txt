@@ -1,0 +1,76 @@
+1. find()
+=========
+
+-> find() is similar to filter() with key difference is that find() return 'first element' and filter() return 'new array' with elements who 
+passes the test provided by function. 
+-> The find() method returns the the first element that passes a test.
+-> The find() method executes a function for each array element.
+-> The find() method returns undefined if no elements are found.
+-> The find() method does not execute the function for empty elements.
+-> The find() method does not change the original array.
+
+
+// ex. vote
+const arr = [10, 20, 30];
+let vote = arr.find((curEle) => {
+  return curEle >= 18;
+});  // 20
+
+// return user whose id is 102
+const arr = [
+  { id: 101, fname: "Adesh" },
+  { id: 102, fname: "Manoj" },
+  { id: 103, fname: "Akshay" },
+];
+let res = arr.find((curElement, index, array) => {
+  return curElement.id === 102;
+});
+
+
+
+2. findIndex():
+===============
+
+-> The findIndex() method returns the index of the first element that passes a test.
+-> The findIndex() method returns -1 if no match is found.
+-> The findIndex() method does not execute the function for empty array elements.
+-> The findIndex() method does not change the original array.
+
+// ex.1
+const ages = [3, 10, 18, 20];
+const res = ages.findIndex((age) => {
+  return age >= 18;
+});
+
+// ex. 2
+const arr = [
+  { id: 101, fname: "Adesh" },
+  { id: 102, fname: "Manoj" },
+  { id: 103, fname: "Akshay" },
+];
+let res = arr.findIndex((curEle)=>{
+    return curEle.id === 102;
+})
+
+
+
+3. indexOf()
+============
+
+-> findIndex() find index of element based on 'condition' where indexOf() 'directly tales element', also indexOf() does not work on 
+array of objects[{}, {}, {}] or more specifically references type.
+-> takes two arguments
+1. element
+2. starting index to start searching
+-> The indexOf() method returns -1 if the value is not found.
+
+ex.1 :
+
+const arr = [10, 20, 30, 40, 50];
+let indexOf40 = arr.indexOf(40);  //3
+
+ex.2:
+
+const arr = [10, 20, -30, 40, 50];
+let indexOf40 = arr.indexOf(40, 2);  //3
+console.log(indexOf40);

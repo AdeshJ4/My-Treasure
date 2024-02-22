@@ -1,0 +1,12 @@
+-> The splice() method adds/removes array elements from anywhere.
+-> The splice() method overwrites the original array
+
+splice(start index, count delete, add elements);
+
+// delete 
+const arr = [10, 20, 30];
+arr.splice(1, 1);  // [10, 20, 30] => [10, 30]
+
+// add
+arr.splice(3, 0, 40,50);  //[10, 20, 30] => [ 10, 20, 30, 40, 50 ]
+

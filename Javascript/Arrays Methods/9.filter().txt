@@ -1,0 +1,39 @@
+-> The filter() method "creates a new array filled with elements that pass a test provided by a function."
+
+-> The filter() method "does not execute the function for empty elements".
+
+-> The filter() method "does not change the original array".
+
+
+examples: 
+
+1. return voting age.
+const arr = [10, 20, 30, 40, 50];
+const voting = arr.filter((curElement) => {
+  return curElement >= 18;
+});
+
+
+2. return even evenNumbers 
+const arr = [1, 2, 3, 4, 5, 6];
+const evenNumbers = arr.filter((curEle, index)=>{
+    return curEle % 2 === 0;
+})
+
+3. return strings longer than 5 characters
+const words = ["apple", "banana", "orange", "kiwi", "grape"];
+const longWord = words.filter((word)=>{
+    return word.length >= 5;
+})
+
+
+4. return products which have price greater than 50 
+const products = [
+  { name: "Laptop", price: 1000 },
+  { name: "Mouse", price: 20 },
+  { name: "Keyboard", price: 50 },
+  { name: "Monitor", price: 300 },
+];
+const priceGreaterThan50 = products.filter((curEle)=>{
+    return curEle.price > 50;
+})

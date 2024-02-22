@@ -1,0 +1,7 @@
+const arr1 = [10, 20, 30];
+
+arr1.unshift(5);  // add element at start
+arr1.push(40);  // add element at end
+arr1.pop();    // remove last
+arr1.shift(); // remove first
+arr1.splice(1, 1);  // remove/add in between

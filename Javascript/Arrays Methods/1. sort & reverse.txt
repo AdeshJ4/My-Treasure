@@ -1,3 +1,4 @@
+Note: Both methods modify original array.
 
 const arr = [ 50, 40, 30, 20, 10 ];
 

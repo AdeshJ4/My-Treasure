@@ -1,0 +1,17 @@
+-> includes() return true if given element present inside array otherwise false.
+-> The includes() method is case sensitive.
+-> it takes two arguments : 
+1. element 
+2. index from which searching start.
+
+
+ex.1  case sensitive
+const fruits = ["Banana", "Orange", "Apple", "Mango"];
+let res = fruits.includes("Mango");  // true
+
+ex.2  case sensitive
+const fruits = ["Banana", "Orange", "Apple", "Mango"];
+let res = fruits.includes("mango");  // false
+
+
+    ex. 3

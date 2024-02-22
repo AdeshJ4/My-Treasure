@@ -1,17 +1,3 @@
-class Person {
-    constructor(id, fname, age){
-        this.id = id;
-        this.fname = fname;
-        this.age =age;
-    }
-
-    intro(){
-            console.log(this.id);
-            console.log(this.fname);
-            console.log(this.age);
-    }
-}
-
-const obj1 = new Person(101, "Adesh", 22);
-
-obj1.intro();
+let str =  "Hello, World! Hello, Universe!";
+let newStr = str.replace(/Hello/g, 'Hi');  // 'Adesh Pramod Jadhav' => 8
+console.log(newStr);

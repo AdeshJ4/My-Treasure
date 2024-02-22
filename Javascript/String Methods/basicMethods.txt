@@ -1,0 +1,44 @@
+1. toLowerCase()
+2. toUpperCase()
+3. trim()
+4. trimStart()
+5. trimEnd()
+6. concat()
+7. substring()   -> support only +ve no
+8. slice()       -> support +ve -ve no. 
+9. includes()    -> check give character/word present inside string or not, return true/false
+10. charAt()
+11. split()      -> Split a string into substrings using the specified separator and return them as an array.
+12. indexOf(str)
+13. replace()
+
+
+let str = 'ADESH';
+str.toLowerCase();  // adesh
+str.toUpperCase();  // ADESH
+str.trim();  // remove whitespace
+str.trimStart();
+str.trimEnd();
+str1.concat(str2);
+str.substring(1);  // desh
+str.substring(1, 5);  // desh
+str.slice(1);  // desh
+str.slice(1, 5);  // desh
+str.slice(-4);  // desh
+str.slice(-4, -1);  // des
+str.slice(-4, 0);  // no output
+str.includes('A')  // 'Adesh' -> return true
+str.includes('a')  // 'Adesh' -> return false
+str.includes('Pramod')  // 'Adesh Pramod Jadhav' -> return true
+str.charAt(0);  // 'Adesh' -> 'A'
+str.charAt(1);  // 'Adesh' -> 'd'
+str.split();  // 'Adesh Pramod Jadhav' => [ 'Adesh Pramod Jadhav' ]
+str.split('');  // 'Adesh' => ['A', 'd', 'e', 's', 'h']
+str.split(' ');  // 'Adesh Pramod Jadhav' => [ 'Adesh', 'Pramod', 'Jadhav' ]
+str.indexOf('Pramod');  // 'Adesh Pramod Jadhav' => 6
+str.indexOf('pramod');  // 'Adesh Pramod Jadhav' => -1
+str.indexOf('a');  // 'Adesh Pramod Jadhav' => 8
+str.replace('Adesh', 'Ram'); // 'Adesh Jadhav'  => 'Ram Jadhav'  -> replace only first occurrence
+let str =  "Hello, World! Hello, Universe!";
+let newStr = str.replace(/Hello/g, 'Hi');  // Hi, World! Hi, Universe!
+
