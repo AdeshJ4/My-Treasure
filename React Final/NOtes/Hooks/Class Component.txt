@@ -1,11 +1,11 @@
-React Components
+Two Types of Components : 
+1. class COmponent 
+2. functional component
 
--> Components are like functions that return HTML elements via a render() function.
--> Components are independent and reusable bits of code.
--> They serve the same purpose as JavaScript functions, but work in isolation and return HTML via a render() function.
--> Components come in two types, Class components and Function components.
--> When creating a React component, the component's name must start with an upper case letter.
-
+-> functional component considered to be stateless component because functional component don't have access to state.
+where class component considered as a stateful component because they have access to state.
+-> Components are like functions that return HTML elements more specifically JSX through render() method.
+-> When creating a React component, the component's name MUST start with an upper case letter
 
 
 
@@ -20,17 +20,17 @@ React Class Components:
 -> Even though Function components are preferred, there are no current plans on removing Class components from React.
 
 -> when we create class component we have to extend that component with React.Component.
--> this statement "React.Component" create an inheritance to React.Component and give access to all methods of React.Componet.
+-> this statement "React.Component" create an inheritance to React.Component and give access to all methods of React.Component.
 
 
 Component Constructor: 
 ----------------------
 
 -> The constructor() method is called before anything else, when the component is initiated. 
--> constructor() function in your component, will be called when the component gets initiated.
--> The constructor function is where you initiate the component's properties.
--> In React, component properties should be kept in an object called state.
--> we write super() in the constructor function which executes the parent component's constructor function, and your component has access to all the functions of the parent component (React.Component).
+-> The constructor function is where you 'initiate' the component's properties.
+-> In React, component properties should be kept in an 'object' called 'state'.
+-> we write super() in the constructor function which executes the parent component's constructor function, and your component has 
+access to all the functions of the parent component (React.Component).
 
 class Car extends React.Component {
   constructor() {
@@ -70,113 +70,13 @@ React Class Component State:
 ----------------------------
 
 -> React Class components have a built-in state object.
--> the state refere to application data, properties that need to be tracked.
+-> the state refers to application data, properties that need to be tracked.
 -> When the state object changes, the component re-renders.
 -> The state object is initialized in the constructor
 -> Refer to the state object anywhere in the component by using the this.state.propertyname syntax:
 -> To change a value in the state object, use the this.setState() method.
--> When a value in the state object changes, the component will re-render, meaning that the output will change according to the new value(s).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-> When a value in the state object changes, the component will re-render, meaning that the output will change according to the new 
+value(s).
 
 
 

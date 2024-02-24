@@ -1,4 +1,4 @@
-//To Do List : 
+//To Do List :
 // 1. Garbage Collection in JavaScript
 
 // Q0] What is a first class function in Javascript?
@@ -55,7 +55,6 @@ obj.fun2();
 obj.fun3();
 obj.fun4();
 */
-
 
 //Q1]. What are the different data types present in javascript?
 /*
@@ -227,7 +226,6 @@ console.log(typeof fun);                // function -> special kind of object
 
 */
 
-
 //Q2] Explain Hoisting in javascript.
 
 /*
@@ -258,7 +256,6 @@ function walk(){
 
 */
 
-
 //Q3] Difference between “ == “ and “ === “ operators.
 
 /*
@@ -273,7 +270,6 @@ var y = "2";
 (x === y) // Returns false since the typeof x is "number" and typeof y is "string"
 
  */
-
 
 //Q4] explain different types of JavaScript Scope and Scope chain.
 /*
@@ -431,7 +427,6 @@ page or close the window.
 
  */
 
-
 // Q5] why it is bad to attach global variable define with 'var' to window object.
 /*
 Global variables defined with the var keyword belong to the global object.
@@ -452,7 +447,6 @@ Any function, including the window object, can overwrite your global variables a
 
 */
 
-
 //Q6] Difference between var and let keyword in javascript
 /*
 
@@ -464,8 +458,7 @@ Any function, including the window object, can overwrite your global variables a
 
 */
 
-
-// Q7] Explain Type Conversion. 
+// Q7] Explain Type Conversion.
 /*
 
 Type Conversions: 
@@ -634,9 +627,7 @@ console.log(0 || "");  // empty string is returned
 console.log( 10 && "Adesh");    // "Adesh"
 console.log( "" && "Adesh");    // ""
 console.log( 10 && 0);          // 0 
-*/ 
-
-
+*/
 
 // Q8] Is javascript a statically typed or a dynamically typed language?
 
@@ -647,7 +638,6 @@ console.log( 10 && 0);          // 0
 -> In dynamic language the type of variable can change at runtime like from number to string vice versa.
 -> the type of variable will be determine at runtime means at runtime we can change type of data to another data type.
 */
-
 
 // Q9] What is NaN property in JavaScript
 /*
@@ -665,7 +655,6 @@ isNaN(undefined) // Returns true
 
 
 */
-
 
 // Q10]  Explain passed by value and passed by reference.
 /*
@@ -749,8 +738,7 @@ console.log('After value: ' + obj.value);//  reference type are pass by referenc
 
  */
 
-
-// Q11] Explain “this” keyword: 
+// Q11] Explain “this” keyword:
 
 /*
 this: 
@@ -930,7 +918,6 @@ obj.showTags()
 
 */
 
-
 // Q12] Explain call(), apply() and, bind() methods.
 
 /*
@@ -1023,7 +1010,6 @@ greetJohn(); // Output: Hello John
 
 */
 
-
 // Q13] What is an Immediately Invoked Function Expression(Self Invoking Functions ) in JavaScript?
 
 /*
@@ -1062,8 +1048,6 @@ console.log(insideVar);  // NOT ACCESSIBLE
 
 */
 
-
-
 // Q14] What do you mean by strict mode in javascript and characteristics of javascript strict-mode?
 
 /*
@@ -1098,7 +1082,6 @@ let x = "\010";            // This will cause an error
 
 */
 
-
 // Q15] What is a Higher Order Function?
 
 /*
@@ -1123,8 +1106,6 @@ resFunction();
 ex. 2
 map((item, index)=><li key={index}>{item.name}</li>)
 */
-
-
 
 // Q16] Explain Closures in JavaScript.
 
@@ -1155,8 +1136,6 @@ In this example, `outerFunction()` returns `innerFunction`, creating a closure. 
 executing, the returned `innerFunction` still has access to `num`.
 
 */
-
-
 
 // Q17] What is currying in JavaScript
 
@@ -1192,7 +1171,6 @@ Why is currying useful in JavaScript?
 -> It makes the 'code more readable'
 -> It helps us to create a 'higher-order function'.
 */
-
 
 // Q18] What is DOM?
 
@@ -1237,7 +1215,6 @@ const myDiv = document.getElementByTagName('div')
 
 
 */
-
 
 // Q19]  What do you mean by BOM?
 
@@ -1289,8 +1266,7 @@ res(10);
 res(10);
 */
 
-
-// Q22 ] Exception handling 
+// Q22 ] Exception handling
 
 /*
 JavaScript try...catch...finally Statement :
@@ -1448,7 +1424,6 @@ try{
 
 */
 
-
 // Q23] What is the rest parameter and spread operator and arguments ?
 
 /*
@@ -1521,7 +1496,6 @@ const myUpdatedVehicle = {...obj1, ...obj2}
 
 */
 
-
 // Q24] Array and Object Destructuring in JavaScript
 
 /*
@@ -1580,8 +1554,7 @@ function extractPerson ({id, lname, address: {city}}) {
 
 */
 
-
-// Q25] Different Ways to Create Objects 
+// Q25] Different Ways to Create Objects
 /*
 You can create an object in three different ways:
 
@@ -1740,15 +1713,14 @@ const p1 = new Person('Adesh', 22); //The example above uses the Person class to
 
 */
 
-
 // Q26] What are arrow functions?
 
 /*
 -> Arrow functions were introduced in the ES6 version of javascript
--> arrow functions provide shorter syntax for declaring functions
--> Arrow functions can only be used as a function expression.
+-> arrow functions provide 'shorter syntax' for declaring functions
+-> Arrow functions can only be used as a 'function expression'.
 -> Arrow functions are declared without the function keyword
--> Arrow functions are not hoisted. They must be defined before they are used.
+-> 'Arrow functions are not hoisted'. They must be defined before they are used.
 -> If there is only one returning expression then we don’t need to use the return keyword Also, for functions having just one line 
 of code, curly braces { } can be omitted.
 -> If the function takes only one argument, then parenthesis () around the parameter can be omitted.
@@ -1782,14 +1754,11 @@ const person2 = {
 }
 */
 
-
 // Q27] Explain difference between synchronous and asynchronous architecture and different ways of handling asynchronous code ?
 
 // refer Asynchronous javascript folder
 
-
-
-// Q28] classes: 
+// Q28] classes:
 
 /*
 
@@ -1797,8 +1766,8 @@ const person2 = {
 -> classes are new way to create a objects.
 -> classes are nothing but syntactic sugars for constructor functions. They provide a new way of declaring constructor functions in 
 javascript.
+-> 'classes are not hoisted'. A class cannot be used before it is declared.
 -> Classes are a template or blueprint for creating objects
--> classes are not hoisted. A class cannot be used before it is declared.
 -> The body of a class is executed in strict mode even without the "use strict" directive. means you don't have to define "use strict"
 explicitly.
 -> Classes we have in js are not classes like we have inside c#., java
@@ -1808,7 +1777,7 @@ explicitly.
 -> Classes are in fact "special functions", and just as you can define function expressions and function declarations, a class can 
 be defined in two ways: a class expression or a class declaration.
 
-// class Declaration syntax
+-> class Declaration syntax
 class Rectangle {
   constructor(height, width) {
     this.height = height;
@@ -1816,7 +1785,7 @@ class Rectangle {
   }
 }
 
-// class Expression syntax: the class is anonymous but assigned to a variable
+-> class Expression syntax: the class is anonymous but assigned to a variable
 const Rectangle = class {
   constructor(height, width) {
     this.height = height;
@@ -2221,179 +2190,38 @@ console.log(obj.msg); // "hello world"
 obj.msg = "Adesh";
 console.log(obj.msg); // "hello Adesh"
 
-
-
-
-
-
 */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Q29] JSON
+
+/*
+-> JSON stands for 'JavaScript Object Notation'
+-> JSON is a 'text format' for storing and transporting data.
+-> A common use of JSON is to exchange data to/from a web server.
+-> JSON is language independent.
+-> When sending data to a web server, the data has to be a string.
+
+Two methods are popular in JSON.
+1. JSON.parse()
+2. JSON.stringify()
+
+1. JSON.parse()
+-> The JSON.parse() method parses a 'JSON string' and returns a 'JavaScript object'.
+JSON.parse('{"firstName":"John", "lastName":"Doe"}');  // o./p=> { firstName: 'John', lastName: 'Doe' }
+JSON.parse('["John", "Peter", "Sally", "Jane"]'); // ["John", "Peter", "Sally", "Jane"]
+JSON.parse('"2006-01-02T15:04:05.000Z"'); // 2006-01-02T15:04:05.000Z
+
+2. JSON.stringify()
+-> Convert a 'JavaScript object', "date", "array" into a 'JSON string'.
+JSON.stringify({ name: "John", age: 30, city: "New York" });  // o/p=> {"name":"John","age":30,"city":"New York"} 
+JSON.stringify(["John", "Peter", "Sally", "Jane"]); // '["John", "Peter", "Sally", "Jane"]'
+JSON.stringify(new Date());   // '"2024-01-02T15:04:05.000Z"'
+Stringify Functions: 
+The JSON.stringify() function will remove any functions from a JavaScript object, both the key and the value:
+to add function inside a 'JSON string()' you have to convert it into string separately using 'toString()'
+code:
+const obj = {name: "John", age: function () {return 30;}, city: "New York"};
+obj.age = obj.age.toString();
+const myJSON = JSON.stringify(obj);
+
+*/

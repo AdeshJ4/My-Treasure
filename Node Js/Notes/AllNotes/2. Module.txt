@@ -1,14 +1,11 @@
 11. What is a Module in Node.js ?
 =================================
 
--> In node, Modules can be a single file or a collection of multiple files/folders which contain variables and functions defined in it 
-are scoped to that module, they are not accessible outside that module. to make them available we have to export them and they will 
-become public to others.
--> In other words, Modules are the blocks of encapsulated code that communicate with an external application based on their related 
+-> Modules can be a 'single file' or a 'collection of multiple files/folders' .
+-> In other words, Modules are the 'blocks of encapsulated code' that communicate with an external application based on their related 
 functionality.
--> like in java class considered as examples of encapsulation, we considered "module" as a example of encapsulation in node js.
 -> NPM package can be considered as module. like nodemon, helmet, mongoose, express
--> To load a module, use the require() function.
+-> To load a module, use the 'require()' function.
 
 Types of Node Modules: 
 ----------------------
@@ -73,10 +70,10 @@ Built-in modules :
 1. HTTP Module:
 ===============
 
--> HTTP module is a built-in module which is use for building Networking application.
--> http module is built on top of TCP (Transmission Control Protocol). 
--> with the help of http module we can easily create HTTP server that can listen for incoming requests, handle those requests, and 
-send back responses on a given port and with this we can easily create a backend server for our client application.
+-> HTTP module is use for 'building Networking application'.
+-> http module is built on top of 'TCP' (Transmission Control Protocol). 
+-> with the help of http module we can easily create 'HTTP server' that can listen for incoming requests, handle those requests, and 
+send back responses on a given port and with this we can easily create a 'backend server' for our client application.
 -> for creating 'http server' we use 'http.createServer()' method which creates an instance of 'http.Server'. 
 This method takes a callback function that will be invoked for each incoming HTTP request. 
 -> http.createServer() is implemented inside 'http.Server' class and this http.Server class is provided by http module. 
@@ -178,6 +175,14 @@ Update files
 Delete files
 Rename files
 
+1. readFile()
+2. appendFile()
+3. writeFile()
+4. rename()
+5. unlink()
+6. readdir()
+
+
 const fs = require('fs');
 
 i. Read Files : file must be present if not then it will give you error
@@ -265,8 +270,7 @@ vi. list all files from current directory
 3. URL Module:
 ==============
 
-
--> The URL module splits up a web address into readable parts.
+-> The URL module splits up a 'web address' into 'readable parts'.
 -> we use "url.parse()" method and it will parse your web address into readable parts like hostname, pathname, query object.
 
 code: 
@@ -417,17 +421,17 @@ console.log('Clean Path : ', cleanPath);
 6. Events Module:
 =================
 
--> The Events module provides a way of working with events.
--> It enables developers to create, emit, and listen for custom events within their applications.
--> Event is basically a signal that indicates something has happened in your application and you have to handle that event. 
+-> The 'Events module' provides a way of 'working with events'.
+-> It 'enables' developers to 'create', 'emit', and 'listen' for 'custom events' within their applications.
+-> Event is basically a 'signal' that indicates something has happened in your application and you have to handle that event. 
 Like when a connection is made or a file is opened. Every action on a computer is an event. 
 -> lots of node class/modules raises different kinds of events and in your code you have respond to that events.
 for ex in node we have a class called 'http.Server' which we can use to build the http server. so we listen on a given port and 
 every time we receive a request on that port that http.Server class raises an event. our job is to respond to that event which 
 basically involves reading that request and returning the right response.
--> The core of the "Events" module is the EventEmitter class. 
--> we create Instances of EventEmitter class so that we can emit events with the help of event() method as well as we can register 
-events with the help of addListener() and on() method to respond to those events.
+-> The 'core' of the "Events module" is the "EventEmitter class". 
+-> we create "Instances" of "EventEmitter class" so that we can 'emit events' with the help of 'emit()' method as well as we can 
+'register events' with the help of 'addListener()' and 'on()' method to respond to those events.
 
 var events = require('events');
 var eventEmitter = new events.EventEmitter();

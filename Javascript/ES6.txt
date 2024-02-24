@@ -1,3 +1,6 @@
+ES6 stands for ECMAScript 2015, is a significant update to the JavaScript language, introducing new syntax, features, and 
+improvements
+
 ES6 (ECMAScript 2015) introduced some new features and enhancements to JavaScript, including new data types and improvements to 
 existing ones. Here are some key data types and features introduced or enhanced in ES6:
 

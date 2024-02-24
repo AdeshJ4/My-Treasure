@@ -1,7 +1,7 @@
 Middleware & Request Processing Pipeline:
 -----------------------------------------
 
--> Middleware function is basically a function that takes a request object and either returns a response to the client or passes 
+-> Middleware is basically a function that takes a 'request object' and either returns a response to the client or passes 
 control to another middleware function.
 -> at runtime, when we receive a request on the server that request goes through a pipeline we call this pipeline "Request Processing 
 Pipeline".

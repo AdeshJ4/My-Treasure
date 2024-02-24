@@ -1,7 +1,7 @@
 Synchronous Code : 
 ------------------
 
--> Synchronous code is executed in a sequential and blocking manner.
+-> Synchronous code is executed in a 'sequential' and 'blocking manner'.
 -> it means first task/operation completes its execution then and only then 2nd task/operation will start its execution.
 -> it means first task/operation is blocking the execution of 2nd task/operation
 -> other thing to notice is that the order of execution in sequential that means It follows a natural flow of execution which is 

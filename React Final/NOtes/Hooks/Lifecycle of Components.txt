@@ -6,16 +6,45 @@ Lifecycle of Components:
 
 
 1. Mounting
-
+------------
 -> Mounting means putting elements into the DOM.
--> React has four built-in methods that gets called, in this order, when mounting a component
 
-1. constructor()
-2. getDerivedStateFromProps()
-3. render()
-4. componentDidMount()
 
--> The render() method is required and will always be called, the others are optional and will be called if you define them.
+2. Updating: 
+-------------
+-> The next phase in the lifecycle is when a component is updated.
+-> A component is updated whenever there is a change in the component's state or props.
+
+
+3. Unmounting
+--------------
+-> the next phase in the lifecycle is unmounting.
+-> unmounting means removing component from DOM
+
+
+componentDidMount = useEffect()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 1.constructor : 

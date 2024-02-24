@@ -1,25 +1,11 @@
-const express = require('express');
-const app = express();
+const timer1 = setTimeout(() => {
+  console.log("setTimeout()");
+}, 500);
 
+const timer2 = setImmediate(() => {
+  console.log("setImmediate()");
+}, 500);
 
-function logging(req, res, next){
-    console.log('Logging');
-    next();
-}
-
-app.use((req, res, next)=>{
-    console.log('Authentication');
-    next();
-});
-
-app.use(logging);
-
-app.get('/', logging, (req, res, next)=>{
-    return res.status(200).send('2 middleware function');
-});
-
-
-
-app.listen(5000, ()=>{
-    console.log('Server is listening on port 5000');
-})
+const timer3 = process.nextTick(() => {
+  console.log("process.nextTick()");
+}, 500);
