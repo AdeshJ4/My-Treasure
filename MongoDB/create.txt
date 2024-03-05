@@ -30,13 +30,6 @@ db.tb1.insertMany([{name: 'Adesh'}, {name: 'Ram'}])
 
 
 
-
-
-
-
-
-
-
 DataTypes: 
 1. **String:** This is the most commonly used data type to store textual data.
 db.tb4.insertOne({id: 101, name: 'Adesh'})
@@ -74,7 +67,7 @@ db.tb4.insertOne({id: 102, birth_date: ISODate("2023-01-01T12:00:00Z")});
 db.tb1.insertOne({name: 'Adesh', age: 22, CGPA: 8.81, job: true, address:{city:'Pune'}, 
 hobbies: ['h1', 'h2'], DOB: ISODate('2001-06-22')})
 
-9. **Timestamp:** Typically used to store the creation time of a document.
+9. **Timestamp:** Typically used to store the 'creation time of a document'.
 db.tb4.insertOne({ "id": 102, "createdAt": new Timestamp() })
 
 
@@ -82,7 +75,7 @@ db.tb4.insertOne({ "id": 102, "createdAt": new Timestamp() })
 db.tb4.insertOne({ "id": 102, "img": new BinData(0, "base64-encoded-binary-data") })
 
 
-11. **ObjectId:** A special 12-byte identifier typically employed as the primary key for a document.
+11. **ObjectId:** A 'special 12-byte identifier' typically employed as the 'primary key' for a document.
 db.tb4.insertOne({"_id": ObjectId("61f39f009f3b0a68d62f9b8c"), name: 'Adesh'});
 db.tb4.insertOne({"_id": 101, name: 'Adesh'});
 

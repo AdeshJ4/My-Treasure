@@ -3,7 +3,7 @@ single-page applications:
 
 1. **Traditional Websites vs. SPAs**:
 
--> Traditional websites load a new HTML page from the server every time you click a link or request a new 
+-> 'Traditional websites' load a 'new HTML 'page from the 'server' every time you click a link or request a new 
 URL. This process involves a full page refresh, which can be slower and less interactive.
 
 -> In SPA, we initially load just one HTML page most of the time its a Home page. Then, SPA use JavaScript 
@@ -18,7 +18,7 @@ update the content of the page. This data can include various types of informati
 tables, etc. then question aries that why page is not reloaded? answer is that :-
 -> React uses a router (like React Router) to manage navigation within the application.
 When a user clicks on a link or interacts with the app to navigate to a different "page" (view), the router 
-'intercepts the request' and prevents the default browser navigation.
+'intercepts the request' and prevents the 'default browser navigation'.
 This makes the user experience faster and smoother.
 
    - SPAs are often used for applications where user interaction is a priority, such as social media sites, 

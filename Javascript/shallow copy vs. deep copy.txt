@@ -63,7 +63,7 @@ Shallow Copy inside Array
 
 1. Array.slice():
 const arr1 = [10, 20, [30, 40]];
-const arr2 = arr1.slice();
+consslice();t arr2 = arr1.
 arr2[2].push(50);  // changes will reflect
 arr2.push(50);  // changes will not reflect
 console.log(arr1);
@@ -89,10 +89,10 @@ console.log("arr2: ", arr2);
 
 2. Deep Copy:
 
--> obj2 will create new Object with same properties as obj1 but with different memory locations. so changes will not reflect.
 -> A deep copy is a copy that creates a new object with new memory locations for all of its properties and nested objects or arrays.
 -> It means that if you make changes to the copied object or any of its nested objects or arrays, it will not affect the original 
 object.
+-> obj2 will create new Object with same properties as obj1 but with different memory locations. so changes will not reflect.
 Here's how you can perform a deep copy in JavaScript:
 
 1. Using Libraries:

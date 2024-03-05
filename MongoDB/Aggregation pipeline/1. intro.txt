@@ -1,30 +1,38 @@
 The MongoDB Aggregation Pipeline
 --------------------------------
 
-An aggregation pipeline consists of one or more stages that process documents:
+An 'aggregation pipeline' consists of 'one or more stages' that 'process documents':
 
-Each stage performs an operation on the input documents. 
-For example, a stage can filter documents, group documents, and calculate values.
+'Each stage' 'performs an operation' on the 'input documents'. 
+For example, a stage can 'filter documents', 'group documents', and 'calculate values'.
 
-The documents that are output from a stage are passed as a input to the next stage.
+The documents that are 'output from a stage' are passed as a 'input to the next stage'.
 
 An aggregation pipeline can return results for groups of documents. For example, return the total, average, 
 maximum, and minimum values.
 
 Note: 
 Aggregation pipelines run with the db.collection.aggregate() method do not modify documents in a collection, 
-unless the pipeline contains a $merge or $out stage.
+unless the pipeline contains a '$merge or $out stage.'
+
+why we use aggregation pipeline: 
+1. The MongoDB aggregation framework provides a powerful way to 'process and analyze data' also offers several advantages when it 
+comes to complex data manipulation and analysis tasks:
+2. Performance is better than normal queries.
+3. Data Transformation & data manipulation
 
 
+
+
+Popular Stages: 
+===============
 
 $match (aggregation): 
 
--> The `$match` stage filters documents based on specified condition(s), allowing only matching documents to 
+-> The `$match` stage 'filters documents' based on specified condition(s), allowing only matching documents to 
 proceed to the next pipeline stage.
 -> To optimize the pipeline place $match as early in the aggregation Pipeline
 -> The $match query syntax is identical to the read operation query syntax;
-
-
 
 db.users.aggregate([
     {
@@ -36,22 +44,18 @@ output:
   { _id: 4, name: 'India', category: 'Clothing' },
   { _id: 5, name: 'India', category: 'Electronics' }
 ]
-
 db.users.aggregate([
     {
         $match: {name: 'India'}   // only return documents which has name = 'India'
     }
 ])
-
 db.users.aggregate([
     {
         $match: {age: {$gt: 22}}   // only return documents where age gt 22
     }
 ])
-
 db.users.aggregate([
     {
-
         $match: {age: {$in: [20, 30, 40]}}
     }
 ])
@@ -61,9 +65,9 @@ db.users.aggregate([
 
 $group (aggregation)
 
--> $group stage Groups documents together based on a 'specified key' and allows you to perform aggregate functions(count, sum, max, min,
- avg) on the grouped data.
--> A group key is often a field, or group of fields. The group key can also be the result of an expression. 
+-> $group stage, 'Groups documents together' based on a 'specified key' and allows you to perform 'aggregate functions'(count, sum, 
+max, min, avg) on the grouped data.
+-> A 'group key 'is often a field, or group of fields. The group key can also be the result of an expression. 
 -> Use the '_id' field in the $group pipeline stage to set the group key.
 -> In $group, when you use '_id: null' within the $group stage, it means that you are grouping all the 
 documents in the collection together, treating them as a single group.
@@ -110,6 +114,7 @@ db.products.aggregate([
     }
   }
 ]);
+
 output: 
 [
   {
@@ -347,9 +352,9 @@ $first:
 
 $lookup:
 
--> Performs a 'left outer join' to another collection in the same database to combine documents from two 
-collections based on a common field.
--> LEFT (OUTER) JOIN: Returns all records from the left table, and the matched records from the right table
+-> Performs a 'left outer join' to 'another collection' in the same database to combine documents from two 
+collections based on a 'common field'.
+-> LEFT (OUTER) JOIN: Returns 'all records' from the 'left table', and the 'matched records' from the 'right table'
 
 authors
 [

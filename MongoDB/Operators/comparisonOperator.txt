@@ -1,6 +1,6 @@
 1. $eq: 
 
--> This operator return documents if the value of given field is equal to specified value.
+-> This operator 'return documents' if the 'value of given field is equal to specified value'.
 -> db.voters.find({age: {$eq: 18}})
 -> db.voters.find({age: 18})
 
@@ -37,7 +37,7 @@
 
 7. $in
 
--> This operator returned documents if the value of the given field is in specified array.
+-> This operator returned documents if the value of the given field is in 'specified array'.
 -> db.sales.find({category: {$in: ['Cloth', 'Books']}})
 
 
@@ -45,5 +45,9 @@
 
 -> This operator returned documents if the value of the given field is not in specified array.
 -> db.sales.find({category: {$nin: ['Cloth', 'Books']}})
+
+
+
+
 
 

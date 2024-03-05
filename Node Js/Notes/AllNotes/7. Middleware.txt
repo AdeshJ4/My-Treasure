@@ -24,7 +24,7 @@ and many more.
 app.get('/', (req, res)=>{
 	res.send("Hello");
 });
-In the above ex tha callback function passes to route handler is the example of middleware function.
+In the above ex tha callback function passes to route handler is the example of 'middleware function'.
 "(req, res)=>{
 	res.send("Hello");
 }"
@@ -47,34 +47,40 @@ Building Custom Middleware:
 const express = require("express");
 const app = express();
 
-app.use((req, res, next)=> {
-    console.log('1st middleware function');
-    next();
-})
+function middleware(req, res, next) {
+  console.log("Front Middleware");
+  next();
+}
 
-app.get("/", (req, res, next) => {
-  res.send("Home Page");
+function middleware1(req, res, next) {
+  console.log("Middleware 1");
+  next();
+}
+
+function middleware2(req, res, next) {
+  console.log("Middleware 2");
+  next();
+}
+
+function middleware3(req, res, next) {
+  console.log("Last Middleware");
+  next();
+}
+
+app.use(middleware);
+app.get("/part1", [middleware1, middleware2], (req, res, next) => {
+  res.send("2 middleware function : [middleware1, middleware2]");
   next();
 });
-
-app.use(function (req, res, next) {
-  console.log("last Middleware function");
-  next();
+app.get("/part2", middleware1, (req, res) => {
+  res.send("1 middleware function: middleware1 -> we terminate req-res cycle");
 });
+app.use(middleware3);
 
-app.listen(5000, () => {
-  console.log("Server is listening on port 5000");
+const port = 5000;
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
-
-o/p: 
-
-when you send a request then only all middleware functions going to be executed. 
-send a request like : http://localhost:5000
-Server is listening on port 5000
-1st middleware function
-2nd middleware function
-last Middleware function
-
 
 
 

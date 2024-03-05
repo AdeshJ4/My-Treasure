@@ -1,12 +1,12 @@
--> Express.js is a popular web application framework for Node.js.
--> Express is commonly used for building RESTful APIs. 
+-> Express.js is a popular 'web framework' for Node.js.
+-> Express is commonly used for 'building RESTful APIs'. 
+-> express support 'middleware system', support various 'template engines' as will as provide 'flexible and modular structure' for 
+building 'RESTful APIs' also it have 'Active Maintenance & Active Community'. 
 -> we used express over the http module because, In http module we have to used method called 'createServer()' fro crating a server.
 Inside this method we have to write multiple if statements for checking multiple urls.
 This make code messy as well as hard to understand, hard to maintain and hard to debug. 
 To solve this problem we use Express js.
 -> also there are other reasons such as : 
-express support middleware system, support various template engines as will as provide flexible and modular structure for 
-building RESTful APIs also it have Active Maintenance & Active Community. 
 
 
 The meaning of this lines:
@@ -14,7 +14,7 @@ const express = require("express");
 const app = express();
 
 -> we import express module with the help of require() function.
--> The 2nd line creates an instance of the Express application by calling the express function. 
+-> The 2nd line creates an 'instance' of the Express application by calling the express function. 
 The app variable now represents your Express application. 
 This instance of app is where you'll define your routes, middleware, and other configurations for handling HTTP requests and 
 building your web application.
@@ -23,16 +23,9 @@ building your web application.
 
 for more reference: 
 
-3. Middleware:
--> The http module in Node.js itself does not have built-in support for a middleware system like Express.js.
--> Express js support middleware system.
--> Express have built-in middleware such as express.json(), express.urlencoded({ extended: true }), express.static('public) as well 
-as user can create its own custom middleware function for authentication, logging,error handling or download Third-party Middleware
-like nodemon jsonwebtoken dotenv express helmet compression.
-
 2. Templating: 
-Express.js supports a variety of templating engines, such as EJS, Handlebars, and pug, which allow developers to generate dynamic
-HTML pages and views for their applications.
+Express.js supports a variety of templating engines, such as 'EJS', Handlebars, and pug, which allow developers to generate 'dynamic
+HTML pages' and 'views' for their applications.
 
 1. Flexibility for APIs & Routing: 
 -> Express.js provides a flexible and modular structure for building RESTful APIs.
@@ -104,120 +97,114 @@ app.listen(port, () => {
 
 more advance example: 
 ---------------------
+
+
+
 const express = require("express");
 const app = express();
-const dotenv = require("dotenv").config();
-const Joi = require("joi");
 
-// data from database
 const courses = [
-  { id: 1, name: "React JS" },
-  { id: 2, name: "Node JS" },
-  { id: 3, name: "Express JS" },
-  { id: 4, name: "MongoDB" },
+  { id: 101, name: "React Js" },
+  { id: 102, name: "Node Js" },
+  { id: 103, name: "Express Js" },
+  { id: 104, name: "Mongodb" },
 ];
 
 app.use(express.json());
 
-function validateCourse(course) {
-  const joiSchema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-
-  return joiSchema.validate(course);
-}
-
 app.get("/", (req, res) => {
-  res.send("Home Page");
-});
-
-// define route parameter id
-app.get("/api/courses/:id", (req, res) => {
-  // res.send(req.params.id)
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course) res.status(404).send("The course with given id was not found.");
-  res.send(course);
+  return res.status(200).send("All ABout Courses");
 });
 
 app.get("/api/courses", (req, res) => {
-  res.send(courses);
+  return res.status(200).json(courses);
+});
+
+app.get("/api/courses/:id", (req, res) => {
+  const course = courses.find((course) => {
+    return course.id === parseInt(req.params.id);
+  });
+  if (!course) return res.status(404).send("Not Found");
+  return res.status(200).send(course);
 });
 
 app.post("/api/courses", (req, res) => {
-  // input validation
-  // part 1 : manual validation
-  //   if (!req.body.name || req.body.name.length < 3) {
-  //     res.status(400).send("Name is required and must be 4 character long");
-  //     return;
-  //   }
-
-  // part 2 : using schema based validation library called Joi
-  const { error } = validateCourse(req.body); // object destructuring
-
-  if (error) return res.status(400).send(error.details[0].message);
-
+  if (!req.body.name || req.body.name.length <= 3)
+    return res.status(400).send("Invalid Data");
   const course = {
     id: courses.length + 1,
     name: req.body.name,
   };
-
   courses.push(course);
-  res.status(200).send(courses);
+  return res.status(201).send(course);
 });
 
 app.put("/api/courses/:id", (req, res) => {
-  // look up the course, if not exist return 404
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course)
-    return res.status(404).send("The course with given ID not found");
+  const course = courses.find((course) => {
+    return course.id === parseInt(req.params.id);
+  });
+  if (!course) return res.status(404).send("Not Found");
+  if (!req.body.name || req.body.length <= 3)
+    return res.status(400).send("Bad Request");
 
-  //validate req body, if invalid return 404
-  const { error } = validateCourse(req.body); // object destructuring
-  if (error) return res.status(400).send(error.details[0].message);
-
-  // update course
   course.name = req.body.name;
-  res.status(200).send(courses);
+
+  return res.status(200).json(course);
 });
 
 app.delete("/api/courses/:id", (req, res) => {
-  // look up the course, not exists return 404
-  const course = courses.find((c) => c.id === parseInt(req.params.id));
-  if (!course)
-    return res.status(404).send("The COurse with given ID not found");
+  const course = courses.find((course) => {
+    return course.id === parseInt(req.params.id);
+  });
+  if (!course) return res.status(400).send("Not Found");
 
-  // delete course
   const index = courses.indexOf(course);
   courses.splice(index, 1);
-  res.status(200).send(courses);
+  return res.status(200).send("Deleted Successfully");
 });
+
 
 // define multiple route parameters
-app.get("/api/posts/:year/:month", (req, res) => {
-  res.send(req.params);
+app.get('/api/users/:id/:fname', (req, res, next)=>{
+  // http://localhost:5000/api/users/101/Adesh?age=23&&lname=Jadhav
+  console.log('req.params: ', req.params);  // required parameters=> { id: '101', fname: 'Adesh' }
+  console.log('req.url: ', req.url);  //  url =>  /api/users/101/Adesh
+  console.log('req.query: ', req.query); // additional Information to backend => { age: '23', lname: 'Jadhav' }
+  next();
 });
 
-/* 
--> query string parameter -> This are the parameters that we add in the url after question mark. 
--> we use query string parameter to provide additional data to backend services.
--> so we use parameters for essential values or required values where we use query string parameters for anything
-that is optional 
-this part from below is query string parameter : ?sortBy=name
-ex. http://localhost:5000/api/posts/2001/06?sortBy=name
-*/
-app.get("/api/blogs/:year", (req, res) => {
-  res.send(req.query);
+app.get("*", (req, res) => {
+  res.status(400).send("Invalid Url");
 });
 
-const port = process.env.PORT || 5001;
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+app.listen(5000, () => {
+  console.log(`Server listening on port 5000`);
 });
 
 
 
 
+Types of parameters: 
+
+1. 'query string parameter' 
+-> These are the 'parameters' that we add in the url 'after question mark'. 
+-> we use 'query string parameter' to provide 'additional data' to 'backend services'.
+-> if you don't provide then 'they will not give error'.
+-> in bellow example we have 'sortBy' as a query string parameter.
+-> you can access them like : log(req.query) => {sortBy: "name"};
+eg> http://localhost:5000/api/posts/2001/06?sortBy=name
+app.get('/api/users/:id/:fname', (req, res, next)=>{
+  console.log('req.query: ', req.query); // additional Information to backend => {sortBy: "name"}
+  next();
+});
+
+2. 'required parameters' 
+-> These are 'required parameters', if you don't provide then it will give you error.
+http://localhost:5000/api/users/101/Adesh
+app.get('/api/users/:id/:fname', (req, res, next)=>{
+  console.log('req.params: ', req.params);  // required parameters=> { id: '101', fname: 'Adesh' }
+  next();
+});
 
 
 

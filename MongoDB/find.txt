@@ -17,10 +17,9 @@ db.users.findOneAndDelete({_id: 101}, {projection: {_id: 0, name: 1}})
 db.users.findOneAndReplace({_id: 101}, {_id: 101, name: 'Adesh'}, {projection: {_id: 0, name: 1}, {returnDocument: 'after'}})
 db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {returnDocument: 'after'}, {projection: {_id: 0, name: 1}})
 
-
 1. find()
 
--> find() method return all documents from collection if no query object is passed.
+-> find() method 'return all documents' from collection if no 'query object' is passed.
 -> This method accepts a query object.
 -> if query object is pass then selected documents will be returned who match the 
     query object.
@@ -30,9 +29,9 @@ db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {
 
 2. findOne()
 
--> findOne() method return only first document.
--> This method also accepts query object
--> If left empty, it will return the first document it finds.
+-> findOne() method return 'only first document'.
+-> This method also 'accepts query object'
+-> If left empty, it will 'return the first document' it finds.
 -> db.users.findOne()
 -> db.users.findOne({_id: 1})
 
@@ -42,8 +41,8 @@ db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {
 
 -> findOneAndDelete is focused on deleting a document, while findOneAndReplace is focused on replacing a 
 document with a new one.
--> findOneAndDelete: Returns the deleted document or null if no document is found.
--> findOneAndReplace: By default, returns the deleted document.
+-> findOneAndDelete: Returns the 'deleted document' or 'null' if no document is found.
+-> findOneAndReplace: By default, returns the 'deleted document'.
 
 // Delete a document where the 'username' is 'john_doe'
 db.tb1.findOneAndDelete({name: 'john_doe'});

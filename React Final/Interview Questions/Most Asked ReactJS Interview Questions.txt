@@ -4,7 +4,6 @@
 8:32 types of components in react
 9:40 what is jsx
 12:20 creating state using useState hook
-12:56 how to drink water from an empty bottle
 14:06 normal variable vs useState variable
 22:30 demo of using props
 26:15 building a carousel
@@ -16,20 +15,20 @@
 1:00:35 why use key with map
 1:03:20 useEffect hook
 1:09:28 react component lifecycle
-1:10:55 moving hardcoded data in separate constants fil
+1:10:55 moving hardcoded data in separate constants file
 
 
 
 Q1] What is React & SPA?
 
--> React is a 'JavaScript library' created by Facebook to build single-page applications.
--> React allows us to create reusable UI components.
+-> React is a 'JavaScript library' created by 'Facebook' to build 'single-page applications'.
+-> React allows us to 'create reusable UI components'.
 -> Current version of React.JS is V18.0.0 (April 2022).
 
 Q] Explain single page application
 
 -> Traditional websites load a new HTML page from the server every time you click a link or request a new 
-URL. This process involves a full page refresh, which can be slower and less interactive.
+URL. This process involves a 'full page refresh', which can be slower and less interactive.
 
 -> In SPA, we initially load just one HTML page most of the time its a Home page. Then, SPA use JavaScript 
 to handle user interactions. 

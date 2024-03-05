@@ -5,15 +5,37 @@
 5. $min
 6. $max
 7. $mul
+8. $push
+9. $addToSet
+10.$pull
+11.$pop
+12.$slice
 
 
 
 1. $set
--> $set field is used to update the value of a field or to add a new field.
+-> $set field is used to 'update the value' of a field or to 'add a new field'.
 -> If the field does not exist, $set will add a new field with the specified value.
 
+2. $unset
+-> The $unset operator 'deletes a particular field'.
+-> If the field does not exist, then $unset does nothing.
+
+
+3. $rename
+-> The $rename operator 'rename the name of a field '
+-> If the field does not exist, $rename does nothing
+
+
+4. $inc
+-> The $inc operator 'increments' a field by a 'specified value'.
+-> The $inc operator accepts 'positive and negative values'.
+-> If it accepts +ve number then increase the no. it it accepts -ve no then decrees no.
+-> If the field does not exist, $inc creates the field and sets the field to the specified value.
+-> Use of the $inc operator on a field with a null value will generate an error.
+
 5. $min
--> Only updates the field value if the specified value is less than the existing field value.
+-> Only updates the field value if the 'specified value' is less than the 'existing field value'.
 -> If the field does not exist, the $min operator sets the field to the specified value
 Input: [{ _id: 1, highScore: 800, lowScore: 200 } ]
 Query: db.tb1.updateOne({_id: 1}, {$min: {lowScore: 150}})
@@ -27,26 +49,6 @@ Input: [{ _id: 1, highScore: 800, lowScore: 150 } ]
 Output: [{ _id: 1, highScore: 800, lowScore: 200 } ]
 Query: db.tb1.updateOne({_id: 1}, {$max: {lowScore: 200}})
 
-
-2. $unset
--> The $unset operator deletes a particular field.
--> If the field does not exist, then $unset does nothing.
-
-
-3. $rename
--> The $rename operator rename the name of a field 
--> If the field to rename does not exist in a document, $rename does nothing
-
-
-4. $inc
--> The $inc operator increments a field by a specified value.
--> The $inc operator accepts positive and negative values.
--> If it accepts +ve number then increase the no. it it accepts -ve no then decrees no.
--> If the field does not exist, $inc creates the field and sets the field to the specified value.
--> Use of the $inc operator on a field with a null value will generate an error.
-
-
-
 7. $mul
 -> Multiplies the value of the field by the specified amount.
 
@@ -55,11 +57,13 @@ Output: [ { "_id": 1, "quantity": 6 }]
 Query: db.tb1.updateOne({_id: 1}, {$mul: {quantity: 2}})  // 3 * 2 = 6
 
 
+
 1. Add a Single Property:
 -------------------------
 Input: [{_id: 101, name: 'Adesh'}]
 Output: [{name: 'Adesh', age: 22}]
 Query: db.tb1.updateOne({Id: 101}, {$set: {age: 22}});
+
 
 
 1. Change A Single Property : 
@@ -74,7 +78,8 @@ Input: [ { name: 'Adesh' } ]
 Output: [ { name: 'Adesh' company: 'DXC', gender: 'M' } ]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$set: {company: 'DXC', gender: 'M'}})
 
-2. Change Multiple Properties: 
+
+2. Update Multiple Properties: 
 ------------------------------
 Input: [ { name: 'Adesh' age: 21, height: 5 } ]
 Output:[ { name: 'Adesh' age: 22, height: 6 } ]
@@ -113,7 +118,6 @@ output: Input: [
 ]
 
 Query: db.tb1.updateMany({}, {$rename: {"nmae": "name"}})
-
 ==========================================================================================================
 
 Objects

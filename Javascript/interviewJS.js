@@ -643,7 +643,7 @@ console.log( 10 && 0);          // 0
 /*
 
 -> NaN stands for "Not-a-Number".
--> NaN indicates a value that is not a legal number
+-> NaN indicates a 'value' that is not a legal number
 -> typeof of NaN will return a Number.
 -> To check if a value is NaN, we use the isNaN() function,
 isNaN("Hello")  // Returns true
@@ -744,7 +744,7 @@ console.log('After value: ' + obj.value);//  reference type are pass by referenc
 this: 
 -----
 
--> "this" references the object that is executing the current function.
+-> "this" references the 'object' that is executing the 'current function'.
 -> so if that function is part of that object "this" reference that obj itself.
 -> otherwise if that function is regular function which means it is not part of the object then "this" references to global object 
 which is "window" object in the browser and "global" in node.
@@ -898,7 +898,7 @@ obj.showTags();
 
 ex. 3 : using arrow function
 
-->  you can use an arrow function, which does not have its own this context and inherits it from the surrounding scope 
+->  you can use an arrow function, which does not have its own 'this context' and inherits it from the surrounding scope 
 (in this case, the showTags method):
 -> The good thing about arrow function is that they inherit "this" value from containing function in below ex that function is 
 showTags().
@@ -1003,7 +1003,6 @@ is passed to the bind method and subsequent arguments are passed to the function
 function greet(message) {
   console.log(message + " " + this.name);
 };
-const person = {name: "John"}
 const greetJohn = greet.bind({name: "John"}, "Hello");
 greetJohn(); // Output: Hello John
 
@@ -1014,7 +1013,7 @@ greetJohn(); // Output: Hello John
 
 /*
 -> IIFE stands for "Immediately Invoked Function Expression." 
--> It is a JavaScript design pattern where a function is defined and executed immediately after its creation. 
+-> It is a JavaScript design pattern where a function is defined and executed 'immediately after its creation'. 
 -> The primary purpose of IIFE is to create a new scope for variables to avoid polluting the global scope.
 -> An Immediately Invoked Function also called self invoked function or IIFE is a function that runs as soon as it is defined.
 -> two sets of parentheses()() are used to execute this function.
@@ -1429,7 +1428,7 @@ try{
 /*
 Arguments : 
 -----------
--> we have object called "arguments" which contain all arguments passed to function.
+-> we have 'object' called "arguments" which 'contain all arguments' passed to function.
 function fun (){
     let sum=0;
     for (let args of arguments){
@@ -1683,7 +1682,7 @@ Example 6 : Using es6 classes:
 
 -> ES6 supports class concept 
 -> object can be created using class 
--> classes are nothing but syntactic sugars for constructor functions.
+-> classes are nothing but syntactic sugars for 'constructor functions'.
 -> They provide a new way of declaring constructor functions in javascript. 
 -> JavaScript Classes are templates for JavaScript Objects.
 -> classes are not hoisted. A class cannot be used before it is declared.

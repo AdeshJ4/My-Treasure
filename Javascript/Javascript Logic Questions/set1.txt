@@ -79,7 +79,6 @@ INPUT : "Hey Adesh"
 OUTPUT: "yeH hsedA"
 code : using split(), reverse(), join()
 function reverseSentence(str){
-    // separate each word of the sentence.  -> ["Adesh", "Pramod", "Jadhav"] -> ['A', 'd', 'e', 's', 'h'] -> ['h', 's', 'e', 'd', 'A'] => 'hsedA'
     let savesStr = str.split(" ").map((ele)=>{
         return ele.split("").reverse().join("")
     }); // return ["hsedA", "domarP", "vahdaJ"];

@@ -8,10 +8,10 @@
 
 1. $exists: 
 
--> if you want to know that given field is exists in document or not we use $exists operator.
--> This operator takes boolean value as a input.
--> if exists : true then return all documents where that field exists
--> if false then return you documents that don't have that field.
+-> if you want to know that 'given field is exists in document or not' we use $exists operator.
+-> This operator takes 'boolean value as a input'.
+-> if 'exists : true' then 'return all documents where that field exists'
+-> if 'exists : false' then 'return you documents that don't have that field'.
 
 // Find documents where the "fieldName" exists
 db.collectionName.find({ fieldName: { $exists: true } })
@@ -46,7 +46,7 @@ db.addressBook.find( { "zipCode" : { $type : "string" } } );
 
 3. $expr: 
 
--> useful when you need to compare fields from the same document or perform more complex comparisons
+-> useful when you need to 'compare fields from the same document' or 'perform more complex comparisons'
 -> find all documents where "age" is greater than "target" (both fields are in the same document).
 -> db.tb1.find({$expr: {$eq: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$ne: ["$age", "$target"]}})
@@ -72,9 +72,9 @@ query:
 db.tb1.aggregate([
     {
         $match: {
-            $expr: {
-                $gt: [{$multiply: ['$quantity','$price']}, 10000]
-            }
+                $expr: {
+                    $gt: [{$multiply: ['$quantity','$price']}, 10000]
+                }
         }
     }
 ])
@@ -82,7 +82,7 @@ db.tb1.aggregate([
 
 4. $regex
 
--> it stands for regular expression
+-> it stands for 'regular expression'
 -> it accepts pattern and according to that pattern it finds the documents.
 -> ex. pattern for string like, str starts with, str ends with, str contain word like and s on..
 -> it is not good for performance. instead use "text index".
@@ -113,6 +113,8 @@ db.tb10.insertMany([
     {_id: 3, name: 'abcd'},
 ]
 
+
+db.tb1.find({name: {$regex: /mno/i}})
 
 2. Find documents where "fieldName" contains "mno" or "MNO" anywhere in the string (case-insensitive)
 -> db.t1.find({name: {$regex: /mno/i}})

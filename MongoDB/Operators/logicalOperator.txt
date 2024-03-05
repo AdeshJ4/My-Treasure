@@ -2,24 +2,25 @@
 
 -> $and operator accepts array of conditions.
 -> if you have multiple conditions then we can use $and operator.
--> document should satisfy all conditions specified in array of $and operator then and only then that document will return.
+-> 'document' should satisfy 'all conditions' specified in array of $and operator then and only then that document will return.
 -> there is no limit for conditions.
 -> In the second query, MongoDB implicitly uses the $and operator to combine the conditions. 
 db.tb1.find({$and: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
 db.tb1.find({id: 101, name: "Adesh", age: 21})
 
+
 2. $or : 
 
 -> $or operator accepts array of conditions.
 -> if you have multiple conditions then we can use $or operator.
--> document should satisfy at least one condition specified in array of $or operator then and only then that document will return.
+-> document should 'satisfy at least one condition' specified in array of $or operator then and only then that document will return.
 -> there is no limit for conditions.
 db.tb1.find({$or: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
 
 
 3. $not: 
 
--> This operator invert the result of an query.
+-> This operator 'invert the result of an query'.
 -> If you query a collection:  like db.tb1.find({age: {$eq: 20}}) it will return you all documents where 
 age = 20. but if you add $not operator like db.tb1.find({age: {$not: {$eq: 20}}}) then it will give you all 
 documents where age is not equal to 20.
@@ -29,7 +30,7 @@ documents where age is not equal to 20.
 
 4. $nor: 
 
--> This operator return documents that do not match any of the specified conditions.
+-> This operator 'return documents that do not match any of the specified conditions'.
 -> invert result of each condition
 -> db.tb1.find({$nor: [{id: 101}, {name: "Adesh"}, {age : 21}]})
 -> the documents except having id 101, name = "Adesh", age = 21 all documents will returned.
@@ -46,3 +47,4 @@ db.tb1.find({$nor: [{id: 102}, {name: "Eva"}, {age : 30}]})
   { "_id": 1, "id": 101, "name": "Adesh", "age": 21, "city": "ExampleCity1" },
   { "_id": 4, "id": 104, "name": "Bob", "age": 22, "city": "ExampleCity4" }
 ]
+

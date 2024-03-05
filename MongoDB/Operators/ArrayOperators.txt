@@ -6,16 +6,16 @@
 4. $unwind
 5. $ifNull
 6. $push
-7. $addToSet
 8. $pop
 9. $pull
+7. $addToSet
 10.$each
 11.$slice
 
 
 data: 
 
-[
+db.hobbies.insertMany([
   {
     _id: ObjectId("65658eeb0cea2748b06400af"),
     name: 'Max',
@@ -50,16 +50,16 @@ data:
     name: 'Chris',
     hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
   }
-]
+])
 
 
-Note : You can access array elements like objects means using dot notation.
+Note : You can access 'array elements' like objects means using 'dot notation'.
     "hobbies": [
       { "title": "Reading", "description": "Enjoys reading books" },
       { "title": "Sports", "description": "Plays various sports" },
       { "title": "Music", "description": "Loves listening to music" }
     ]
-eg. db.tb1.find({'hobbies.title': {$eq: 'Sports'}});
+eg. db.hobbies.find({'hobbies.title': {$eq: 'Sports'}});
 
 
 
@@ -67,7 +67,7 @@ eg. db.tb1.find({'hobbies.title': {$eq: 'Sports'}});
 ---------
 
 -> $all operator used on the array.
--> $all operator returns documents if the array field of a document contain all values specify inside a $all operator.
+-> $all operator returns documents if the 'array field' of a document contain all values specify inside a $all operator.
 -> given array element may contain other elements but must contain specified element.
 
 ex. 1
@@ -113,16 +113,15 @@ I/P
 Query: db.tb1.find({features: {$all: [{ name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" }]}})
 
 Note: if you want documents only with specified elements then use: 
-db.users.find({hobbies: ["Swimming"]})
 // return only documents which has single hobbies elements
+db.users.find({hobbies: ["Swimming"]})
 =============================================================================================================
 
 
 2. $elemMatch
 
 -> this operator return documents which contain 'array field' and 'at least one element' of array field should 
-'satisfy all conditions' specify by the $elemMatch operator.
--> all specified conditions are satisfied by a single array element.
+'satisfy condition' specify by the $elemMatch operator.
 
 ex.1:
 find user who has grade above 91 or grade array must contain grade element $gte 90
@@ -131,9 +130,8 @@ I/P:
   { _id: 1, name: 'Alice', grades: [ 85, 90, 88 ] },
   { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] }
 ]
+o/p: [ { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] } ]
 Query> db.tb1.find({grades: {$elemMatch: {$gt: 90}}})
-[ { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] } ]
-
 
 example 3: 
 hobbies is array, and each element of hobbies contain title and frequency.
@@ -213,10 +211,7 @@ output:
   }
 ]
 
-
 =============================================================================================================
-
-
 
 3. $size: 
 ---------
@@ -227,9 +222,7 @@ eg. find({hobbies: {$size: {$gt: 3}}}) // not acceptable
 eg.return me all documents who has hobbies elements equal to 3.
 -> db.tb1.find({hobbies: {$size: 3}})
 
-
 =============================================================================================================
-
 
 $push: 
 
@@ -237,8 +230,9 @@ $push:
 -> if the array field specified in $push does not exist, MongoDB will create it and set it to the specified 
 value.
 { "_id": 1, "name": "John" }
-db.tb1.updateOne({_id: 1}, {$push: {fruits: 'Apple'}})
-{ "_id": 1, "name": "John", "fruits": ["apple"] }
+db.tb1.updateOne({_id: 101}, {$push: {hobbies: 'Swimming'}})
+{ "_id": 1, "name": "John", "hobbies": ["Swimming"] }
+
 
 Append a Value to an Array
 { _id: 1, scores: [ 44, 78, 38, 80 ] } 
@@ -261,18 +255,18 @@ db.tb1.updateMany({}, {$push: {scores: 95}})
 
 $each: 
 
--> $each operator is used with $push and $addToSet operator.
--> $each operator is used to Append Multiple Values to an Array
+-> $each operator is used with '$push' and '$addToSet' operator.
+-> $each operator is used to Append 'Multiple Values' to an Array
 { _id: 1, scores: [ 44, 78, 38, 80 ] } 
 db.tb1.updateOne({_id: 1}, {$push: {scores: {$each: [10, 20, 30]}}})
 { "_id": 1, "scores": [ 44, 78, 38, 80, 10, 20, 30 ] }
-  
+
 
 =============================================================================================================
 
 $addToSet: 
 
--> The $addToSet operator in MongoDB is used to add unique elements to an array.
+-> The $addToSet operator in MongoDB is used to 'add unique elements' to an array.
 -> prevent duplication elements.
 
 db.tb1.updateOne(
@@ -280,12 +274,11 @@ db.tb1.updateOne(
   { $addToSet: { scores: { $each: [10, 20, 30] } } }
 )
 
-
 =============================================================================================================
 
 $pull: 
 
--> This operator is used to remove all instances of specified value.
+-> This operator is used to 'remove all instances' of specified value.
 
 ex.1: remove all occurrences of specified value from array.
 { "_id": 1, "grades": [85, 90, 92, 85, 88] }
@@ -305,7 +298,7 @@ Query> db.users.updateOne({_id: 1}, {$pull: {grades: {$gt: 86}}})
 =============================================================================================================
 
 
-$pop: Removes the first or last element of an array.
+$pop: 'Removes' the 'first or last' element of an array.
 
 db.users.updateOne({ _id: 1 }, { $pop: { marks: 1 } }) // removes the last element
 db.users.updateOne({ _id: 1 }, { $pop: { marks: -1 } }) // removes the first element
@@ -313,7 +306,7 @@ db.users.updateOne({ _id: 1 }, { $pop: { marks: -1 } }) // removes the first ele
 =============================================================================================================
 
 
-$slice: $slice is used in combination with $push to control the size of the array.
+$slice: $slice is used in combination with '$push' to 'control the size 'of the array.
 
 ex. 1 store only last five elements inside array.
 {  "_id": 1, "grades": [10, 20, 30, 40, 50] }
@@ -327,10 +320,7 @@ Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $
 
 
 
-
-
-
-
+db.users.updateOne({_id: 101}, {$push: {hobbies: {$each: ["A", "B"], $slice: 3}}})
 
 
 

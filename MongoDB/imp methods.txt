@@ -1,0 +1,16 @@
+countDocuments()
+-> db.tb1.countDocuments()
+
+skip()
+-> db.tb1.find().skip(10)
+
+limit()
+-> db.tb1.find().limit(10)
+
+sort()
+-> db.tb1.find().sort({"name": 1}) //ascending order
+-> db.tb1.find().sort({"age": -1}) //descending  order
+
+distinct()
+-> db.myCollection.distinct("city")   // unique values
+

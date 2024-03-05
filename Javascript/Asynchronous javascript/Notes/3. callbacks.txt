@@ -184,7 +184,7 @@ getUser(101, (user)=>{  					// asynchronous operation 1
 -> suppose we have function called getUser which is fetching user from database.
 -> inside callback function of getUser we are calling getRepositories function.
 -> getRepositories function fetching the repos of user.
--> inside callback function of getRepositories we are calling getCommits fucntion.
+-> inside callback function of getRepositories we are calling getCommits function.
 -> getCommits function fetching the commits of that repo.
 -> inside callback function of getCommits we are logging commits of repo.
 
