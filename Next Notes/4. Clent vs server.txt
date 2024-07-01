@@ -1,0 +1,97 @@
+In next js we can render components in two ways and generate HTML markup:
+
+1. On client side (web browser)
+2. On server side (Node js Runtime)
+
+
+Rendering component on client side is similar to how we render component in react.
+we refer this technique as CSR.
+
+
+
+
+In Server side (SSR) component render on server side
+
+
+
+Server component cannot: 
+1. Listen to browser events (click events) 
+2. Access browser APIs (localStorage)
+3. Maintain State (useState)
+4. Use Effect
+
+
+
+
+
+Query string parameter are a way of passing data on the server.
+Access query string parameter inside a page and pass it to component.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

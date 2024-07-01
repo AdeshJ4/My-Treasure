@@ -1,0 +1,11 @@
+Layouts: 
+
+-> layout.tsx is special file.
+-> we use layout to create UI that shared between multiple pages.
+
+we can create custom layout for ex>
+if all our admin pages need a particular UI we can create a custom layout for our admin area.
+
+Navigation panel is common for all pages so we define inside rootlayout.tsx
+
+

@@ -1,0 +1,123 @@
+1. Global Styles
+2. CSS modules
+3. Tailwind CSS
+4. Daisy UI
+
+
+
+Global Styles: 
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  padding: 1rem;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+
+
+
+
+CSS modules
+
+-> ProductCard.module.css
+
+
+Tailwind CSS
+
+1. padding: 
+p-5
+px-5
+py-5
+pt-5
+pr-5
+pb-5
+pl-5
+
+2. Margins
+m-5
+mx-5
+my-5
+mt-5
+mr-5
+mb-5
+ml-5
+
+3. Text Size
+text-xs
+text-sm
+text-base
+text-lg
+text-xl
+text-2xl
+text-3xl
+
+4.color
+text-white
+text-sky-400
+bg-orange
+
+5. Thickness
+font-thin
+font-light
+font-normal
+font-medium
+font-bold
+
+
+ex: 
+<div className="p-5 my-5 bg-sky-400 text-white text-xl hover:bg-sky-500">
+  <AddToCart />
+</div>
+
+
+
+
+
+
+
+
+
+
+Daisy UI:
+
+-> component library for Tailwind CSS
+ 
+https://daisyui.com/
+
+step 1: install Package: npm i -D daisyui@latest
+step 2: Add daisyUI to tailwind.config.js:
+
+const config: Config = {
+  plugins: [require('daisyui')],   <-------- Add Plugins
+  daisyui: {
+    themes: ["forest", "winter", "retro"],   <-------- Thems
+  },
+};
+export default config;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

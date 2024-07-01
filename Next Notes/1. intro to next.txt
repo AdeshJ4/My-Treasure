@@ -1,0 +1,78 @@
+create a folder for project, inside that folder open vs code and inside a terminal run following commands.
+==========================================================================================================
+
+./ -> in current folder.
+
+PS E:\z Placement\Mosh\Next.js\Projects\car_showcase> npx create-next-app@latest ./
+Need to install the following packages:
+create-next-app@14.2.4
+Ok to proceed? (y)      y
+
+npm notice Beginning October 4, 2021, all connections to the npm registry - including for package installation - must use TLS 1.2 or higher. You are currently using plaintext http to connect. Please visit the GitHub blog for more information: https://github.blog/2021-08-23-npm-registry-deprecating-tls-1-0-tls-1-1/
+npm notice Beginning October 4, 2021, all connections to the npm registry - including for package installation - must use TLS 1.2 or higher. You are currently using plaintext http to connect. Please visit the GitHub blog for more information: https://github.blog/2021-08-23-npm-registry-deprecating-tls-1-0-tls-1-1/
+√ Would you like to use TypeScript? ... No / Yes
+√ Would you like to use ESLint? ... No / Yes
+√ Would you like to use Tailwind CSS? ... No / Yes
+√ Would you like to use `src/` directory? ... No / Yes
+√ Would you like to use App Router? (recommended) ... No / Yes
+√ Would you like to customize the default import alias (@/*)? ... No / Yes
+Creating a new Next.js app in E:\z Placement\Mosh\Next.js\Projects\car_showcase.
+
+
+PS E:\z Placement\Mosh\Next.js\Projects\car_showcase> npm run dev
+
+
+
+
+
+
+-> A framework for building fast and search engine friendly applications.
+-> build on top of react.
+-> React is just a library for creating interactive UI interface
+-> Next js is a framework.
+framework = libs + tools + conventions
+
+-< Next js includes its own React Router so we don't have to use separate library like react router.
+
+
+in terms of tooling it comes with compiler for transforming and minify JS code and CLI for building and start up application and Node js Runtime for executing Node code.
+1. Compiler (transforming and minify JS code )
+2. CLI (building and start up application )
+3. Node.js Runtime (executing Node code)
+
+
+
+We can write both frontend and backend code within same Next js Project.
+
+
+Static site generation:
+-> We can pre render certain pages/components that have static data when we build or application. we render them just once and serve them whenever they needed.
+
+
+
+
+Next App create Steps: 
+
+-> npx create-next-app@latest ./  (will create app in current folder)
+
+w
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

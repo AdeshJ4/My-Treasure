@@ -80,11 +80,79 @@ need to call an API endpoint that is only accessible to authenticated users.
 what do you mean by "To hash passwords, use bcrypt"
 ---------------------------------------------------
 
-"To hash passwords, use bcrypt" means that when storing passwords in a database, it is important to hash them for security reasons, and the recommended way to do this is using the bcrypt algorithm. Hashing a password means converting the password into a fixed-length string of characters that cannot be easily reversed, making it more difficult for attackers to access user accounts even if they gain access to the password database.
+"To hash passwords, use bcrypt" means that when storing passwords in a database, it is important to hash them for security reasons, 
+and the recommended way to do this is using the bcrypt algorithm. Hashing a password means converting the password into a 
+fixed-length string of characters that cannot be easily reversed, making it more difficult for attackers to access user accounts 
+even if they gain access to the password database.
 
-Bcrypt is a popular and widely-used algorithm for password hashing because it is designed to be slow and resource-intensive, which makes it harder for attackers to crack the hash. It also includes features like salting (adding random data to the password before hashing) and configurable work factors (to adjust the computational cost of hashing), which further increase the security of the hash.
+Bcrypt is a popular and widely-used algorithm for password hashing because it is designed to be slow and resource-intensive, 
+which makes it harder for attackers to crack the hash. It also includes features like salting (adding random data to the password 
+before hashing) and configurable work factors (to adjust the computational cost of hashing), which further increase the security 
+of the hash.
 
-In summary, if you need to store passwords in a database, it is important to hash them using a secure algorithm like bcrypt to protect your users' data from unauthorized access.
+In summary, if you need to store passwords in a database, it is important to hash them using a secure algorithm like bcrypt to 
+protect your users' data from unauthorized access.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

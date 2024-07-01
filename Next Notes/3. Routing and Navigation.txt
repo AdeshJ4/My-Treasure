@@ -1,0 +1,160 @@
+-> Routing in Next js is based on file system.
+
+
+
+Inside app folder create a folder which has the path name.
+like localhost:5000/home
+
+create folder having name "home" and inside that folder create file having name "page.tsx".
+
+nested route : 
+
+localhost:5000/users/new
+
+folder structure : app > users > new > page.tsx
+
+
+to make route publicly accessible we have to add page.tsx file.
+page.tsx is special file next js is looks for
+
+
+special files: 
+1. page.tsx
+2. layout.tsx
+3. loading.tsx
+4. route.tsx
+5. not-found.tsx
+6. error.tsx
+
+
+
+Navigation: 
+
+use Link tag
+
+Properties of Link Tag: 
+
+1. Only download the content of target page.
+2. Pre-fetch links that are in the view-port.
+3. Caches pages on the client. (if you visit the page which is already visited then next will store that page in cache and will not made extra req for that page)
+
+ex: 
+
+import Link from "next/link";
+
+export default function Home() {
+  return (
+    <main>
+      <ul>
+        <li>
+          <Link href="/home">Home</Link>
+        </li>
+        <li>
+          <Link href="/about">About</Link>
+        </li>
+        <li>
+          <Link href="/contact">Contact</Link>
+        </li>
+        <li>
+          <Link href="/users">Users</Link>
+        </li>
+        <li>
+          <Link href="/users/new">New User</Link>
+        </li>
+      </ul>
+    </main>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+Define dynamic routes
+Access route  and query string parameters
+Create layouts
+show loading UIs
+Handle errors
+
+
+
+
+dynamic routes:
+
+dynamic routes are routes with parameter.
+
+
+
+
+query string parameters:
+
+Whenver we have to access query string parameters, we have to receive them in pages and from pages to components.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Programmatic Navigation: 
+
+-> Sometimes we have to redirect or take user to another/new page as a result of clicking on button or submitting form. this is called Programmatic Navigation.
+-> we use useRouter() hook to navigate from one page to another.
+code : 
+
+'use client';
+import { useRouter } from "next/navigation";
+
+const NewUser = () => {
+  const router = useRouter();
+  return (
+    <>
+      <button onClick={() => router.push('/users')} className="btn btn-primary ml-3">Create</button>
+    </>
+  );
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+How to Use localStorage with React Hooks to Set and Get Items:
+
+
+-> Local Storage is one of the easiest ways to store data on the client side.
+-> The best thing about local storage is that your data won't be removed from your browser unless you clear your browser's cache
+-> localStorage is a web storage object that allows JavaScript sites and apps to keep "key-value pairs" in a web browser with no "expiration date".  You can access web storage objects using the localStorage() API.
+-> All kinds of data can be stored in storage objects. This is a built-in hook, so you don't need to import anything. 
+-> The best and most common practice is to store data first in the state and then in storage objects.
+-> This means the data survives page refreshes and even browser restarts.
+-> This indicates that the data stored in the browser will remain even when the browser window is closed
+-> In basic terms, local storage enables developers to store and retrieve data in the browser.
+-> using localStorage as a database for your project is not a good practice, since data will be lost when the user clears the cache.
+-> Developers frequently use localStorage for adding a dark mode feature to an application, saving a to-do item, or persisting a user's form input values, among many other scenarios.
+
+
+
+
+Syntax: 
+// To store data
+localStorage.setItem('data', data);
+
+// To retrieve data
+localStorage.getItem('data');
+
+// To clear a specific item
+localStorage.removeItem('data');
+
+// To clear the whole data stored in localStorage
+localStorage.clear();
+
+key(): Specify a number to help get the localStorage key.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

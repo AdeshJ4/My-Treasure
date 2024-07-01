@@ -1,4 +1,4 @@
--> we used to this package to store configuation setting of our application in json files or environment variables and overridig 
+-> we used to this package to store configuration setting of our application in json files or environment variables and overriding 
 those setting in each environment (dev/prod).
 
 -> for ex in development environment we are going to use different database or mail server

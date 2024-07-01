@@ -1,0 +1,6 @@
+Getting collection f objects: 
+
+
+-> api endpoint to get collection of objects.
+-> route handler is a function that handle the http request.
+-> http req have multiple methods like get, post, put, patch, delete

@@ -1,0 +1,16 @@
+-> loading is special file which you have to create inside a app folder like "loading.tsx" 
+-> once created you don't have to import it anywhere, Next js will automatically take this file code and apply whenever it needed.
+-> when you switched from one file to another file the content of that file will take time to load, so we have to display something while the data is loading so we can display this 
+loading.tsx file content
+-> You can display loading skeleton also.
+
+
+code: 
+import React from 'react'
+const Loading = () => {
+    return (
+        <span className="loading loading-ring loading-md"></span>
+    )
+}
+
+export default Loading

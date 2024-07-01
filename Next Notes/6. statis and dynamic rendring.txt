@@ -1,0 +1,40 @@
+
+Rendering: 
+
+1. client-side 
+2. server-side -> i] Static (at build time)   ii] Dynamic (at request time)
+
+
+
+Static rendering : if we have pages or components which contain static data we can have next js to render them once when we build our application for production.
+so next time those page/components are needed next js is not going to re-render its going to reload content from its cache which is based o file system this is static rendering means 
+rendering at build time.
+
+
+Dynamic rendering which is rendering at request time.  
+
+when we used fetch function to fetch data, next js will store result of fetch in cache so that that route (page) considered as static page. to change this behaviour we have to disable 
+cache for that fetch function.
+
+
+production build:
+npm run build
+npm start
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    274 B          87.3 kB
+├ ○ /_not-found                          871 B          87.9 kB
+├ ƒ /users                               141 B          87.2 kB
+└ ○ /users/new                           141 B          87.2 kB
++ First Load JS shared by all            87 kB
+  ├ chunks/23-a21e28e9b12aca38.js        31.5 kB
+  ├ chunks/fd9d1056-cb422f7581ecfa2f.js  53.6 kB
+  └ other shared chunks (total)          1.86 kB
+

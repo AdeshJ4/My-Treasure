@@ -1,0 +1,3 @@
+-> app folder also called app router, it is a container for rounting system.
+-> In next js our router is based on file system.
+-> we can simply creates file/folders to represent route.

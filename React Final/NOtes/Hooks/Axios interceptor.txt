@@ -1,0 +1,136 @@
+axios.interceptors in Axios allow you to intercept requests or responses before they are handled by then or catch. 
+This capability is useful for globally managing HTTP requests and responses in an application, enabling centralized error handling, request/response transformation, and more.
+
+Why Use axios.interceptors?
+
+Interceptors allow you to set up default configurations for all requests or responses.
+you can set common headers, 
+handle authentication tokens
+configure timeouts universally.
+Every API call that has been made, is passed through this interceptor.
+-> Assume you need to attach a token to every request made, instead of duplicating the token addition logic at every Axios call, you can make an interceptor that attaches 
+a token on every request that is made.
+
+
+-> intercept responses to check for HTTP errors (like 400 or 500 series status codes) and handle them in a single place. 
+-> This avoids duplicating error-handling logic across your application.
+-> Interceptors can modify request data or response data before they are passed to your application. 
+-> This is useful for transforming data formats, logging requests/responses, or implementing custom data processing.
+
+-> Interceptors can be used to automatically inject authentication tokens into outgoing requests or handle expired tokens by refreshing them.
+
+
+Two types of interceptor: 
+
+1. Request Interceptor:
+
+-> The axios.interceptors.request.use function intercepts requests before they are sent.
+-> Here, you can modify the request configuration (config) such as adding headers, logging the request, or handling errors that occur before the request is sent.
+
+example 1:
+If one wants to check what headers are being passed/add any more generic headers, it is available in the config.headers object. For example:
+axios.interceptors.request.use((config) => {
+    config.headers.genericKey = "someGenericValue";
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
+note: In case it's a GET request, the query parameters being sent can be found in config.params object.
+
+
+Example 2 : 
+One can print the configuration object of axios (if need be) by doing (in this case, by checking the environment variable):
+const DEBUG = process.env.NODE_ENV === "development";
+
+axios.interceptors.request.use((config) => {
+    /** In dev, intercepts request and logs it into console for dev */
+    if (DEBUG) { console.info("✉️ ", config); }
+    return config;
+}, (error) => {
+    if (DEBUG) { console.error("✉️ ", error); }
+    return Promise.reject(error);
+});
+
+2. Response Interceptor: 
+
+-> The axios.interceptors.response.use function intercepts responses before they are passed to .then or .catch. 
+-> This allows you to handle the response data (response) or error (error) globally. 
+-> For example, you can log responses, transform data, or handle specific HTTP status codes like 401 (unauthorized) or 500 (server error).
+
+
+example: 
+
+import axios from 'axios';
+
+const axiosInstance = axios.create({
+  header:{
+    "Content-Type": "application/json"  ,
+    Accept: "*/*",
+    Authorization: "Bearer your_token_here" 
+  }
+})
+
+// Add a request interceptor
+axios.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    console.log('Request sent:', config);
+    // Modify headers, add tokens, etc.
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
+// Add a response interceptor
+axios.interceptors.response.use(
+  function (response) {
+    // Do something with successful response data
+    console.log('Response received:', response);
+    return response;
+  },
+  function (error) {
+    // Do something with response error
+    console.error('Response error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Usage of axios with interceptors
+axios.get('https://api.example.com/data')
+  .then(function (response) {
+    // Handle success
+    console.log('Data:', response.data);
+  })
+  .catch(function (error) {
+    // Handle error
+    console.error('Request failed:', error);
+  });
+
+
+
+
+
+
+
+
+
+
+
+// 
+
+
+
+
+
+
+
+-> Axios is a promise-based HTTP Client for node.js and the browser.
+-> It is isomorphic (= it can run in the browser and nodejs with the same codebase).
+-> On the server-side it uses the native node.js http module, while on the client (browser) it uses XMLHttpRequests
+
+
+
