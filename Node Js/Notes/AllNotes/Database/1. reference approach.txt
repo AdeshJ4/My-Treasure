@@ -42,7 +42,7 @@ see updated author.
 is inside a course document.
 -> However with this approach tomorrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple 
 course documents that need to updated and if our update operation doesn't complete successfully it is possible that we have some 
-documents which are not updated. so will end up with unconsistent data.
+documents which are not updated. so will end up with un consistent data.
 
 Summary : 
 -> 1st approach gives us consistency 
@@ -58,89 +58,142 @@ Summary :
 
 
 code : 
+
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  try {
-    const connect = await mongoose.connect("mongodb://127.0.0.1/playGround");
-    console.log("Database is connected..");
-    console.log("Host Name: ", connect.connection.host);
-    console.log("DB Name: ", connect.connection.name);
-  } catch (err) {
-    console.log("Database is not connected");
-    console.log("DB Error: ", err.message);
-    process.exit(1);
-  }
+    try {
+        const connect = await mongoose.connect("mongodb://127.0.0.1:27017/mongoDB");
+        console.log("Database Connected", connect.connection.name);
+    } catch (err) {
+        console.log(err.message);
+    }
 };
-
 connectDB();
 
-const Course = mongoose.model(
-  "Course",
-  new mongoose.Schema({
-    courseName: String,
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Author",
-    },
-  })
-);
-
 const Author = mongoose.model(
-  "Author",
-  new mongoose.Schema({
-    name: String,
-    phone: String,
-    email: String,
-  })
+    "Author",
+    new mongoose.Schema({
+        name: String,
+        age: Number,
+    })
 );
 
-async function createAuthor(name, phone, email) {
-  const author = await Author.create({
-    name,
-    phone,
-    email,
-  });
-  console.log(author);
+const Customer = mongoose.model(
+    "Customer",
+    new mongoose.Schema({
+        name: String,
+        age: Number,
+    })
+);
+
+const Book = mongoose.model(
+    "Book",
+    new mongoose.Schema({
+        title: String,
+        author: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Author",
+        },
+        fans: [{ type: mongoose.Schema.Types.ObjectId, ref: "Customer" }],
+    })
+);
+
+async function createCustomer(name, age) {
+    try {
+        const customer = await Customer.create({ name, age });
+        console.log(customer);
+    } catch (err) {
+        console.log(err.message);
+    }
+};
+
+// createCustomer('Adesh Jadhav', 23);
+// createCustomer('Swarnima Jadhav', 27);
+// createCustomer('Pramod Jadhav', 51);
+// createCustomer('Rohini Jadhav', 50);
+// createCustomer('Suvrna Jadhav', 74);
+
+async function createAuthor(name, age) {
+    try {
+        const author = await Author.create({ name, age });
+        console.log("author", author);
+    } catch (err) {
+        console.log(err.message);
+    }
 }
-// createAuthor('Adesh', '9527370288', 'adejad1234@gmail.com');
-// createAuthor('Mosh', '7721031355', 'mosh1234@gmail.com');
+// createAuthor("J.R.R. Tolkien", 87);
+// createAuthor("J.K. Rowling", 70);
+// createAuthor("George R.R. Martin", 60); 
+// createAuthor("Patrick Rothfuss", 99); 
+// createAuthor("Brandon Sanderson", 45); 
 
 
-async function createCourse(courseName, authorId) {
-  const course = await Course.create({
-    courseName,
-    author: authorId,
-  });
-
-  console.log(course);
-}
-// createCourse('Node Course', '659cdcd840ba68543b42a4b7');
-// createCourse('React Course', '659cdcd840ba68543b42a4b6');
-// createCourse('MongoDB Course', '659cdcd840ba68543b42a4b6');
-// createCourse('MYSQL Course', '659cdcd840ba68543b42a4b6');
-
-
-async function listCourses() {
-  const courses = await Course.find().populate("author");
-  // .populate("author", "name -_id");
-  // .select({ name: 1, author: 1, category: 1, _id: 0 });
-  console.log(courses);
+async function createBook(title, author, fans) {
+    try {
+        const book = await Book.create({ title, author, fans });
+        console.log(book);
+    } catch (err) {
+        console.log(err.message);
+    }
 }
 
+// createBook("The Hobbit", "668e3aa5c7ff80fc615f1043", ["668e3aa5c7ff80fc615f103e", "668e3aa5c7ff80fc615f103f"])
+// createBook("Harry Potter and the Sorcerer's Stone", "668e3aa5c7ff80fc615f1044", ["668e3aa5c7ff80fc615f1042", "668e3aa5c7ff80fc615f1041"])
+// createBook("A Game of Thrones", "668e3aa5c7ff80fc615f1045", ["668e3aa5c7ff80fc615f103f", "668e3aa5c7ff80fc615f103e"])
+// createBook("The Name of the Wind", "668e3aa5c7ff80fc615f1046", ["668e3aa5c7ff80fc615f1040", "668e3aa5c7ff80fc615f1041"])
 
 
-// checking changes of author are visible in courses or not. and changes are visible
-async function changeAuthorEmail() {
-  try {
-    const author = await Author.findByIdAndUpdate("659cdcd840ba68543b42a4b6", {
-      name: "Adesh",
-      phone: "9527370288",
-      email: "jadhavadesh13061@gmail.com",
-    }, {new : true});
-
-    console.log(author);
-  } catch (err) {
-    console.log(err.message);
-  }
+async function getBooks() {
+    try {
+        const books = await Book.find().populate("author").populate("fans");
+        console.log(books);
+    } catch (err) {
+        console.log(err.message);
+    }
 }
+getBooks();
+
+async function getAuthors() {
+    try {
+        const authors = await Author.find();
+        console.log(authors);
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+async function getCustomers() {
+    try {
+        const customers = await Customer.find();
+        console.log(customers);
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+
+async function deleteAuthorBook() {
+    try {
+        const author = await Author.deleteMany({});
+        const books = await Book.deleteMany({});
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+async function updateAuthor(author) {
+    try {
+        const a = await Author.findByIdAndUpdate(author.id, author, { new: true });
+        if (!a) console.log('Author Not found');
+        console.log('author', a);
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+// updateAuthor({
+//   id: "668e3aa5c7ff80fc615f1043",
+//   name: "J.R.R. Tolkien",
+//   age: 100,
+// });
+

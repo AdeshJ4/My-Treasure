@@ -73,7 +73,7 @@ db.product.drop()
 db.stats():
 ----------
 
-stats is a utility method provided by the shell which output the some well stasts about this database.
+stats is a utility method provided by the shell which output the some well stats about this database.
 
 
 
@@ -89,10 +89,10 @@ use shop
 How to get type of Data : 
 -----------------------
 
-db.prod.findOne({name: "Adesh"}).age
+typeof db.prod.findOne({name: "Adesh"}).age
 	-> number
 
-db.prod.findOne({name: "Adesh"}).name
+typeof db.prod.findOne({name: "Adesh"}).name
 	-> string
 
 
@@ -101,8 +101,8 @@ Select Data :
 -------------
 
 1] Select All Data :
-   find() return cursor object and not all the documents of that collection. so if you have millions of documents then it will return jsut first 10 to 20 
-   documents. if you want all documnets then type find().toArray(), but agin it is not optimal.
+   find() return cursor object and not all the documents of that collection. so if you have millions of documents then it will return 
+   just first 10 to 20 documents. if you want all documents then type find().toArray(), but agin it is not optimal.
 
 
 1] find() method:
@@ -118,13 +118,27 @@ db.products.find().toArray();
 
 
 2] forEach() method 
-   this method simply simply allows you to write a code to do somthing on every element that is in your databse on every document you got in there.
-	
+The forEach() method in MongoDB is used to iterate over the documents in a cursor. 
+It allows you to execute a function for each document in the cursor, making it convenient for processing or manipulating each 
+document individually.	
+code: 
+db.collection.find({ name: "Adesh" }).forEach(function(doc) {
+  printjson(doc);
+});
 
 
 2] Select Unique Data : 
 
-db.flightData.find({_id : "txl-1"});
+RTK-DB> db.customers.find({_id: ObjectId("6673aa8ac4e773f90917ce0e")})
+[
+  {
+    _id: ObjectId("6673aa8ac4e773f90917ce0e"),
+    name: 'Adesh Jadhav',
+    phone: '7721031355',
+    email: 'adesh@gmail.com',
+    __v: 0
+  }
+]
 
 
 
@@ -198,9 +212,6 @@ db.products.insertOne(
 
 
 
-
-
-
 Delete Data :
 -------------
 
@@ -209,8 +220,7 @@ Delete Data :
 db.flightData.deleteMany({});
 
 
-
-2] Delete all documents whose disance = 14000
+2] Delete all documents whose distance = 14000
 
 db.flightData.deleteMany({distance : 14000})
 
@@ -247,13 +257,13 @@ db.flightData.updateOne({_id: "txl-1"}, {$set : {distance : 12000}});
 
 3] Update Many documents - Add a field in all documents
 
-db.flightData.updatemany({}, {$set: {distance : 12000}});
+db.flightData.updateMany({}, {$set: {distance : 12000}});
 
 
 
 4] Update Many documents - Update a field in all documents
 
-db.flightData.updatemany({}, {$set: {distance : 14000}});
+db.flightData.updateMany({}, {$set: {distance : 14000}});
 
 
 
