@@ -1,0 +1,80 @@
+Choosing between HTTPS and SSH for interacting with your Git repository depends on your specific needs and preferences. Here are the differences and considerations for each:
+
+### HTTPS
+**Advantages:**
+1. **Ease of Setup**: HTTPS is generally easier to set up, especially for beginners. You don't need to manage SSH keys.
+2. **Accessibility**: Since HTTPS uses the standard port 443, it's less likely to be blocked by firewalls, making it more accessible from various networks.
+3. **Password-based Authentication**: It uses username and password for authentication, which can be simpler for users who are not comfortable with SSH keys.
+
+**Disadvantages:**
+1. **Repeated Authentication**: You might need to enter your username and password frequently unless you use a credential manager.
+2. **Less Secure**: If your password is intercepted or compromised, your repository is at risk.
+
+### SSH
+**Advantages:**
+1. **Security**: SSH keys are generally considered more secure than passwords. Once set up, SSH authentication is password-less, using cryptographic keys instead.
+2. **Convenience**: Once you have SSH keys set up, authentication is automatic and seamless, without the need to enter passwords.
+3. **Automation**: Better suited for automated scripts and CI/CD pipelines due to the key-based authentication.
+
+**Disadvantages:**
+1. **Setup Complexity**: SSH requires generating and managing SSH keys, which can be slightly more complex for beginners.
+2. **Firewall Issues**: SSH uses port 22, which might be blocked by some firewalls, making it less accessible in restricted environments.
+
+### Recommendations
+- If you're new to Git or prefer a simpler setup process, **HTTPS** is a good starting point.
+- If you prioritize security and plan to work with automation or CI/CD pipelines, **SSH** is the better option.
+
+
+
+location of SSH key : C:\Users\user\.ssh
+
+
+id_ed25519: This is your private SSH key.
+id_ed25519.pub: This is your public SSH key.
+known_hosts: This file stores the SSH server fingerprints that you have connected to.
+known_hosts.old: This is a backup of the known_hosts file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

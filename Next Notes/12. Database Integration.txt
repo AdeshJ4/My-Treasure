@@ -1,0 +1,164 @@
+How to connect Next js application to database using popular library called prisma.
+
+-> setting up Prisma
+-> Defining Data models.
+-> Creating migrations
+-> Performing CRUD operations.
+
+
+
+Installing MYSQL 
+
+
+Setting up Prisma: 
+
+-> Prisma is an open-source ORM (Object-Relational Mapping) tool for Node.js and TypeScript that provides a type-safe way to interact with a database.
+-> It simplifies database access, offers a powerful querying API, and ensures compile-time type safety, which helps prevent runtime errors.
+-> Prisma is a modern DB toolkit to query, migrate and model your database (https://prisma.io)
+-> Prisma is popular ORM(object relation mapper)
+-> we use ORM to work with databases.	
+-> ORM is a tool which sits between database and application.
+-> Sends queries to database and get data back or use it to create update delete data.
+
+Key Features of Prisma: 
+
+1. Type Safety: Prisma generates TypeScript types based on your database schema. This ensures that you get compile-time validation for your database queries.
+2. Auto-generated Queries: Prisma automatically generates queries for CRUD operations based on your schema. This saves time and reduces the potential for errors.
+3. Database Migrations: Prisma includes a powerful migration system that allows you to manage your database schema changes.
+4. Prisma Client: This is a type-safe database client that you can use in your application to interact with your database. It replaces traditional SQL queries with a more intuitive API.
+
+Components of Prisma: 
+1. Prisma Schema: This is a central configuration file (schema.prisma) where you define your data model, data source (database connection), and generator (Prisma Client).
+2. Prisma Client: This is the auto-generated and type-safe query builder for your database
+3. Prisma Migrate: This is a database migration tool to manage and deploy schema changes.
+4. Prisma Studio: This is a GUI to explore and interact with your database.
+
+Benefits of Using Prisma: 
+1. Developer Productivity: Prisma simplifies database interactions with a type-safe API, reducing the time spent writing and debugging SQL queries.
+2. Type Safety: The auto-generated types ensure that your database queries are type-safe, reducing runtime errors.
+3. Migration System: Prisma’s migration system helps manage schema changes in a controlled and versioned manner.
+4. Ecosystem Integration: Prisma integrates well with modern JavaScript/TypeScript frameworks like Next.js, NestJS, and others.
+
+
+
+
+step 1: Download extension for prism in vs code.
+step 2: npm i prisma
+step 3: prisma comes with command line interface that we can work with using npx. so just in terminal enter "npm prisma"
+step 4: enter "npx prisma init" to set up prisma.
+go to google and search "prisma connection string", you will see this link "Connection URLs (Reference) | Prisma Documentation" or simply visit this link "https://www.prisma.io/docs/orm/reference/connection-urls#format" and after that select "MySql" and then make changes as mentioned in "Connection details" link.
+ 
+
+make changes in bellow files according to your database: 
+1. schema.prisma: 
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+2. .env file (automatically generated)
+
+DATABASE_URL="mysql://root:Adesh@2001@localhost:3306/nextapp"
+
+
+
+Defining the models : 
+=====================
+
+-> now we are going to define data or application modal these models are Entities of our applications domain. for ex. in Ecommerce application we have entities or models like products, 
+customers , shopping cart, orders and so on.
+-> Run this command after defining model : "npx prisma format"
+-> ex.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  name      String
+  followers Int     @default(0)
+  isActive  Boolean @default(true)
+}
+
+
+
+
+
+
+Creating Migrations: 
+====================
+
+-> As we define or change our model we have to create migration, this migrations are used to keep our database schema in sync with prisma schema.
+-> if you use no-sql dbs like mongo then run : npx prisma db push
+-> if you use sql dbs like MySQL, postgreydb then run : npx prisma migrate dev 
+
+so basically whenever we create a new table or make any changes in existing table or db like created new table or added new column in existing table then we have to create migration to keep track of changes we have made inside db.do basically run these tw commands: 
+1. npx prisma format  
+2. npx prisma migrate dev
+
+
+
+
+
+Creating Prisma Client : 
+
+-> to work with our database first we need to create a prisma client.
+-> So anytime we define or change the model and then create a migration prisma cli automatically generates or regenerate this PrismaClient. its always sync with our modal.
+-> we can create this object and export it as a default object from this module.
+ex: 
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+export default prisma;
+
+-> Technically we can create this prisma client anywhere in our application, but as a best practice we should make sure that only single instance of this running in our application
+-> just add this code in your clients.ts file > 
+
+import { PrismaClient } from '@prisma/client'
+const prismaClientSingleton = () => {
+  return new PrismaClient()
+}
+declare const globalThis: {
+  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
+} & typeof global;
+const prisma = globalThis.prismaGlobal ?? prismaClientSingleton()
+export default prisma
+if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

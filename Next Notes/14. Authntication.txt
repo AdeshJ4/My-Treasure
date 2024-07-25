@@ -1,0 +1,108 @@
+-> Setting up Next Auth (powerful and popular Authentication library)
+-> Configuring the google provider so that peoples can sign in with google account.
+-> Authentication sessions how they work and how we can access them on client and server.
+-> Protecting our routes so that they only accessible to authenticate users.
+-> Database Adaptors. How we can use them to store data in our databases.
+-> Configuring the credentials Provider to allow user to sign in with email and password.
+
+
+
+
+
+
+
+
+1. Setting Up Next Auth : 
+
+-> to set up authentication we are going to use popular library called NextAuth.js.
+-> visit : https://next-auth.js.org/
+-> Install this package: npm install next-auth
+
+NEXTAUTH_SECRET :that next auth will use to encrypt and signed the authentication keys.
+run this command to get NEXTAUTH_SECRET value : openssl rand -base64 32
+so final will look like this and save it inside env file: 
+NEXTAUTH_SECRET=0xMIxLw06ipSWLW/IFv3TzzHWuXre/v4EEYPcWADJiA=
+
+
+
+
+
+2. Configuring the google provider : 
+
+-> 
+
+
+
+Understanding Authentication Sessions:
+
+-> When the user log in Next Auth creates Authentication session for that user.
+-> by default that session represent as JSON web token.
+to see web token go to : developer tool(ctrl + c) => Application -> C ookies -> next-auth.session-token
+-> Server uses Next Auth and Next Auth Knows how to decode this.
+
+
+
+Accessing Sessions on the Client: 
+
+-> To access Authentication sessions on the client go to the layout.tsx.
+-> wrap whole content inside session provider. 
+-> This is session provider internally use react context to pass session down the tree.
+->  	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

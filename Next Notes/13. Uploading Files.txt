@@ -1,0 +1,110 @@
+How to allow a user to upload files in your next js application.
+
+Choosing cloud Platform: 
+=======================
+
+-> to store files that user upload we have to use cloud platform.
+ex. Amazon S3, Google Cloud, Microsoft Azure, Cloudinary
+
+-> Cloudinary have better integration with Next js.
+support number react components 
+
+
+Setting up with Cloudinary: 
+===========================
+
+-> login to Cloudinary : https://console.cloudinary.com/pm/c-8a4a422700526667d9320948d6a8a1/developer-dashboard
+-> then install in vs code terminal : npm i next-Cloudinary
+
+-> This library brings bunch of react components that we are going to drop into our project for uploading and viewing files.
+
+-> then go to google and search : next Cloudinary : https://next.cloudinary.dev/installation
+then follow that steps.
+like adding NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="dm3nigj8n" inside env file.
+
+
+Uploading Files: 
+================
+-> for uploadPreset='iyge4qmn', you have to visit : 
+setting > Upload > Upload presets > Add upload preset > Signing Mode(Unsigned) > Save
+-> add following code inside a component which require file upload functionlity.
+code : 
+"use client";
+import React from 'react'
+import { CldUploadWidget } from 'next-cloudinary'
+const UploadPage = () => {
+    return (
+        <CldUploadWidget uploadPreset='iyge4qmn'>
+            {({ open }) => <button onClick={() => open()} className='btn btn-primary'>Upload</button>}
+        </CldUploadWidget>
+    )
+}
+export default UploadPage
+
+-> To check uploaded files/images: 
+visit this link: https://console.cloudinary.com/console/c-8a4a422700526667d9320948d6a8a1/media_library/search?q=&view_mode=mosaic
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

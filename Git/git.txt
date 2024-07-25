@@ -1,0 +1,258 @@
+difference between SSH and HTTPS
+
+git init
+git add .
+git add index.js  ->  now tracking this file, you can commit this file changes
+git commit -m "msg"
+git commit -a -m "msg"
+git show 005c00c
+git blame index.js   -> it will display each line of index.js along with the commit hash, author, and timestamp of the last change made to that line.
+
+git revert  
+git reset 
+
+publish branch -> git push origin b1
+
+
+
+git push origin main     or  git push origin main --force
+git pull origin main
+
+
+================================================================================================================================================================================
+
+Branch tracking : 
+
+Branch tracking in Git refers to the concept where a local branch is linked or "tracked" to a corresponding branch on a remote repository. This tracking relationship allows Git to understand which remote branch your local branch is associated with, making commands like git pull and git push more intuitive and less cumbersome.
+***
+git branch --set-upstream-to=origin/branch_name
+***
+
+Simplified Commands: When a local branch is tracking a remote branch, you can use simpler commands like git pull and git push without specifying the remote or branch name.
+Automatic Merge Information: When you pull changes, Git knows which remote branch to pull from and merge into your current branch.
+
+
+
+===================================================================================================================================================================================
+
+Question : what is origin ?
+origin: This is the default name for the remote repository.
+
+===================================================================================================================================================================================
+
+Question : Your branch is ahead of 'origin/main' by 1 commit.
+
+$ git log --oneline 
+9168177 (HEAD -> main) removed main() calling and extra specing
+c9fec13 (origin/main) Added Company function
+bb1b886 Added new function called greeting()
+fd86d36 Added main function
+
+$ git status
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working tree clean
+
+explanation: on origin main branch you have three commits, but on local main branch you have 4 commits. so you have 1 extra commit that have to push on origin/main.
+
+
+===================================================================================================================================================================================
+
+
+Q]  Explain " git merge" && "git fetch"  && "git pull" && "git push"
+
+
+1. git fetch: 
+-> git fetch downloads commits, files, and refs from a remote repository into your local repository.
+-> Unlike git pull, it does not automatically merge the changes into your current branch.
+
+
+
+2. git merge: 
+-> git merge is used to combine the changes from one branch into another branch. 
+-> When you merge branches, Git takes the commits from the source branch and applies them to the target branch, combining the histories.
+***
+git merge <branch-name>
+***
+Example:
+If you are on the main branch and you want to merge changes from feature-branch into main, you would use:
+***
+git merge feature-branch
+***
+Scenarios to Use git merge:
+-> When you’ve completed a feature in a branch and want to incorporate those changes into another branch, like main.
+
+===================================================================================================================================================================================
+
+Question : what this command  do : git push origin main
+
+-> The command git push origin main is used to upload the changes from your local main branch to the main branch on the remote repository named origin.
+-> If you have committed changes in your local main branch that are not present on the remote main branch, these commits will be uploaded
+
+what i have to check before running this command ?
+
+1. Commit Your Changes:
+
+Ensure that all your changes are committed. If you have uncommitted changes, you can commit them using:
+***
+git add .
+git commit -m "Your commit message"
+***
+
+2. Check Branch Name:
+
+Verify that you are on the correct branch, main, if that's the branch you intend to push:
+This command will highlight the current branch with an asterisk (*).
+***
+git branch
+***
+
+3. Review Commit History
+
+Review your commit history to ensure all changes are as expected. Use:
+***
+git log --oneline
+***
+This allows you to see a list of commits and their messages. Make sure that all the commits you intend to push are included and correct.
+
+
+4. Pull Latest Changes:
+
+Ensure that your local branch is up-to-date with the remote branch to avoid conflicts:
+***
+git pull origin main
+***
+This command fetches the latest changes from the remote main branch and merges them into your local main branch. 
+If there are conflicts, resolve them before pushing.
+
+
+5. Check for Conflicts
+
+If you've pulled changes from the remote and encountered conflicts, resolve them. Use:
+***
+git status
+***
+This command shows the status of your working directory and staged changes. It helps identify if there are any conflicts that need resolution.
+
+===================================================================================================================================================================================
+
+
+Question : git reset
+git reset --hard c9fec13 (revert commit) -> all commits after this commit will disappear
+
+$ git log --oneline
+005c00c (HEAD -> main, origin/main) Added Addition Function
+bbbab42 Added stack function
+c9fec13 Added Company function 
+bb1b886 Added new function called greeting()
+fd86d36 Added main function
+
+$ git reset --hard  c9fec13
+HEAD is now at c9fec13 Added Company function
+
+$ git log --oneline
+c9fec13 (HEAD -> main) Added Company function
+bb1b886 Added new function called greeting()
+fd86d36 Added main function
+
+$ git push origin main --force
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To github.com:AdeshJ4/anime.git
+ + 005c00c...c9fec13 main -> main (forced update)
+
+
+===================================================================================================================================================================================
+
+
+Question : git revert 
+
+-> The git revert command is used to create a new commit that undoes the changes introduced by a specific previous commit
+-> This is a safe way to "undo" changes because it doesn't rewrite history, unlike git reset. 
+-> Instead, it creates a new commit that reverses the changes made by the specified commit, preserving the commit history and making it clear that a particular change was reversed.
+
+$ git log --oneline
+db9cc45 Added Addition function
+227bd6b remove main() calling
+fd86d36 (origin/main) Added main function
+
+$ git revert 227bd6b
+
+$ git log --oneline
+e9bfe37 (HEAD -> main) Revert "remove main() calling"
+db9cc45 Added Addition function
+227bd6b remove main() calling
+fd86d36 (origin/main) Added main function
+
+===================================================================================================================================================================================
+
+Question : How to delete branch from local and server.
+
+1. Delete the local branch:
+
+i] (safe delete):
+*** 
+git branch -d b1  
+***
+This command deletes the local branch only if it has been fully merged with your current branch or other branches. If it hasn't been merged, Git will refuse to delete it to prevent accidental loss of unmerged work.
+
+ii] (force delete):
+***
+git branch -D b1
+***
+This command forces the deletion of the local branch, regardless of whether it has been merged. Use this with caution, as it can lead to the loss of unmerged changes.
+
+
+2. Delete the remote branch:
+***
+git push origin --delete b1
+***
+
+===================================================================================================================================================================================
+
+
+Question : how to publish the branch 
+
+currently on server we don't have branch called b1. after running bellow command new branch called origin b1 will be created.
+***
+git push -u origin b1               // -u (or --set-upstream):
+***
+
+
+===================================================================================================================================================================================
+
+
+Question : merge code from one branch to another
+
+PR: 
+
+-> push your code in your branch 
+-> then go inside Pull requests tab of github
+-> click on New pull request tab
+-> check your code and create pull request.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
