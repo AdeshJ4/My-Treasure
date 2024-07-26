@@ -236,13 +236,82 @@ PR:
 
 
 
+===================================================================================================================================================================================
 
 
 
 
+git stash: 
+
+***
+git stash -u       // to stash the changes
+git stash apply    // to apply stash again. does not remove stash just applied.
+git stash pop	   // to apply and remove the latest stash. same as git stash apply but it removed that stash.
+git stash list     // list all stashes
+***
+
+-> Stashing changes is useful in various situations when you need to temporarily set aside your uncommitted work. 
+
+Here are some common scenarios where you might want to use git stash:
+
+1. Switching Branches: 
+-> If you need to switch branches but have uncommitted changes that you don't want to commit yet, stashing can help:
+Scenario: You're working on a feature branch and suddenly need to switch to another branch to fix a bug or review code.
+Solution: Use git stash to save your uncommitted changes, switch branches, and then use git stash apply or git stash pop to reapply the changes when you switch back.
+
+2. Pulling Latest Changes
+-> Before pulling the latest changes from the remote repository, it's a good practice to ensure your working directory is clean. 
+Scenario: You need to pull the latest changes from the remote branch but have some work in progress.
+Solution: Use git stash to temporarily save your changes, then git pull to update your branch. After pulling, you can reapply your stashed changes.
 
 
 
+================================================================================================================================================================================
+
+
+incoming changes  &&  current changes: 
+
+1. Current Changes: 
+-> "Current changes" refer to the modifications that you have made locally in your working directory or branch. These changes have not yet been incorporated into the remote repository or another branch. They represent your work-in-progress and can include:
+-> Uncommitted Changes: Modifications you have made in your working directory but haven't committed yet. These are the changes you see when you run git status and they are listed as modified, new (untracked), or deleted files.
+-> Committed Changes: Changes you have committed to your local branch that may not yet be pushed to the remote repository or merged into another branch.
+-> Examples of Current Changes:
+Editing a file and not yet committing those edits.
+Adding new files that are not yet tracked by Git.
+Committing changes to your local branch but not pushing them to the remote.
+
+
+2. Incoming Changes
+-> "Incoming changes" are modifications made in the remote repository or in another branch that are not yet present in your current branch. These changes are typically discovered when you perform operations like fetching, pulling, or merging, and they can include:
+-> Remote Changes: Updates in the remote repository that you haven't yet pulled into your local branch. For example, if someone else has pushed new commits to the main branch on the remote repository, these are considered incoming changes for your local main branch.
+-> Other Branch Changes: Changes from another branch that you want to merge into your current branch. For instance, if you're working on feature-branch and want to merge updates from main, the changes in main are incoming relative to your feature-branch.
+-> Examples of Incoming Changes:
+A colleague pushes new commits to the main branch, and you want to update your local main branch.
+Changes made in a feature branch that you want to merge into the main development branch.
+
+
+common example : 
+
+when you stash your changes in order to take pull from main branch, after taking pull you apply your stash. then if conflicts occurs then you code comes under "incoming Changes" because we apply stash after pull so incoming is our stash changes.
+
+in case if you commit you changes and not stash and you pull from main/parent then if conflicts occur then your changes comes under "current changes". because in this case incoming changes are from parent. if you accepts current changes then in source control yo can see message like this "Merge branch 'main' of github.com:AdeshJ4/anime into b1", or you can run this command in your terminal "git status" and ou will see this message:
+ ***
+Admin@DESKTOP-ADESH MINGW64 ~/Desktop/anime (b1|MERGING)
+$ git status
+On branch b1
+Your branch is ahead of 'origin/b1' by 1 commit.
+  (use "git push" to publish your local commits)
+
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+****
+in this case in terminal you have to use "git commit" to conclude merge, just copy the message from source control and paste it like bellow: 
+***
+Admin@DESKTOP-ADESH MINGW64 ~/Desktop/anime (b1|MERGING)
+$ git commit -m "Merge branch 'main' of github.com:AdeshJ4/anime into b1"
+[b1 cd88c60] Merge branch 'main' of github.com:AdeshJ4/anime into b1
+***
+after that push to your branch.
 
 
 
