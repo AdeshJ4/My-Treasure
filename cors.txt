@@ -1,0 +1,94 @@
+What is CORS?
+
+
+-> CORS helps control which websites can communicate with your server, enhancing security.
+-> Typically, you only need to enable CORS (Cross-Origin Resource Sharing) in production when you’re making requests to your backend from a different domain or origin. 
+if (config.get("NODE_ENV") === "production") {
+    app.use(cors());
+    console.log("cors is enabled.");
+  }
+
+
+
+Imagine you have two houses: your house (the website you're on) and your friend's house (another website).
+Normally, you can do whatever you want in your own house, like playing with your toys (data). 
+But sometimes, you might want to go to your friend's house to borrow a toy. 
+Before you can do that, your friend's parents need to know if you're allowed to borrow toys from their house.
+
+In the world of websites, CORS is like those parents. It's a way to control if one website (your house) is allowed to talk to another website (your friend’s house) and borrow information (data).
+
+
+1. Same Origin (No CORS Needed):
+You’re playing in your own house.
+Example: Your website (https://mywebsite.com) talks to its own server (https://mywebsite.com/api). No permission needed—everything's in the same place.
+
+2. Different Origin (CORS Needed):
+You want to borrow a toy from your friend's house.
+Example: Your website (https://mywebsite.com) wants to get data from another website (https://friendwebsite.com/api). Now, the friend's parents (CORS) need to give permission first.
+
+
+Real-World Example:
+
+1. Playing in Your House (No CORS):
+Your website https://shop.com fetches product details from https://shop.com/api. It’s your own house, so no permission check is needed.
+
+2. Visiting a Friend’s House (CORS Check Needed):
+Your website https://shop.com wants to get weather data from https://weather.com/api.
+weather.com (friend’s house) checks if shop.com is allowed.
+If weather.com says, "Yes, you’re allowed," your website gets the data.
+If weather.com says, "No, you’re not allowed," your website won’t get the data, and you'll see an error.
+
+
+
+Why Do We Need CORS?
+
+Safety: Just like parents set rules to keep you safe, CORS rules help keep websites safe by controlling who can access what.
+Privacy: It prevents bad websites from sneaking into your friend’s house and taking toys (data) without permission.
+
+
+
+CORS is like a parent’s permission system between websites. It decides if one website can borrow data from another, keeping everything safe and under control!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

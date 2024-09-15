@@ -1,0 +1,107 @@
+JavaScript Cookies vs Local Storage vs Session Storage
+
+-> three ways to store data inside a web browser.
+-> any cookies, local storage, web browser that saves on user browser for ex chrome will not be available on the another browser for ex firefox on their same computer. in nutshell all of these storage are browser independent.
+-> also user not share cookies and local storage between them so if you set the local storage for a certain user none of the other user that site will be able to see that because its stored  on that users computer. it really meant for storing information related to a single user. you can delete it these storage any time.
+-> cookies are older than other storage. also they are supported by older browsers.
+
+
+
+1. Cookie 
+-> capacity : 4kb
+-> Browser : HTML 4 / HTML 5
+-> Accessible from : Any Window
+-> Expires: manually set
+-> Storage location : Browser and server
+-> Sent with request: Yes
+
+2. local storage
+-> capacity : 10 MB
+-> Browser : HTML 5
+-> Accessible from : Any Window
+-> Expires: Never
+-> Storage location : Browser only
+-> Sent with request: No
+
+2. Session storage
+-> capacity : 5 MB
+-> Browser : HTML 5
+-> Accessible from : Same tab
+-> Expires: on tab close
+-> Storage location : Browser only
+-> Sent with request: No
+
+
+
+
+Choosing the Right Storage Method:
+Cookies: Best for small pieces of data that need to be sent with every request to the server, such as authentication tokens or session IDs.
+localStorage: Suitable for storing data that needs to persist between page reloads and browser restarts, like user preferences or application state.
+sessionStorage: Ideal for temporary data that should only be available for the duration of a single session, like unsaved form data.
+
+1. User Preferences:
+Types of Data:
+Example: theme: 'dark'
+Example: language: 'en-US'
+Example: viewMode: 'grid'
+Example: notifications: { email: true, sms: false }
+Example: privacy: { dataSharing: 'minimal' }
+
+
+
+2. Application State:
+Types of Data:
+Form Data: Data entered into forms that the user may not want to lose if they navigate away.
+Example: formData: { name: 'John', email: 'john@example.com' }
+User Activity: Current activity or progress within the application (e.g., the current page or step in a multi-step form).
+Example: currentPage: 3
+Dynamic Content: State related to content being displayed or interacted with, like filters or search results.
+Example: searchFilters: { category: 'books', priceRange: '10-50' }
+Session Information: Data specific to the current session that doesn’t need to be persisted beyond the session.
+Example: sessionData: { lastLogin: '2024-09-12T08:00:00Z' }
+
+eg. 
+// Storing current page number in sessionStorage
+sessionStorage.setItem('currentPage', '3');
+// Retrieving current page number from sessionStorage
+const currentPage = sessionStorage.getItem('currentPage');
+// Storing theme preference in localStorage
+localStorage.setItem('theme', 'dark');
+// Retrieving theme preference from localStorage
+const theme = localStorage.getItem('theme');
+
+
+
+
+
+
+
+
+
+
+localStorage.setItem("name", "Anurag");
+console.log('Name stored inside localstorage : ', localStorage.getItem('name'));
+localStorage.removeItem('name')
+
+
+
+sessionStorage.setItem('Bike', 'MT-15');
+sessionStorage.setItem('user', JSON.stringify({
+  fname: 'Adesh',
+  age: 22
+}));
+console.log(JSON.parse(sessionStorage.getItem('user')));
+sessionStorage.removeItem('Bike')
+
+
+
+function setCookie(name, value, minutes){
+  const date = new Date();
+  date.setTime(date.getTime() + minutes * 60 * 1000); 
+  const expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${name}=${value}; ${expires}; path='/cleint'`
+  // document.cookie = 'name=kyal'
+}
+setCookie('name', 'adesh', 1);
+setCookie('age', 22, 5);
+console.log(document.cookie);   // age=22; name=adesh  (string)

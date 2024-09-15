@@ -1,0 +1,116 @@
+What is a Domain?
+
+Imagine the internet is like a giant city, and every website is like a house in that city. Now, just like every house has an address (like "123 Street Name") so people can find it, every website has an address too. That address is called a **domain**.
+
+Domains Are Like Addresses:
+- Just like you need an address to visit a friend's house, you need a domain to visit a website.
+- A domain tells your computer exactly where to go to find that website.
+
+Examples of Domains:
+- amazon.in: This is the address for Amazon's website in India.
+- flipkart.com: This is the address for Flipkart’s website.
+
+So, when you type **amazon.in** or **flipkart.com** in your browser, it's like telling your computer, "Hey, take me to this house (website)!" Your computer knows exactly where to go because the domain is the address.
+
+Breaking Down a Domain:
+Let’s take `amazon.in` as an example:
+- amazon: This part is the name of the website (like the name of the house).
+- .in: This part tells you it's an address in India (just like how some addresses end with "Street" or "Avenue"). 
+
+Similarly, for `flipkart.com`:
+- flipkart: The website’s name.
+- .com: Tells us it's a common commercial website.
+
+Why Do We Use Domains?
+Domains make it easy for us to find and visit websites. Imagine if you had to remember a long string of numbers (like a phone number) instead of a simple name like `amazon.in`—it would be really hard! Domains make the internet friendly and easy to use.
+
+So yes, **amazon.in** and **flipkart.com** are domains, just like addresses that lead you straight to their websites!
+
+
+
+
+
+
+
+
+url : 				https://www.example.com/tutorials
+protocol : 			https://
+subdomain: 			www
+second-level-domain(SLD): 	example
+top-level-domain(TLD) or domain extension: .com
+domain name: 			example.com
+subdirectory : 			tutorials
+
+
+
+
+
+
+
+Here are some popular domain names that are widely recognized and frequently used worldwide:
+
+1. **google.com** - The most popular search engine in the world.
+2. **facebook.com** - The domain for Facebook, one of the largest social media platforms.
+3. **youtube.com** - The home of YouTube, the largest video-sharing platform.
+4. **amazon.com** - Amazon's main domain for its global e-commerce platform.
+5. **twitter.com** - The domain for Twitter, a popular social media and microblogging site.
+6. **instagram.com** - The domain for Instagram, a widely used photo and video-sharing social network.
+7. **wikipedia.org** - The free online encyclopedia that anyone can edit.
+8. **netflix.com** - The domain for Netflix, a major streaming service for movies and TV shows.
+9. **microsoft.com** - The official website of Microsoft, one of the largest tech companies.
+10. **apple.com** - The official website of Apple, known for its electronics and software.
+11. **ebay.com** - A popular online marketplace for buying and selling goods.
+12. **linkedin.com** - The domain for LinkedIn, a professional networking site.
+13. **yahoo.com** - One of the oldest web portals and search engines.
+14. **reddit.com** - A social news aggregation and discussion website.
+15. **pinterest.com** - A site where users can share and discover new interests through images and videos.
+
+These domains are popular because they are the addresses of some of the most visited websites on the internet, serving millions of users every day!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

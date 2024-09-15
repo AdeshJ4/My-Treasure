@@ -1,5 +1,33 @@
-difference between SSH and HTTPS
+1. Delete the local branch:
 
+i] (safe delete): git branch -d b1         
+ii] (force delete):   git branch -D b1
+
+2. Delete the remote branch:  git push origin --delete b1
+
+===================================================================================================================================================================================
+
+
+Question : how to publish the branch 
+
+currently on server we don't have branch called b1. after running bellow command new branch called origin b1 will be created.
+***
+git push -u origin b1               // -u (or --set-upstream):
+***
+
+
+
+
+
+
+
+
+
+
+
+
+
+git log --oneline
 git init
 git add .
 git add index.js  ->  now tracking this file, you can commit this file changes
@@ -208,6 +236,30 @@ This command forces the deletion of the local branch, regardless of whether it h
 ***
 git push origin --delete b1
 ***
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ===================================================================================================================================================================================
 
