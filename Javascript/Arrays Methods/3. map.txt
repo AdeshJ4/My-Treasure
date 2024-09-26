@@ -2,7 +2,7 @@ map();
 -> Does not override original array but you can modify it.
 -> map() creates a new array from calling a function for every array element.
 -> If you want to do any arithmetic operation with each element of array then you can do it and return that result;
-->It crates a new Array.
+-> It crates a new Array.
 -> map() does not execute the function for empty elements.
 
 

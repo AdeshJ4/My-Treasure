@@ -1,7 +1,46 @@
 Note: Both methods modify original array.
 
-const arr = [ 50, 40, 30, 20, 10 ];
+sort(): 
+======
 
-console.log(arr.sort());
-console.log(arr.reverse());
+-> The sort() method is used to sort the elements of an array in place. By default, it converts elements to strings and sorts them in alphabetical order.
 
+ex: 
+
+const fruits = ['banana', 'apple', 'mango', 'cherry'];
+fruits.sort();        // Ascending order => ['apple', 'banana', 'cherry', 'mango']
+
+
+const fruits = ['banana', 'apple', 'mango', 'cherry'];
+fruits.sort().reverse();    // Descending order => [ 'mango', 'cherry', 'banana', 'apple' ]
+
+
+
+
+
+Problem : 
+-> Sorting numbers with sort() can lead to incorrect results because numbers are compared as strings
+-> To sort numerically, you need to pass a comparison function.
+
+ex: 
+const numbers = [10, 2, 30, 1];
+numbers.sort(); // Incorrect result: [1, 10, 2, 30] (sorted as strings)
+
+sol: 
+
+const numbers = [10, 2, 30, 1];
+numbers.sort((a, b) => a - b); // Ascending order
+console.log(numbers); // [1, 2, 10, 30]
+
+const numbers = [10, 2, 30, 1];
+numbers.sort((a, b) => b - a); // Descending order
+console.log(numbers); // [30, 10, 2, 1]
+
+
+
+
+
+
+reverse(): 
+
+-> reverse() method does not convert elements into strings. It simply reverses the order of the elements in the array, regardless of the data types of the elements.

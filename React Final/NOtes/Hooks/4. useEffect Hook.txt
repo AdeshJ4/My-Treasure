@@ -77,6 +77,82 @@ const App = () => {
 
 
 
+example : 
+
+import axios from "axios"
+import { useState, useEffect } from "react"
+
+const App = () => {
+  const [users, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(null);
+
+  const fetchUsers = async (controller) =>  {
+    try{
+      const { data } = await axios.get("https://jsonplaceholder.typicode.com/users", { signal: controller.signal}) ;
+      setUser(data);
+    }catch(err){
+      console.log(err.message);
+      setIsError(err.message);
+    }finally{
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(()=> {
+    const controller = new AbortController();
+    fetchUsers(controller);
+    return () => controller.abort();
+  }, []);
+
+  useEffect(()=> {
+    users ? document.title = `Users: ${users.length}` : 'Loading...';
+  }, [users])
+
+
+
+  if(isLoading) return <div>Loading...</div>
+  if(isError) return <div>{isError}</div>
+
+  const displayUsers = (users) => {
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>UserName</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => <tr key={user.id}>
+            <td>{user.id}</td>
+            <td>{user.name}</td>
+            <td>{user.username}</td>
+            <td>{user.email}</td>
+          </tr>)}
+        </tbody>
+      </table>
+    )
+  }
+
+  return (
+    <>
+      <ul>
+        {
+          users && users.length > 0 ? displayUsers(users) : <div>No data to display</div>
+        }
+      </ul>
+    </>
+  )
+}
+
+export default App;
+
+
+
+
 Example No 1: fetch the data : 
 ------------------------------
 
@@ -88,7 +164,7 @@ import React, { useEffect, useState } from "react";
 const UseMe = () => {
   const [data, setData] = useState(null);
 
-  const fetchData = async () => {
+  const fetchData = async () => { 
     try {
       const response = await axios.get(
         "https://jsonplaceholder.typicode.com/users"
