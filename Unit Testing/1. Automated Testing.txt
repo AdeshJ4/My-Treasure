@@ -1,0 +1,37 @@
+What is Automated Testing?
+
+-> The practice of writing code to test our code and then run those tests in an automated fashion.
+-> With Automated Testing our source code consists application code which we also called production code and test code.
+
+suppose we have a function that we want to test
+so with manual testing : 
+you have to launch the app, perhaps you have to login may be you have to do clicks to navigate the page where 
+this function is used. then you have to fill the form and submit it and see the result of this function on The
+screen. then you have to repeat the all these steps for different inputs.   
+
+
+so this is going to take time.
+
+
+now what this makes worse that its not only function that you have to test. In real application you have 10 or 
+100 function to test.
+
+thats why we use automated Testing.
+
+
+
+
+With Automated Testing you write code and directly calls this function with different inputs 
+
+You can rerun these tests every time you changed the code, every time you commit code to repository and before 
+deploying the application.
+
+
+you can write 1000 of automate tests for various parts of your application and run them all in few seconds.
+
+
+
+
+
+
+

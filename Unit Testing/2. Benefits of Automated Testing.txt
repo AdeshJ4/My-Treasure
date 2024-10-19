@@ -1,0 +1,10 @@
+why should we write code to test our code ? 
+
+Benefits of Automated Testing: 
+
+-> Test your code frequently, in less time.
+-> Catch bugs before deploying
+-> Deploy with confidence.
+
+
+

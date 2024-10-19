@@ -1,0 +1,32 @@
+In Automated Testing we have three types: 
+
+1. Unit Test 
+2. Integration Test
+3. End to End Test
+
+
+1. Unit Test : 
+
+-> Tests a unit of application without its external dependencies.
+-> A Unit Test is a type of software testing where individual components or "units" of an application are 
+tested in isolation, ensuring that each part functions correctly. 
+-> These units are the smallest testable parts of an application, such as functions, methods, or classes.
+-> You focus on testing only the specific unit or module without worrying about its external dependencies, 
+like databases, file systems, external services (e.g., web APIs), or message queues
+-> External dependencies are usually replaced with "mock" objects, which simulate the behavior of the real 
+dependencies without performing actual operations, like connecting to a database or writing to a file.
+-> For example, if you're testing a function that calculates the total price of items in a cart, you would write
+a unit test for just that function, independent of where the data is coming from (database or API). 
+You would provide test data directly to the function, and the test would verify that the correct total 
+is returned.
+
+
+
+2. Integration Test: 
+
+-> Tests the application with its external dependencies.
+-> These tests takes longer to execute because they often involved writing and reading DB.
+-> 
+
+
+
