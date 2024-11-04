@@ -19,6 +19,9 @@ dependencies without performing actual operations, like connecting to a database
 a unit test for just that function, independent of where the data is coming from (database or API). 
 You would provide test data directly to the function, and the test would verify that the correct total 
 is returned.
+-> Unit test are great for quickly test the logic like conditional statemsts and loops, if you have methods with complex logic and calculations you should tet them with 
+your unit tests. 
+-> Fastest to write and cheapest to write.
 
 
 
@@ -26,7 +29,29 @@ is returned.
 
 -> Tests the application with its external dependencies.
 -> These tests takes longer to execute because they often involved writing and reading DB.
--> 
+-> Traditionally an integration test is defined as a test that takes a few units or classes and test behaviour as a whole.
+-> So based on this definition if you test two classses together some peoples beleive you are writing an integration test and not a unit test, even none of the classes 
+talk to an external resource like a database
+-> as you changed the implemention of classes these test are gonna break and you will end up wasting a lot of time fixing them.
+-> They don't give value as well as they slow down application.
 
 
 
+Summary : 
+
+Unit test, test the class or multiple classes without their external dependencies. They test unit of work.
+An Integration test, test a class or multiple class with their external dependencies.
+
+
+
+
+
+3. End-TO-END test: 
+
+-> Drives an application through its UI.
+-> They are specific tool build for creating end to end test.
+-> Most popular tool is Selenium, which allows us to record the interaction of user with our application and then play back and check if application is returning the right 
+result or not.
+-> The first problem with this test are they very slow because they require launching the application and testing through UI. so every test is going to launch the 
+application and then login, navigate to an internal page, submit the form and inspect the problem.
+-> 2nd problem is they are very brittle (hard but easily broken). that means a small change in applcaition/UI can easiily break these tests

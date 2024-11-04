@@ -1,0 +1,270 @@
+-> In unit tests don't talk about external recourses.
+
+Jest is development dependency so install like this : 
+
+npm i jest --save-dev
+
+In package json file: 
+  "scripts": {
+    "test": "jest --watchAll"    // it will run all test if you make changes like nodemon
+  },
+
+
+this is pattern where jest is searching for tests : 
+
+testMatch: **/__tests__/**/*.[jt]s?(x), **/?(*.)+(spec|test).[tj]s?(x) - 0 matches
+
+any file which ends with that ends with spec.js or test.js is treated as test file.
+
+
+
+to add test create a folder named "tests" in a root directory.
+
+
+test function takes two arguments is name of test and that what we will see in console, the 2nd arguments is function where we implement
+test, when we run the test jest call this function.
+
+tests(folder) -> lib.test.js
+code inside that file:
+test("Our First Test", () => {
+
+})
+
+
+PS E:\z Placement\Mosh\Node Js\12 Unit Testing\11.6- Writing Your First Test\testing-demo> npm test
+> testing-demo@1.0.0 test
+> jest
+
+ PASS  tests/lib.test.js
+  √ Our First Test (3 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        5.576 s
+Ran all test suites.
+
+
+
+test("Our First Test", () => {
+    throw new Error("Something failed")
+})
+
+PS E:\z Placement\Mosh\Node Js\12 Unit Testing\11.6- Writing Your First Test\testing-demo> npm test
+
+> testing-demo@1.0.0 test
+> jest
+
+ FAIL  tests/lib.test.js
+  × Our First Test (2 ms)
+
+  ● Our First Test
+
+    Something failed
+
+      1 | test("Our First Test", () => {
+    > 2 |     throw new Error("Something failed")
+        |           ^
+      3 | })
+      4 |
+      5 |
+
+      at Object.<anonymous> (tests/lib.test.js:2:11)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 1 total
+Snapshots:   0 total
+Time:        0.687 s, estimated 5 s
+Ran all test suites.
+
+
+=================================================================================================================================
+
+
+
+Testing Numbers: 
+
+
+lib.js: 
+
+function absolute (number) {
+  if (number > 0) return number; 
+  if (number < 0) return -number; 
+  return 0; 
+}
+module.exports = { absolute };
+
+
+lib.test.js: 
+
+const lib = require('../lib');
+
+test("absolute - should return a +ve no id I/P is +ve", () => {
+    const result = lib.absolute(1);
+    expect(result).toBe(1);
+})
+
+test("absolute - should return a +ve no if I/P is -ve", () => {
+    const result = lib.absolute(-1);
+    expect(result).toBe(1);
+})
+
+
+test("absolute - should return 0 if I/P is 0", () => {
+    expect(lib.absolute(0)).toBe(0);
+})
+
+=================================================================================================================================
+
+
+Grouping Test: 
+
+-> we have describe() function to group test.
+-> this function takes two arguments, 1st one is name of group and 2nd is function which contain all tests related to that group.
+ex: 
+
+const lib = require('../lib');
+
+describe('absolute', () => {
+
+    it("should return a +ve no id I/P is +ve", () => {
+        const result = lib.absolute(1);
+        expect(result).toBe(1);
+    })
+
+    it("should return a +ve no if I/P is -ve", () => {
+        const result = lib.absolute(-1);
+        expect(result).toBe(1);
+    })
+
+    it("should return 0 if I/P is 0", () => {
+        expect(lib.absolute(0)).toBe(0);
+    })
+})
+
+
+=================================================================================================================================
+
+
+Testing string: 
+
+-> When testing string make sure you tests are not to specific.
+
+code: 
+// Testing strings 
+module.exports.greet = function(name) { 
+  return 'Welcome ' + name + '!';  // this string can change at any time, like another developer can add anything.
+}
+
+test code: 
+describe('greet', ()=> {
+    it('should return the greeting message', () => {
+        const result = lib.greet("Adesh");
+        // expect(result).toMatch(/Adesh/); // we don't want to check exact match, we just want to make sure result contain name of user.
+        expect(result).toContain('Adesh');  // if you don't want to use regular expression then you can use this function.
+    })
+})
+
+
+
+=================================================================================================================================
+
+
+TestinG Arrays: 
+
+
+-> Test is to specific: when testing array don't look exact location of elements in that array because position of elements 
+will change based on sorting logic.
+example: 
+describe('getCurrencies', () => {
+    it('should return supported currencies', () => {
+        const result = lib.getCurrencies();
+        expect(result[0]).toBe('USD');
+        expect(result[1]).toBe('AUD');
+        expect(result[2]).toBe('EUR');
+        expect(result.length).toBe(3);
+    })
+})
+
+
+-> proper way to test array is check for existence of element irrespective of its position.
+
+describe('getCurrencies', () => {
+    it('should return supported currencies', () => {
+        const result = lib.getCurrencies();
+
+        expect(result).toContain('AUD');
+        expect(result).toContain('USD');
+        expect(result).toContain('EUR');
+    })
+})
+
+but there is shortcut for above: 
+
+describe('getCurrencies', () => {
+    it('should return supported currencies', () => {
+        const result = lib.getCurrencies();
+  
+        expect(result).toEqual(expect.arrayContaining(['EUR', 'AUD', 'USD']))
+    })
+})
+
+
+
+=================================================================================================================================
+
+Testing Objects: 
+
+-> while testing objects don't use toBe() since this compares the references of objects.
+-> use toEqual() since its compares the content inside object.
+-> Use this three methods to test object: 
+1. toEqual()
+2. toMatchObject()
+3. toHaveProperty()
+
+describe("Objects", () =>{
+  it("toEqual objects", () => {
+    expect({fname: 'Adesh'}).toEqual({fname: "Adesh"})  // passes
+  })
+})
+
+
+
+=================================================================================================================================
+
+
+
+Testing Exception: 
+
+-> use toThrow() method to test exception.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

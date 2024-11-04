@@ -1,0 +1,40 @@
+create a folder named "hello-docker", inside this create a file named "app.js".
+
+app.js: 
+console.log("Hello Docker");
+
+
+so this is our application.
+
+
+
+// lets  think like this is a application/program and we want dockerize this application.
+// we want to run, build and ship this with docker.
+// without docker if you want to ship this application or program in another machine, we need 
+// to install node and then we can got to terminal and type "node app.js" to get output.
+/*
+following are only 4 instructions but as our application grow we need multiple instructions
+which are complicated.
+
+instructions: 
+1. Start with an OS
+2. Install Node
+3. copy app files
+4. Run node app.js
+*/
+
+/*
+we can run these above instruction in docker file, and let docker package our application.
+
+*/
+
+
+
+
+
+
+
+
+
+
+

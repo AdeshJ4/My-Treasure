@@ -1,0 +1,45 @@
+What kind of test you should write in your application.
+-> well answer is all of them.
+
+This is what we called test pyramid.
+
+
+
+
+                   /\
+                  /  \
+                 /    \
+                /      \
+               /   E2E  \
+              /----------\
+             /            \
+            /              \
+           /  Integration   \
+          /------------------\
+         /                    \
+        /                      \
+       /         Unit           \
+      ----------------------------
+
+
+
+
+
+
+
+
+-> This pyramid argue the most of your tests should be in category of unit test, because they are easy to write and they execute quickly
+-> Since unit test don't give much more connfidence about your applcaition health you should write bunch of integration test that test integration of your application 
+code with its external dependencies.
+-> At the end you have to write very few end to end for key functions of the application. test the happy path and leave the edge cases to unit test 
+-> The actual ratio between unit, integration and end to end tests are depends on your project.
+-> Unit test are great for quickly test the logic like conditional statemsts and loops, if you have methods with complex logic and calculations you should tet them with 
+your unit tests. 
+
+-> if you have function which simply reads data from write to DB in that case you need integration test than unit test.
+-> 
+
+
+
+
+

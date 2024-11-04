@@ -1,0 +1,98 @@
+### What is Docker?
+
+Imagine you're building a cool project, like a toy robot. You need a lot of parts to make it work — wires, motors, a power source, 
+sensors, and even a special controller. All these parts need to fit together perfectly, and they have to work on the same 
+"blueprint" so your robot behaves just as you want.
+
+Now, let's say you want to share this robot with your friend who lives far away. 
+You send all the parts, but when your friend tries to put them together, something doesn’t work right. 
+Maybe the power source doesn’t match, or the wires don’t fit. Your friend might have a slightly different setup than yours, 
+and now the robot doesn’t work the way you intended. Frustrating, right?
+
+This is the same problem people have with software! When we create programs, they rely on specific "parts" or environments, 
+like certain versions of libraries, configurations, or tools. If someone tries to run that program on a slightly different setup, 
+it might not work or might behave differently. 
+
+
+
+### Why Docker is Like a Magic Box for Programs
+
+Docker helps solve this problem by creating a "container." Think of a container as a magic box where you put your program and 
+everything it needs to run, perfectly packaged together. 
+This includes the specific versions of libraries, settings, and tools it relies on. 
+
+When your friend gets the container (the magic box) and opens it, everything inside is exactly how it should be, 
+and the program runs perfectly, no matter where it is. So, Docker containers make sure that programs can run anywhere without 
+surprises!
+
+
+
+
+### Why Do We Use Docker?
+
+1. **Consistency**: Docker makes sure that software works the same way on any computer, whether it’s your laptop, your friend's 
+computer, or a big server. This solves the "it works on my computer" problem.
+  
+2. **Efficiency**: Docker containers are light and fast. Instead of needing an entire computer for each program, multiple Docker 
+containers can run side by side on one machine, each with its own "environment." It’s like sharing one big house but having separate 
+rooms with everything each person needs.
+  
+3. **Easier Collaboration**: Developers can share containers with each other, so everyone is working with the exact same setup. 
+This helps teams avoid unexpected issues and speeds up development.
+
+4. **Quick Setup**: If you need a specific environment, you don’t have to install a bunch of things manually. You just grab a Docker 
+container with everything pre-set up.
+
+
+
+
+### What Problems Docker Solved
+
+Before Docker, developers had to spend a lot of time setting up their environments and making sure everything matched perfectly. 
+If a developer wrote code on one computer, it might not work on another because of tiny differences. 
+Docker solved this by making it easy to package programs with all their dependencies, so they run the same everywhere.
+
+In short, **Docker makes sure that programs work consistently and easily, no matter where you run them.**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=====================================================================================================================================
+
+Mosh Notes:
+
+
+
+-> A platform for building, running and shipping applications in consistent manner so if your application works in development
+machine it can run and function in same way in other machines.
+
+Dockerfile: 
+
+-> It is a plain text file which includes instructions that docker uses to package our application into image.
+This image includes everything .
+
+-> Once we have image we tell docker to start container using that image.
+-> container is a process but special kind of process because it has its own file system which is provided by image.
+so our application is loaded inside a container or process and this is how we run our application locally on development machine.
+
+
+-> Once we have image we pushed it to docker registry like docker hub.
+-> docker hub to docker is like github to git. it is a storage for docker images that anyone can use.
+-> so once our application image on docker hub then we can pull it on any machine using docker.
+-> we just tell docker to start a container using this image.
+
+
+-> you can deploy a container on cloud, share with friend, 
+each container have its own OS, tools, configuration.

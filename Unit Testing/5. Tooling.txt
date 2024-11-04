@@ -1,0 +1,25 @@
+Here's a more readable and structured version of your text:
+
+---
+
+**Tooling Overview:**
+
+- **Test Framework**:  
+  To write tests, we need a **Test Framework**.  
+  A Test Framework provides:
+  
+  1. **Utility Functions**: A set of built-in functions to help with writing and organizing tests.
+  2. **Test Runner**: A program that runs tests from the command line, executes them, and generates a report showing how many tests passed or failed.
+
+- **Popular Test Frameworks**:
+  
+  1. **Jasmine**  
+     - A comprehensive testing framework that includes everything you need to test your application.
+  
+  2. **Mocha**  
+     - By design, Mocha does not include assertions or certain features found in other testing libraries.  
+     - It is often used with plugins like **Chai** (for assertions) and **Sinon** (for mocking and spying).
+
+  3. **Jest**  
+     - Developed by Facebook, Jest is commonly used for testing React applications.  
+     - Jest is essentially a wrapper around Jasmine, providing additional features like snapshot testing.

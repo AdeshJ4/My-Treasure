@@ -1,0 +1,238 @@
+
+0. toBe(): 
+-> It is a Jest matcher used to check for strict equality (similar to JavaScript's ===). 
+-> It ensures that the two values being compared are exactly the same, both in terms of value and type.
+
+Key Points:
+It checks for strict equality (===).
+Use it when comparing primitive types (like numbers, strings, booleans).
+It also compares object references, meaning it checks if two objects or arrays are the same instance in memory, not just if they contain the same data.
+
+test('primitive values are strictly equal', () => {
+    expect(10).toBe(10);       // Passes, because 10 === 10
+    expect('abc').toBe('abc'); // Passes, because 'abc' === 'abc'
+    expect(true).toBe(true);   // Passes, because true === true
+});
+
+
+=================================================================================================================================
+
+
+1. toBeDefined()
+-> It is a Jest matcher used to check if a variable or value has been defined.
+-> In JavaScript, a variable is considered defined if it is not undefined. 
+
+Key Points:
+toBeDefined() checks that a value is not undefined.
+It ensures that a variable or property has been assigned some value, but it doesn't check the type or value itself.
+It is the opposite of toBeUndefined().
+
+test('variable is defined', () => {
+    const name = 'Alice';
+    
+    expect(name).toBeDefined();   // Passes, because 'name' is defined
+    expect(undefined).toBeDefined();  // Fails, because the value is 'undefined'
+});
+
+
+test('function returns defined value', () => {
+    function getNumber() {
+        return 10;
+    }
+
+    expect(getNumber()).toBeDefined();  // Passes, because the function returns 10, which is defined
+});
+
+=================================================================================================================================
+
+2. toBeNull():
+-> toBeNull() : toBeNull() is a Jest matcher used to check if a value is exactly null.
+-> It ensures that the value being tested is strictly null.
+-> If the value is anything other than null (like undefined, 0, false, [], or {}), the test will fail.
+
+expect(null).toBeNull();         // Passes
+expect(undefined).toBeNull();    // Fails
+expect(0).toBeNull();            // Fails
+
+=================================================================================================================================
+
+3. toContain(): 
+-> it is a Jest matcher used to check if a particular item or value exists within an array, a string, or an iterable.
+How It Works:
+For arrays: It checks if an array contains a specific element.
+For strings: It checks if a string contains a substring.
+
+Example with Arrays:
+test('array contains a specific item', () => {
+    const shoppingList = ['milk', 'bread', 'butter']; 
+
+    expect(shoppingList).toContain('bread'); // Passes
+    expect(shoppingList).toContain('eggs');  // Fails
+});
+
+Example with Strings:
+test('string contains a substring', () => {
+    const phrase = 'Hello, World!';
+
+    expect(phrase).toContain('World');  // Passes
+    expect(phrase).toContain('world');  // Fails (case-sensitive)
+});
+
+=================================================================================================================================
+
+4. toEqual()
+
+-> toEqual() is a Jest matcher used to check if two values are deeply equal, meaning it compares the content and structure of objects, arrays, and other data types, not just their references (like === does).
+
+Key Points:
+For primitive values (like numbers, strings, booleans), toEqual() works just like toBe().
+For objects and arrays, toEqual() checks for deep equality, comparing the values inside, rather than checking if the references are the same.
+
+Example with Primitives:
+test('two numbers are equal', () => {
+    expect(10).toEqual(10);  // Passes
+    expect('abc').toEqual('abc');  // Passes
+});
+
+
+Example with Objects:
+test('objects are deeply equal', () => {
+    const user1 = { name: 'John', age: 30 };
+    const user2 = { name: 'John', age: 30 };
+
+    expect(user1).toEqual(user2);  // Passes
+});
+
+
+Example with Arrays:
+test('arrays are deeply equal', () => {
+    const arr1 = [1, 2, 3];
+    const arr2 = [1, 2, 3];
+
+    expect(arr1).toEqual(arr2);  // Passes
+});
+
+
+Difference between toEqual() & toBe():
+const obj1 = { name: 'Alice' };
+const obj2 = { name: 'Alice' };
+
+expect(obj1).toBe(obj2);      // Fails (different references)
+expect(obj1).toEqual(obj2);   // Passes (same content)
+
+=================================================================================================================================
+
+
+5. toMatchObject()
+
+-> Use toMatchObject() when you want to verify that an object contains certain properties with specific values, but you're not 
+concerned with the other properties
+-> Works with objects and arrays of objects.
+-> In nutshell we don't care how many properties we have in the object until and unless we have specific properties which we expect.
+ex 1: 
+test('object matches part of another object', () => {
+    const user = { id: 1, name: 'John', age: 30 };
+
+    expect(user).toMatchObject({ name: 'John', age: 30 });
+});
+
+
+ex 2: 
+test('array of objects match part of each object', () => {
+    const users = [
+        { id: 1, name: 'John', age: 30 },
+        { id: 2, name: 'Jane', age: 25 },
+    ];
+
+    expect(users).toMatchObject([
+        { name: 'John' },
+        { name: 'Jane' }
+    ]);
+});
+
+
+
+
+=================================================================================================================================
+
+6. toHaveProperty(): 
+toHaveProperty() is a Jest matcher used to check if an object has a specific property, and optionally, if that property has a 
+certain value. It allows you to verify the existence of a property in an object, even for nested properties.
+
+test('object has property', () => {
+    const user = { name: 'Alice', age: 25 };
+
+    expect(user).toHaveProperty('name');  // Passes, because 'name' exists
+    expect(user).toHaveProperty('age', 26);   // Fails, because 'age' is not 25
+    expect(user).toHaveProperty('gender');  // Fails, because 'gender' does not exist
+});
+
+
+
+=================================================================================================================================
+
+7. toThrow():
+-> it is a Jest matcher used to verify that a function throws an error when it is called. 
+-> This matcher is typically used to test error handling in your code, ensuring that specific conditions cause functions to 
+throw errors.
+
+
+Key Points:
+
+It is used to check if a function throws an error when called.
+You can check for any error, a specific error message, or even a specific error type.
+
+
+Basic Usage:
+test('throws an error', () => {
+    function throwError() {
+        throw new Error('This is an error!');
+    }
+
+    expect(throwError).toThrow();  // Passes, because throwError throws an error
+});
+
+
+Checking for a Specific Error Message:
+test('throws error with specific message', () => {
+    function throwError() {
+        throw new Error('This is an error!');
+    }
+
+    expect(throwError).toThrow('This is an error!');  // Passes, because the error message matches
+});
+
+
+=================================================================================================================================
+
+
+8. toBeGreaterThan(): 
+-> it is a Jest matcher used to verify if one value is greater than another. 
+-> It is typically used for comparing numbers to ensure that a value exceeds a specified threshold.
+
+test('number is greater than another number', () => {
+    expect(10).toBeGreaterThan(5);  // Passes, because 10 > 5
+    expect(3).toBeGreaterThan(5);   // Fails, because 3 is not greater than 5
+});
+
+=================================================================================================================================
+
+9. toBeLessThan() : 
+-> it is a Jest matcher used to verify if one value is less than another. 
+-> It is typically used for comparing numbers to ensure that a value exceeds a specified threshold.
+
+test('number is less than another number', () => {
+    expect(3).toBeLessThan(5);   // Passes, because 3 is less than 5
+    expect(10).toBeLessThan(5);  // Fails, because 10 > 5
+});
+
+
+
+
+
+
+
+
+
+
+

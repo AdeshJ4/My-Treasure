@@ -1,21 +1,63 @@
-1. Delete the local branch:
+git config --global user.name
+git config --global user.email
 
-i] (safe delete): git branch -d b1         
-ii] (force delete):   git branch -D b1
 
-2. Delete the remote branch:  git push origin --delete b1
 
-===================================================================================================================================================================================
+
+
+
+stash : 
+
+push untracked stash:
+git stash push -u -m "pastellification changes"
+
+apply named stash:
+git stash list
+git stash apply stash@{0}
+
+
+
+
+abort the merge if you don't want new changes: 
+if you have this : (poc/dev|MERGING)
+git merge --abort
+
+
+
+
+
+
 
 
 Question : how to publish the branch 
 
 currently on server we don't have branch called b1. after running bellow command new branch called origin b1 will be created.
 ***
-git push -u origin b1               // -u (or --set-upstream):
+git push -u origin anurag/dev               // -u (or --set-upstream):
 ***
 
 
+Question : How to delete branch from local and server.
+
+1. Delete the local branch:
+
+i] (safe delete):
+*** 
+git branch -d b1  
+***
+This command deletes the local branch only if it has been fully merged with your current branch or other branches. If it hasn't been merged, Git will refuse to delete it to prevent accidental loss of unmerged work.
+
+ii] (force delete):
+***
+git branch -D b1
+***
+This command forces the deletion of the local branch, regardless of whether it has been merged. Use this with caution, as it can lead to the loss of unmerged changes.
+
+
+2. Delete the remote branch:
+***
+git push origin --delete feature/CourseDetailsPage
+***git branch -D feature/CourseDetailsPage
 
 
 
@@ -27,7 +69,7 @@ git push -u origin b1               // -u (or --set-upstream):
 
 
 
-git log --oneline
+
 git init
 git add .
 git add index.js  ->  now tracking this file, you can commit this file changes
@@ -234,32 +276,8 @@ This command forces the deletion of the local branch, regardless of whether it h
 
 2. Delete the remote branch:
 ***
-git push origin --delete b1
-***
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+git push origin --delete feature/CourseDetailsPage
+***git branch -D feature/CourseDetailsPage
 
 ===================================================================================================================================================================================
 
@@ -270,7 +288,7 @@ currently on server we don't have branch called b1. after running bellow command
 ***
 git push -u origin b1               // -u (or --set-upstream):
 ***
-
+git push -u origin anurag/dev
 
 ===================================================================================================================================================================================
 
@@ -364,16 +382,3 @@ $ git commit -m "Merge branch 'main' of github.com:AdeshJ4/anime into b1"
 [b1 cd88c60] Merge branch 'main' of github.com:AdeshJ4/anime into b1
 ***
 after that push to your branch.
-
-
-
-
-
-
-
-
-
-
-
-
-

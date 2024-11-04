@@ -1,0 +1,172 @@
+A Linux distribution, or "distro," is an operating system built on the Linux kernel, combined with a package 
+of software and libraries that help it run. 
+
+1000 of distro available now.
+
+
+famous one: 
+
+1. Ubuntu
+2. Debian
+3. Alpine
+4. Fedora
+5. CentOS
+
+
+
+
+
+
+
+PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker> docker run -it ubuntu
+root@56ad8dab1938:/# echo bonjour
+bonjour
+root@56ad8dab1938:/#
+root@56ad8dab1938:/# whoami
+root
+root@56ad8dab1938:/# echo $0
+/bin/bash
+root@56ad8dab1938:/# history
+    1  echo bonjour
+    2  whoami
+    3  echo $0
+    4  history
+root@56ad8dab1938:/# !2
+whoami
+root
+root@56ad8dab1938:/# 
+
+
+
+
+apt: advance package tool
+
+
+list all packages: 
+root@56ad8dab1938:/# apt list
+
+
+when you install any package it will give error so run this command first:
+root@56ad8dab1938:/# apt update
+
+
+install package called nano(text editor): 
+root@56ad8dab1938:/# apt install nano
+
+
+uninstall package called nano(text editor): 
+root@56ad8dab1938:/# apt remove nano 
+
+
+
+pwd stands for "print working directory". When you type pwd in the terminal, it outputs the full path of the current directory you’re working in
+root@f5105e6b3e6f:/# pwd    
+/
+root@f5105e6b3e6f:/# 
+
+
+
+list all files and folders: 
+root@f5105e6b3e6f:/# ls
+bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+root@f5105e6b3e6f:/# 
+
+
+mkdir -> create directory
+root@f5105e6b3e6f:~# mkdir test
+
+
+mv -> move or rename
+root@f5105e6b3e6f:~# ls
+test
+root@f5105e6b3e6f:~# mv test dockerTest
+root@f5105e6b3e6f:~# ls
+dockerTest
+
+mv -> move file from one directory to another
+root@f5105e6b3e6f:/adesh/f1# mv index.js ../f2/
+we are moving index.js from f1 folder to f2 folder.
+
+
+touch -> create new file or files in one go: 
+root@f5105e6b3e6f:~/dockerTest# touch hello.txt
+root@f5105e6b3e6f:~/dockerTest# touch f1.txt f2.txt f3.txt
+
+
+
+rm -> remove/delete file
+root@f5105e6b3e6f:~/dockerTest# rm f1.txt
+
+rm -> remove all files start from specific word. like f
+root@f5105e6b3e6f:~/dockerTest# rm f4.txt     -> it will delete all files starts with f like f1.txt, f2.txt
+
+
+rm -> remove directory and its content: 
+root@f5105e6b3e6f:~# rm -r dockerTest/
+
+
+
+
+view file : 
+root@f5105e6b3e6f:/adesh# cat app.txt 
+Hello Docker
+I am learning docker for up sko=illing my sills
+root@f5105e6b3e6f:/adesh# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

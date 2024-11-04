@@ -1,0 +1,191 @@
+start container: 
+-> docker start container_id
+
+To find the container ID, you can list all containers with:
+-> docker ps -a
+
+
+if you need to access the terminal inside the container
+-> docker exec -it container_id /bin/bash
+
+
+
+
+
+
+
+PS E:\z Placement\Mosh\All Notes> docker version
+Client:
+ Version:           27.2.0
+ API version:       1.47
+ Go version:        go1.21.13
+ Git commit:        3ab4256
+ Built:             Tue Aug 27 14:17:17 2024
+ OS/Arch:           windows/amd64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.34.3 (170107)
+ Engine:
+  Version:          27.2.0
+  API version:      1.47 (minimum version 1.24)
+  Go version:       go1.21.13
+  Git commit:       3ab5c7d
+  Built:            Tue Aug 27 14:15:15 2024
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.7.20
+  GitCommit:        8fc6bcff51318944179630522a095cc9dbf9f353
+ runc:
+  Version:          1.1.13
+  GitCommit:        v1.1.13-0-g58aa920
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+PS E:\z Placement\Mosh\All Notes> 
+
+
+
+
+
+
+
+
+
+
+
+run ubuntu container : 
+-> C:\WINDOWS\system32>docker run -it ubuntu
+
+
+
+
+
+list running containers : 
+PS E:\z Placement\Mosh\All Notes> docker container ls
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
+bd3f049b78f0   ubuntu    "/bin/bash"   41 minutes ago   Up 10 seconds             hardcore_poincare
+5f9513741d87   ubuntu    "/bin/bash"   41 minutes ago   Up 12 seconds             angry_babbage
+
+
+
+
+list all containers: 
+PS E:\z Placement\Mosh\All Notes> docker container ls -a
+CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS                        PORTS     NAMES
+1093f205f70f   ubuntu    "/bin/bash"   2 minutes ago    Exited (130) 55 seconds ago             trusting_hamilton
+bd3f049b78f0   ubuntu    "/bin/bash"   44 minutes ago   Up 34 seconds                           hardcore_poincare
+5f9513741d87   ubuntu    "/bin/bash"   44 minutes ago   Up 3 minutes                            angry_babbage
+
+
+
+start container : 
+PS E:\z Placement\Mosh\All Notes> docker start trusting_hamilton(name of container)
+trusting_hamilton
+PS E:\z Placement\Mosh\All Notes>
+
+
+
+stop container :
+PS E:\z Placement\Mosh\All Notes> docker stop hardcore_poincare
+hardcore_poincare
+PS E:\z Placement\Mosh\All Notes>
+
+ 
+
+build: 
+PS E:\z Project\Docker Crash Course\hello-docker> docker build -t hello-docker .
+
+
+
+PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker> docker images
+REPOSITORY     TAG       IMAGE ID       CREATED         SIZE
+hello-docker   latest    48b66919e8bc   5 minutes ago   159MB
+ubuntu         latest    59ab366372d5   3 weeks ago     78.1MB
+
+
+
+
+pull the image from docker hub:
+PS C:\Users\user\Desktop\d-t> docker pull codewithmosh/hello-docker
+
+run that image:
+PS E:\z Placement\Mosh\All Notes> docker run codewithmosh/hello-docker
+Hello World!
+PS E:\z Placement\Mosh\All Notes>
+
+
+
+if its install locally then ok if not then it will download it.
+PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker> docker run -it ubuntu
+
+
+list running containers/process: 
+PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker> docker ps               
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+
+list all containers/process: 
+PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker> docker ps -a
+CONTAINER ID   IMAGE     COMMAND       CREATED              STATUS                          PORTS     NAMES
+efe5afd28c26   ubuntu    "/bin/bash"   About a minute ago   Exited (0) About a minute ago             admiring_poincare
+c69baa5632c8   ubuntu    "/bin/bash"   3 minutes ago        Exited (0) 2 minutes ago                  agitated_goodall
+PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

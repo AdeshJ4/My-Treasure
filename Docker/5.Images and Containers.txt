@@ -1,0 +1,2 @@
+Images are like OS
+Containers actually run images.
