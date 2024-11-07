@@ -1,5 +1,5 @@
-const arr = [ 10, 20, 30, 40, 50 ];
+const arr = [10, 20, 30];
 
-arr.forEach((ele, index, arr) => {
-    console.log(ele, index, arr);
+arr.forEach((curEle, index, array) => {
+    console.log('curEle, index, array', curEle, index, array);
 })

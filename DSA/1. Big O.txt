@@ -1,0 +1,37 @@
+What is Big O?
+==============
+
+-> We use Big O notation to describe performace of algorithm.
+-> Big O notation helps us answer the question, “Can we do better?”
+-> Big O notation is a system for measuring the rate of growth of an algorithm.
+-> Big O notation mathematically describes the complexity of an algorithm in terms of time and space.
+-> We don’t measure the speed of an algorithm in seconds or minutes. Instead, we measure the number of 
+operations it takes to complete.
+-> The O is short for “Order of”. So, if we’re discussing an algorithm with O(n^2), we say its order of, or 
+rate of growth, is n^2, or quadratic complexity.
+
+
+How Does Big O Work?
+====================
+
+-> Big O notation measures the "worst-case scenario". Why? Because we need to know just how poorly our 
+algorithm will perform so we can evaluate other solutions.
+-> The worst-case scenario is also known as the “upper bound”. When we say “upper bound”, we mean the maximum 
+number of operations performed by an algorithm.
+
+Remember this table?
+
+O	              Complexity	      Rate of growth
+O(1)	          constant	            fast
+O(log n)	      logarithmic	
+O(n)	          linear time	
+O(n * log n)    log linear	
+O(n^2)	        quadratic	
+O(n^3)	        cubic	
+O(2^n)	        exponential	
+O(n!)	          factorial	            slow
+
+-> It lists common orders by rate of growth, from fastest to slowest.
+
+
+

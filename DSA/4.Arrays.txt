@@ -1,0 +1,40 @@
+-> First Data structure.
+
+-> List of strings, numbers, objects literally anythong
+-> Items get stored sequentially in memory
+-> if we allocate array of 5 elements this elements stores in memory like this: 
+integers in java takes 4 bytes of memory 
+
+memory location:    100 104 108 112 116
+array items:        10  20  30  40  50  
+
+eg: int[] numbers = new int[5];
+
+-> looking for element in array is o(1) operation.
+-> In java and other languages array are static which means we have to specify size in prior which 
+can not be change later. so we have to know head of time how many items we have to store in an array.
+what if we don't know then we have to guess, if our guess is to large then we will waste the space, if our 
+guess is to small then we don't have space to store remaining elements for that we have to copy elements of 
+small array and shift them in big array, runtime complexity of this is O(n).cost of copying the elements into 
+the new array increases linearly and in direct proportional to size of array.
+-> Now for removing element: 
+removing element from last is O(1) we can quickly look the element by its index and clear the memory(no shifting require).
+which is best case scenario but when we talk about Big O we have to talk about worst case scenario.
+what is worst case scenario it is removing first element of the array or in between. 
+because we have to shift all elements to left to fill that vacant position. 
+the more items we have the more the more shifting operation is gonna cost.
+for that we have O(n) because of shifting elements.
+
+Lookup: O(1)    index wise
+Insert: O(n)    Shift elements to new array or shifting elements to make position for new element
+Delete: O(n)    delete in between
+
+
+Drawbacks of array: 
+-> Since array have fixed size, in situations where we have to know head of time how many items we have to store 
+or add/remove items they don't perform well.
+
+In those case we used Linked List.
+
+
+ 

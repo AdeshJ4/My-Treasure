@@ -1,0 +1,120 @@
+1. for loop: 
+-> It's used when you know in advance how many times the block of code should be executed
+ex: 
+for(let i=0; i < 5; i++){
+  console.log(i);  // Outputs 0, 1, 2, 3, 4
+}
+
+=================================================================================================================================================================================
+
+
+2. while loop:
+-> The while loop is used when you don’t know the number of iterations in advance. It runs as long as the given condition is true.
+ex:
+let i = 0;
+while (i < 5) {
+  console.log(i);  // Outputs 0, 1, 2, 3, 4
+  i++;
+}
+
+
+=================================================================================================================================================================================
+
+
+3. do...while loop: 
+
+-> The do...while loop is similar to the while loop, but it guarantees that the block of code will be executed at least once, because the condition is evaluated after 
+the loop body runs
+-> Even if the condition is false initially, the loop body will run at least once.
+ex:
+let i = 0;
+do {
+  console.log(i);  // Outputs 0
+  i++;
+} while (i < 0);
+
+
+=================================================================================================================================================================================
+
+
+4. for...in loop
+
+-> The for...in loop is used to iterate over the enumerable(able to be counted) properties of an object. 
+-> It's primarily used with objects, but can also be used with arrays (though it’s not recommended for arrays, as it iterates over property names, not values).
+ex: 
+objects: 
+const person = { name: 'John', age: 30, city: 'New York' };
+for (let key in person) {
+  console.log(key + ": " + person[key]);  
+  // Outputs "name: John", "age: 30", "city: New York"
+}
+
+array: 
+const arr = [10, 20, 30];
+for (let key in arr) {
+  console.log(key + ": " + arr[key]);   // key is index and arr[key] is value stored in that index
+}
+
+strings: 
+
+const str = 'Adesh';
+for(let key in str){
+  console.log(key + ' ' + str[key]);  //  key is index and str[key] is value stored in that index like 'A'
+}
+
+
+=================================================================================================================================================================================
+
+
+5. for...of loop
+
+-> The for...of loop is used to iterate over iterable objects like arrays, strings, Maps, Sets, etc. Unlike for...in, it directly accesses the values of the iterable, 
+not just the keys or property names.
+-> Object is not iterable so to make it itrable you can use Object.keys(nameObj) method but you ca use for in loop also
+-> if you iterate string using "for of" loop then you will get only value and not index, if you want index then you have to use Object.keys(str) method but you ca use 
+for in loop also.
+
+array: 
+const arr = [10, 20, 30];
+for(let value of arr){
+  console.log(value);  // o/p: 10, 20, 30 -> you can't access key/index, just value
+}
+
+object: 
+const obj = { fname:'Adesh', age: 23 }
+for(let value of Object.keys(obj)){
+  console.log(value, ' ', obj[value]);
+}
+
+string: 
+const str = 'Adesh';
+for (let value of Object.keys(str)){
+  console.log(value, " ", str[value]);
+}
+
+
+
+=================================================================================================================================================================================
+
+
+6. break and continue: 
+
+break: Used to exit the loop entirely, regardless of the loop condition.
+ex:
+for (let i = 0; i < 5; i++) {
+  if (i === 3) break;  // Exit the loop when i is 3
+  console.log(i);  // Outputs 0, 1, 2
+}
+
+
+continue: Skips the rest of the current loop iteration and moves to the next iteration.
+ex:
+for (let i = 0; i < 5; i++) {
+  if (i === 3) continue;  // Skip iteration when i is 3
+  console.log(i);  // Outputs 0, 1, 2, 4
+}
+
+
+
+
+

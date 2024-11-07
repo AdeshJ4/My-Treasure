@@ -1,0 +1,209 @@
+Time Complexity: 
+
+-> Time complexity is a way to analyze how the runtime of an algorithm changes as the size of the input increases.
+-> Time complexity helps you understand how scalable an algorithm is. 
+-> An algorithm that works quickly for a small input might become very slow as the input grows if it has poor 
+time complexity.
+
+
+Common Time Complexities
+1. Constant Time - O(1)   -> Excellent
+2. Logarithmic Time - O(log n) -> Good
+3. Linear Time - O(n)   -> Fair
+4. Quadratic Time - O(n^2) -> Horrible
+5. Exponential Time - O(2^n) -> Horrible
+
+
+Examples: 
+
+1. Constant Time - O(1)  -> Excellent
+-> An algorithm with O(1) time complexity takes the same amount of time, regardless of the input size. 
+A common example is accessing a specific index in an array.
+code:
+ex. 1: 
+function getFirstElement(arr) {
+  return arr[0];
+}
+// No matter the size of `arr`, this takes constant time.
+const array = [1, 2, 3, 4, 5];
+console.log(getFirstElement(array)); // Output: 1
+
+ex. 2: 
+This method have single operation and takes a constant amount of time to run. we don't care about exact 
+execution time in milliseconds because that can be different from one machine to another or even on the same 
+machine. all we care about is that this method run on constant time and we represent using Big O(1). this is 
+runtime complexity of this method. In this method size of input doesn't matter, this method always on constant 
+time or Big o(1).
+
+function log(arr){
+  console.log(arr[0]);   // O(1)
+}
+
+-> Now what will be time complexity if we duplicate the log line.
+-> here we have two operations. Both operations are running on constant time so the runtime complexity is O(2)
+-> when talking about runtime complexity we really don't care about number of operations, we just wanna know how 
+much algorithm slows down as the input grows larger. 
+-> so in this example we have 1 or 1 millions of items our method run in constant time. so we can simplfy to 
+make it O(1) meaning constant time.
+
+function log(arr){
+  console.log(arr[0]);   // O(1)
+  console.log(arr[0]);   // O(1)    -> O(1)+O(1)=O(2)  ===> O(1)
+}
+
+
+
+
+
+
+
+
+
+2. Linear Time - O(n)  -> Fair
+-> An algorithm with O(n) time complexity grows proportionally with the input size. 
+For example, iterating over an array requires one operation per element.
+
+-> if we have single item in this input array we gonna have one printing operation. 
+-> if we have millions items we have millions printing operations.
+-> so the cost of this algorithm grows linearly and direct relation to the size of input.
+-> so we represnt runtime complexity of this alogorithm using O(n) where n represent the size of input.
+-> as "n" grows the cost of this algorithm also grows linearly. it doen't matter which kind of loop you used to
+iterate over this array.
+
+code : 
+function printElements(arr) {
+  arr.forEach(element => {
+    console.log(element);
+  });
+}
+// For `n` elements, this will perform `n` operations.
+const array = [1, 2, 3, 4, 5];
+printElements(array); // Output: 1, 2, 3, 4, 5
+
+
+-> what if we have print statements before and after the loop.
+-> Using Big O Notation we drop constant because they don't really matter.
+-> Here is the reason supposw our array have 1 millions elements and adding two extra operations donen't really 
+matter.
+
+function printElements(arr) {
+  console.log("Before");   // O(1)
+  arr.forEach(element => {  // O(n)
+    console.log(element);
+  });
+  console.log("after"); // O(1)      -> O(1+ n + 1) => O(2 + n) => O(n)
+}
+
+
+
+-> what if we have two loops in method?
+-> This another example where we drop constant. all we need here is approximation of the cost of this algorithm 
+relative to its input size. so n or 2n still represent linear growth.
+
+    public void log(int[] numbers){
+        // o(n + n) => O(2n) => O(n)
+
+        for(int number: numbers)  // O(n)
+            System.out.print(number);
+        for(int number: numbers)  // O(n)
+            System.out.print(number);
+    }
+
+
+-> In this example we have two for loops, we are taking n and m because we have two arrays string and number.
+-> we have two inputs, numbers and names. so we have distinguish between two inputs.
+-> O(n + m) => O(n) because runtime of this method increases linearly.
+
+
+    public void log(int[] numbers, String[] names){
+        // Time Complexity : O(n + m) => O(n)
+
+        for(int number: numbers)  // O(n)
+            System.out.print(number);
+        
+        for(String name: names)   // O(m)
+            System.out.print(name);
+    }
+
+
+
+
+3. Quadratic Time - O(n^2)  -> Horrible
+
+    public void log(int[] numbers){
+      // Time Complexity : O(n * n) => O(n^2)
+      
+        for(int first: numbers){  // O(n)
+            for(int second: numbers){ // O(n)
+                System.out.print(first + " " + second);
+            }
+        }
+    }
+    
+-> The square of number is greater than number its self. so in this code n^2 always grows faster than n.
+-> all we need is approximation and not an exact value. so we drop n and conclude that this method run in O(n^2).
+
+public void log(int[] numbers){
+    // Time Complexity : O(n * n + n) => O(n^2 + n) => O(n^2)
+      for(int num: numbers){  // O(n)
+        System.out.print(num);
+      }
+      for(int first: numbers){  // O(n)
+          for(int second: numbers){ // O(n)
+              System.out.print(first + " " + second);
+          }
+      }
+  }
+
+
+-> Algorithm with this time complexity is much slower than O(n^2)
+
+    public void log(int[] numbers){
+    // Time Complexity : O(n * n * n) => O(n^3)
+
+        for(int first: numbers){     // O(n)
+            for(int second: numbers){     // O(n)
+                for(int third: numbers){     // O(n)
+                    System.out.print(first + " " + second + " " + third);
+                }
+            }
+        }
+    }
+
+
+
+
+4. Logarithmic Time - O(log n)   -> Good
+-> In this we reduce our work by half.
+-> the algorithm run on O(log n) are more efficient and scalable than the algorithms that run on linear or 
+Quadratic time.
+-> Lets say we have array of sorted numbers from 1 to 10, and we want to find number 10, one way to find no 10 
+is to iterate over array from first number going forward until we find 10. this is called linear search. because 
+its run in linear time.
+in worst case scenario the no we are looking for is at the end of the array we have to inspect every element
+of this array to find target number.
+-> the more items we have the more operations it will take. so the runtime of this algorithm increases 
+linearly and in direct proportion with size of array.
+
+-> We have another searching algorithm called binary search and it runs in Logarithmic time. it is more 
+faster then linear search. 
+assuming our array is sorted we start looking form middle item. is the target item smaller or greater than the 
+value we are looking for. if its smaller so our target number must be in right partition. so we don't have to 
+look for left partition. with this we can narrow down our search by half.
+we apply same technique on right partition until we find target element
+-> So in every step we are narrow down our search by half. with this algorithm if we have 1 million items in 
+our array then to find target element we just need maximum of 19 comparisons.
+
+
+
+
+
+
+
+
+5. Exponential Time - O(2^n) -> Horrible
+
+-> This is opposite of Logarithmic growth O(log n).
+-> So Logarithmic slows down as input size grows.
+-> But Exponential curve growth faster and faster.
+-> Not scalable

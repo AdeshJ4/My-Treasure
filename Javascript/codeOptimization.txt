@@ -1,0 +1,198 @@
+debouncing and throttling
+
+
+How to lazy load routes with react router.
+
+lazy loading is a technique where component not required on the home page can be split 
+into separate code bundles and downloaded only when the user navigate to that page.
+
+
+it helps to reduce initial load time thereby improving performance.
+
+
+Relationship between Code Splitting and Lazy Loading:
+Code splitting refers to the process of breaking the app’s code into smaller bundles (chunks).
+Lazy loading refers to the technique of loading these chunks on demand (when the user needs them).
+
+
+Code splitting breaks the app’s code into smaller bundles.
+Lazy loading ensures that these bundles are loaded only when needed.
+
+
+
+The Suspense component in React is used to handle lazy-loaded components and show a fallback (like a loading spinner or message) while those components are being fetched or loaded in the background.
+
+
+
+
+lazy load images : 
+
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import img1 from './assets/img1.jpg';
+import img2 from './assets/img2.jpg';
+import img3 from './assets/img3.jpg';
+import img4 from './assets/img4.jpg';
+import img5 from './assets/img5.jpg';
+import img6 from './assets/img6.jpg';
+import img7 from './assets/img7.jpg';
+import img8 from './assets/img8.jpg';
+import img9 from './assets/img9.jpg';
+import img10 from './assets/img10.jpg';
+import img11 from './assets/img11.jpg';
+import img12 from './assets/img12.jpg';
+import img13 from './assets/img13.jpg';
+import img14 from './assets/img14.jpg';
+import img15 from './assets/img15.jpg';
+import img16 from './assets/img16.jpg';
+import img17 from './assets/img17.jpg';
+import img18 from './assets/img18.jpg';
+import img19 from './assets/img19.jpg';
+import img20 from './assets/img20.jpg';
+import img21 from './assets/img21.jpg';
+import img22 from './assets/img22.jpg';
+import img23 from './assets/img23.jpg';
+
+
+const images  = [ img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14, img15, img16, img17, img18, img19, img20, img21, img22, img23];
+
+const App = () => {
+  return (
+    <>
+      <div>
+        {images.map((img, index) => (
+          <img key={index} src={img} alt={`Image ${index + 1}`} loading="lazy" />
+        ))}
+      </div>
+    </>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Debounce and Throttling:
+========================
+
+-> Debouncing and throttling are techniques used to optimize the performance of functions triggered by events that occur frequently, such as scrolling, resizing, or typing
+
+-> Debouncing is a technique that delays the execution of a function until the user stops performing a certain action for a specified amount of time
+
+-> This is useful if you have a frequently used function—say, a scroll or resize event listener—and don’t want to trigger it too frequently because that might slow down the browser
+
+-> There are some heavy tasks in software development. Take calling an API, for example. Suppose we have an API that searches a list of users, and we can't afford to fire it too often. We want to search only when we have typed the whole search query.
+
+
+
+When to Use Debouncing
+Let's understand this with an example. Suppose we have an input element that gets some data when we type something. For example, let's say we type any pin-code, and it returns some data.
+
+But there is a catch here. Let's say our pin-code is 800001. If we type the first character, that is 8, we will send request to the backend server. Then we type 0, and we will send another request to the server, and so on.
+
+This calls the API so many times, and in turn overuses the requests. So, to prevent this, we use something called a debounce function.
+
+So to achieve this, we have a feature in JavaScript called Debouncing.
+
+-> No matter how many times the user fires the event, the connected function will only run once the user stops firing the event,
+
+code 1: 
+
+import React from 'react'
+import { useEffect } from 'react';
+import { useState } from 'react'
+
+const App = () => {
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {    
+    const timer = setTimeout(() => {
+      console.log(searchQuery);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+  }
+
+  return (
+    <div>
+      <input type="text" value={searchQuery} onChange={handleInputChange} />
+    </div>
+  )
+}
+
+export default App
+
+
+
+
+code 2: 
+
+import React, { useState } from 'react';
+
+function SearchComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Debounce function: waits 300ms before calling the function
+  const debounce = (func, delay) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  const handleSearch = debounce((term) => {
+    console.log('Searching for:', term);
+    // You can add API call or search logic here
+  }, 300);
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    handleSearch(value);  // Debounced function
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleInputChange}
+        placeholder="Search..."
+      />
+    </div>
+  );
+}
+
+export default SearchComponent;
+
+
+
+
+code 3: 

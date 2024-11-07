@@ -10,7 +10,7 @@
 10. charAt()
 11. split()      -> Split a string into substrings using the specified separator and return them as an array.
 12. indexOf(str)
-13. replace()
+13. replace() : replace() does not modify the original string because strings are immutable. Instead, it returns a new string with the replacement applied.
 
 
 let str = 'ADESH';

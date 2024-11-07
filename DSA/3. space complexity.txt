@@ -1,0 +1,36 @@
+Space Complexity: 
+
+-> we have to do trade of between saving time and saving space.
+-> How much space a algorithm require.
+
+
+
+-> When we talk about space complexity we only look at the additional space that we should allocate relative to
+the size of the input, we always have input of size n so we don't count it, we just analyze how much extra space 
+we need to allocate to this algorithm.
+
+
+Space Complexity is a measure of the total memory space required by an algorithm to run to completion. 
+This includes:
+1. Auxiliary Space: Extra space or temporary space used by the algorithm, excluding input data.
+2. Input Space: Memory space used by the inputs of the algorithm.
+When analyzing space complexity, we focus on the auxiliary space, as the input space is generally fixed by the problem size.
+
+The space complexity helps us understand how much memory an algorithm needs relative to its input size, which is important for optimizing memory usage, especially in resource-constrained environments.
+
+
+
+
+
+-> In this example loop variable i is going to have extra space.
+    public void log(String[] names){
+        for(int i=0; i<names.length; i++){  // O(1)
+            System.out.println("Hi " + names[i]);
+        }
+    }
+
+
+-> In this example copy array may have n size.
+    public void log(String[] names){
+        String[] copy = new String[names.length];  // O(n)
+    }

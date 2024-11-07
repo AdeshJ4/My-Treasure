@@ -3,7 +3,8 @@ forEach():
 -> forEach is exactly same as a map() function with key difference that it does not create a new array.
 -> The forEach() method call a function for each element in an array.
 -> return value of a forEach() is undefined.
-
+-> The forEach method is a higher-order function that iterates over each element of an array. It takes a callback function and executes it for each array element
+-> Note: Unlike for loops, forEach cannot be broken out of using break or continue.
 
 for examples see map() function examples.
 

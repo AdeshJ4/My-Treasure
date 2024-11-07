@@ -1429,6 +1429,7 @@ try{
 Arguments : 
 -----------
 -> we have 'object' called "arguments" which 'contain all arguments' passed to function.
+-> 'arguments' is object not array, because its give false for Array.isArray().
 function fun (){
     let sum=0;
     for (let args of arguments){
@@ -1441,6 +1442,26 @@ function fun (){
     console.log(sum); 
 }
 fun(10, 20, 30, 50);
+
+
+
+Note: just log the arguments value in regular and arrow function ans see the difference.
+the behaviour of arguments object is different for regular and arrow function.
+-> In regular functions, arguments is a built-in object that contains all the arguments passed to the function.
+-> Arrow functions do not have their own arguments object. When you try to access arguments in an arrow function, it will reference the arguments object from the 
+surrounding scope (parent), which in your case seems to be the Node.js module scope (which is why you're seeing information about the module and require).
+-> Fix for Arrow Functions:To get similar behavior in an arrow function, you can use the rest parameter syntax (...args) to explicitly collect all the arguments 
+passed to the function:
+
+
+const fun = (...args) => {
+  console.log(args);  // `args` will be an array of the passed arguments
+}
+
+fun(10, 20, 30);  // Output: [10, 20, 30]
+
+
+
 
 
 Rest parameters : 

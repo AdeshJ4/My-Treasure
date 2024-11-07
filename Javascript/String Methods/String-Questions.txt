@@ -1,0 +1,43 @@
+1. Reverse a String
+
+function reverseString(str) {
+  return str.split('').reverse().join('');
+}
+
+
+2. Check if a String is a Palindrome
+
+function isPalindrome (str) {
+  return str.split('').reverse().join('') === str;
+}
+
+
+3. Count the Number of Vowels in a String:
+
+code 1: 
+function countVowels (str) {  // a e i o u
+  let count = 0;
+  const vowels = ['a', 'e', 'i', 'o', 'u'];
+  const strArr = str.toLowerCase().split(''); // [ 'a', 'n', 'u', 'r', 'a', 'g' ]  
+  for(let s of strArr){    
+    if(vowels.includes(s)){
+      console.log(s);
+      count++;
+    }
+  }
+  return count;
+}
+
+
+code 2: 
+function countVowels(str) {
+  const vowels = 'aeiou';
+  let count = 0;
+  for (let char of str.toLowerCase()) {
+    if (vowels.includes(char)) {
+      count++;
+    }
+  }
+  return count
+}
+
