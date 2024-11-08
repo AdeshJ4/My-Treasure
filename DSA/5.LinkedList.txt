@@ -1,0 +1,79 @@
+-> Linked List are probably most commonly used data structure after arrays.
+-> We used Linked list to store list of objects in sequence.
+-> Linked list grows and shrink automatically.
+-> Nodes of linked list can be all over the place in memory. they are not exact to each other.
+-> Linked list consist of group of nodes in sequence.
+-> Each node holds two piece of data, one is value and the other is address of the next node in the list.
+-> Each node points to or references to next node. thats why we refer to this structure as a linked list 
+because this nodes are linked together.
+-> we call first node as a head and the last as a tail.
+refer to img 1.1
+
+Operations Runtime COmplexity:
+==============================
+
+1. Lookup:
+
+-> In a Singly Linked List in Java, lookup operations generally have a time complexity of O(n), 
+regardless of whether you’re looking up by "value" or by "index".
+
+By Value: O(n)
+-> To find a node with a specific value, you need to traverse the list from the head and compare each 
+node’s value with the target value.
+-> In the worst case, you may need to check all n nodes in the list (if the value is at the end or not 
+present).
+-> Time Complexity: O(n) because each node needs to be checked once
+
+
+By Index: O(n)
+-> Unlike arrays, linked lists don’t allow direct access by index. To access a node at a specific index, you 
+need to traverse the list from the head until you reach that index.
+-> In the worst case, if you’re looking for the last node (at index n - 1), you need to traverse the entire 
+list, making it an O(n) operation.
+
+
+
+
+2. Insert: 
+
+At the End: O(1)
+-> It depends where we are going to store that element.
+-> If we insert item at the end then we simply create an new node and have the last node or tail find to it/
+reference to it. we must have reference of last node somewhere so that we don't have to traverse list.
+so its time complexity is O(1) you just need reference of last node.
+
+Inserting at beginning: O(1)
+-> we must have reference of head or first node, we create a new node linked it to 1st node and then changed 
+the head to point to this new node.
+
+In the Middle: O(n)
+-> What if we want to store node in between the list say after 10th node.
+-> first we will find the node thats O(n) operation then we have update the links which O(1) operation.
+
+
+
+3. Delete: 
+
+From the Beginning: O(1)
+-> In a singly linked list, deleting the first node (head) is efficient because you only need to update 
+the head pointer to the next node.
+Steps:
+1. Set the head to head.next.
+2. The previous head node becomes eligible for garbage collection if there are no other references to it.
+
+From the End: O(n)
+-> To delete the last node, you need to find the second-last node (because it needs to point to null). 
+-> This requires traversing the list from the head, which takes O(n) time for a list of n elements.
+Steps:
+1. Traverse to the second-last node.
+2. Set its next pointer to null to remove the last node.
+
+From the Middle: O(n)
+-> To delete a node from the middle, you must first locate it, which requires traversing from the head up 
+to that node. This traversal takes O(n) time in the worst case (e.g., if the element is near the end).
+Steps:
+1. Traverse to the node just before the node you want to delete.
+2. Update its next pointer to skip over the node to be deleted.
+
+
+

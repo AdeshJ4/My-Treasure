@@ -37,4 +37,13 @@ or add/remove items they don't perform well.
 In those case we used Linked List.
 
 
- 
+ -> we have two classes in java for dynamic array both these classes are declare in java.util package:
+
+ 1. ArrayList
+ 2. Vector
+
+
+ vector class grows 100% and have synchronized methods.
+ when we say a method is synchronized it means single thread can access that method.
+
+ ArrayList grows 50%  
