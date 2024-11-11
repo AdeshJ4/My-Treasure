@@ -1,0 +1,161 @@
+1. Method Overloading: 
+
+-> Method Overloading occurs when multiple methods in the same class have the same name but different 
+parameters (either in number, type, or order). 
+-> Same Method Name, Different Parameters: 
+The methods must have the same name but different parameter lists.
+-> Return Type Doesn’t Matter: 
+The return type of the overloaded methods can be different, but it’s not considered in distinguishing 
+overloaded methods
+-> Compile-time Polymorphism: 
+Method overloading is resolved at compile-time, making it an example of compile-time polymorphism.
+-> No Inheritance Requirement: 
+Overloading can occur in a single class or between a class and its subclass.
+ex: 
+public class MathOperations {
+
+    // Method to add two integers
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    // Overloaded method to add three integers
+    public int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    // Overloaded method to add two double values
+    public double add(double a, double b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        MathOperations operations = new MathOperations();
+        
+        System.out.println(operations.add(5, 3));          // Output: 8
+        System.out.println(operations.add(5, 3, 2));       // Output: 10
+        System.out.println(operations.add(5.5, 3.2));      // Output: 8.7
+    }
+}
+
+
+
+
+
+
+
+=========================================================================================================
+
+
+
+2. Method Overriding: 
+
+-> Method Overriding occurs when a subclass (child class) has a method with the same name, return type, and 
+parameters as a method in its superclass (parent class). 
+-> This allows the subclass to provide a specific implementation of a method that is already defined in its 
+superclass.
+-> Purpose: To redefine a superclass method in a subclass
+-> Key Points about Method Overriding:
+1. Same Method Signature: 
+The method name, parameters, and return type must match exactly with the method in the superclass.
+2. Only in Inheritance: 
+Overriding is possible only in an inheritance scenario, where a subclass extends a superclass.
+3. Runtime Polymorphism: 
+Method overriding is used to achieve runtime polymorphism, allowing a subclass to define its own behavior 
+for a method.
+4. Annotations: 
+Java provides the @Override annotation, which is optional but helps make the code more readable and allows 
+the compiler to check if the method is actually overriding a method in the superclass.
+
+
+// Superclass
+class Animal {
+    public void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+// Subclass
+class Dog extends Animal {
+    // Overriding the makeSound method
+    @Override
+    public void makeSound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal myAnimal = new Animal();
+        myAnimal.makeSound();  // Output: Animal makes a sound
+
+        Animal myDog = new Dog();
+        myDog.makeSound();     // Output: Dog barks
+    }
+}
+
+
+
+
+
+
+
+
+
+### Differences between Overriding and Overloading
+
+| Feature                  | Overriding                                             | Overloading                                    |
+|--------------------------|--------------------------------------------------------|------------------------------------------------|
+| **Purpose**              | To redefine a superclass method in a subclass.         | To create multiple methods with the same name but different parameters. |
+| **Inheritance Required** | Yes                                                    | No                                             |
+| **Method Signature**     | Must match exactly (name, parameters, return type).    | Must have different parameters (number, type, or order). |
+| **Access Modifier**      | Cannot be more restrictive than the overridden method. | No restriction based on other methods.         |
+| **Return Type**          | Must be the same or covariant.                         | Can be different.                              |
+| **Polymorphism**         | Achieves runtime polymorphism.                         | Achieves compile-time polymorphism.            |
+
+### Summary
+
+- **Overriding**: Allows a subclass to provide a specific implementation of a method that is already defined in its superclass. It requires inheritance and achieves runtime polymorphism.
+- **Overloading**: Allows multiple methods with the same name but different parameters in the same class. It achieves compile-time polymorphism and doesn’t require inheritance. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

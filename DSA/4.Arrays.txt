@@ -47,3 +47,34 @@ In those case we used Linked List.
  when we say a method is synchronized it means single thread can access that method.
 
  ArrayList grows 50%  
+
+
+
+Insert : 
+
+1. 
+
+
+
+ Remove : 
+
+1. removing the last item : O(1)
+-> The time complexity for removing the last item from an array is O(1), or constant time.
+-> In an array, each element is stored in contiguous(next to each other) memory locations, so you can directly access the last element by its index (e.g., 
+array[length - 1]).
+-> No shifting of elements or additional operations are needed.
+
+2. removing the first item: O(n)
+-> The time complexity for removing the first item from an array is O(n), where n is the number of elements in the array.
+-> When you remove the first item, all subsequent elements need to be shifted one position to the left to fill the gap left by the removed item.
+
+
+3. removing an element from the middle: O(n)
+-> Removing an element from the middle of an array also has a time complexity of O(n), where n is the number of elements in the array.
+-> When you remove an element from the middle, all elements to the right of the removed element need to be shifted one position to the left to maintain the array’s contiguous memory structure.
+
+
+
+
+
+

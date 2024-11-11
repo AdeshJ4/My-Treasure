@@ -1,0 +1,66 @@
+What are stacks : 
+
+-> In Java, a stack is a data structure that follows the Last In, First Out (LIFO) principle, meaning the last element added to the stack 
+is the first one to be removed. 
+-> Stacks are commonly used in scenarios like evaluating expressions, parsing, and implementing UNDO and REDO operations.
+->> Internally we used an array or linked list to store objects in a stack. so stack is basically wrapper around an array or linked list
+that gives us different way of storing and accessing objects.
+-> we don't used stack to store list of products or like that and search for them quickly.
+-> stacks are ideal for temporary storage when working with nested or sequential operations where the most recent item added is the first needed for the next operation
+
+
+Stack have 4 operations : 
+
+1. push(item)  :  O(1)    Which adds item on top of the stack
+2. pop()       :  O(1)    Which removes item from top
+3. peek()      :  O(1)    which return items from top without removing it
+4. isEmpty()   :  O(1)    tells stack is empty or not.
+
+all operations of stack runs in O(1), its not matter that your stack is implement in array or linked list.
+
+
+1. Browser History Navigation: 
+Problem: When navigating back and forth between web pages, each page visit is stored in a way that allows users to go back to the 
+previous page they visited.
+Solution with Stack:
+Each time a user visits a new page, the URL is pushed onto a stack.
+If they press the “Back” button, the most recent URL (top of the stack) is popped and displayed.
+To implement a “Forward” button, you can use another stack to store pages visited after going back.
+
+
+
+
+
+2. Undo/Redo Functionality in Text Editors: 
+Problem: Users need the ability to undo the last action (e.g., typing or deleting text) and redo it if they change their mind.
+Solution with Stack:
+An “undo” stack stores each action as it is performed.
+When the user presses “Undo,” the last action is popped from the undo stack and added to a “redo” stack.
+If the user then presses “Redo,” the action moves back from the redo stack to the undo stack.
+
+
+
+3. Expression Evaluation (e.g., Arithmetic Expressions)
+Problem: When evaluating mathematical expressions (like 3 + (4 * 5)), operations need to follow a specific order (e.g., handling parentheses and operator precedence).
+Solution with Stack:
+Stacks help evaluate expressions by storing operators and operands in a way that respects precedence.
+For example, in converting an infix expression to postfix (or evaluating postfix expressions), a stack is used to process operators in the correct order.
+
+
+4. Parsing Nested Structures (e.g., HTML or XML tags)
+Problem: To validate if an HTML or XML document is well-formed, each opening tag needs a corresponding closing tag in the correct order.
+Solution with Stack:
+As each opening tag is encountered, it’s pushed onto a stack.
+When a closing tag appears, it’s compared to the tag at the top of the stack. If they match, the opening tag is popped.
+This continues until the document is parsed or an error is detected
+
+5. Function Call Management in Recursion
+Problem: Each function call in recursion needs to keep track of its own local variables, parameters, and return address.
+Solution with Stack:
+The program stack (call stack) handles function calls and stores each function’s state. As each function is called, a stack frame is created and pushed.
+When a function returns, its frame is popped off the stack, and execution resumes at the previous frame.
+Example: In recursive algorithms (like calculating Fibonacci numbers or factorials), each function call is stacked until the base case is reached, at which point the stack unwinds as functions return
+
+
+
+

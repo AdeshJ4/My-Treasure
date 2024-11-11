@@ -1,0 +1,14 @@
+we should able to differentiate In term of require memory and time complexity of various operations.
+
+-> Arrays/static arrays have fixed size if we don't know head of time how many items we are going to store then either we have to use dynamic array.
+-> Dynamic array grow by 50%-100% so we end up wasting space.
+
+
+-> Linked list only take necessary memory.
+-> Linked list take little bit extra space to store address of next node.
+
+-> If we know head of time how many items we are going to store then we should use array.
+
+-> Some operations are faster in linked list and slower in array or vice versa.
+
+-> 
