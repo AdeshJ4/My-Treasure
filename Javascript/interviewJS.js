@@ -1277,7 +1277,8 @@ Types of Errors:
 
 1. Compile-time errors
 
--> Compile-time errors are the errors that occurred during compilation time.
+-> compile-time error occurs during the compilation phase when the code is translated to machine-readable instructions before 
+execution.
 -> If we write the wrong syntax or semantics of any programming language, then the compile-time errors will be thrown by the 
 compiler
 ->The compiler will not allow to run the program until all the errors are removed from the program.
@@ -1290,18 +1291,66 @@ Definition, Missing Import Statement, Incorrect Loop Syntax.
 
 -> The runtime errors are the errors that occur during the execution and after compilation.
 -> These errors are not easy to detect as the compiler does not point to these errors.
+-> When a runtime error occurs, JavaScript "throws" an exception, which can be caught and handled using try...catch blocks.
+-> This is why you can think of all runtime errors as exceptions in JavaScript. 
+These runtime exceptions are generally thrown as Error objects with specific types, like ReferenceError, TypeError, or SyntaxError.
+
+
 ex. 
-For example,
-calling an invalid function or a variable, 
-errors such as division by zero, 
-determining the square root of a negative number.
+For example,Logic errors that don’t halt execution but cause crashing of program.
+Invalid operations like calling a function that doesn’t exist or a Accessing an Undeclared Variable (Runtime Error), division by 
+zero, determining the square root of a negative number.
+
+Division by Zero: Division by zero does not throw an error in JavaScript, but it produces special values (Infinity, -Infinity, or 
+NaN). Since this behavior happens during program execution, it is considered a runtime behavior.
+code : 
+let result = 10 / 0;  // Output: Infinity
+let negativeResult = -10 / 0; // Output: -Infinity
+let zeroDividedByZero = 0 / 0; // Output: NaN (Not a Number)
+
+Undeclared Variable: If you try to access a variable that has never been declared, JavaScript will throw a ReferenceError 
+because it can't find the variable in the current scope. 
+code : 
+let a = 5;
+console.log(b); // ReferenceError: b is not defined
+fun(); //ReferenceError: fun is not defined
+
+determining the square root of a negative number: JavaScript's Math.sqrt() function only returns real numbers for non-negative 
+values. If you try to find the square root of a negative number, the result will be NaN (Not a Number), as real square roots for 
+negative numbers don’t exist.
+
+let positiveSqrt = Math.sqrt(25); // Output: 5
+let negativeSqrt = Math.sqrt(-25);  // Output: NaN
+
 
 Exception: 
 
--> These errors that occur during runtime are called exceptions
+-> In JavaScript, exceptions refer to any "abnormal condition" that disrupts code execution and can be handled to avoid application 
+crashes. While most exceptions are thrown due to runtime errors, you can also manually throw exceptions when certain conditions 
+are met in your code.
+-> runtime errors and exceptions are closely related. 
+-> In fact, in JavaScript, most runtime errors are considered exceptions! When a runtime error occurs, it is treated as an 
+exception.
+-> This is why you can think of all runtime errors as exceptions in JavaScript. These runtime exceptions are generally thrown as 
+Error objects with specific types, like ReferenceError, TypeError, or SyntaxError.
 -> When an error occurs, an exception is thrown, and the normal flow of the program is interrupted
--> Exception handling allows developers to gracefully manage errors and prevent the program from crashing.
+-> Exception handling allows developers to gracefully manage errors and prevent the program from crashing so that rest of the code 
+can easily executed even though we encounter a exception.
 
+code : 
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Cannot divide by zero");
+  }
+  return a / b;
+}
+
+try {
+  console.log(divide(4, 0)); // This will throw an exception
+} catch (error) {
+  console.error("An exception occurred:", error.message);
+}
+console.log("Hello");  // rest of the code will be executed.
 
 
 JavaScript try...catch Statement : 
@@ -1351,7 +1400,7 @@ function divide(x, y) {
 }
 
 try {
-  console.log(divide(10, 0));
+  divide(10, 0);
 } catch (error) {
   console.error(error.message);
 }
@@ -1388,10 +1437,7 @@ try {
   console.error(error.name + ": " + error.message);
 }
 
-========================================================================================
-
-
-final ex: 
+ex: 
 
 const obj = {
   fname: "Adesh",
@@ -1410,8 +1456,6 @@ const obj = {
     this.lname = parts[1];
   },
 };
-
-
 try{
     obj.fullName = 1;
 }catch(e){
@@ -1420,8 +1464,40 @@ try{
     console.log('Closing all the resources..');
 }
 
+Rules and Best Practices: 
+
+1. You can use one try block inside another, but it's not a common practice: 
+code : 
+try {
+  console.log("Outer try block");
+  try {
+    console.log("Inner try block");
+  } catch (error) {
+    console.error("Error in inner try block:", error.message);
+  }
+} catch (error) {
+  console.error("Error in outer try block:", error.message);
+}
+
+
+2. Try block always have catch or finally block.
+try{
+    throw new Error("Ohhhhh my god");
+}catch(err){
+    console.log(err.message;
+}
+
+
+
+
+
+
+
 
 */
+
+
+
 
 // Q23] What is the rest parameter and spread operator and arguments ?
 
@@ -1446,7 +1522,7 @@ fun(10, 20, 30, 50);
 
 
 Note: just log the arguments value in regular and arrow function ans see the difference.
-the behaviour of arguments object is different for regular and arrow function.
+the behavior of arguments object is different for regular and arrow function.
 -> In regular functions, arguments is a built-in object that contains all the arguments passed to the function.
 -> Arrow functions do not have their own arguments object. When you try to access arguments in an arrow function, it will reference the arguments object from the 
 surrounding scope (parent), which in your case seems to be the Node.js module scope (which is why you're seeing information about the module and require).

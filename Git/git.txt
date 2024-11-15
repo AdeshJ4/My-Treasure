@@ -88,6 +88,17 @@ publish branch -> git push origin b1
 git push origin main     or  git push origin main --force
 git pull origin main
 
+================================================================================================================================================================================
+
+
+Branch not available locally : 
+
+When branch is available on remote server but you can't see it in local then run these commands: 
+
+1. List All Remote Branches: git branch -r
+2. Fetch the all Remote Branches code: git fetch origin
+3. Switch to given branch : git checkout b1
+
 
 ================================================================================================================================================================================
 
