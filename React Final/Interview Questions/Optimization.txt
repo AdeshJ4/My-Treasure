@@ -1,0 +1,105 @@
+1. Memo function
+-> Using memo we will skip rendering a component if its props have not changed, even though you didn't pass any state to 
+that component it will unnecessary rerender so we can stop it by memo function.
+-> React.memo is a higher-order component (HOC) 
+->  It works by memoizing the rendered output of the component and re-rendering it only if its props change
+-> refer w3school example.
+
+
+
+2. useCallback hook: 
+
+-> The React useCallback Hook returns a "memoized callback function".
+-> This allows us to isolate resource intensive functions so that they will not automatically run on every render
+-> The useCallback Hook only runs when one of its dependencies update
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+. Debouncing and Throttling: 
+
+-> Event triggers, such as key presses, button clicks, and mouse movements, are commonly utilised in applications to initiate 
+functions based on user actions. However, users have the potential to trigger these events excessively, leading to notable performance
+problems within the application.
+-> Most common Example you will encounter is ,while creating a search component
+
+
+import React, { useState, useCallback } from "react";
+import _ from "lodash";
+
+const App = () => {
+  const [query, setQuery] = useState("");
+  const [searchResults, setSearchResults] = useState("");
+
+  // Mock search function to simulate API call
+  const performSearch = (query) => {
+    setSearchResults(`${query}`);
+  };
+
+  // Use Lodash's debounce function
+  const debouncedSearch = useCallback(_.debounce(performSearch, 500), []);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    debouncedSearch(value);
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={query}
+        onChange={handleInputChange}
+      />
+
+      <h1>{searchResults}</h1>
+    </div>
+  );
+};
+
+export default App;

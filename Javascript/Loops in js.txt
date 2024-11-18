@@ -23,8 +23,8 @@ while (i < 5) {
 
 3. do...while loop: 
 
--> The do...while loop is similar to the while loop, but it guarantees that the block of code will be executed at least once, because the condition is evaluated after 
-the loop body runs
+-> The do...while loop is similar to the while loop, but it guarantees that the block of code will be executed at least once, 
+because the condition is evaluated after the loop body runs.
 -> Even if the condition is false initially, the loop body will run at least once.
 ex:
 let i = 0;
@@ -40,7 +40,8 @@ do {
 4. for...in loop
 
 -> The for...in loop is used to iterate over the enumerable(able to be counted) properties of an object. 
--> It's primarily used with objects, but can also be used with arrays (though it’s not recommended for arrays, as it iterates over property names, not values).
+-> It's primarily used with objects, but can also be used with arrays (though it’s not recommended for arrays, as it iterates over 
+property names, not values).
 ex: 
 objects: 
 const person = { name: 'John', age: 30, city: 'New York' };
@@ -68,9 +69,9 @@ for(let key in str){
 
 5. for...of loop
 
--> The for...of loop is used to iterate over iterable objects like arrays, strings, Maps, Sets, etc. Unlike for...in, it directly accesses the values of the iterable, 
-not just the keys or property names.
--> Object is not iterable so to make it itrable you can use Object.keys(nameObj) method but you ca use for in loop also
+-> The for...of loop is used to iterate over iterable objects like arrays, strings, Maps, Sets, etc. Unlike for...in, it directly 
+accesses the values of the iterable, not just the keys or property names.
+-> Object is not iterable so to make it iterable you can use Object.keys(nameObj) method but you ca use for in loop also
 -> if you iterate string using "for of" loop then you will get only value and not index, if you want index then you have to use Object.keys(str) method but you ca use 
 for in loop also.
 

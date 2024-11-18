@@ -17,6 +17,26 @@ const person = {
 person.intro()
 
 
+================================================================================================================
+
+How to access objects properties: 
+
+if("fname" in obj){
+    console.log('Yeah');
+}
+
+if(obj.hasOwnProperty("fname")){
+    console.log("Oh Yeah");
+}
+
+if(obj.fname){
+    console.log("Mumma miya");
+}
+
+if(obj["fname"]){
+    console.log("Super");
+}
+
 
 
 ================================================================================================================
