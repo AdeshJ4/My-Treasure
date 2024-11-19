@@ -3,26 +3,26 @@
 that component it will unnecessary rerender so we can stop it by memo function.
 -> React.memo is a higher-order component (HOC) 
 ->  It works by memoizing the rendered output of the component and re-rendering it only if its props change
--> refer w3school example.
+-> refer w3school example and react website ex
 
 
 
 2. useCallback hook: 
-
 -> The React useCallback Hook returns a "memoized callback function".
+-> Every time a component re-renders, its functions get recreated. 
+-> The useCallback and useMemo Hooks are similar. The main difference is that useMemo returns a memoized value and 
+useCallback returns a memoized function. 
 -> This allows us to isolate resource intensive functions so that they will not automatically run on every render
 -> The useCallback Hook only runs when one of its dependencies update
+-> refer react website ex
 
 
 
-
-
-
-
-
-
-
-
+3. useMemo hook: 
+-> The React useMemo Hook returns a "memoized value".
+-> The useMemo Hook only runs when one of its dependencies update
+-> The useMemo Hook can be used to keep expensive, resource intensive functions from needlessly running.
+-> refer react website ex
 
 
 
