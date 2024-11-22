@@ -75,6 +75,14 @@ Symbol
 Object 
 Arrays
 FUnction
+Date
+RegExp
+Map
+WeakMap
+Set
+WeakSet
+Class
+
 
 
 1. Primitive Types: 
@@ -112,8 +120,23 @@ code:
 var x; // value of x is undefined
 var y = undefined; // we can also set the value of a variable as undefined
 
-vi. null - The null value represents the intentional absence of any object value.
+vi. null - 
+null means "no value" or "empty value.", It is Used to explicitly indicate/assign "no value" or "empty value" to a variable.
+It can be used to reset or clear a variable's value
+The null value represents the "intentional absence of any object value".
+In JavaScript, typeof null is an infamous quirk: it returns "object".
+This behavior is due to a "legacy bug" in the language and has been retained for "compatibility reasons".
+Although typeof null is "object", null is "not an actual object"; it is a primitive value.
+Comparison with undefined:
+null is not the same as undefined.
+undefined indicates that a variable has been declared but not assigned a value.
+null is an assigned value that represents "nothing."
 code: let num = null;
+Practical Use Cases:
+1. Indicate an empty state for a variable:
+let user = null; // No user is currently logged in
+
+
 
 vii. symbol:
 -> It is a 'new data type' introduced in the 'ES6' version of javascript.
@@ -167,7 +190,9 @@ console.log(typeof Symbol('hey'));                  // symbol
 
 
 2. Non-primitive types / Reference Type : 
-Primitive data types can store only a single value. To store multiple and complex values, non-primitive data types are used.
+In JavaScript, non-primitive types (or reference types) refer to values which are stored as references in memory rather than as the actual value.
+Primitive data types can store only a single value. To store collections of data and complex values, non-primitive data types are used.
+
 
 
 i. Object 
@@ -175,7 +200,19 @@ i. Object
 -> Objects are collections of key value pair written inside {}.
 -> if we have properties which are highly related then we can encapsulate them inside object.
 -> main purpose of object is to grouped related properties.
--> In javascript objects are dynamic. once we create them we can add additional properties or can remove properties.
+-> In JavaScript objects are dynamic. once we create them we can add additional properties or can remove properties.
+-> In JavaScript, object keys are automatically converted to strings if they are not already strings. This is because object keys must always be strings (or symbols) internally
+code : 
+const obj = {
+  10: 'ten',
+  20: 'twenty',
+  1.2: "P"
+}
+console.log(obj[10]); // ten
+console.log(obj[1.2]); // P
+console.log(obj); // { '10': 'ten', '20': 'twenty', '1.2': 'P' }
+
+
 code : 
 const obj = {
   id: 101,
@@ -209,20 +246,99 @@ console.log(obj['id']);
 ii. Array: 
 
 -> Array store multiple elements which has different datatype inside a single variable.
-code : const arr = [10, 'A', true, Symbol('Hey'), undefined, null, 46316685164514n, function fun1(){log("Hello")}, ];
+code : const arr = [10, 'A', true, Symbol('Hey'), undefined, null, 46316685164514n, function() {console.log("function 1")}, function fun2() {console.log("function 2")}, () =>console.log("Function 3")];
 
 
 iii. Function
-
+-> Functions are objects, but they are a specific kind of object.
 -> inside a function we write block of code which we can run again and again without repeating it.
+-> Function inherit from the Function.prototype object and have properties and methods like call, apply, and bind.
+-> Functions can be passed as arguments or returned from other functions (first-class citizens in JavaScript).
+
+why typeof operator return function instead of object?
+-> functions are technically objects in JavaScript, specifically callable objects with some special properties.
+-> JavaScript did not distinguish between callable objects (functions) and general objects in terms of type detection.
+-> To make it easier for developers to differentiate functions from regular objects, the typeof operator was updated to return "function" for functions.
+-> Returning "function" allows developers to quickly check if a value is a function without extra logic.
 function sayMyName(fname){
     log(fname);
 }
 
-typeof of reference types :
-console.log(typeof ['A', 'B']);         // object
-console.log(typeof {1: 'A', 2: 'B'});   // object
-console.log(typeof fun);                // function -> special kind of object
+
+
+
+
+iv. Date: 
+-> The Date data type in JavaScript is used to handle dates and times. It allows you to create, manipulate, and format dates, as well as perform date calculations.
+-> Use the Date constructor to create a date object.
+code:
+let now = new Date(); // Current date and time
+let specificDate = new Date('2024-11-20'); // Specific date
+let fromTimestamp = new Date(1690000000000); // From timestamp (ms)
+// Methods to Get/Set Components
+1. Get
+now.getFullYear();  // Year
+now.getMonth();     // Month (0-11)
+now.getDate();      // Day of the month (1-31)
+now.getHours();     // Hour (0-23)
+2. Set
+now.setFullYear(2025); // Set year
+now.setMonth(0);       // Set month (January)
+// Formatting Dates
+Convert a date to a readable string:
+now.toDateString();  // "Wed Nov 20 2024"
+
+
+v. RegExp (Regular Expressions)
+-> Represents patterns used for string matching and manipulation.
+
+vi. Map and WeakMap
+vii. Set and WeakSet
+viii. Class
+
+
+
+Characteristics of Reference Types:
+1. Stored in Memory (Heap):
+The actual value is stored in a separate memory location (heap), and the variable holds a reference to that location.
+2.Mutability:
+Non-primitive types are mutable, meaning their contents can be changed without changing their reference.
+3. Reference Equality:
+Two variables holding the same object reference point to the same data, not independent copies.
+Example:
+const obj1 = { key: "value" };
+const obj2 = obj1;
+obj2.key = "new value"; 
+console.log(obj1.key); // "new value"
+
+
+### Differences Between Primitive and Non-Primitive Types:
+
+|-----------------------------------------------------------------------------------------------|
+| Feature                | Primitive Types                  | Non-Primitive Types               |
+|------------------------|----------------------------------|---------------------------------- |
+| **Examples**           | `number`, `string`, `boolean`    | `object`, `array`, `function`     |
+| **Storage**            | Stored directly in the stack     | Stored as a reference in the heap |
+| **Mutability**         | Immutable                        | Mutable                           |
+| **Equality**           | Compared by value                | Compared by reference             |
+|------------------------|----------------------------------|-----------------------------------|
+
+
+|-----------------------------------------------------------------------------------------------|
+| **Type**             | **Example**                            | **`typeof` Result**     	|
+|----------------------|----------------------------------------|-------------------------------|
+| **Object**           | `{ name: "John", age: 25 }`            | `"object"`              	|
+| **Array**            | `[1, 2, 3]`                            | `"object"`              	|
+| **Function**         | `function greet() { return "Hello"; }` | `"function"`            	|
+| **Date**             | `new Date()`                           | `"object"`              	|
+| **RegExp**           | `/abc/`                                | `"object"`              	|
+| **Map**              | `new Map()`                            | `"object"`              	|
+| **WeakMap**          | `new WeakMap()`                        | `"object"`              	|
+| **Set**              | `new Set()`                            | `"object"`              	|
+| **WeakSet**          | `new WeakSet()`                        | `"object"`              	|
+| **Class**            | `class MyClass {}`                     | `"function"` (constructor) 	|
+| **`null` (special)** | `null`                                 | `"object"` (bug in JS)     	|
+|-----------------------------------------------------------------------------------------------|
 
 */
 
@@ -750,10 +866,28 @@ this:
 which is "window" object in the browser and "global" in node.
 -> in case of constructor function, we all know that we create object using new operator. so new operator create a new empty object 
 like this {} and set "this" to point newly created object.
--> 
-without using strict mode the value of a "this" inside a standalone function refer to global object but using strict mode the 
+-> without using strict mode the value of a "this" inside a standalone function refer to global object but using strict mode the 
 value of a this keyword inside a standalone function will refer 'undefined', this is because
-we don't have to accidently over right the value of global object
+we don't have to accidentally over right the value of global object.
+-> Arrow functions do not have their own this. Instead, they inherit this from their lexical scope (the surrounding context where the arrow function is defined).
+
+code: 
+const obj = {
+  fname: 'Adesh',
+  lname: 'Jadhav',
+  intro: function(){
+    const inner = () => {
+      console.log(`Name: ${this.fname} lname: ${this.lname}`);  // // Inherits `this` from `intro`
+    }
+    inner();
+  },
+  callMe: () => {
+    console.log(`Name: ${this.fname} lname: ${this.lname}`);  // Name: undefined lname: undefined 
+  }
+}
+obj.callMe()
+
+
 code: 
 "use strict";
 function fun(){
@@ -763,7 +897,6 @@ fun(); // undefined
 
 
 ex
-
 1. function inside obj
 
 const obj = {

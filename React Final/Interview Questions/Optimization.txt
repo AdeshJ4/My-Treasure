@@ -27,79 +27,288 @@ useCallback returns a memoized function.
 
 
 
+4. Debouncing and Throttling: 
+
+example video : https://www.meziantou.net/assets/demo-throttle.mp4?v=af81
+
+-> Event triggers, such as key presses, button clicks, and mouse movements, resize are commonly utilized in applications to execute functions based on user actions. 
+However, users have the potential to trigger these events excessively, leading to notable performance problems within the application.
+-> Most common Example you will encounter is while creating a search component.
+you might have a search bar that fetches suggestions from the backend as the user types, or a resize event handler that adjusts the layout of your page. 
+In these cases, you don’t want to execute your code too often, as it might cause unnecessary network requests, a laggy user interface, or high CPU usage.
+-> To solve this problem, you can use two techniques called debouncing and throttling.
+-> These techniques allow you to control the rate at which your code is executed, and reduce the number of times it is called.
+
+What is Debouncing?
+
+-> Debouncing is a technique that delays the execution of a function until the user stops performing a certain action/event for a specified amount of time and If 
+new events occur within the delay period, the timer is reset, and the function execution is started from beginning.
+-> For example, if you have a search bar that fetches suggestions from the backend as the user types, you can "debounce the function" that makes the API call, 
+so that it only runs after the user stops typing for specified amount of time. This way, you can avoid making too many API calls that might overload your server or return 
+irrelevant results
+-> To implement debouncing in JavaScript, you can use a timer variable to track the delay period. You can use the setTimeout function to set a timer that will 
+execute your function after the delay period. You can also use the clearTimeout function to cancel the timer if the user performs the action again before the delay 
+period ends. This way, you can ensure that your function only runs once after the user stops performing the action.
+
+
+What is Throttling?
+
+Throttling: In throttling, the function is executed at a fixed interval. Even if the triggering event occurs more frequently, the function is invoked according to the 
+defined interval. . This is particularly useful for performance optimization in scenarios like scrolling or resizing.
+
+
+2. Use Cases
+
+Throttling: Throttling is suitable for scenarios where you want to limit the frequency of function calls, like handling scroll events or resizing events. 
+It helps avoid overloading the system with frequent updates.
+Debouncing: Debouncing is ideal when you want to wait for a pause in the events before triggering a function. 
+This is useful for situations like search suggestions, where you want to wait for the user to finish typing before fetching suggestions.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-. Debouncing and Throttling: 
-
--> Event triggers, such as key presses, button clicks, and mouse movements, are commonly utilised in applications to initiate 
-functions based on user actions. However, users have the potential to trigger these events excessively, leading to notable performance
-problems within the application.
--> Most common Example you will encounter is ,while creating a search component
-
-
-import React, { useState, useCallback } from "react";
-import _ from "lodash";
-
-const App = () => {
+// code 1: 
+function App() {
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState("");
-
   // Mock search function to simulate API call
-  const performSearch = (query) => {
-    setSearchResults(`${query}`);
+  const performSearch = useCallback((query) => {
+    setSearchResults(`Results for "${query}"`);
+  }, []);
+  // Debounce function: waits 300ms before calling the function
+  const debounce = (func, delay) => {
+    let intervalId;  // id=1 or id=2
+    return (value) => {  // rest parameter accepts indefinite number of arguments as a array
+      clearTimeout(intervalId);  // if new event occurs then clear previous one and starts from 0(reset functionality)
+      intervalId = setTimeout(() => func(value), delay);
+    };
   };
-
-  // Use Lodash's debounce function
-  const debouncedSearch = useCallback(_.debounce(performSearch, 500), []);
-
+  // Use a stable debounced version of performSearch
+  const debouncedSearch = useCallback(debounce(performSearch, 3000), [performSearch]);
   const handleInputChange = (e) => {
     const value = e.target.value;
     setQuery(value);
     debouncedSearch(value);
   };
-
   return (
     <div>
       <input
         type="text"
         value={query}
         onChange={handleInputChange}
+        placeholder="Search..."
+        style={{ padding: '8px', width: '30%' }}
       />
+      <p>{searchResults}</p>
+    </div>
+  );
+}
 
-      <h1>{searchResults}</h1>
+
+
+
+
+
+code 2 : useEffect hook 
+
+const App = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  useEffect(() => {    
+    const timer = setTimeout(() => {
+      console.log(searchQuery);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+  }
+  return (
+    <div>
+      <input type="text" value={searchQuery} onChange={handleInputChange} />
+    </div>
+  )
+}
+export default App
+
+
+
+
+
+============================================================================================================================================================================================================================
+
+debouncing and throttling
+
+
+How to lazy load routes with react router.
+
+lazy loading is a technique where component not required on the home page can be split 
+into separate code bundles and downloaded only when the user navigate to that page.
+
+
+it helps to reduce initial load time thereby improving performance.
+
+
+Relationship between Code Splitting and Lazy Loading:
+Code splitting refers to the process of breaking the app’s code into smaller bundles (chunks).
+Lazy loading refers to the technique of loading these chunks on demand (when the user needs them).
+
+
+Code splitting breaks the app’s code into smaller bundles.
+Lazy loading ensures that these bundles are loaded only when needed.
+
+
+
+The Suspense component in React is used to handle lazy-loaded components and show a fallback (like a loading spinner or message) while those components are being fetched or loaded in the background.
+
+
+
+
+lazy load images : 
+
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import img1 from './assets/img1.jpg';
+import img2 from './assets/img2.jpg';
+import img3 from './assets/img3.jpg';
+import img4 from './assets/img4.jpg';
+import img5 from './assets/img5.jpg';
+import img6 from './assets/img6.jpg';
+import img7 from './assets/img7.jpg';
+import img8 from './assets/img8.jpg';
+import img9 from './assets/img9.jpg';
+import img10 from './assets/img10.jpg';
+import img11 from './assets/img11.jpg';
+import img12 from './assets/img12.jpg';
+import img13 from './assets/img13.jpg';
+import img14 from './assets/img14.jpg';
+import img15 from './assets/img15.jpg';
+import img16 from './assets/img16.jpg';
+import img17 from './assets/img17.jpg';
+import img18 from './assets/img18.jpg';
+import img19 from './assets/img19.jpg';
+import img20 from './assets/img20.jpg';
+import img21 from './assets/img21.jpg';
+import img22 from './assets/img22.jpg';
+import img23 from './assets/img23.jpg';
+
+
+const images  = [ img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11, img12, img13, img14, img15, img16, img17, img18, img19, img20, img21, img22, img23];
+
+const App = () => {
+  return (
+    <>
+      <div>
+        {images.map((img, index) => (
+          <img key={index} src={img} alt={`Image ${index + 1}`} loading="lazy" />
+        ))}
+      </div>
+    </>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=============================================================================================================================================================
+
+
+what is meaning of useCallback with empty dependency array:
+
+
+
+When you use `useCallback` with an **empty dependency array** (`[]`), it means that the function you are memoizing will be created **only once**, during the initial render of the component. This ensures that the same instance of the function is reused across all renders.
+
+### Syntax
+```javascript
+const memoizedFunction = useCallback(() => {
+  // Function logic here
+}, []);
+```
+
+### What It Means
+1. **"Create once and reuse":**  
+   The function is created only during the component's first render. On subsequent renders, React reuses the same instance of the function without recreating it.
+
+2. **No dependencies:**  
+   The function does not rely on any values or variables from the component that may change over time. If you include variables as dependencies (e.g., `[value]`), React will recreate the function whenever those variables change.
+
+### When to Use `useCallback([])`
+- **Stable function reference:**  
+   If a child component depends on the function (e.g., passed as a prop), using `useCallback([])` prevents unnecessary re-renders of the child component. React checks prop equality by reference, so keeping the function instance stable helps optimization.
+
+- **Dependencies are not needed:**  
+   The function does not rely on dynamic state, props, or other variables that can change.
+
+### Example
+```javascript
+import React, { useCallback, useState } from 'react';
+
+const MyComponent = () => {
+  const [count, setCount] = useState(0);
+
+  // Function that doesn't depend on any changing values
+  const handleClick = useCallback(() => {
+    console.log('Button clicked!');
+  }, []);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={handleClick}>Log Message</button>
     </div>
   );
 };
+```
 
-export default App;
+### Behavior in This Example:
+- `handleClick` is created once and reused, even if `count` changes.
+- React reuses the same instance of `handleClick` across renders, which can improve performance if `handleClick` is passed to child components.
+
+### Key Points
+- Use `useCallback([])` for functions that don’t rely on external variables.
+- Avoid overusing `useCallback` for all functions—use it only when there's a clear benefit, like preventing unnecessary re-renders.
+
+
