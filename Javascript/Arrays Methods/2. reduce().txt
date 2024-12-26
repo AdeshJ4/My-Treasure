@@ -130,9 +130,11 @@ console.log(min); // 10
 
 const arr = [[10, 20], [30, 40], [50, 60]];
 const flatArray = arr.reduce((acc, cur) => acc.concat(cur), [])
-console.log(flatArray);  // [ 50, 60, 30, 40, 10, 20 ]
+console.log(flatArray);  // [ 10, 20, 30, 40, 50, 60 ]
 
-
+const res = arr.reduce((acc, curEle) => {
+  return [...acc, ...curEle];
+}, []);   // [ 10, 20, 30, 40, 50, 60 ]
 
 
 

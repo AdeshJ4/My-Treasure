@@ -1,5 +1,223 @@
 ### What is Docker?
 
+
+-> Docker is a "platform" used to develop, ship, and run applications inside lightweight, portable "containers".
+
+Key Concepts of Docker:
+
+1. Containers:
+-> A container has its 'own environment' separate from your PC. it means that A container runs 'independently' of the operating system and software installed on your 
+computer
+-> Containers are lightweight, standalone, isolated environments, and executable packages that include everything needed to run an application.
+-> Containers are isolated environments that bundle the application and its dependencies, making it easier to deploy the 
+application across different environments without worrying about inconsistencies in software versions or configurations.
+-> They are isolated from the host system and other containers, which helps avoid conflicts between applications.
+-> each container can have a different operating system environment, but they share the same underlying host OS kernel.Containers 
+do not run their own full operating system like virtual machines (VMs) do. Instead, containers share the kernel of the host OS 
+but run in isolated user spaces. This means that containers can appear to have their own "OS" in terms of the libraries, tools, 
+and file system, but they still rely on the kernel of the host machine.
+
+
+2. Images
+
+-> An image is a blueprint for creating containers.
+-> It contains the code, libraries, and runtime environment the container will use.
+-> You can create Docker images from a Dockerfile (a configuration file that defines the image) or pull them from a public or private registry like Docker Hub.
+
+
+
+3. Dockerfile
+
+-> A Dockerfile is a text document that contains "instructions on how to build a Docker image". It specifies the base image, installation steps, configuration, 
+and any commands that should run when a container starts.
+
+
+4. Docker Engine : 
+
+-> It is "runtime" that runs and manages containers.
+-> It has two parts: 
+i] Docker daemon (dockerd)    : runs in the background (IMP)
+ii] Docker CLI (docker)       : command-line interface used by the user to interact with Docker.
+
+
+5. Docker Hub:
+
+-> Its a "cloud-based registry" that allows you to "store" and "share" "Docker images"
+-> You can "pull images" from the Docker Hub or "push" your own images to it.
+
+
+
+6. Docker Compose:
+
+-> Docker Compose is a "tool" for defining and running "multi-container" Docker applications. 
+-> Using a "docker-compose.yml" file, you can define services, networks, and volumes, making it easier to manage complex applications with multiple containers.
+
+
+
+7. Volumes
+
+-> Volumes are used to persist data created by and used by Docker containers
+-> They are stored outside the container filesystem, ensuring that data remains even if the container is stopped or removed.
+
+
+
+Docker Architecture: 
+====================
+
+Docker uses client-server Architecture, it has a client component that talks with server using REST API, the server also called 
+"DOCKER ENGINE" sets in the background takes care of building and running, managing the containers. 
+
+technically containers are processes like other processes running in your machine. but its a special kind of process.
+All containers on host share the OS of the host. 
+"more accurately all the containers share the kernel of the host". 
+Kernel is core of OS. its like engine of car. its the part which manages all applications as well as hardware resources lik memory 
+& CPU.
+Every OS has its own Kernel engine and this kernel  have different apis. that why we can't run windows applications on linux or 
+different OS , under the hood this application is talk to kernel of underline OS. 
+that means "on linus machine we can run only linux containers" because these containers needs linux, on window machine however we 
+can run both windows and linux containers because window have custom build linux support. 
+what about macOS,  it has its own kernel which is different from others. Docker on mack uses lightweight "Linux VM" which runs linux 
+containers. 
+
+
+
+Virtual machine vs containers :
+================================
+
+-> Virtual machine as the name implies is an abstraction of a machine (physical hardware) so we can run several virtual machines on 
+physical machine.
+for ex we can have mac and on that mac we can run two VMs one running window and other linux, how do that ? using tool called 
+"Hypervisor". "Hypervisor" is a software we used to create and manage VMs, there are many hypervisor available in market like 
+VirtualBox, VMware which are cross platform so they can run on windows macOS, linux and Hyper-v is only for windows.
+
+so what is benefits of VMs: We can run application in isolation inside a VM, so on the same physical machine we can have 
+two different VMs each running completely different application and each application have exact dependencies it needs. 
+
+so app 1 can use node 16 while app 2 can use node 20. all running in same machine but different isolated environments.
+
+
+Problems : 
+
+Each VM needs a full-blown OS  (OS which are licensed)
+SLow to start  (because you are running complete OS like host machine)
+Resources intensive  (If you have 8 GB ram on host machine then we have to give some Ram to VMs)
+
+
+Containers: gives us isolated environment like VM so we can run multiple apps in isolation. 
+lightweight, they don't need full OS, all containers in single machine share the OS of host. Don't need hardware resources of host.
+Starts quickly.
+
+
+
+Shradha Ma'am: 
+
+-> Manual process to install/set up dependencies for project, so manual error can occurred, 2nd error can be : different version of node or python can give errors 
+like project needs node V16 but new member installed latests node v20, 3rd error can be commands to run applications like you wrote commands for running application
+based on linux OS but new member have windows OS.
+
+SO DOcker solves this issue.
+
+Docker is a service which  helps you to create, build, update, destroy containers.
+
+Containers take code and its dependencies and pack them in single unit/package and can be shared with fellow developers or can be deploy as a single package. 
+
+Containers works on almost on every machine/OS.
+
+We don't have to make any special changes in any other machine for running the container.
+
+Containers are portable, we can share them from one machine to another.
+Containers are lightweight.
+
+Containers are instance of docker image.
+
+
+Docker Image is a executable file. This file contain instructions to build a container. Using One Image we can build multiple containers. 
+When we say that we are going to share a container with our fellow colleague/team then we are actually not sharing the container.
+first we create the docker image of our application then that docker image is shared with others, then anyone can build container with this image inside any OS.
+
+image is like a static screenshot/snapshot of what the code and dependencies is going to look like.
+
+
+
+
+Steps to download docker : 
+https://www.docker.com/products/docker-desktop/ 
+
+open terminal and paste this : "docker pull hello-world"
+
+to create a container from a image run : 
+
+When someone says **"A container has its own environment separate from your PC"**, it means that:
+
+### 1. **Isolation of Applications**  
+A container runs **independently** of the operating system and software installed on your computer.  
+- **Your PC (Host Machine)** might have different applications and libraries installed.  
+- A **container** packages everything it needs to run (e.g., code, dependencies, libraries) in its own isolated environment.  
+- This isolation prevents conflicts between applications and ensures that the containerized app behaves the same, no matter where it is deployed.
+
+👉 **Example**:  
+- On your PC, you might have Python 3.10 installed.  
+- A container can run an app that uses Python 3.7 without interfering with your PC's version of Python.  
+
+### 2. **Filesystem Isolation**  
+A container has its own **filesystem, processes, and networking** that are separate from the host machine.  
+- Even though a container runs on the same kernel as the host, it uses its own virtual filesystem, which comes from the container image.  
+- Changes made inside a container **do not affect your PC's filesystem** (unless explicitly configured to do so).  
+
+👉 **Example**:  
+- If a container deletes files in `/app` inside its environment, the `/app` directory on your PC remains untouched.  
+
+### 3. **Networking Isolation**  
+Containers have their own virtual network interfaces and IP addresses.  
+- They can communicate with each other or the outside world, but by default, they don’t have direct access to the host machine’s network unless configured.  
+
+👉 **Example**:  
+- A container can run a web server on port `80` without affecting other web servers running on your PC.  
+
+### 4. **Process Isolation**  
+Containers run their own processes, which are separate from processes running on the host machine.  
+- A container cannot see or interact with processes outside of its environment.  
+
+👉 **Example**:  
+- If you stop or kill a process inside the container, it **won’t affect any processes on your PC**.  
+
+---
+
+### Why Does This Matter?  
+- **Consistency**: Apps run the same way in development, testing, and production.  
+- **Security**: Containers add a layer of isolation, reducing the risk of malicious software affecting the host.  
+- **Efficiency**: Multiple containers can run on the same machine without interfering with each other.  
+
+Would you like a hands-on example of creating a container to see this in action?
+
+
+
+
+
+Basic Docker Commands: 
+
+
+
+i]    docker build -t <image-name>:   Build a Docker image from a Dockerfile in the current directory.
+ii]   docker run <image-name>:        Run a container from a specified image
+iii]  docker ps:                      List running containers
+iv]   docker stop <container-id>:     Stop a running container
+v]    docker rm <container-id>:       Remove a stopped container
+vi]   docker images:                  List available images
+vii]  docker pull <image-name>:       Download an image from a registry like Docker Hub.
+
+
+Example Workflow:
+Write a Dockerfile: Define how the container should be built (e.g., which base image to use, what dependencies to install, etc.).
+
+Build the Image: Run docker build -t my-app . to create a Docker image based on the Dockerfile.
+
+Run a Container: Use docker run to start a container from the image. For example, docker run -d -p 80:80 my-app will run the application in the container and map port 80 to the host.
+
+Manage Containers: Use docker ps, docker stop, and docker rm to manage your running containers
+
+
+
 Imagine you're building a cool project, like a toy robot. You need a lot of parts to make it work — wires, motors, a power source, 
 sensors, and even a special controller. All these parts need to fit together perfectly, and they have to work on the same 
 "blueprint" so your robot behaves just as you want.
@@ -96,3 +314,17 @@ so our application is loaded inside a container or process and this is how we ru
 
 -> you can deploy a container on cloud, share with friend, 
 each container have its own OS, tools, configuration.
+
+
+
+
+
+=====================================================================================================================================
+
+
+
+
+
+
+
+

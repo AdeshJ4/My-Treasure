@@ -1,0 +1,262 @@
+useSearchParams Hook : 
+
+-> The useSearchParams hook in React is part of the react-router-dom library (version 6 and above). 
+-> It provides a convenient way to access and manipulate query parameters in the URL
+
+
+Query parameters: 
+
+-> Query parameters are key-value pairs appended to the URL after a question mark (?), often used for passing small amounts of data or configuration to a page.
+ex: https://example.com/search?category=react&sort=asc
+
+
+
+Usage: 
+
+The useSearchParams hook allows you to:
+->  Read query parameters from the current URL.
+-> Set or update query parameters, triggering a re-render of your component
+-> Changing query parameters automatically triggers a re-render, ensuring the UI reflects the updated state
+
+
+
+Syntax: 
+
+const [searchParams, setSearchParams] = useSearchParams();
+
+searchParams: A URLSearchParams object representing the current query parameters. It provides methods like .get(), .getAll(), .has(), etc.
+setSearchParams: A function to update the query parameters. It accepts an object or URLSearchParams instance
+
+ex: 
+-> 
+const location = useLocation();
+const searchParams = new URLSearchParams(location.search);
+
+-> 
+setSearchParams(new URLSearchParams(createQueryString))
+location.pathname.includes('listing') && currentFilter !== null ? setSearchparams(new URLSearchParams(`?category=${getCurrentMenuItem.id}`)): 
+
+-> 
+    const query = new URLSearchParams({
+      ...filterParams,
+      sortBy: sortParams,
+    });
+          const response = await axios.get(
+        `http://localhost:5000/api/shop/products/get?${query}`  //  // /api/shop/products/get?category=men%2Cwomen&brand=nike%2Cadidas&sortBy=price-lowtohigh
+      );
+
+
+
+
+
+
+examples: 
+
+Example: Reading Query Parameters
+
+url : https://example.com/search?category=react&sort=asc
+
+function SearchPage() {
+  const [searchParams] = useSearchParams();
+
+  const category = searchParams.get('category'); // "react"
+  const sort = searchParams.get('sort');   // "asc"
+
+  return (
+    <div>
+      <h1>Search Page</h1>
+      <p>Category: {category}</p>
+      <p>Sort: {sort}</p>
+    </div>
+  );
+}
+
+
+
+Example: Updating Query Parameters
+before : https://example.com/search?category=react&sort=asc
+after : https://example.com/search?category=node&sort=desc
+
+
+function SearchPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const updateSort = () => {
+    setSearchParams({ query: 'react', sort: 'desc' });
+  };
+
+  return (
+    <div>
+      <h1>Search Page</h1>
+      <button onClick={updateSort}>Change Sort Order</button>
+    </div>
+  );
+}
+
+
+
+Example: Multiple Parameters : If you want to update only specific parameters while keeping others, merge them with searchParams:
+setSearchParams({
+  ...Object.fromEntries(searchParams), // Existing params
+  sort: 'desc',                       // New or updated param
+});
+
+
+Example:  Removing Parameters: Use setSearchParams without the key to remove a parameter
+searchParams.delete('query');
+setSearchParams(searchParams);
+
+
+
+
+
+
+
+
+
+
+
+
+
+Final Example : 
+
+import { Route, Routes, useNavigate } from "react-router-dom";
+const App = () => {
+  const navigate = useNavigate();
+  const createURL = () => {
+    navigate('/about?category=react&sort=desc');
+  }
+  return (
+    <>
+    <button onClick={createURL}>navigate to About Page</button>
+    <Routes>
+      <Route path="/" element={<Navbar />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+      </Route>
+    </Routes>
+    </>
+  )
+}
+
+export default App;
+
+
+About.jsx: 
+==========
+import React from 'react'
+import { useSearchParams } from 'react-router-dom'
+
+const About = () => {
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const category = searchParams.get("category");
+  const sort = searchParams.get("sort");
+
+  const createURL = () => {
+    setSearchParams({ category: "react", sort: "asc" });
+  }
+
+  const changeCategory = () => {
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      category: "node"
+    })
+  }
+
+  const changeSort = () => {
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      sort: "desc"
+    })
+  }
+
+  const deleteCategory = () => {
+    searchParams.delete('category');
+    setSearchParams(searchParams)
+  }
+
+  console.log("category sort : ", category, sort);
+
+  console.log('location.search', window.location.search);  // ?category=react&sort=asc  
+
+  return (
+    <>
+      <h1>About page: {window.location.href}</h1>
+      <h3>Category: {category}</h3>
+      <h3>Sort: {sort}</h3>
+      <button onClick={createURL}>Change url</button>
+      <button onClick={changeCategory}>Change Category</button>
+      <button onClick={changeSort}>Change Sort</button>
+      <button onClick={deleteCategory}>Delete Category query</button>
+    </>
+  )
+}
+
+export default About
+
+
+Navbar.jsx: 
+==========
+
+import React from "react";
+import { Link, Outlet } from "react-router-dom";
+
+const Navbar = () => {
+  const menuItems = [
+    {
+      id: 1,
+      path: "/",
+      name: "Home",
+    },
+    {
+      id: 2,
+      path: "/products",
+      name: "Product",
+    },
+    {
+      id: 3,
+      path: "/about",
+      name: "About",
+    },
+    {
+      id: 4,
+      path: "/contact",
+      name: "Contact",
+    },
+  ];
+
+
+  return (
+    <header style={{ zIndex: 50 }}>
+      <nav>
+        <ul
+          style={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            gap: "20px",
+            backgroundColor: "orange",
+            padding: "10px",
+          }}
+        >
+          {menuItems.map((menu) => (
+            <li key={menu.id}>
+              <Link
+                to={menu.path}
+                style={{ padding: "10px", display: "inline-block" }}
+              >
+                {menu.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <Outlet/>
+    </header>
+  );
+};
+
+export default Navbar;

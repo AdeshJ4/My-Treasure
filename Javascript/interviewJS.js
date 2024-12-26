@@ -1632,12 +1632,12 @@ try{
 
 
 
-// Q23] What is the rest parameter and spread operator and arguments ?
+// Q23] What is the "rest parameter" and "spread operator" and "arguments" ?
 
 /*
 Arguments : 
 -----------
--> we have 'object' called "arguments" which 'contain all arguments' passed to function.
+-> 'arguments' is object which 'contain all arguments' passed to function.
 -> 'arguments' is object not array, because its give false for Array.isArray().
 function fun (){
     let sum=0;
@@ -1692,8 +1692,7 @@ add(10, 20, 30)
 
 Spread Operator : 
 -----------------
--> spread operator (...) allows us copy all or part of an existing array or object into another array 
-or object.
+-> spread operator (...) allows us copy all or part of an existing array or object into another array or object.
 -> The spread operator is often used in combination with destructuring
 -> We can use the spread operator with objects and array.
 
