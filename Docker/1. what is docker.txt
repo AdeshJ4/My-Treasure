@@ -1,9 +1,13 @@
 ### What is Docker?
-
-
+===================
 -> Docker is a "platform" used to develop, ship, and run applications inside lightweight, portable "containers".
+-> Docker is built on basic linux concepts.
+
+
+
 
 Key Concepts of Docker:
+=======================
 
 1. Containers:
 -> A container has its 'own environment' separate from your PC. it means that A container runs 'independently' of the operating system and software installed on your 
@@ -16,48 +20,37 @@ application across different environments without worrying about inconsistencies
 do not run their own full operating system like virtual machines (VMs) do. Instead, containers share the kernel of the host OS 
 but run in isolated user spaces. This means that containers can appear to have their own "OS" in terms of the libraries, tools, 
 and file system, but they still rely on the kernel of the host machine.
-
+-> container is a process but special kind of process because it has its own file system which is provided by image.
 
 2. Images
-
 -> An image is a blueprint for creating containers.
 -> It contains the code, libraries, and runtime environment the container will use.
 -> You can create Docker images from a Dockerfile (a configuration file that defines the image) or pull them from a public or private registry like Docker Hub.
-
-
+-> we can package our application into a image and run it virtually everywhere. this is beauty of docker.
 
 3. Dockerfile
-
 -> A Dockerfile is a text document that contains "instructions on how to build a Docker image". It specifies the base image, installation steps, configuration, 
 and any commands that should run when a container starts.
 
-
 4. Docker Engine : 
-
 -> It is "runtime" that runs and manages containers.
 -> It has two parts: 
 i] Docker daemon (dockerd)    : runs in the background (IMP)
 ii] Docker CLI (docker)       : command-line interface used by the user to interact with Docker.
 
-
 5. Docker Hub:
-
 -> Its a "cloud-based registry" that allows you to "store" and "share" "Docker images"
 -> You can "pull images" from the Docker Hub or "push" your own images to it.
 
-
-
 6. Docker Compose:
-
 -> Docker Compose is a "tool" for defining and running "multi-container" Docker applications. 
 -> Using a "docker-compose.yml" file, you can define services, networks, and volumes, making it easier to manage complex applications with multiple containers.
 
-
-
 7. Volumes
-
 -> Volumes are used to persist data created by and used by Docker containers
 -> They are stored outside the container filesystem, ensuring that data remains even if the container is stopped or removed.
+
+
 
 
 
@@ -66,7 +59,6 @@ Docker Architecture:
 
 Docker uses client-server Architecture, it has a client component that talks with server using REST API, the server also called 
 "DOCKER ENGINE" sets in the background takes care of building and running, managing the containers. 
-
 technically containers are processes like other processes running in your machine. but its a special kind of process.
 All containers on host share the OS of the host. 
 "more accurately all the containers share the kernel of the host". 
@@ -81,6 +73,8 @@ containers.
 
 
 
+
+
 Virtual machine vs containers :
 ================================
 
@@ -89,55 +83,65 @@ physical machine.
 for ex we can have mac and on that mac we can run two VMs one running window and other linux, how do that ? using tool called 
 "Hypervisor". "Hypervisor" is a software we used to create and manage VMs, there are many hypervisor available in market like 
 VirtualBox, VMware which are cross platform so they can run on windows macOS, linux and Hyper-v is only for windows.
-
 so what is benefits of VMs: We can run application in isolation inside a VM, so on the same physical machine we can have 
 two different VMs each running completely different application and each application have exact dependencies it needs. 
-
 so app 1 can use node 16 while app 2 can use node 20. all running in same machine but different isolated environments.
-
-
 Problems : 
-
 Each VM needs a full-blown OS  (OS which are licensed)
 SLow to start  (because you are running complete OS like host machine)
 Resources intensive  (If you have 8 GB ram on host machine then we have to give some Ram to VMs)
-
-
 Containers: gives us isolated environment like VM so we can run multiple apps in isolation. 
 lightweight, they don't need full OS, all containers in single machine share the OS of host. Don't need hardware resources of host.
 Starts quickly.
 
 
 
+
+
+
+Development workFlow: 
+======================
+we take application, it does not matter what kind of application it is or how its build. 
+we take application and "dockerize" it. which means we make small change so that it can be run by docker.
+how, we just add "dockerfile" to it. "dockerfile" is a "plain text file" which includes instructions that docker uses to package our application into image.
+also A Dockerfile is a text document that contains "instructions on how to build a Docker image". It specifies the base image, installation steps, configuration, 
+and any commands that should run when a container starts.
+This Image contain everything our application need to run. for ex. A cut down OS. A runtime environment (eg Node/python), Applications files, Third party libraries,
+environment variables and so on. so we create a docker file and give it to docker for packaging our application into a image.
+
+once we have image we tell the docker to start a container using that image.
+container is a process but special kind of process because it has its own file system which is provided by image.
+so our application is loaded inside a container and this is how we run our application locally on development machine.
+and this is how we run our application locally on our development machine.
+so instead of directly launching the application and running inside typical process we tell the docker to run it inside a container and in isolated environment.
+
+Once we have this "image" we can push it to docker registry like docker hub, docker to docker hub is similar to git to github, its a storage for docker images that 
+anyone can use. so once our "application image" is on docker hub then can pull it from any machine running docker. with this we can start the container in same way 
+we do in development machine. we just tell docker to start a container using this image. 
+
+
+
+
+
 Shradha Ma'am: 
+==============
 
 -> Manual process to install/set up dependencies for project, so manual error can occurred, 2nd error can be : different version of node or python can give errors 
 like project needs node V16 but new member installed latests node v20, 3rd error can be commands to run applications like you wrote commands for running application
 based on linux OS but new member have windows OS.
 
 SO DOcker solves this issue.
-
 Docker is a service which  helps you to create, build, update, destroy containers.
-
 Containers take code and its dependencies and pack them in single unit/package and can be shared with fellow developers or can be deploy as a single package. 
-
 Containers works on almost on every machine/OS.
-
 We don't have to make any special changes in any other machine for running the container.
-
 Containers are portable, we can share them from one machine to another.
 Containers are lightweight.
-
 Containers are instance of docker image.
-
-
 Docker Image is a executable file. This file contain instructions to build a container. Using One Image we can build multiple containers. 
 When we say that we are going to share a container with our fellow colleague/team then we are actually not sharing the container.
 first we create the docker image of our application then that docker image is shared with others, then anyone can build container with this image inside any OS.
-
 image is like a static screenshot/snapshot of what the code and dependencies is going to look like.
-
-
 
 
 Steps to download docker : 
@@ -197,7 +201,7 @@ Would you like a hands-on example of creating a container to see this in action?
 Basic Docker Commands: 
 
 
-
+0]    docker version                  to check docker is installed or not.
 i]    docker build -t <image-name>:   Build a Docker image from a Dockerfile in the current directory.
 ii]   docker run <image-name>:        Run a container from a specified image
 iii]  docker ps:                      List running containers
@@ -282,49 +286,108 @@ In short, **Docker makes sure that programs work consistently and easily, no mat
 
 
 
+Docker In Action: 
+=================
+
+Typical development workflow: 
+
+Instructions if we are not using docker : 
+
+1. Start the machine which will start OS of that machine
+2. Then we have to install specific versions of node/python supported by project.
+3. Then we have to copy all the file and have to make chnges in file structure.
+4. Then Run the code.
+
+
+we can write all these above instructions in docker file and let docker package our application.
+
+create a hello-docker folder and open it inside vs code.
+create a "app.js" file and add js code.
+create a "Dockerfile", this file don't have extension.
+typically we start from base image.
+
+What is a Base Image?
+A base image is like a starting point for your Docker container.
+It contains a minimal operating system or runtime environment (e.g., Ubuntu, Node.js, Python).
+Base images can be official ones from Docker Hub (like ubuntu, node, or alpine) or custom-made by others
+
+Why Use a Base Image?
+Instead of creating everything from scratch, you start with a pre-built environment
+For example:  FROM node:16
+
+Adding Additional Files
+After selecting the base image, you add files or install additional software to customize the environment.
+Example: 
+FROM node:16
+WORKDIR /app
+COPY . .
+RUN npm install
+
+explanation:
+FROM node:16 – Start from Node.js 16 base image.
+WORKDIR /app – Set the working directory inside the container.
+COPY . . – Copy files from your project folder to the container.
+RUN npm install – Install dependencies inside the container
 
 
 
 
 
-=====================================================================================================================================
+node image is built on top of different distributions of linux, so linux have different distributions or different flavours use for different purposes.
+eg: FROM node:alpine
+the size of image that we are gonna download and build on top of is going to be small.
+then we copy our application files for that we use COPY command, we copy all the files in the current directory (.) into a app directory (/app) into that image. 
+that image have file system and in that file system we are gonna create a directory called "app".
+ex: 
+FROM node:alpine
+COPY . /app
+we use "CMD" command to execute command, what command should we execute here ? "node /app/app.js".
+ex:
+FROM node:alpine
+COPY . /app
+CMD node /app/app.js
+alternatively we can set current working directory, when we use this instructions all the following instructions assume you are currently inside a app directory.
+ex: 
+FROM node:alpine
+COPY . /app
+WORKDIR /app
+CMD node app.js
 
-Mosh Notes:
+So these instructions clearly document our deployment process.
+now open terminal to tell docker to package our application
+type > docker build
+we have to give our image a tag, tag to identify, then we have to specify where docker can find this file. 
+terminal path: PS C:\Users\Anurag\Desktop\hello-world>
+so we are inside "hello-world" directory and our dockerfile is right here. so we use dot (.) to reference a current directory.
+type > docker build -t hello-docker .
+expected result: [+] Building 10.7s (8/8) FINISHED     
 
-
-
--> A platform for building, running and shipping applications in consistent manner so if your application works in development
-machine it can run and function in same way in other machines.
-
-Dockerfile: 
-
--> It is a plain text file which includes instructions that docker uses to package our application into image.
-This image includes everything .
-
--> Once we have image we tell docker to start container using that image.
--> container is a process but special kind of process because it has its own file system which is provided by image.
-so our application is loaded inside a container or process and this is how we run our application locally on development machine.
-
-
--> Once we have image we pushed it to docker registry like docker hub.
--> docker hub to docker is like github to git. it is a storage for docker images that anyone can use.
--> so once our application image on docker hub then we can pull it on any machine using docker.
--> we just tell docker to start a container using this image.
-
-
--> you can deploy a container on cloud, share with friend, 
-each container have its own OS, tools, configuration.
-
-
-
-
-
-=====================================================================================================================================
-
-
-
+to see all the images : 
+PS Desktop\hello-world> docker images
+REPOSITORY     TAG       IMAGE ID       CREATED         SIZE
+hello-docker   latest    b730f6678a28   3 minutes ago   228MB
+hello-world    latest    5b3cc85e16e3   20 months ago   24.4kB
 
 
+since we use node from linux alpine we end up with only 228MB of data.
+so this image contain node, alpine, and our files 
+
+if you use different version of node based on different version of linux we will end up wth larger image and when deploying that image 
+we have to transfer the image from one computer to another.
+We build the image and that image can be run on any computer running docker.
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Desktop\hello-world> docker run hello-docker
+Hello Docker
+
+i can go ahead and publish the image on docker hub so anyone can install this image.then i can go on another machine like test or production 
+machine and pull and run the image. 
 
 
 
+
+
+
+Linux Distributions: 
+
+also called linus distros.
+
+linux is opens sourse platform.

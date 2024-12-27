@@ -229,7 +229,9 @@ export default App;
 
 
 
+Most Used Design Patterns in React | Learn React Design Patterns in One Video
 
+Dipesh Malvia
 
 
 

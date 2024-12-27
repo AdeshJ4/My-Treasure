@@ -1,5 +1,6 @@
 some()
 
+-> return true/false
 -> some() method return true if at least one element pass the test, otherwise false.
 -> does not change original array.
 
@@ -14,9 +15,7 @@ const res = arr1.some((ele)=>{
 every() 
 
 -> return true/false
--> every() method checks if all the array elements pass the given test or not
 -> return true if all elements pass the test otherwise false.
--> some() method also similar to this method but it return true if at least one element pass the test.
 
 
 let arr = [10, 20, 30];
@@ -28,5 +27,4 @@ const res = arr.every((ele)=>{
 const res = arr.every((ele)=>{
     return ele > 5;
 });  // return true
-
 

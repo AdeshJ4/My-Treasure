@@ -37,6 +37,22 @@ architecture. this is how applications are build with frameworks like ASP.NET. w
 to use asynchronous architecture but you have to do extra work for that
 
 
+JavaScript is single-threaded by nature. This means it can only execute one operation at a time per execution context. 
+However, JavaScript achieves asynchronous, non-blocking behavior through:
+Event Loop – Handles the execution of asynchronous tasks (like timers, I/O, and promises).
+Callbacks – Functions passed to handle certain events when they occur.
+Web APIs – Browsers provide APIs (like setTimeout, fetch) that offload tasks to separate threads outside the main JavaScript thread.
+Promises & async/await – Facilitate asynchronous operations in a more readable manner.
+Web Workers – Enable multi-threading by running JavaScript in the background without blocking the main thread.
+In essence, while the core JavaScript engine is single-threaded, the surrounding environment (browser or Node.js) enables concurrency using asynchronous mechanisms.
+
+
+
+
+
+
+
+
 
 
 
@@ -46,7 +62,7 @@ Asynchronous Code:
 
 -> Asynchronous here refers to all those functions in JavaScript that are processed in the background without blocking any other 
 request.
--> Asynchronous code is executed in a simultaneously, parallelly and non blocking manner.
+-> Asynchronous code is executed in a simultaneously, parallelly and non-blocking manner.
 -> Asynchronous programming is a technique that enables your program to start a long-running task and still be able to be responsive 
 to other tasks while that long running task runs, rather than having to wait until that long running task has finished. 
 Once that long running task has finished, your program is presented with the result.
@@ -77,6 +93,7 @@ real life example:
 
 Practical Knowledge: 
 
+-> JavaScript is single-threaded by nature
 -> Node applications are Asynchronous by default.
 -> In node we have a single thread to handle all requests.
 -> In Asynchronous architecture, When a request arrives on a server, Node assign single thread to handle that request. suppose that 
@@ -84,9 +101,11 @@ request is queering a database. as you know queering a database may takes some t
 that our thread doesn't have to wait for database to return a data. while the database is executing query that thread is used to 
 serve another client/request.
 -> When our asynchronous task completes in our case asynchronous task is fetching data from database, database puts the message in 
-what we called "Event Queue".
+what we called "Event Queue/Message Queue".
+-> The browser or Node.js APIs (e.g., fetching data from a database) put the completed task or callback message into the Event Queue.
 -> Node is continuously monitoring queue in background. when Node found event in this event queue node will take out that event 
-or data and process it. 
+or data and process it.
+-> The Event Queue (or Message Queue) in JavaScript follows the FIFO (First In, First Out) 
 -> This kind of architecture make a node ideal for building applications which includes lots of disk or network access like 
 I/O-intensive apps.
 -> we can serve more clients without the need of using more hardware. and that why node application highly scalable.
@@ -139,14 +158,14 @@ On the left we have V8 engine which consists of two parts:
 and on the right side we have : libuv library
 
 -> whenever we declare a variable or function memory is allocated on the heap.
--> When you executed code function is pushed to the call stack and when tje function returned it popped out call stack.
+-> When you executed code function is pushed to the call stack and when the function returned it popped out call stack.
 
 
 -> On the right we have 'libuv' library 
 -> whenever you execute async method it is off loaded to the libuv.
--> libuv then run the task using native async mechanism of operating system.
+-> libuv then run the task using "native async mechanism" of operating system.
 -> and if that is not possible it will utilized its thread pool to run that task ensuring the main thread is not block
-(main thread resides i+n call stack).
+(main thread resides in call stack).
 
 
 
@@ -182,8 +201,7 @@ Asynchronous Code Execution in Node js:
 
 
 Step 1 : The main thread of execution always starts in the global() scope. global() function is pushed to the stack.
-Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. 'First' is log to the console. 
-The log statement is popped out of stack.
+Step 2 : Then on line 1 we have log('First') statement. The log statement is pushed to the stack. 'First' is log to the console. The log statement is popped out of stack.
 Step 3 : Execution comes to line two. The readFile() method gets pushed to the stack. readFile() is async operation thats why it 
 will be off loaded to 'libuv' section only callback function present inside readFile() will be handed over to libuv. 
 readFile() without callback will remain inside call stack section. like : fs.readFile();

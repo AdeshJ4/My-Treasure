@@ -1,24 +1,82 @@
+Linux is open source software. for this reason many individuals and communities have created their own version of linux called linux distributions.
+each of these distribution is made to fit special needs like running servers, desktop computers mobile phones and so on.
+
 A Linux distribution, or "distro," is an operating system built on the Linux kernel, combined with a package 
 of software and libraries that help it run. 
 
 1000 of distro available now.
 
+linux is case sensitive, so spell the name of files and folders correctly.
 
 famous one: 
 
-1. Ubuntu
+1. Ubuntu   we are going to use
 2. Debian
 3. Alpine
 4. Fedora
 5. CentOS
 
 
+most of these distros support same commands. 
+
+
+
+lets see how we can run Ubuntu 
+go to hub and search for "Ubuntu" (https://hub.docker.com/_/ubuntu) 
+instead of pull command we can run directly "docker run ubuntu"
+if we have this image locally docker is going to start a container with this image otherwise its going to pull this image from hub and 
+then start the container.
+
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> docker run ubuntu 
+Unable to find image 'ubuntu:latest' locally
+latest: Pulling from library/ubuntu
+de44b265507a: Download complete
+Digest: sha256:80dd3c3b9c6cecb9f1667e9290b3bc61b78c2678c02cbdae5f0fea92cc6734ab
+Status: Downloaded newer image for ubuntu:latest
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> 
+
+since we didn't interact with container, container stops.
+
+
+if you run "docker ps", then we can see list of running containers.
+iii]  docker ps:                      List running containers
+
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> 
+
+but if you run "docker ps -a"
+
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS                      PORTS     NAMES
+9eae4ef58667   ubuntu         "/bin/bash"              2 minutes ago    Exited (0) 2 minutes ago              wizardly_chatelet
+7239341e58d2   hello-docker   "docker-entrypoint.s…"   29 minutes ago   Exited (0) 29 minutes ago             compassionate_noether
+8ab543b54f0b   hello-docker   "docker-entrypoint.s…"   6 hours ago      Exited (0) 6 hours ago                stoic_benz
+4a439de21cd7   hello-world    "/hello"                 28 hours ago     Exited (0) 28 hours ago               nervous_mayer
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> 
+
+
+
+
+to start a container and interact with it we have to type > docker run -it ubuntu
+"-it" stands for interactive.
+
+
+what we have here is called shell.
+PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Downloads\ok\m-t> docker run -it ubuntu
+root@4ca0c14ac0ef:/# 
+
+a shell is a program that takes a command  and passes them to OS to execute.
+
+the first part "root" represent the currently log in user. 
+root user have highest privileges so he is like god. (/) represent root directory.
+(#) only if you are root user, for normal user we have ($).
 
 
 
 
 
-PS E:\z Placement\Mosh\React 18\Project\Docker Crash Course\hello-docker> docker run -it ubuntu
+PS E:\z Project\hello-docker> docker run -it ubuntu
 root@56ad8dab1938:/# echo bonjour
 bonjour
 root@56ad8dab1938:/#
@@ -34,16 +92,49 @@ root@56ad8dab1938:/# history
 root@56ad8dab1938:/# !2
 whoami
 root
-root@56ad8dab1938:/# 
+root@56ad8dab1938:/# history   (history of commands)
+    1  echo bonjour
+    2  echo adesh
+    3  whoami
+    4  cls
+    5  history
+root@56ad8dab1938:/# !2   (you can rerun any command by this)
+echo adesh
+adesh
 
 
 
+Managing packages: 
+These days most of OS and development platform comes with package manager, you probably works with npm, yarn, pip
+ 
+in ubuntu we have : apt: advance package tool
+type > apt 
 
-apt: advance package tool
+lets download package called "nano", its a basic text editor for linux.
+
+if you type > nano then you will get :
+root@4ca0c14ac0ef:/# nano
+bash: nano: command not found   (because we don't have)
+
+lets install using apt.
+root@4ca0c14ac0ef:/# apt install nano
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package nano
+root@4ca0c14ac0ef:/# 
 
 
-list all packages: 
+we get error saying "E: Unable to locate package nano",  here in linux we have "package database" and this database might contain 100 of 
+packages but not all these packages are installed. 
+
+to get list all packages: 
 root@56ad8dab1938:/# apt list
+
+when we type "apt install nano" then it search the in package database, when he didn't find in their then we get error.
+
+so run : 
+root@4ca0c14ac0ef:/# apt update (to update database)
 
 
 when you install any package it will give error so run this command first:
@@ -112,61 +203,3 @@ root@f5105e6b3e6f:/adesh# cat app.txt
 Hello Docker
 I am learning docker for up sko=illing my sills
 root@f5105e6b3e6f:/adesh# 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

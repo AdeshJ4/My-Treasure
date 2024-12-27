@@ -1,9 +1,7 @@
 1. find()
 =========
 
--> find() is similar to filter() with key difference is that find() return 'first element' and filter() return 'new array' with elements who 
-passes the test provided by function. 
--> The find() method returns the the first element that passes a test.
+-> The find() method returns the the "first element" that passes a test.
 -> The find() method executes a function for each array element.
 -> The find() method returns undefined if no elements are found.
 -> The find() method does not execute the function for empty elements.
