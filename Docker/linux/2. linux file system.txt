@@ -1,2 +1,6 @@
 everything is file.
 
+Finding Files and directories:
+
+
+->  

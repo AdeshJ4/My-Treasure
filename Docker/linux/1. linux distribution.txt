@@ -157,6 +157,23 @@ root@f5105e6b3e6f:/#
 
 
 
+Home Directory : 
+----------------
+home directory where each user have home directory.
+but the root user has "special home" directory called "root". 
+ex:
+root@3ad147fc14ec:/# ls
+bin   dev  home  lib64  mnt  proc  run   srv  tmp  var
+boot  etc  lib   media  opt  root  sbin  sys  usr
+root@3ad147fc14ec:/# cd root/
+root@3ad147fc14ec:~# 
+
+there is short cut for this : 
+root@3ad147fc14ec:/# cd ~
+root@3ad147fc14ec:~#  
+
+
+
 list all files and folders: 
 root@f5105e6b3e6f:/# ls
 bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
