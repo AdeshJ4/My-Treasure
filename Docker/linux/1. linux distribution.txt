@@ -141,7 +141,7 @@ when you install any package it will give error so run this command first:
 root@56ad8dab1938:/# apt update
 
 
-install package called nano(text editor): 
+then install package called nano(text editor):
 root@56ad8dab1938:/# apt install nano
 
 
@@ -150,10 +150,28 @@ root@56ad8dab1938:/# apt remove nano
 
 
 
+Linux file System: 
+==================
+
+In windows we have "C" drive on top of the hierarchy and below that we have Program files, windows, In linux we have root directory on top of the hierarchy.
+below that we have bin, boot, dev, etc, home, root, lib, var, proc.
+
+In linux everything is file, including devices, directories, network sockets and so on.
+
+
+
+
+Navigating to File System:
+=========================
+
 pwd stands for "print working directory". When you type pwd in the terminal, it outputs the full path of the current directory you’re working in
 root@f5105e6b3e6f:/# pwd    
 /
 root@f5105e6b3e6f:/# 
+
+
+change directory: 
+cd
 
 
 
@@ -220,3 +238,123 @@ root@f5105e6b3e6f:/adesh# cat app.txt
 Hello Docker
 I am learning docker for up sko=illing my sills
 root@f5105e6b3e6f:/adesh# 
+
+
+
+
+Finding Files and directories: 
+
+-> we have "find" command for finding files and directories. if we execute this command without any arguments 
+then you can see all the files and directories in the current directory
+
+
+
+
+
+root@cc2538cb151c:~# cat /etc/passwd | grep john
+john:x:1001:1001::/home/john:/bin/sh
+root@cc2538cb151c:~# grep john /etc/passwd
+john:x:1001:1001::/home/john:/bin/sh
+
+
+Managing Users: 
+==============
+
+
+-> How to create a new user and log in as a that user.
+commands L 
+
+1. useradd -> adding new user
+2. usermod -> modifying user
+3. userdel -> deleting user
+4. adduser -> more interactive command to add user (new command)
+
+
+type > exit 
+ex: 
+
+root@cc2538cb151c:~# useradd -m john
+C:\Users\Anurag\m-t> docker exec -it -u john cc2538cb151c bash   (log in as a john)
+userdel john 
+
+
+passwords are stored in encrypted format:
+root@cc2538cb151c:~# cat /etc/shadow
+root:*:20046:0:99999:7:::
+daemon:*:20046:0:99999:7:::
+bin:*:20046:0:99999:7:::
+sys:*:20046:0:99999:7:::
+sync:*:20046:0:99999:7:::
+games:*:20046:0:99999:7:::
+man:*:20046:0:99999:7:::
+lp:*:20046:0:99999:7:::
+mail:*:20046:0:99999:7:::
+news:*:20046:0:99999:7:::
+uucp:*:20046:0:99999:7:::
+proxy:*:20046:0:99999:7:::
+www-data:*:20046:0:99999:7:::
+backup:*:20046:0:99999:7:::
+list:*:20046:0:99999:7:::
+irc:*:20046:0:99999:7:::
+_apt:*:20046:0:99999:7:::
+nobody:*:20046:0:99999:7:::
+ubuntu:!:20046:0:99999:7:::
+john:!:20088:0:99999:7:::
+root@cc2538cb151c:~#
+
+
+
+
+Quite ofter when using docker for deploying our application we don't want to use "adduser" command because 
+we don't want to interact with this command.  
+
+
+
+Managing Groups: 
+
+1. groupadd -> 
+2. groupmod -> 
+3. groupdel -> 
+
+we use groups so that all users in the same group have the same kind of permissions.
+
+ex: 
+
+root@cc2538cb151c:~# groupadd merndevelopers
+
+
+to see all groups : 
+
+root@cc2538cb151c:~# cat /etc/group 
+
+
+lets add john to "merndevelopers" group: 
+
+
+every "linux user" has "one primary" group and 0 or more "supplementary groups".
+
+why these groups are separated:
+lets say john is part of 5 groups and now he wants to create a new file, every file owned by one user and 
+one group. if john is part of 5 groups which group we should use for owning that new file.
+thats why we need primary group.
+"primary group" is automatically created when we create a "new user", its the group with same name as the user.
+
+
+
+set supplementary group for "john":
+
+root@cc2538cb151c:~# usermod -aG merndevelopers john 
+
+to check its added or not: 
+root@cc2538cb151c:~# groups john
+john : john merndevelopers   (john is part of two groups 1.john 2.merndevelopers);
+
+Now add john to group "artist"
+
+step 1 : create group: root@cc2538cb151c:~# groupadd artist
+step 2 : check group is created or not(check last entry) > root@cc2538cb151c:~# cat /etc/group
+step 3 : add "john" to "artist" group: root@cc2538cb151c:~# usermod -aG artist john 
+step 4 : check "john" added to that group or not > 
+
+
+

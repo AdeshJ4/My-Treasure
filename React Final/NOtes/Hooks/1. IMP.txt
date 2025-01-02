@@ -4,11 +4,13 @@
 
 -> In React, the principle "The component which holds the state is responsible for updating it" is a key part of the framework's architecture
 
--> This aligns with the concept of unidirectional data flow, where data flows in a single direction, from parent to child components.
+-> This aligns with the concept of "unidirectional data flow", where data flows in a "single direction", from parent to child components.
 
--> The component that owns the state is responsible for both defining and updating that state. Typically, this is a parent component.
--> If the state needs to be updated, the stateful component will handle the logic for the update. This can involve functions or event handlers defined within the component.
--> The state can be passed down to child components via props. However, these child components are generally stateless and cannot directly modify the state they receive. Instead, they can trigger the parent component to update the state through callback functions (also passed via props).
+-> If the state needs to be updated, the stateful component will handle the logic for the update. 
+This can involve functions or event handlers defined within the component.
+-> The state can be passed down to child components via props. 
+However, these child components are generally stateless and cannot directly modify the state they receive. 
+Instead, they can trigger the parent component to update the state through callback functions (also passed via props).
 
 
 State Management Example:

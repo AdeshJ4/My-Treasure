@@ -1,11 +1,12 @@
 useContext Hook : 
 -----------------
 
--> Before understanding useContext lets understand what is context ?
--> Context in React is a mechanism for sharing values, like themes or authentication status, across components in a component tree 
-without the need for explicit prop passing.
--> to consume the context we use useCOntext hook
--> useContext hook allows a functional component to consume values from a context, without prop drilling.
+Before understanding useContext, let's understand what context is:
+
+> Context in React is a mechanism for sharing values (like themes or authentication status) across components in a component tree without the need for explicit 
+prop passing (prop drilling).
+> To consume the context, we use the useContext hook.
+> The useContext hook allows a functional component to access values from a context directly, bypassing prop drilling.
 
 
 
@@ -342,6 +343,109 @@ const Compo1 = () => {
   );
 };
 export default Compo1;
+
+
+
+==================================================================================================================================================================
+
+
+piyush garg: 
+
+import React, { useContext } from 'react'
+import Counter from './components/Counter'
+import { CounterContext } from './context/Counter';
+
+const App = () => {
+
+  const counterState = useContext(CounterContext);
+
+  return (
+    <div>
+      <h1>{`Count is ${counterState?.count}`}</h1>
+      <Counter />
+    </div>
+  )
+}
+
+export default App
+
+
+
+
+
+import React, { useContext } from 'react'
+import { CounterContext } from '../context/Counter';
+
+const Counter = () => {
+  const counterContext = useContext(CounterContext);
+
+ const handleCounterIncrement = () => {
+  counterContext?.setCount((prevState) => prevState + 1)
+ }
+
+ const handleCounterDecrement = () => {
+  counterContext?.setCount((prevState) => prevState - 1)
+ }
+ 
+  return (
+    <div>
+      <button onClick={handleCounterIncrement}>Increment</button>
+      <button onClick={handleCounterDecrement}>Decrement</button>
+    </div>
+  )
+}
+
+export default Counter
+
+import React, { createContext, useState } from 'react';
+
+export const CounterContext = createContext(null); // initially "null"
+
+export const CounterProvider = (props) => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <CounterContext.Provider value={{ count, setCount }}>
+      {props.children}
+    </CounterContext.Provider>
+  )
+}
+
+
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import './index.css'
+import {CounterProvider} from './context/Counter.jsx';
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <CounterProvider>
+    <App />
+  </CounterProvider>
+)
+
+
+
+==================================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

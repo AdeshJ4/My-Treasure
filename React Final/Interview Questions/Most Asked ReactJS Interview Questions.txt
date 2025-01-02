@@ -140,3 +140,148 @@ with ternary:
 const x = 5;
 const myElement = <h1>{(x < 10) ? "Hello" : "Goodbye"}</h1>;
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+
+
+
+
+
+
+
+
+
+1. How does React store state?
+
+In React, state persistence is achieved through **closures** and the way React manages component re-renders. Let's break it down:
+
+### 1. **Component and State Lifecycle**:
+- When a component is rendered, React **creates an isolated instance** of that component.
+- `useState` creates state variables that are **preserved** across re-renders.
+- Even though a function component executes and "disappears" after rendering, React **remembers the state** because it manages this state **outside the component function itself**.
+
+---
+
+### 2. **How `useState` Works Internally**:
+- When you call `useState`, React:
+  - **Stores the state value** in an internal data structure (often linked to the component's "fiber" in React's reconciliation algorithm).
+  - Associates this state with the specific component instance.
+- On subsequent renders:
+  - React **retrieves the preserved state** and reuses it during the function execution.
+
+---
+
+### 3. **Closure and Reference**:
+- Even though function components execute and exit, the `setState` function returned by `useState` **closes over the component’s scope**.
+- This **closure maintains access** to the component's preserved state, allowing it to persist between renders.
+
+```javascript
+function Counter() {
+  const [count, setCount] = React.useState(0);
+
+  const increment = () => setCount(count + 1);
+
+  return (
+    <div>
+      <p>{count}</p>
+      <button onClick={increment}>Increment</button>
+    </div>
+  );
+}
+```
+- Here, `count` is re-evaluated on every render, but React **remembers** the previous value because `useState` preserves it behind the scenes.
+
+---
+
+### 4. **Why Local Variables Vanish**:
+- Local variables **live only during the function's execution**.
+- Once the function finishes, local variables are **garbage collected**.
+- But `useState` **stores data at the component level, not inside the function’s local scope**.
+
+---
+
+### 5. **React’s Fiber Architecture**:
+- React uses **fibers (lightweight objects)** to represent component instances.
+- State and other properties are attached to these fibers, allowing React to **track and persist state** even when components re-render.
+
+---
+
+### In Short:
+React preserves state by **managing it outside the component function** and linking it to the component instance. This design allows state to persist between re-renders, unlike local variables which are scoped to function execution.
+
+
+==========================================================================================================================================================================================================================================
+
+
+
+2. do we have lifecycle methods for functional component ?
+
+
+Functional components in React **don’t have traditional lifecycle methods** like class components (`componentDidMount`, `componentDidUpdate`, `componentWillUnmount`).  
+
+However, React provides the **`useEffect` hook** to handle side effects and lifecycle-like behavior in functional components. This makes `useEffect` a powerful replacement for lifecycle methods.
+
+---
+
+### How `useEffect` Replaces Lifecycle Methods:
+1. **`componentDidMount` (Runs once after the component mounts):**
+   ```javascript
+   useEffect(() => {
+     console.log("Component mounted");
+
+     // Cleanup (equivalent to componentWillUnmount)
+     return () => {
+       console.log("Component unmounted");
+     };
+   }, []);  // Empty dependency array - runs only once
+   ```
+
+2. **`componentDidUpdate` (Runs after every update):**
+   ```javascript
+   const [count, setCount] = useState(0);
+
+   useEffect(() => {
+     console.log("Component updated");
+   }, [count]);  // Runs when `count` changes
+   ```
+
+3. **`componentWillUnmount` (Cleanup when component unmounts):**
+   ```javascript
+   useEffect(() => {
+     const interval = setInterval(() => {
+       console.log("Running interval");
+     }, 1000);
+
+     return () => {
+       clearInterval(interval);  // Cleanup logic
+       console.log("Interval cleared on unmount");
+     };
+   }, []);
+   ```
+
+---
+
+### Why Use `useEffect`:
+- **Consolidates multiple lifecycle phases** into one place.
+- Reduces code duplication.
+- Makes functional components **simpler and more readable**.
+
+---
+
+### Key Takeaway:
+Functional components **don’t have lifecycle methods** explicitly, but the **`useEffect` hook** allows you to replicate lifecycle behavior effectively.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
