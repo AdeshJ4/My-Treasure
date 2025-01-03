@@ -1,0 +1,96 @@
+controlled and uncontrolled components: 
+=======================================
+
+
+Controlled Components:
+
+-> A controlled component is one where React manages the form element's value via the component's state.
+-> The value of the form element is controlled by React, meaning it is always driven by the component's state
+-> In a controlled component, you provide a value prop to the form element (like input, textarea, etc.) and handle any changes to the element 
+using an onChange event handler, which updates the component's state.
+-> The value of the input field is controlled by the state
+
+
+function ControlledComponent() {
+  const [value, setValue] = useState('');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <input
+      type="text"
+      value={value}          // The input's value is tied to React state
+      onChange={handleChange} // Updates the state when the user types
+    />
+  );
+}
+
+
+
+
+
+
+
+Uncontrolled Components:
+========================
+
+->  An uncontrolled component is one where React does not directly manage the form element’s state. Instead, the form element maintains its own internal state, 
+and you interact with it using refs (references) to get its current value.
+->  an uncontrolled component, you do not bind the form element's value to the state. Instead, you use a ref to access the DOM node and retrieve its value when needed.
+-> The input field does not have its value controlled by the state.
+-> The inputRef is used to reference the DOM node directly and access its value
+
+function UncontrolledComponent() {
+  const inputRef = useRef();
+  const nameRef = useRef(null);
+  const ageRef = useRef(null);
+  const [formData, setFormData] = useState(null);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setFormData({
+      name: nameRef.current.value,
+      age: ageRef.current.value
+    });
+  } 
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+          <input type='text' id='name' name='name' ref={nameRef}/>
+          <input type="number" id='age' name='age' ref={ageRef} />
+        <button  type='submit'>Submit</button>
+      </form>
+    </>
+  )
+}
+
+
+
+
+
+
+
+
+When to Use Which?
+Controlled Components are ideal when you need full control over the form data, such as for validation, dynamic form behavior, or managing the form's state in a React app.
+Uncontrolled Components might be more appropriate for simple forms or when you want to avoid unnecessary re-rendering due to state updates.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -13,10 +13,14 @@ code :
 
 -> Here is what we have done : we handle onChange event and every time user type a key stroke we update the name of the person.
 
--> Every time the user types or remove the character because we update the state our component is re-render. for most cases this is not issuse.
+-> Every time the user types or remove the character because we update the state our component is re-render. for most cases this is not issues.
 
--> There is tiny problem with this approach : we know that all input fields in HTML have a "value" property for maintaning their own 
+-> There is tiny problem with this approach : we know that all input fields in HTML have a "value" property for maintaining their own 
 state. but in this implementation we also have the state variable called person.
+When to Use value (Controlled Component):If you want React to control the form's state.
+When Not to Use value (Uncontrolled Component):If you don’t need React to control the input value directly.
+
+
 -> so it is possible that these sources get out of sync. so to solve this problem we should make react the single source of truth. 
 How ? 
 -> Back to our input field here we set value attribute to person.name .

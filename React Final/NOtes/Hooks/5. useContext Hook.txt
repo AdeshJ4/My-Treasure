@@ -430,29 +430,117 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 ==================================================================================================================================================================
 
 
+shop ex: 
+
+App.jsx: 
+import React, { useState, useEffect } from 'react';
+import Item from './components/Item';
+import Cart from './components/Cart';
+
+const App = () => {
+  return (
+    <div className='App'>
+      <h1>Items</h1>
+      <Item name="Apple" price={12} />
+      <Item name="Banana" price={14} />
+      <Item name="Cherry" price={16} />
+      <Cart />
+    </div>
+  )
+}
+
+
+export default App; 
+
+Item.jsx:
+import React, { useState, useEffect, useContext } from 'react';
+import { CartContext } from '../context/Cart';
+
+
+const Item = ({name, price}) => {
+
+    const cart = useContext(CartContext);
+
+    console.log(cart, 'cart');
+    
+
+    return (
+        <div className='item-card'>
+            <h4>Item Name: {name}</h4>        
+            <h4>Item Price: {price}</h4>
+
+            <button onClick={() => cart?.setItems((prevState) => [...prevState, {name, price}])}>Add to cart</button>        
+        </div>
+    )
+}
+export default Item;
+
+
+Cart.jsx (component):
+import React, { useState, useEffect, useContext } from 'react';
+import { CartContext } from '../context/Cart';
+
+
+const Cart = () => {
+
+    const cart = useContext(CartContext);
+
+    return (
+       <div className='cart'>
+        <hr />
+
+        <h1>Cart</h1>
+        {cart?.items.map((c, i) => {
+            return <li key={i}>{c?.name} - ${c?.price}</li>
+        })}
+        <h3>{`Total Bill : $${cart?.items?.reduce((acc, curEle) => acc + curEle?.price, 0)}`}</h3>
+       </div>
+    )
+}
+export default Cart;
+
+
+cart.jsx(context file):
+import { createContext, useState } from "react";
+
+export const CartContext = createContext(null);
+
+export const CartProvider = ({ children }) => {
+  const [items, setItems] = useState([]);
+
+  return <CartContext.Provider value={{ items, setItems }} >
+    {children}
+  </CartContext.Provider>
+}
+
+
+main.jsx: 
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <CartProvider>
+    <App />
+  </CartProvider>
+);
 
 
 
+for optimization create a hook called "useCart" and use that.
 
+useCart.jsx: 
+import { useContext } from "react"
+import { CartContext } from "../context/Cart"
+export const useCart = () => {
+  const cart = useContext(CartContext);
+  return cart;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ex:
+const Item = ({name, price}) => {
+    const cart = useCart();
+    return (
+        <div className='item-card'>
+            <h4>Item Name: {name}</h4>        
+            <h4>Item Price: {price}</h4>
+            <button onClick={() => cart?.setItems((prevState) => [...prevState, {name, price}])}>Add to cart</button>        
+        </div>
+    )
+}

@@ -1,3 +1,17 @@
+
+useState() = Re-renders the component when the state value changes.
+
+useRef() = "use Reference" Does not cause re-renders when its value changes.
+           When you want a component to "remember" some information, 
+           but you don’t want that information to trigger new renders.
+
+           1. Accessing/Interacting with DOM elements
+           2. Handling Focus, Animations, and Transitions
+           3. Managing Timers and Intervals
+
+-> useRef returns a "ref object"t with a single "current property" initially set to the "initial value" provided by you.
+
+
 -> The useRef Hook allows you to persist values between renders.
 -> It is used to store a mutable value that does not cause a re-render when updated.
 -> It can be used to access a DOM element directly.
