@@ -1,17 +1,46 @@
-//To Do List :
 // 1. Garbage Collection in JavaScript
+/*
+-> Garbage collection (GC) is the process of automatically freeing up memory by removing objects that are no longer needed or accessible.
+-> The garbage collector identifies and removes objects that are unreachable
+-> JavaScript uses an automatic garbage collector, meaning developers don't need to manually manage memory.
 
-// Q0] What is a first class function in Javascript?
+
+example: 
+function demo() {
+    let obj = {
+        name: 'Sample'
+    };
+    
+    obj = null;  // The object "{name: 'Sample'}" is now unreachable
+}
+Explanation:
+Initially, obj holds a reference to an object.
+When obj = null; is assigned, the original object becomes unreachable because no variable is referencing it.
+The garbage collector will clean up this object during the next GC cyc
+
+*/
+
+
+// Q0] What is a "first class function" in Javascript?
 /*
 -> In JavaScript, functions are considered first-class citizens, which means they can be treated like any other variable 
 (e.g., a number, string, or object).
 
--> so we can assign a function to a variable using function expression syntax.
+-> so we can assign a function to a variable using "function expression syntax".
 -> we can pass a function as a argument to another function (concept of callback).
 -> we can return a function from another function (concept of closure)
 -> we can store a function inside a data structure like array, object.
 -> Functions can be higher order function.
 
+so we can assign a function to a variable using function expression syntax
+ex: 
+const fun = () => {
+  console.log('he');
+}
+
+const greet = function(name) {
+  console.log(`Hi ${name}`);
+}
 
 -> we can store a function inside a data structure like array.
 const arr = [
@@ -56,6 +85,7 @@ obj.fun3();
 obj.fun4();
 */
 
+
 //Q1]. What are the different data types present in javascript?
 /*
 1. Primitive types
@@ -72,16 +102,16 @@ BigInt
 Symbol
 
 2. Non-primitive types / Reference Type
+Class
 Object 
 Arrays
-FUnction
+Function
 Date
 RegExp
 Map
 WeakMap
 Set
 WeakSet
-Class
 
 
 
@@ -140,35 +170,61 @@ let user = null; // No user is currently logged in
 
 vii. symbol:
 -> It is a 'new data type' introduced in the 'ES6' version of javascript.
--> It is used to create 'unique identifiers'.
+-> It is used to "create unique property keys" that avoid name collisions in objects.
+-> Symbols prevent accidental property overwriting.
 -> Symbols are 'immutable' (cannot be changed) and are 'unique'. 
--> You use the 'Symbol() function' to create a Symbol.
--> symbol is 'not a constructor'. so you can't use 'new keyword'.
 -> Every symbol is guaranteed to be unique, even if it has the same 'description'.
 This makes symbols useful for creating 'hidden or private properties'.
 
-code 0 : 
-const id = new Symbol("Hey");  // error	-> don't use new keyword
+ex: 
 
-code 1:
-const x = Symbol('hey');
-console.log(x); // Symbol(hey)
-console.log(x.description); // hey
-
-code 2: 
-Symbol("foo") === Symbol("foo"); // false
-
-code 4: 
-const id = Symbol();
-const fname = Symbol();
-console.log(id.description); // undefined
-console.log(fname.description);  // undefined
-const obj = {
-  [id]: 101,
-  [fname]: 'Adesh',
+Problem Without Symbol (Name Collision):
+const user = {
+    name: 'Alice',
+    role: 'Admin'
 };
-console.log(obj[id]);  // 101
-console.log(obj[fname]);  // "Adesh"
+// Adding a new property from another module
+user.role = 'User';  // Overwrites the existing 'role' property
+console.log(user);  // { name: 'Alice', role: 'User' }
+In the example above, the role property gets overwritten by accident, which could lead to bugs and unexpected behavior.
+
+
+
+Solution Using Symbol (Avoiding Collisions):
+const role = Symbol('role');  // Symbol for role
+const anotherRole = Symbol('role');  // A different Symbol, even with the same description
+const user = {
+    name: 'Alice',
+    [role]: 'Admin'
+};
+// Another module tries to add a property
+user[anotherRole] = 'User';  // This will NOT overwrite the previous role
+console.log(user); // { name: 'Alice', [Symbol(role)]: 'Admin', [Symbol(role)]: 'User' } 
+
+explanation:
+role and anotherRole are two distinct symbols, even though they have the same description ('role').
+This ensures that the two role properties do not overwrite each other.
+
+Why This Matters:
+No Overwriting: Symbols prevent accidental property overwriting.
+Hidden Properties: These properties are not accessible via standard enumeration methods (for...in or Object.keys()).
+
+Accessing Symbol Properties:
+To access or modify properties created with Symbols, you must reference the exact symbol:
+
+console.log(user[role]);  // 'Admin'
+console.log(user[anotherRole]);  // 'User'
+
+
+Symbols are crucial when working with large codebases or collaborating across teams to safeguard object properties from unintentional overwriting, ensuring better data integrity and code reliability.
+
+
+
+
+
+
+
+
 
 
 
@@ -190,7 +246,8 @@ console.log(typeof Symbol('hey'));                  // symbol
 
 
 2. Non-primitive types / Reference Type : 
-In JavaScript, non-primitive types (or reference types) refer to values which are stored as references in memory rather than as the actual value.
+In JavaScript, non-primitive types (or reference types) refer to values which are stored as references in memory rather than as the 
+actual value.
 Primitive data types can store only a single value. To store collections of data and complex values, non-primitive data types are used.
 
 
@@ -201,7 +258,9 @@ i. Object
 -> if we have properties which are highly related then we can encapsulate them inside object.
 -> main purpose of object is to grouped related properties.
 -> In JavaScript objects are dynamic. once we create them we can add additional properties or can remove properties.
--> In JavaScript, object keys are automatically converted to strings if they are not already strings. This is because object keys must always be strings (or symbols) internally
+-> In JavaScript, "object keys" are automatically converted to strings if they are not already strings. 
+This is because object keys must always be strings (or symbols) internally
+
 code : 
 const obj = {
   10: 'ten',
@@ -407,7 +466,6 @@ JavaScript Scope :
 -> These two keywords provide 'Block Scope' in JavaScript
 -> Variables declared inside a { } block cannot be accessed from outside the block
 -> variable from outside of block can be accessible inside block and you can change its value inside a block.
--> for loop, while loop, if statement provide block scope for a let, const.
 
 -> variable from outside of block can be accessible inside block and you can change its value inside a block.
 code : 
@@ -419,23 +477,6 @@ let a = 10;
 }
 console.log(a);  // 11
 console.log(x);  // not accessible
-
--> for loop, while loop, if statement provide block scope for a let, const.
-code: 
-if(true){
-  const x = 5;
-}
-console.log(x); // NOT ACCESSIBLE
-for(let y = 0; y<1;y++){
-  console.log();
-}
-console.log(y);// NOT ACCESSIBLE
-function fun(){
-  if(true){
-    const name = "Adesh";
-  }
-  log(name) // NOT ACCESSIBLE
-}
 
 -> var does not support block scope, it only support function scope;
 code : 
