@@ -840,13 +840,16 @@ b = 10;    // Changing b does not affect a
 console.log(a);  // Output: 5
 console.log(b);  // Output: 10
 
-ex.2
-let num = 10;
-function cal1(num) { // local variable
-  num++;
+ex.2 
+// x is passed by value. The function works on a copy of x, leaving the original unchanged.
+let x = 10;
+function demo(y) {
+    y = 20;
 }
-cal1(num); // primitive types are pass by value, both variables are different
-console.log(num);
+
+demo(x);
+console.log(x);  // Output: 10 (Original value remains unchanged)
+
 
 
 
