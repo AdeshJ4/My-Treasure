@@ -24,6 +24,47 @@ bubbleSort(arr);
 
 /*
 
+
+-> sort the array in increasing order.
+-> we scan the array left to right and if the item are out of order we swap them.
+-> we start by comparing items at index 0 and 1, if the right item is smaller then left one then we swap them because we want to sort 
+the array in ascending order.
+-> at the end of each pass/iteration the next largest item moves to its correct position.
+-> This is why we called this algorithm bubble sort, because after each pass/iteration the next largest item bubbles up and movers to 
+its correct position.
+
+
+Time Complexity: 
+
+-> In best case our array is already sorted, so we need "single pass". 
+-> In worst case scenario the array is sorted in reverse order so we need "n" passes.
+-> In both best and worst scenario each pass/iteration we need "n" comparisons, more accurately (n-1) comparisons. 
+for ex if we have 4 items then we need 3 comparisons
+
+Summary : 
+-> In Best case we have linear O(n) complexity. (Fair)
+-> In Worst case we have quadratic O(n^2) complexity. (Horrible)
+-> This algo gets real slow as the amount of input data grows.
+
+Explanation: 
+
+arr.length - 1: 
+
+The outer loop iterates n-1 times (where n is the array length). This is because:
+In each pass, the largest unsorted element "bubbles" to its correct position.
+After one full pass, the last element is sorted, meaning you don't need to check it again in subsequent passes.
+By the time the loop runs n-1 times, all elements will be sorted.
+
+
+arr.length - i - 1: 
+
+Each pass reduces the unsorted portion of the array by 1.
+The - i part ensures we don't recheck sorted elements.
+The - 1 part prevents comparing the last element with undefined.
+
+
+
+
 How It Works:
 
 

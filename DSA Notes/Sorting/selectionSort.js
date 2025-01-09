@@ -23,7 +23,7 @@ technically unsorted part shrink after each pass but we still see this as a O(n)
 So, Its O(n^2) for both best and worst case.
 
 
-Why we need O(n) passes for best case when array is alredy sorted?
+Why we need O(n) passes for best case when array is already sorted?
 -> we can't tell with one pass if the array is fully sorted or not 
 
 
