@@ -1,3 +1,540 @@
+Indexes: Retrieving data efficently
+
+What are indexes ?
+Different types of indexes.
+Using and Optimizing Indexes.
+
+
+what are indexes and why do we use them ?
+
+-> speed up find, update, delete query 
+
+db.products.find({ seller: "Max" })
+if i don't have index on seller field then mongodb will use "COLLSCAN". This is default approach mongodb takes when you don't have any index.
+That means mongodb will go through entire collection one by one documents to find seller max. 
+just imagine what will happen if collection is big.
+
+
+now you can create index, index is not replacement for a collection but addition you could say.
+
+so you would create an index for the seller field of the products collection and that index then exists additionally to the 
+collection like extra column at the end of the collection and the index is an ordered list of all the values that are store in the seller 
+field for all the documents.
+its not just an ordered list of the values of course every value in the index has a pointer to the documentit belongs to.
+ex: 
+Seller field Index column -> | Anna | Chris | Manu | Max | Max | Zod |.... // orderd data and not document
+
+Now this allows mongodb to do a so called index scan  "IXSCAN".
+for seller field, such an index exits and it therfore simply goes to that seller index and can quickly jump to right value because it knows
+values are already sorted. so it don't have to look first 10 documents if record start with M.  
+
+Don't use Too many indexes:
+===========================
+if you create index for each field it will boost your find query but not insert query, because that extra index that has to be maintain 
+needs to be updated with every insert because we have ordered list of elements with pointers to the documents.
+so if you add a new document you also have to add a new element to the index and that might sound simple and it won't take super long 
+but if you have got 10 indexes for your Documents in your collection then you have to update all 10 indexes for every insert as well as 
+update and delete query, thats will take lots time.
+
+thats why you have to find which field can have index or which one not.
+
+explain(): 
+====================
+MongoDB gives us a tool to analyze how it executed the query and this tool is a simple method we add to our query.
+explain() works for find(), update(), delete() and not for insert().
+
+
+explain() method takes following arguments:
+1. queryPlanner: Show summary for Executed Query + Winning Plan
+2. executionStats: Show Detailed Summary for Executed Query + Winning Plan + possibly rejected plans
+3. allPlansExecution: Show Detailed Summary for Executed Query + Winning Plan + Winning plan Decision Process
+
+1. Should be as close as possible OR # of Documents should be 0
+-> "# of keys (in index ) examined" <--->  "# of documents examined"
+
+2.  Should be as close as possible OR # of Documents should be 0
+-> "# of documents examined"  <--->   "# of Documents returned"
+
+
+
+playGround> db.person.explain("executionStats").find({"dob.age": {$gt: 60}})
+
+check "executionStats", "winningPlan" field 
+
+
+mongodb thinks in so-called plans and plans are simply alternatives it considered for executing that query in the end it will find "winning
+plan". 
+"winning plan" is essential what it did to get our results it have which scan mongodb uses.
+    winningPlan: {
+      stage: 'COLLSCAN',
+      filter: { 'dob.age': { '$gt': 60 } },
+      direction: 'forward'
+    },
+
+
+1. create Index: 
+playGround> db.person.createIndex({"dob.age": 1})
+> dob.age_1  // name of index
+1: ascending order
+0: descending order
+Note: You can create index on nested field.
+
+2. get Indexes
+db.users.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { 'dob.age': 1 }, name: 'dob.age_1' }
+]
+_id field have by default index on it.
+
+3. drop index
+myDB> db.users.dropIndex('dob.age_1')
+{ nIndexesWas: 2, ok: 1 } 
+
+
+
+
+
+without Index: 
+db.person.explain("executionStats").find({"dob.age": {$gt: 60}})
+>executionStats: {
+    executionSuccess: true,
+    nReturned: 1222,
+    executionTimeMillis: 5,  <--------- Time
+    totalKeysExamined: 0,
+    totalDocsExamined: 5000,
+    executionStages: {
+      stage: 'COLLSCAN',  <-------------- Collection Scan
+    }
+  },
+
+with Index: 
+db.person.explain("executionStats").find({"dob.age": {$gt: 60}})
+>executionStats: {
+    executionSuccess: true,
+    nReturned: 1222,
+    executionTimeMillis: 3,  <-------------------------Time
+    totalKeysExamined: 1222,
+    totalDocsExamined: 1222,
+    executionStages: {
+      stage: 'FETCH',
+      nReturned: 1222,
+      inputStage: {
+        stage: 'IXSCAN',  <---------------------Index scan
+      }
+    }
+}
+
+
+
+
+when you run this query : 
+db.person.explain("executionStats").find({"dob.age": {$gt: 20}});  // Note all 5000 documents have age > 20
+
+then you can notice that with index it took 20 to 300 milliseconds to find those docuemnts but if you don't use index then it took 2 to 10 
+milliseconds.
+
+why this ?
+
+-> When an index is used, MongoDB performs the following:
+Scans the index to find matching keys.
+Retrieves the corresponding documents from the collection using pointers.
+This involves extra steps (reading the index and then fetching the documents).
+-> Indexes shine when they narrow down the number of documents that need to be retrieved. 
+For example, if only 5 out of 5000 documents matched age > 20, the index would drastically reduce the work.
+-> COLLSCAN reads data sequentially from disk or memory, benefiting from linear reads.
+If the collection is small enough to fit entirely in memory, a COLLSCAN becomes much faster because MongoDB can read documents directly 
+from memory in sequence.
+-> if you have a query that will return a large portion or the majority of your documents, an index can actually slower because you then just 
+have an extra step to go through your almost entire index list and then you have to go to the colllection and get all these documents, so
+thats a extra step.
+-> on the other hand if you do "COLLSCAN" then you alredy have all the documents in memory 
+-> so if you have queries that regularly return the majority or all of your documents, an index will not really help you.
+-> if your query return 10 to 20 % of dataset then  indexes will help.
+
+
+You can create index on a field which have text, number value.
+but for boolean it will speed up your query.
+
+
+
+
+
+compound index: 
+
+-> A compound index in MongoDB is an index that includes multiple fields. It allows you to create an index on more than one field in a 
+document, enabling efficient query performance for queries that involve those fields.
+-> Compound indexes are larger than single-field indexes
+-> The order of fields in a compound index is critical
+
+syntax: 
+db.collection.createIndex({ field1: 1, field2: -1 });
+field1: 1 means the field is indexed in ascending order.
+field2: -1 means the field is indexed in descending order.
+
+EX: 
+db.collection.createIndex({ name: 1, age: 1 });
+Initial Data:
+[
+  { name: "Alice", age: 30 },
+  { name: "Bob", age: 25 },
+  { name: "Alice", age: 35 }
+]
+With a compound index { name: 1, age: 1 }, the data is ordered as:
+[
+  { name: "Alice", age: 30 }
+  { name: "Alice", age: 35 }
+  { name: "Bob", age: 25 }
+]
+
+How Does It Work?
+A compound index sorts and organizes data by the specified fields in the order defined. 
+It essentially acts as a "multi-level" sorting system:
+First sorts by the first field (field1).
+Then sorts by the second field (field2) for documents with the same field1 value.
+
+Use Cases for Compound Indexes:
+
+1. Multi-Field Queries
+If your queries frequently filter or sort by multiple fields, a compound index can optimize performance.
+Example: db.collection.createIndex({ age: 1, gender: 1 });
+Query:db.collection.find({ age: { $gt: 30 }, gender: "male" });
+
+2. Sorting
+Compound indexes can be used to optimize sorting queries.
+Example: db.collection.createIndex({ age: 1, salary: -1 });
+Query: db.collection.find({}).sort({ age: 1, salary: -1 });
+If you are not using indexes and you do a sort on large amount of documents, you can actually timeout because mongodb has a threshold of 
+32 megabytes in memory for sorting and if you don't have index mongodb will essentially fetch all your docuemnts into memory and do the 
+sort there 
+
+
+3. Matching a Subset of Fields
+A compound index can also be used to optimize queries involving only the first field or a prefix subset of fields.
+Example: db.collection.createIndex({ age: 1, gender: 1 });
+Optimized: db.collection.find({ age: { $gt: 30 } });
+Not optimized: db.collection.find({ gender: "female" });
+The query does not use the index fully because gender is not the first field in the compound index.
+
+
+Queries That Benefit
+
+1. Only contain age field
+2. Both Fields in Query
+
+
+Using Indexes for Sorting : 
+==========================
+available Indexes: 
+  {
+    v: 2,
+    key: { 'dob.age': 1, gender: 1 },
+    name: 'dob.age_1_gender_1'
+  }
+
+db.person.explain().find({"dob.age": 35}).sort({gender: 1})
+
+
+If you are not using indexes and you do a sort on large amount of documents, you can actually timeout because mongodb has a threshold of 
+32 megabytes in memory for sorting and if you don't have index mongodb will essentially fetch all your docuemnts into memory and do the 
+sort there 
+
+if you have millions of documents, you fetch so many documents that an in-memory sort is just not possible and
+you need an index which is alredy sorted so that mongodb doesn't have to sort in memory but can just take the order you have in the index.
+
+
+indexes are not only for searching but also for sorting.
+
+because we have sorted list of elements of index.
+
+mongoDB can utilized in case of you want to sort in the same way that index list is sorted.
+
+Now this is another cool feature of indexes, since we  have an ordered list of values alredy, mongoDB can utilize that to quickly give
+us back the order of documents we need.
+
+If you are not using indexes and you do a sort on large amount of documents, you can actually timeout because mongodb has a threshold of 
+32 megabytes in memory for sorting and if you don't have index mongodb will essentially fetch all your docuemnts into memory and do the 
+sort there 
+
+So sometimes you also need an index not just to speed up the query but also to be able to sort at all.
+
+
+
+
+
+Default Index: 
+==============
+this is derfault Index: 
+{ v: 2, key: { _id: 1 }, name: '_id_' },
+
+
+
+
+
+
+
+Configuring Indexes: 
+=====================
+
+
+db.person.createIndex({"login.uuid": 1}, {unique: 1})
+> login.uuid_1
+
+db.tb1.getIndexes()
+>   {
+    v: 2,
+    key: { 'login.uuid': 1 },
+    name: 'login.uuid_1',
+    unique: true
+  }
+
+
+
+
+
+
+Partial Filter: 
+================
+
+-> A partial index is an index that only includes documents that meet a specified filter condition. 
+-> It allows you to create indexes on a documents which passes the filter condition, reducing the index size and improving query 
+performance for specific queries.
+
+for example i have 1 millions of documents and i want to do something for employees whose service_age is more than 50 years then 
+is it more correct/optimised way to create index on only those documents where service_age > 50  rather than whole age fileld.
+
+db.senwell.createIndex({ service_age: 1 }, { partialFilterExpression: { service_age: { $gte: 50 } } })
+
+Query Not Using the Index: 
+db.senwell.find({ service_age : { $lt: 50 }});
+This query will not use the index because documents with service_age < 50 are not included in the index
+
+Example 2: Index Only Non-Null Fields
+[
+  { _id: 1, status: "active", age: 25 },
+  { _id: 2, status: "inactive", age: 30 },
+  { _id: 3, status: "active", age: null },
+  { _id: 4, status: "inactive", age: null }
+]
+Question: Create index on documents which contain age field.
+Query : db.tb.createIndex({ age: 1 }, { partialFilterExpression: { age: { $exists: true } } });  // _id 3 and 4 not included
+supported Query : db.tb.find({ age: { $gt: 20 } });
+
+
+Question: create index on score field but include only documnets where status is active
+db.tb.createIndex({ score: 1 }, { partialFilterExpression: { status: "active" } });
+supported Query :db.tb.find({ score: { $gte: 85 }, status: "active" });
+Not Supported :  db.tb.find({score: 20});  // here it perform COLLSCAN instaed of IXSCAN because you didn't mention status of document.
+Note: while seaching for documents make sure you have added correct filelds so that index will applied correctly.
+
+compound Index + Partial Filter:
+db.tb1.createIndex({age: 1, gender: 1}, { partialFilterExpression: { age:{ $gte: 31 }, gender: { $exists: true } } } );
+
+
+
+TTL Index (Time to Live Index):
+============================
+A TTL (Time to Live) index is a special type of index that automatically removes documents from a collection after a specified period. 
+This is particularly useful for managing data that becomes irrelevant or obsolete after a certain time, such as:
+
+Session data
+Temporary data (like cache or logs)
+Expiring tokens
+
+TTL indexes are an efficient way to automatically manage and clean up data without needing manual intervention, saving resources and 
+simplifying application logic.
+
+
+Key Points to Remember:
+
+1. Field Type: The TTL index must be on a field with a Date type.
+2. Partial Expiration: TTL index does not expire a portion of a document—either the entire document is removed or it stays.
+3. Background Process: Expiration is handled by a background thread, so it may not happen exactly at the second the document expires.
+4. No Manual Control: You cannot use TTL to "manually" delete documents on demand—it works based solely on the time value.
+5. Compound Indexes: TTL indexes cannot be compound indexes; they must be single-field indexes.
+
+
+How TTL Index Works
+You create a TTL index on a date field in a document.
+MongoDB automatically deletes documents when the indexed field's value is older than the specified expiration time.
+Deletion occurs in the background at regular intervals (every 60 seconds by default).
+
+Example:
+
+1. Scenario
+You have a collection named "sessions" that stores user session data. 
+You want sessions to expire 1 hour (3600 seconds) after their creation.
+
+Query:  db.sessions.createIndex( { createdAt: 1 },  { expireAfterSeconds: 3600 } );
+> [
+  {
+    "v": 2,
+    "key": { "createdAt": 1 },
+    "name": "createdAt_1",
+    "expireAfterSeconds": 3600
+  }
+]
+createdAt: The field storing the document's creation date (must be a valid Date object).
+expireAfterSeconds: Specifies the TTL duration (in seconds).
+Query: db.sessions.insertOne({ sessionId: "abc123", userId: 1, createdAt: new Date() });
+After 3600 seconds, MongoDB will automatically delete this document
+
+
+Query: db.logs.createIndex({ timestamp: 1 }, { expireAfterSeconds: 604800 });  // Automatically delete logs after 7 days.
+Query: db.cache.createIndex({ cachedAt: 1 }, { expireAfterSeconds: 86400 });  // Cache data for 24 hours.
+
+
+
+
+
+
+
+Covered Query in MongoDB: 
+=========================================
+
+-> A covered query is a query in MongoDB that is fully satisfied using an index without needing to examine the actual documents
+(totalDocsExamined) in the collection. This significantly improves query performance because it avoids disk I/O and document retrieval.
+also since we don't have examine the documents (totalDocsExamined) the time is 0 milliseconds.
+
+Conditions for a Covered Query: 
+------------------------------
+For a query to be considered covered:
+
+1. All Fields in the Query Must Be Indexed.
+2. The fields used in the "query filter" must be part of an index.
+3. All Fields in the "Projection" Must Be Indexed:
+4. No "fetch" or "scan" of the collection's documents is required:
+MongoDB does not access the actual documents everything is resolved from the index.
+
+Input Data: 
+db.people.insertMany([
+  { "_id": 1, "name": "Alice", "age": 30, "city": "New York" },
+  { "_id": 2, "name": "Bob", "age": 25, "city": "Los Angeles" },
+  { "_id": 3, "name": "Charlie", "age": 35, "city": "Chicago" }
+])
+
+Index Creation: 
+db.people.createIndex({ name: 1, age: 1 });
+
+Covered Query Example:
+db.people.find({ name: "Alice" }, { name: 1, age: 1, _id: 0 });
+Filter: { name: "Alice" } is covered by the index { name: 1, age: 1 }.
+Projection: { name: 1, age: 1, _id: 0 } retrieves fields present in the index only.
+
+
+You can use the explain() method to verify whether a query is covered. 
+If the FETCH stage is absent in the winningPlan, the query is covered also if "totalDocsExamined" is 0 then also its covered query.
+db.people.explain("executionStats").find({ name: "Alice" }, { name: 1, age: 1, _id: 0 });
+
+Benefits of Covered Queries:
+0. Covered queries are ideal for read-heavy applications where specific fields are queried often
+1. Improved Performance
+2. Avoids reading actual documents from the collection as the (totalDocsExamined) are 0.
+3. Reduces Disk I/O
+4. Works entirely from the index, which is faster
+5. Efficient Use of Resources
+6. Minimizes memory and CPU usage for query execution
+
+
+Limitations: 
+
+1. All Required Fields Must Be Indexed, If any queried or projected field is not in the index, the query won't be covered
+2. If documents are frequently updated, maintaining indexes for covered queries can add overhead
+
+
+
+
+
+How mongodb rejects a plan: 
+==============================
+
+db.users.insertMany([
+  { name: "Adesh", age: 23, sex: "male" },
+  { name: "Akshay", age: 25, sex: "male" },
+  { name: "Rahul", age: 24, sex: "male" },
+  { name: "Sneha", age: 23, sex: "female" },
+  { name: "Riya", age: 26, sex: "female" },
+  { name: "Mohit", age: 27, sex: "male" }
+]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Collscan -> scan like linear search means search document one by one.
 IXScan -> Indexing scan -> Fast -> 
 
@@ -25,9 +562,15 @@ Age Index:
 30 -> [2]      // Reference to the document with age=30
 
 
-In this example, the "Age Index" is sorted by age values, and each age value is associated with references to the documents that have that age value. When you query for a specific age, MongoDB can use this index to quickly locate the relevant documents without having to scan the entire collection.
+In this example, the "Age Index" is sorted by age values, and each age value is associated with references to the documents that have 
+that age value. 
+When you query for a specific age, MongoDB can use this index to quickly locate the relevant documents without having to scan the entire 
+collection.
 
-Keep in mind that the actual data structures used by MongoDB for indexing are more sophisticated, and the example above is simplified for illustrative purposes. MongoDB uses B-tree or hashed indexes, depending on the type of index and other factors, to efficiently support a wide range of query patterns.
+Keep in mind that the actual data structures used by MongoDB for indexing are more sophisticated, and the example above is simplified 
+for illustrative purposes. 
+MongoDB uses B-tree or hashed indexes, depending on the type of index and other factors, to efficiently support a wide range of query 
+patterns.
 
 
 if you create a index on a field like 'name' then it create a separate data structure where we stored all 
@@ -326,12 +869,12 @@ data with index: age_1_gender_1:
 
 unique constraint: 
 ==================
-db.users.createIndex({name: 1}, {unique: true})
--> this stores unique names.
--> It will not store duplicate name data.
-
-
-
+db.users.createIndex({email: 1}, {unique: true})
+-> this stores unique email.
+-> It will not store duplicate email data or null values.
+-> if you try to add document without email field then it will give you error.
+Not Supported:: db.tb1.insertOne({name: "Adesh"})
+Supported:: db.tb1.insertOne({name: "Adesh", email: "adejad1234@gmail.com"})
 
 
 

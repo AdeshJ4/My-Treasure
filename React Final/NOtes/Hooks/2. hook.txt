@@ -7,6 +7,7 @@ no plans to remove classes from React.
 
 Note: 
 -> Functional components traditionally did not have lifecycle methods
+https://manikandan-b.medium.com/react-functional-component-lifecycle-e8525f8fadea
 -> Lifecycle methods were exclusive to class components.
 
 

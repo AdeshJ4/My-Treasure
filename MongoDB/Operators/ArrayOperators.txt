@@ -15,7 +15,7 @@
 
 data: 
 
-db.hobbies.insertMany([
+db.senwell.insertMany([
   {
     _id: ObjectId("65658eeb0cea2748b06400af"),
     name: 'Max',
@@ -54,11 +54,6 @@ db.hobbies.insertMany([
 
 
 Note : You can access 'array elements' like objects means using 'dot notation'.
-    "hobbies": [
-      { "title": "Reading", "description": "Enjoys reading books" },
-      { "title": "Sports", "description": "Plays various sports" },
-      { "title": "Music", "description": "Loves listening to music" }
-    ]
 eg. db.hobbies.find({'hobbies.title': {$eq: 'Sports'}});
 
 
@@ -66,55 +61,49 @@ eg. db.hobbies.find({'hobbies.title': {$eq: 'Sports'}});
 1. $all :
 ---------
 
--> $all operator used on the array.
--> $all operator returns documents if the 'array field' of a document contain all values specify inside a $all operator.
--> given array element may contain other elements but must contain specified element.
+The $all operator in MongoDB is a "query operator" used to match documents where the array field contains all the specified elements. 
+This operator is useful when you need to ensure that all specified values are present in the array, regardless of their order or 
+additional elements
 
-ex. 1
-Find products that have both "Intel Processor" and "256GB SSD" features.
-Note: "features" array may contain others properties also but we are mainly searching for above two values.
+Input Document:
+db.tb1.insertMany([
+  { "_id": 1, "tags": [ "red", "blue", "green", "orange" ] },
+  { "_id": 2, "tags": [ "red", "yellow" ] },
+  { "_id": 3, "tags": [ "blue", "green", "yellow" ] },
+  { "_id": 4, "tags": "orange" },
+  { "_id": 5, "scores": [ [ 10, 20 ], [ 30, 40 ] ] },
+  { "_id": 6, "scores": [ [ 10, 20 ], [ 50, 60 ] ] },
+  { "_id": 7, "features": [ { name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" } ] },
+  { "_id": 8, "features": [ { name: "Processor", value: "Microsoft" }, { name: "RAM", value: "12GB" } ] }
+])
 
-I/P: 
-[
-    {id: 1, productName: 'Laptop', features: [ 'Intel Processor', '8GB RAM', '256GB SSD' ]},
-    {id: 2, productName: 'Mobile', features: [ 'Intel Processor' ]},
-    {id: 3, productName: 'TV', features: [ '256GB SSD' ]},
-    {id: 4, productName: 'Bike', features: [ 'Intel Processor', '256GB SSD' ]},
-]
-O/P: 
-[
-    {id: 1, productName: 'Laptop', features: [ 'Intel Processor', '8GB RAM', '256GB SSD' ]},
-    {id: 4, productName: 'Bike', features: [ 'Intel Processor', '256GB SSD' ]},
-]
-Query : db.tb1.find({features: {$all : ["Intel Processor", "256GB SSD"]}});
+// Find documents where the tags array contains both "red" and "blue".
+db.tb1.find({ tags: { $all: [ "green", "blue" ] } }) ;  // Order of Values Does Not Matter, _id 1 & 3 returned
 
-ex.2 if arrays contain nested elements 
-I/P
-[
-  {
-    _id: 1,
-    productName: "Laptop",
-    features: [
-      { name: "Processor", value: "Intel" },
-      { name: "RAM", value: "8GB" },
-      { name: "Storage", value: "256GB SSD" }
-    ]
-  },
-  {
-    _id: 2,
-    productName: "Mobile",
-    features: [
-      { name: "Processor", value: "Microsoft" },
-      { name: "RAM", value: "12GB" },
-      { name: "Storage", value: "68GB SSD" }
-    ]
-  },
-]
-Query: db.tb1.find({features: {$all: [{ name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" }]}})
+// Using $all with Non-Array Fields, 
+db.tb1.find({ tags: { $all: [ "orange" ] } });  // _id 1 & 3 returned
+Note: The $all operator works with non-array fields by treating the field value as an array of one element.
 
-Note: if you want documents only with specified elements then use: 
-// return only documents which has single hobbies elements
-db.users.find({hobbies: ["Swimming"]})
+
+// Combining $all with Nested Arrays
+db.tb1.find( { scores: { $all: [ [ 30, 40 ] ] } });  // _id 5 returned.
+Note: MongoDB treats the sub-array [30, 40] as a single element when using $all.
+
+// Combining $all with Nested Objects
+db.tb1.find({features: { $all: [{ name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" }]}}); //  "_id": 7 returned
+Note: MongoDB treats the sub-object as a single element when using $all.
+
+
+//  Combining $all with Other Operators
+db.collection.find(
+   {
+      $and: [
+         { tags: { $all: [ "red", "blue" ] } },
+         { _id: { $gt: 1 } }
+      ]
+   }
+);   
+
 =============================================================================================================
 
 
@@ -122,6 +111,37 @@ db.users.find({hobbies: ["Swimming"]})
 
 -> this operator return documents which contain 'array field' and 'at least one element' of array field should 
 'satisfy condition' specify by the $elemMatch operator.
+
+The $elemMatch operator is used to match documents where at least one element in an array field matches all specified query criteria. 
+This is particularly useful when querying "arrays with objects" or when multiple conditions need to be applied to a single element within 
+an array.
+
+Syntax:
+db.collection.find( { <arrayField>: { $elemMatch: { <query1>, <query2>, ... } } })
+<query1>, <query2>, ...: The conditions to match on a single element of the array.
+
+
+Input : 
+db.tb1.insertMany([
+   { "_id": 1, "scores": [ { "subject": "math", "score": 85 }, { "subject": "english", "score": 90 } ] },
+   { "_id": 2, "scores": [ { "subject": "math", "score": 70 }, { "subject": "english", "score": 80 } ] },
+   { "_id": 3, "scores": [ { "subject": "math", "score": 95 }, { "subject": "english", "score": 85 } ] }
+]);
+
+
+// Find documents where the scores array contains an object with subject equal to "math" and score greater than 80.
+db.tb1.find({ scores: { $elemMatch: { subject: "math", score: { $gt: 80 } } } }); // _id 1 & 3 returned
+
+
+
+
+
+
+
+
+
+
+
 
 ex.1:
 find user who has grade above 91 or grade array must contain grade element $gte 90

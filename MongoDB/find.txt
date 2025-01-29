@@ -7,15 +7,21 @@ There are 2 methods to find and select data from a MongoDB collection,
 5. findOneAndUpdate()
 
 
-db.users.find()
-db.users.find({age: {$gt: 22}})
+db.person.countDocuments({"dob.age": {$gt: 60}});
+db.person.find({"dob.age": {$gt: 60}}).count();
 
-db.users.findOne()
+count() (deprecated) can be used with a cursor to get the count.
+countDocuments() is a more modern and efficient method designed specifically to count documents based on a filter, without chaining it with find().
+
+
+
+db.users.find({})
+db.users.find({}, {_id: 1, name: 1, age: 1})   // projection
 db.users.findOne({_id: 101})
-
-db.users.findOneAndDelete({_id: 101}, {projection: {_id: 0, name: 1}})
-db.users.findOneAndReplace({_id: 101}, {_id: 101, name: 'Adesh'}, {projection: {_id: 0, name: 1}, {returnDocument: 'after'}})
-db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {returnDocument: 'after'}, {projection: {_id: 0, name: 1}})
+db.users.findOne({_id: 101}, {_id: 1, name: 1})  // projection
+db.users.findOneAndDelete({_id: 101}, {returnDocument: "after", projection: {_id: 0, name: 1}});
+db.users.findOneAndReplace({_id: 101}, {_id: 101, name: 'Adesh'}, {returnDocument: 'after', projection: {_id: 0, name: 1}})
+db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {returnDocument: 'after', projection: {_id: 1, name: 1, age: 1}})
 
 1. find()
 
@@ -25,6 +31,24 @@ db.users.findOneAndUpdate({_id: 101}, {$set: {name: 'Adesh Jadhav', age: 23}}, {
     query object.
 -> db.users.find()
 -> db.users.find({age: {$gt: 22}})
+
+
+playGround> db.senwell.find({}, {_id: 1, name: 1, age: 1})  // second object is used for projection
+[
+  { _id: 101, name: 'Adesh Yadav', age: 22 },
+  { _id: 102, name: 'adesh Jadhav', age: 25 },
+  { _id: 103, name: 'Rohan', age: 29 },
+  { _id: 104, name: 'Neha', age: 21 },
+  { _id: 105, name: 'Amit', age: 30 },
+  { _id: 106, name: 'Sneha', age: 24 },
+  { _id: 107, name: 'Rahul', age: 28 },
+  { _id: 108, name: 'Anjali mishra', age: 26 },
+  { _id: 109, name: 'Rajesh', age: 32 },
+  { _id: 110, name: 'Kiran Mishra', age: 40 }
+]
+
+
+
 
 
 2. findOne()

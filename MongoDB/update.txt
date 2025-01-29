@@ -7,4 +7,8 @@ There are two methods present inside a MondoDB
 -> The first parameter is query object.
 -> The second parameter is object which contain data to be updated.
 
+db.senwell.updateMany({}, {$set: {active: true}});   // add active frield in all documents
+db.senwell.updateMany({active: false}, {$set: {active: true}});
+
+db.senwell.updateOne({active: false}, {$set: {active: true}});
 

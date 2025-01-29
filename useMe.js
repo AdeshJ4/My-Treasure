@@ -1,3 +1,2 @@
-function palindromeCheck(str){  // racecar = racecar
-    return 
-}
+
+console.log(Math.round("q"));

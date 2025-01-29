@@ -14,3 +14,11 @@ sort()
 distinct()
 -> db.myCollection.distinct("city")   // unique values
 
+count() (deprecated) can be used with a cursor to get the count.
+-> db.person.find({"dob.age": {$gt: 60}}).count();
+
+countDocuments() is a more modern and efficient method designed specifically to count documents based on a filter, without chaining it with find().
+-> db.person.countDocuments({"dob.age": {$gt: 60}});
+
+
+

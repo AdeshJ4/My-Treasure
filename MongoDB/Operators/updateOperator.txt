@@ -30,7 +30,7 @@
 4. $inc
 -> The $inc operator 'increments' a field by a 'specified value'.
 -> The $inc operator accepts 'positive and negative values'.
--> If it accepts +ve number then increase the no. it it accepts -ve no then decrees no.
+-> If it +ve number then increase the no. if its -ve no then decrees no.
 -> If the field does not exist, $inc creates the field and sets the field to the specified value.
 -> Use of the $inc operator on a field with a null value will generate an error.
 
@@ -229,6 +229,11 @@ Query: db.tb1.updateOne({name: 'Adesh'}, {$set: {hobbies: ["Swimming", "Reading"
 
 4. Insert value inside a existing array.
 ---------------------------------------
+Input : [{name: 'Adesh'}, hobbies: [ 'Swimming', 'Reading' ]]
+output: [{name: 'Adesh',hobbies: [ 'Swimming', 'Reading', "Coading" ]}]
+Query: db.tb1.updateOne({name: 'Adesh'}, {$push: {hobbies: "Coading"}})
+
+
 Input : [{name: 'Adesh'}, hobbies: [ { name: 'Anime' } ]]
 output: [{name: 'Adesh',hobbies: [ { name: 'Anime' }, { name: 'KDrama' } ] }]
 Query: db.tb1.updateOne({name: 'Adesh'}, {$push: {hobbies: { name: 'KDrama' }}})
@@ -252,7 +257,8 @@ Output: [
    { _id: 3, scores: [ 46, 78, 38, 80, 89, 95 ] },
    { _id: 4, scores: [ 47, 78, 38, 80, 89, 95 ] }
 ]
-Query: db.tb1.updateOne({}, {$push: {scores: 95}})
+Query: db.tb1.updateMany({}, { $push: { scores: 95 } });
+
 
 
 5. Replace whole array with another Array: 
@@ -303,5 +309,160 @@ Output: {
   ]
 }
 Query: db.tb1.updateOne({_id: 1}, {$push: {grades: {$each: [{ "subject": "Science", "score": 92 },{ "subject": "English", "score": 88 }]}}})
+
+
+=======================================
+
+9. $addToSet: 
+
+The $addToSet operator in MongoDB is used to add a value to an array only if it does not already exist. 
+It ensures that the array remains a set (no duplicates).
+if array is empty or does not exists then it create the array with that name and values.
+
+// Adding a New Value to an Array
+db.senwell.updateOne({_id: 3}, {$addToSet: {hobbies: "Web-Series"}})
+
+// Adding Multiple Values Using $each
+db.tb1.updateOne({_id: 1}, { $addToSet: { hobbies: { $each: [ "Movies", "Gaming", "Swim" ] } } })
+
+
+// Adding a Value to an Array in a Nested Document, 
+I/P: { "_id": 3, "profile": { "hobbies": [ "Coding", "Gaming" ] } }
+db.tb1.updateOne({_id: 1}, { $addToSet: { "profile.hobbies": "Movies" } });
+
+// Adding a Value to a Non-Existent Array
+db.senwell.updateOne({_id: 1}, { $addToSet: { cars: "Movies" } })  // cars does not exist but it will be created.
+
+
+
+
+
+=======================================
+
+
+10. $pull: 
+
+The $pull operator in MongoDB is used to "remove specific values from an array" in a document. 
+It removes all instances of the specified value(s) that match a condition
+
+// remove "Movies" from "hobbies" array.
+db.tb1.updateOne({_id: 1}, {$pull: {hobbies: "Movies"}})
+
+// remove all items which are less than 50
+db.tb1.updateOne({_id: 1}, {$pull: {scores: {$lt: 50}}})
+
+// Remove all hobbies that start with the letter "C":
+db.tb1.updateOne({ _id: 1 },{ $pull: { hobbies: { $regex: "^C" } } });
+
+//  Remove Duplicates Programmatically
+db.tb1.updateOne({ _id: 1 },{ $set: { hobbies: [...new Set(doc.hobbies)] } });
+
+
+// Remove Hobbies Based on Length (Remove all hobbies that are shorter than 5 characters)
+db.tb1.updateOne({ _id: 1 }, { $pull: { hobbies: { $where: "this.length < 5" } } })
+
+// remove multiple values
+db.tb1.updateOne({_id:1},  { $pull: { hobbies: { $in: [ "Swim", "Read" ] } } })
+
+
+=======================================
+
+
+11.$pop
+
+The $pop operator in MongoDB is used to remove an element from the start or end of an array. 
+It modifies the array by "popping" one element, based on the specified direction.
+Removes only one element: $pop always removes one element, either from the start or end of the array.
+If the array is already empty, $pop will do nothing.
+
+Syntax: db.tb1.updateOne({ <filter> }, { $pop: { <arrayField>: <value> } })
+<value>:
+Use 1 for the last element.
+Use -1 for the first element
+
+
+Example Scenarios: 
+Input Document:
+{ "_id": 1, "hobbies": [ "Swim", "Read", "Coding", "Movies", "Gaming" ] }
+
+// Remove the Last Element
+db.tb1.updateOne({_id: 1}, {$pop: {hobbies: 1}})
+
+// Remove the First Element
+db.tb1.updateOne({_id: 1}, {$pop: {hobbies: -1}})
+
+
+
+=======================================
+
+
+12. $slice
+
+The $slice operator in MongoDB is used to "limit the number of elements returned from an array field". 
+It is often used in "conjunction with projection" to include a subset of an array in the query result, 
+since we use second object for projection.
+However, it does not modify the data in the database.
+
+
+Syntax:
+
+db.collection.find({ <filter> },{ <arrayField>: { $slice: <value> } });
+
+<value>:
+A positive number (N): Returns the first N elements of the array.
+A negative number (-N): Returns the last N elements of the array.
+[skip, limit]: Returns a subset of the array, skipping the first skip elements and including up to limit elements after.
+
+
+
+// Return the First 3 Elements
+db.tb1.find({_id: 1}, {hobbies: {$slice: 3}})
+
+// Return the Last 3 Elements
+db.tb1.slice({_id: 1}, {hobbies: {$slice: -3}})
+
+// skip first 2 elements and return 3 elements [skip, limit]
+db.tb1.find({_id: 1}, {hobbies: {$slice: [2, 3]}}) // o/p-> ["C", "D", "E"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

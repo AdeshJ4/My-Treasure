@@ -8,7 +8,7 @@
 -> db.tb1.drop();
 
 
-3. Delete First document
+3. Delete One (oldest one) document
 
 -> db.tb1.deleteOne({});
 
@@ -21,6 +21,7 @@
 5. Delete One Document according to condition
 
 -> db.tb1.deleteOne({_id: 101});
+-> db.tb1.deleteOne({_id: 101, name: "Adesh"});
 
 
 6. Delete All Documents according to condition

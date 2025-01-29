@@ -18,6 +18,14 @@ db.collectionName.find({ fieldName: { $exists: true } })
 // Find documents where the "fieldName" does not exist
 db.collectionName.find({ fieldName: { $exists: false } })
 
+playGround> db.senwell.find({projects: {$exists: true}}, {_id: 1, name: 1})
+[
+  { _id: 101, name: 'Adesh Yadav' },
+  { _id: 102, name: 'adesh Jadhav' },
+  { _id: 103, name: 'Rohan' },
+  { _id: 107, name: 'Rahul' },
+  { _id: 110, name: 'Kiran Mishra' }
+]
 
 
 2. $type
@@ -54,7 +62,7 @@ db.addressBook.find( { "zipCode" : { $type : "string" } } );
 -> db.tb1.find({$expr: {$lt: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$gte: ["$age", "$target"]}})
 -> db.tb1.find({$expr: {$lte: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})
+-> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})     
 Question: find documents where the total revenue is greater than $10,000.
 hint: calculate total revenue by multiplying (quantity * price) and then compare it with 10000
 input: 

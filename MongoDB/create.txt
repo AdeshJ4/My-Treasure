@@ -60,12 +60,36 @@ db.tb4.insertOne({id: 101, age: null});
 
 
 8. **Date:** Stores the current date or a specific date.
+Note: MongoDB will store the date as a BSON Date type, which is automatically converted to ISO format (YYYY-MM-DDTHH:mm:ss.sssZ) when retrieved.
 db.tb4.insertOne({id: 102, birth_date: new Date()});
 db.tb4.insertOne({id: 102, birth_date: ISODate('2001-06-22')});
 db.tb4.insertOne({id: 102, birth_date: ISODate("2023-01-01T12:00:00Z")});
 
-db.tb1.insertOne({name: 'Adesh', age: 22, CGPA: 8.81, job: true, address:{city:'Pune'}, 
-hobbies: ['h1', 'h2'], DOB: ISODate('2001-06-22')})
+playGround> db.senwell.insertOne({name: "Raman", dob: new Date(), tob: new Date("2001-06-22"), mob: ISODate('2001-06-22'), zob: ISODate("2023-01-01T12:00:00Z")})
+{
+  acknowledged: true,
+  insertedId: ObjectId("6792009a219ff16946dbd2d5")
+}
+playGround> db.senwell.find({name: "Raman"})
+[
+  {
+    _id: ObjectId("6792009a219ff16946dbd2d5"),
+    name: 'Raman',
+    dob: ISODate("2025-01-23T08:40:58.221Z"),
+    tob: ISODate("2001-06-22T00:00:00.000Z"),
+    mob: ISODate("2001-06-22T00:00:00.000Z"),
+    zob: ISODate("2023-01-01T12:00:00.000Z")
+  }
+]
+playGround>
+
+
+
+
+
+
+
+
 
 9. **Timestamp:** Typically used to store the 'creation time of a document'.
 db.tb4.insertOne({ "id": 102, "createdAt": new Timestamp() })

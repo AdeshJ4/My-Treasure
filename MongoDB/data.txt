@@ -1,0 +1,189 @@
+db.senwell.insertMany([
+  {
+    _id: 101,
+    name: 'Adesh Yadav',
+    age: 22,
+    cgpa: 8.87,
+    "email": "adejad1234@google.com",
+    address: { village: "Lohegaon", city: "Pune", distance: 200 },
+    hobbies: ["cricket", "football"],
+    projects: [{ title: "Weather App", status: "completed" }, { title: "Chatbot", status: "in-progress" }],
+    birthdate: "2001-03-15",
+    registerdate: "2023-12-01"
+  },
+  {
+    _id: 102,
+    name: 'adesh Jadhav',
+    age: 25,
+    cgpa: 9.2,
+    "email": "adeshjadhav13061@senwell.com",
+    address: { village: "Baner", city: "Pune", distance: 120 },
+    hobbies: ["painting", "badminton"],
+    salary: 45000,
+    certifications: ["AWS", "Scrum Master"],
+    projects: [{ title: "E-commerce", status: "completed" }, { title: "Blog App", status: "in-progress" }],
+    birthdate: "2001-01-20",
+    registerdate: "2023-11-01"
+  },
+  {
+    _id: 103,
+    name: 'Rohan',
+    age: 29,
+    cgpa: 7.5,
+    "email": "rohan_yadav@example.com",
+    address: { village: "Viman Nagar", city: "Pune", distance: 50 },
+    hobbies: ["chess", "gaming"],
+    salary: 65000,
+    certifications: ["Azure", "PMP"],
+    projects: [{ title: "Inventory System", status: "completed" }],
+    birthdate: "2001-02-15",
+    registerdate: "2023-12-31"
+  },
+  {
+    _id: 104,
+    name: 'Neha',
+    age: 21,
+    cgpa: 8.1,
+    "email": "nehapanchal@hotmail.com",
+    address: { village: "Kothrud", city: "Pune", distance: 70 },
+    hobbies: ["cycling", "photography"],
+    courses: ["Node.js", "React"],
+    attendance: { total: 120, present: 110 }
+  },
+  {
+    _id: 105,
+    name: 'Amit',
+    age: 30,
+    cgpa: 6.9,
+    "email": "amishomkar@example.com",
+    address: { village: "Shivajinagar", city: "Pune", distance: 10 },
+    hobbies: ["travelling", "yoga"],
+    experience: 8,
+    certifications: ["ITIL"],
+    performance: { monthly: [78, 85, 90], yearly: 89 }
+  },
+  {
+    _id: 106,
+    name: 'Sneha',
+    age: 24,
+    cgpa: 8.6,
+    "email": "snehakumari@gmail.com",
+    address: { village: "Hadapsar", city: "Pune", distance: 150 },
+    hobbies: ["reading", "writing"],
+    courses: ["Data Science", "AI"],
+    attendance: { total: 100, present: 90 },
+    reviews: [{ year: 2023, rating: 4.5 }, { year: 2024, rating: 4.7 }],
+    birthdate: "2001-03-15",
+    registerdate: "2023-12-01"
+  },
+  {
+    _id: 107,
+    name: 'Rahul',
+    age: 28,
+    cgpa: 7.2,
+    "email": "rahuldubey@example.com",
+    address: { village: "Katraj", city: "Pune", distance: 30 },
+    hobbies: ["cooking", "swimming"],
+    salary: 55000,
+    certifications: ["DevOps", "Docker"],
+    projects: [{ title: "Banking System", status: "completed" }],
+    birthdate: "2001-03-15",
+    registerdate: "2023-12-01"
+  },
+  {
+    _id: 108,
+    name: 'Anjali mishra',
+    age: 26,
+    cgpa: 9.0,
+    "email": "anjalimishra@yahoo.com",
+    address: { village: "Aundh", city: "Pune", distance: 40 },
+    hobbies: ["gardening", "coding"],
+    experience: 4,
+    performance: { monthly: [80, 85, 88], yearly: 86 },
+    salary: 60000,
+    birthdate: "2001-04-15",
+    registerdate: "2023-07-01"
+  },
+  {
+    _id: 109,
+    name: 'Rajesh',
+    age: 32,
+    cgpa: 7.8,
+    "email": "rajeshpanchal@example.com",
+    address: { village: "Wagholi", city: "Pune", distance: 25 },
+    hobbies: ["fitness", "puzzles"],
+    certifications: ["GCP"],
+    attendance: { total: 110, present: 105 },
+    reviews: [{ year: 2023, rating: 4.0 }, { year: 2024, rating: 4.2 }],
+    birthdate: "2001-09-07",
+    registerdate: "2023-12-21"
+  },
+  {
+    _id: 110,
+    name: 'Kiran Mishra',
+    age: 35,
+    cgpa: 7.4,
+    "email": "kiran@hariom.com",
+    address: { village: "Chinchwad", city: "Pune", distance: 35 },
+    hobbies: ["blogging", "biking"],
+    experience: 12,
+    certifications: ["Kubernetes"],
+    projects: [{ title: "Healthcare System", status: "completed" }],
+    performance: { monthly: [75, 80, 84], yearly: 81 },
+    birthdate: "2001-11-28",
+    registerdate: "2023-12-11"
+  }
+]);
+
+
+db.senwell.insertMany([
+  { _id: 1, name: "Laptop", price: 800, discountedPrice: 700 },
+  { _id: 2, name: "Phone", price: 600, discountedPrice: 600 },
+  { _id: 3, name: "Tablet", price: 300, discountedPrice: 250 },
+  { _id: 4, name: "Monitor", price: 200, discountedPrice: 220 }
+]);
+
+
+db.senwell.insertMany([
+  {
+    _id: 1,
+    name: 'Max',
+    hobbies: [
+      { title: 'Sports', frequency: 3 },
+      { title: 'Cooking', frequency: 6 }
+    ],
+    phone: 131782734
+  },
+  {
+    _id: 2,
+    name: 'Manuel',
+    hobbies: [
+      { title: 'Cooking', frequency: 5 },
+      { title: 'Cars', frequency: 2 }
+    ],
+    phone: '012177972',
+    age: 30
+  },
+  {
+    _id: 3,
+    name: 'Anna',
+    hobbies: [
+      { title: 'Sports', frequency: 2 },
+      { title: 'Yoga', frequency: 3 }
+    ],
+    phone: '80811987291',
+    age: null
+  },
+  {
+    _id: 4,
+    name: 'Chris',
+    hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
+  }
+])
+
+
+db.sm.insertMany([
+   { "_id": 1, "tags": [ "red", "blue", "green" ] },
+   { "_id": 2, "tags": [ "red", "yellow" ] },
+   { "_id": 3, "tags": [ "blue", "green", "yellow" ] }
+])

@@ -26,7 +26,7 @@ age = 20. but if you add $not operator like db.tb1.find({age: {$not: {$eq: 20}}}
 documents where age is not equal to 20.
 -> Not use often.
 -> db.tb1.find({runtime: {$not: {$eq: 60}}})  ===  db.tb1.find({runtime: {$ne: 60}})
-
+db.products.find({ price: { $not: { $gt: 500 } } });  // (i.e., price <= 500)
 
 4. $nor: 
 

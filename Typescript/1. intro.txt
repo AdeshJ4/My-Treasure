@@ -4,28 +4,43 @@ Typescript (v:5.3.3)
 
 What is TypeScript?
 
--> Typescript is programming language built on top of the js, so every js file is valid ts file.
--> Typescript is programming language created at microsoft to address some shortcoming of javascript.
--> we can think it like brother of js.
--> Js is small brother without discipline and do whatever he likes.Typescript is like a kid with some discipline
--> Typescript is javascript with type(data type) checking.
--> with typescript we explicitly set the type of variable while the declarations.
+-> JavaScript is a dynamically typed language, which means the data type of a variable is determined at runtime, and we don't need to 
+explicitly declare the type of data a variable will hold. 
+This flexibility can sometimes lead to errors or unexpected behavior, as the type of data stored in a variable can change during execution. 
+To address this, TypeScript was introduced. TypeScript is a "statically typed superset of JavaScript" that adds optional type annotations 
+and compile-time type checking, helping developers catch type-related errors early and write more predictable and maintainable code.
+-> when we say typescript is superset of javascript that means it has everything javascript have plus additional features of its own.
+-> Typescript is programming language created at microsoft and built on top of the js to address some shortcoming of javascript, 
+so every js file is valid ts file.
+-> we can think it like brother of js but with discipline .
+-> Typescript is javascript with "data type checking".
+-> with typescript we explicitly "set the type of variable" while the declarations.
 -> Then we pass our code to 'typescript compiler' and compiler will tell us if we are doing something wrong. so we can catch our 
 mistakes at compilation time.
--> TypeScript is essentially JavaScript with static typing and some additional features that help us write more concise and robust 
+-> TypeScript is essentially JavaScript with "static typing" and some additional features that help us write more concise and robust 
 code.
+Static Typing: 
+In statically typed languages, variable types are determined at compile time, meaning the type of a variable is known before the 
+code is executed.Once a variable is declared with a specific type, it cannot hold values of any other type. This allows for early 
+detection of type errors, which can be caught by the compiler before the program is run.
+Examples of statically typed languages include Java, C, C++, and Swift
+Dynamic Typing:
+In dynamically typed languages, variable types are determined at runtime, meaning the type of a variable is checked as the 
+program is executed.Variables can hold values of any type, and their type can change over the course of the program's execution.
+Examples of dynamically typed languages include Python, JavaScript, Ruby, and PHP.
 -> With TypeScript we can catch more bugs at compile time.
 -> We can use ts whenever we used js, like in frontend, backend.
 -> anything we do with js we can do with ts.
 -> Typescript: Medium to large projects
 -> Javascript: Simple projects
 -> To check version of typescript used this command : tsc -v
-
+-> TypeScript is backward-compatible, meaning that code written in older versions will generally work in newer versions without issues.
+-. In TypeScript, we set the type of our variables by annotating them
 -> Typescript add some cool features in js: 
 1. static typing 
 2. code completion
 3. Refactoring 
-4. Shorthand notations.`
+4. Shorthand notations.
 
 
 Static Type: C++, C#, Java
@@ -50,18 +65,82 @@ x = 'a';  XXXXX
 Drawbacks: 
 
 1. Compilation: 
--> Browsers don’t understand TypeScript code. So we need to use the TypeScript compiler 
-to compile and translate (or transpile) our TypeScript code into regular JavaScript for 
-execution by browsers.
-this process is called 'Transpilation'
+-> Browsers don’t understand TypeScript code. So we need to use the "TypeScript compiler" to compile and translate (or transpile) our 
+TypeScript code into regular JavaScript for execution by browsers this process is called 'Transpilation'.
 
 2. More discipline while writing a code.
 
 
 
+Installation of Typescript: 
+
+step 1: 
+install : npm i -g typescript
+to check installation run : tsc -v
+
+step 2: 
+create new folder and open it in vs code.
+add new file inside it "index.ts".
+write this code : console.log("Hello Typescript");
+then open terminal and enter: tsc index.ts 
+this command will compile the ts code into js code and will create new file with same name of ts file.
+
+step 3: configure typescript compiler so that it can take latest code of js
+type: tsc --init
+then go inside that file and uncomment "rootDir" line and make following changes: "rootDir": "./src",
+before that create a src folder and move index.ts file inside it and delete index.js file.
+Now do same with "outDir": "./dist", find "outDir" and um comment it.  
+Now search "removeComments" and uncomment it, basically whatever comments you hae added inside ts file will be removed from its js file.
+Now search "noEmitOnError" and uncomment it, basically when we have errors inside ts file and if we try to comile it then it will 
+generate its equivalnet js fiel which is not good so this option prevent that thing.
+with this setting we now only type "tsc" in terminal without specifying any ts file name and it will compile all ts files into their js files.
 
 
 
+Debugging Typescript Application:
+
+-> Enable the "sourceMap" feature in the tsconfig.json file. 
+A source map is a file that maps each line of your TypeScript code to the corresponding line in the generated JavaScript code. 
+This is particularly useful for debugging, as it allows you to trace issues in your original TypeScript code rather than the compiled 
+JavaScript output.
+-> The ".js.map" file (source map file) generated by TypeScript when sourceMap is enabled is not meant to be human-readable. 
+Instead, it is a machine-readable file that debugging tools (like browser developer tools, IDEs, or debuggers) use to map the compiled 
+JavaScript code back to the original TypeScript code.
+
+
+write this code in ts file and add breakpoint on 1st line.
+code: 
+let age: number = 10;  // breakpoint
+if ( age < 50 )
+    age += 10;
+console.log(age);
+
+then clcik on "Run And Debug" option from left panel. 
+thne select "create a launch.json file" and select node js option from dropdown. 
+bydoing this launch.json file is generated and this line bellow "program" field:
+"preLaunchTask": "tsc: build - tsconfig.json",
+eg:         {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}\\src\\index.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/**/*.js"
+            ]
+        }
+
+after that clcik on "|> Launch Program" button or press "F5" button 
+
+
+
+Built in types: 
+
+-> There is no need to annotate variable with its data type since ts compiler knows data type of variable based on value we stored inside it.
+ex: let age: number = 10 you can write this code like this also: let age = 20;
 
 Js: 
 number 
@@ -80,32 +159,74 @@ tuple
 
 
 any: 
--> it represent any type of values.
+-> The "any" type is a special type in TypeScript that essentially disables type checking for a variable.
+-> When a variable is declared as "any", it can hold values of any type, and TypeScript will not enforce any type restrictions on it.
+
+index.ts:  // no error, successful compilation
+let data: any = "Hello";
+data = 10;
+data = true;
+data = { name: "adesh"}
+
 -> if we declare a variable and don't initialize it the typescript compiler assume this variable of type any.
 -> The any type can represent any kind of value. It’s something we should avoid as much as possible because it defeats the purpose of 
 using TypeScript in the first place. A variable of type any can take any kind of value!
-code : 
-let level;
-level = 10;
-level = 'a';
--> for better practice you should avoid using 'any' operator.
--> type any disables type checking:
--> it comes at the cost of losing the benefits of static typing.
-code: 
-let dynamicValue: any = 42;
-console.log(dynamicValue);  // Output: 42
-dynamicValue = "Hello, TypeScript!";
-console.log(dynamicValue);  // Output: Hello, TypeScript!
-dynamicValue = [1, 2, 3];
-console.log(dynamicValue);  // Output: [1, 2, 3]
+
+
+
+Arrays: 
+
+if we have a function which expets a list of numbers, then it will cause a problem because in js we store all types of data in array.
+ts: let numbers: number[] = [10, 20, 30];  // if you add string "40" then it will give error.
+ts: let arr = [];  // its type is "any[]" which we must avoid since it can store any kind of data.
+ts: let arr: number[] = [];   // correct way to initialize empty array.
+
+1. Array of Numbers: 
+let numbers: number[] = [1, 2, 3];
+
+2. Array of Strings
+let names: string[] = ["Alice", "Bob", "Charlie"];
+
+3. Mixed-Type Array:
+let mixedArray: (number | string)[] = [1, "two", 3, "four"];
+
+4. Readonly Array:
+let readonlyArray: readonly number[] = [1, 2, 3];
+readonlyArray.push(4); // Error
+
+5. Generic Array Syntax:
+let numbers: Array<number> = [1, 2, 3];
 
 
 
 tuple: 
 -> is fixed length array where each element has a particular type.
--> for better practice store only two values inside a tuple.
-let arr : [number, string] = [1, 'Adesh'];  -> js-> let arr = [1, 'Adesh'];
+-> for better practice store only two values inside a tuple like key value pair.
+let arr : [number, string] = [1, 'Adesh']; // if you try to add 3rd value then it will give you error.
 -> Internally tuple represent by plain javascript arrays.
+
+
+
+
+enum: 
+-> it holds list of related constants (Variables with const keyword).
+-> In the bellow example we have three constants : small, medium, large, which are grouped.
+code:
+// one way
+const small = 1;
+const medium = 2;
+const large = 3;
+
+// typescript way
+enum Size { Small, Medium, Large }; // if you don't define values then by default value of Small become 0 and Medium 1 & Large 2
+enum Size { Small = 1, Medium, Large }; // Medium and Large becoms 1 & 2 automatically.
+enum Size { Small = 's', Medium = 'm', Large = 'l' }; // string 
+
+let mySize: Size = Size.Medium;
+
+more optimised code if you define enum with const keyword.
+const enum Size { Small = 's', Large = 'l'};
+
 
 
 let isDone: boolean = false;
@@ -118,41 +239,18 @@ let lastName: string = 'Doe';
 let nullValue: null = null;
 let undefinedValue: undefined = undefined;
 let sym1: symbol = Symbol("key1");
-
 const enum Size { small=1, Medium=2, Large=3};
 
-
-======================================================================================================================================
-
-
-
-enum: 
-=====
--> it holds list of related constants.
--> In the bellow example we have three constants : small, medium, large, which are grouped.
-code:
-const enum Size { Small = 1, Medium = 2, Large = 3};
-let tShirt1: Size = Size.Medium;
-let tShirt2: number = Size.Medium;
-tShirt1 = Size.Small;
-tShirt1 = 101;      // error  -> Only accept values from enum
-tShirt2 = 102;      // can accept outside values
-
-
-
-let tShirt1: Size = Size.Medium;
--> This means that tshirt can only hold values that are part of the Size enum (i.e., Small, Medium, or Large). 
-If you try to assign any other numeric value or use a value that is not part of the Size enum, TypeScript will raise a type error.
-
-let tShirt: number = Size.Medium;
--> This means you can later assign any numeric value to tShirt, not necessarily restricted to the values defined in the Size enum. 
-It lacks the type safety provided by explicitly using the Size enum type.
-
-======================================================================================================================================
 
 
 function: 
 =========
+function login (id: number, username: string): boolean {
+    return true;
+}
+function login (id: number, username?: string): boolean {  // optional parameter by adding "?"
+    return true;
+}
 function fun1(): void{
     console.log('fun');
 }
@@ -164,7 +262,7 @@ function fun3(n1: number, n2: number): number{
 }
 function fun4(n1: number, n2: number = 5){
     return n1 * n2;
-}  // fun4(10)=> 10*5=> 50
+}
 const fun1 = (): void => {
     console.log('arrow function');
 }
@@ -174,11 +272,9 @@ const fun2 = () : number => {
 const fun3 = (n1:number, n2: number=10): number => {
     return n1 * n2;
 } 
-function fun (id: number | string): number | string {  // this function used union operator, so this function can return any one value from listed.
-    if(typeof id === 'number')
-        return 0;
-    else 
-        return 'End';
+// this function used union operator, so this function can return any one value from listed.
+function login (id: number | string): number | string {  
+    return id;
 }
 
 
@@ -189,7 +285,7 @@ function fun (id: number | string): number | string {  // this function used uni
 objects: 
 ========
 interface User{
-    id: number;
+    readonly id: number;  // cannot change
     fullName : string;
     faxNo?: number;
     retireDate: Date;
@@ -211,68 +307,211 @@ user.faxNo = 9527370288;
 user.feedBack('He was really nice');
 
 
-======================================================================================================================================
-
-
-array: 
-======
-code 1: 
-let nums: number[] = [ 10, 20, 30];
-let fruits: string[] = ['Apple', 'Banana', 'Cherry'];
-code 2: 
-let anyArray = [];  // any -> avoid it
-anyArray[0] = 10;
-anyArray[1] = '20';
-
-console.log(anyArray);
-
-
-
-======================================================================================================================================
 
 
 Type Aliases: 
 =============
+-> In TypeScript, the "type" keyword is used to define custom types. 
+It helps in creating type aliases, unions, intersections, and more.
+
+1. Basic Type Alias
+A type alias allows you to give a name to any type (data type), making your code more readable and reusable.
+code:
+type UserID = string;
+let user1: string = "abc123";  // user1 & user2 both are same.
+let user2: UserID = "xyz456";
+Here, "UserID" is just an "alias" for string.
+
+
+2. Type Alias for Objects
+You can define object structures using type.
+code:
 type User = {
-    readonly id: number;
-    fname: string;
-    faxNo?: number;
-    retireDate: Date,
-    retire(): Date;
-    feedBack: (data: string)=> void;
+  id: number;
+  name: string;
+  isAdmin: boolean;
+};
+
+const user: User = {
+  id: 1,
+  name: "Alice",
+  isAdmin: true,
+};
+This helps in maintaining consistency and reusability.
+
+
+3. Type Alias with Union Types
+You can use type with union types, which allow multiple possible values.
+code:
+type Status = "success" | "error" | "loading";
+let apiStatus: Status = "success"; // ✅ Valid
+apiStatus = "error"; // ✅ Valid
+// apiStatus = "failed"; // ❌ Error: Type '"failed"' is not assignable to type 'Status'
+
+
+4. Type Alias with Intersection Types
+You can combine multiple types using intersection (&).
+code:
+type Person = { name: string; age: number };
+type Employee = { id: number; department: string };
+
+type EmployeeDetails = Person & Employee;
+
+const emp: EmployeeDetails = {
+  name: "Bob",
+  age: 25,
+  id: 101,
+  department: "IT",
+};
+
+======================================================================================================================================
+
+interface VS type aliases
+
+-> In TypeScript, both interface and type are used to define the shape of objects or custom types. 
+However, they have some differences in terms of usage, extensibility, and capabilities. 
+Let’s break down the differences between interface and type:
+
+1. Syntax
+interface:
+interface Person {
+  name: string;
+  age: number;
 }
 
-const user1: User = {
-    id: 101,
-    fname: 'Adesh Jadhav',
-    retireDate: new Date(),
-    retire(){
-        return this.retireDate;
-    },
-    feedBack: (data: string)=>{
-        console.log(data);
-    }
+type:
+type Person = {
+  name: string;
+  age: number;
+};
+Both can define the shape of an object, but the syntax is slightly different.
+
+
+
+
+2. Extensibility
+interface:
+Interfaces can be extended (using extends) to add new properties.
+interface Person {
+  name: string;
+  age: number;
 }
-const user2: User = {
-    id: 102,
-    fname: 'Akshay Pawade',
-    retireDate: new Date(),
-    retire(){
-        return this.retireDate;
-    },
-    feedBack: (data: string)=>{
-        console.log(data);
-    }
+
+interface Employee extends Person {
+  employeeId: number;
 }
+
+type:
+Types can be combined using intersection (&).
+type Person = {
+  name: string;
+  age: number;
+};
+
+type Employee = Person & {
+  employeeId: number;
+};
+
+
+
+
+4. Declaration Merging
+interface:
+Interfaces support declaration merging, meaning you can define multiple interfaces with the same name, 
+and they will be merged into a single interface.
+interface Person {
+  name: string;
+}
+
+interface Person {
+  age: number;
+}
+
+const person: Person = {
+  name: "Alice",
+  age: 25,
+};
+
+type:
+Types do not support declaration merging. If you define multiple types with the same name, it will result 
+in an error.
+
+type Person = { name: string }; // Valid
+type Person = { age: number }; // Error: Duplicate identifier 'Person'.
+
+
+5. Use Cases
+interface:
+Best suited for defining object shapes and class contracts (e.g., when working with classes and implements).
+
+interface Animal {
+  name: string;
+  makeSound(): void;
+}
+
+class Dog implements Animal {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+  makeSound() {
+    console.log("Woof!");
+  }
+}
+
+
+type:
+
+More flexible and can be used for primitive types, union types, intersection types, and complex types.
+
+type ID = number | string; // Union type
+type Coordinates = [number, number]; // Tuple type
+
+
+
+6. Performance
+interface:
+
+Slightly better performance in some cases because TypeScript can optimize interfaces more effectively.
+
+type:
+
+May have a small performance overhead when used for complex types.
+
+
+
+When to Use interface vs. type
+Use interface when:
+1. Defining object shapes or class contracts.
+2. You need declaration merging.
+3. Working with object-oriented programming (e.g., implements).
+
+Use type when:
+1.Defining union types, intersection types, or tuples.
+2.Creating aliases for primitive types or complex types.
+3.You need more flexibility (e.g., combining types).
+
+
+
+
+
+
+
 
 
 ======================================================================================================================================
 
 Union Types:
 ============
--> type of a variable can be anything from provided types.
-code: 
-function kgToLbs(weight: number | string): number{
+
+-> In TypeScript, Union Types allow a variable, parameter, or return type to hold multiple types. This is useful 
+when a value can be of more than one type.
+-> A union type is created using the | (pipe) operator: 
+ex: let value: string | number;
+Here, value can be either a string or a number.
+
+ex: 
+function kgToLbs(weight: number | string): number {
     if(typeof weight === 'number')
         return weight * 2.2;
     return Number(weight) * 2.2;
@@ -284,7 +523,7 @@ let arr: (string | number )[] = [10, 'a', 20, 'b'];
 ======================================================================================================================================
 
 
-Intersection types: 
+Intersection types (&): 
 ===================
 -> In intersection type a variable can contain two or more than two types.
 
@@ -323,22 +562,74 @@ let obj2: Resizable = {
 
 Literal Types: 
 ==============
--> sometimes we want to limit the values assigned to a variable
+-> Lit3eralk means exact or specific.
+-> Literal types in TypeScript allow you to specify an exact value as a type instead of just a general 
+data type like string, number, or boolean. 
 
-// Literal (exact, specific)
-type Quantity = 50 | 100;
-let quantity: Quantity = 100;  // can hold only 50 or 100;
+1. String Literal Types:
+A variable can only have a predefined set of string values.
+code: 
+type Direction = "up" | "down" | "left" | "right";
+let move: Direction;
+move = "up"; // ✅ Valid
+move = "down"; // ✅ Valid
+// move = "forward"; // ❌ Error: Type '"forward"' is not assignable to type 'Direction'
+
+type Role = "admin" | "user" | "guest";
+const currentUser: Role = "admin"; // ✅ Valid
 
 type Metric = 'cm' | 'inch';
 let metric: Metric = 'cm';   // can hold only cm or inch
 
-let num: 10 | 20 = 10;  // can hold only 10 or 20
+let num: 10 | 20 | "thirty" = 10;  // can hold only 10 or 20 or "thirty"
+
+
+2. Numeric Literal Types:
+A variable can only be assigned specific numeric values.
+type Quantity = 50 | 100;
+let quantity: Quantity = 100;  // can hold only 50 or 100;
+
+3. Boolean Literal Types
+code:
+type Toggle = true | false;
+let isEnabled: Toggle;
+isEnabled = true; // ✅ Valid
+isEnabled = false; // ✅ Valid
+// isEnabled = "yes"; // ❌ Error
+
+
+4. Combining Literal Types with Union Types:
+code:
+type TrafficLight = "red" | "yellow" | "green";
+function changeLight(color: TrafficLight) {
+  console.log(`The light is now ${color}`);
+}
+
+function setMode(mode: "dark" | "light"): void{
+    console.log(mode);
+}
+
+7. Literal Types with Enums (Alternative)
+Instead of using literals, you can use Enums for better organization.
+code:
+enum Status {
+  Success = "success",
+  Error = "error",
+  Loading = "loading",
+}
+
+let apiStatus: Status = Status.Success;
+console.log(apiStatus); // Output: "success"
+
+
+
 
 =================================================================================================================================
 
 Nullable Types: 
 ==============
-
+-> In TypeScript, nullable types allow a variable to accept null or undefined in addition to its primary type. 
+This helps handle cases where a value might be missing or uninitialized.
 -> if you passes null value instead of string in js code then it will give error at runtime.
 -> to prevent this, typescript give compilation time error if null is passed to a function.
 code: 
@@ -363,6 +654,11 @@ fun(null);  // compilation error;
 
 Optional Chaining: 
 =================
+
+-> Optional chaining (?.) is a feature in TypeScript that allows you to safely access nested properties, 
+methods, or array elements without causing errors if a value is null or undefined.
+
+
 type customer = {
     id: number,
     fname: string
