@@ -1,4 +1,4 @@
-/*
+
 vidly is an imaginary backend service for renting out movies.
 
 -> create a service for managing the list of genres : "http://vidly.com/api/genres"
@@ -8,7 +8,7 @@ we have dropdown list for user to select genre.
 -> so we need endpoint to get all genres 
 -> we also able to create a new genre as well as update or delete an existing one
 
- */
+
 
 
 const express = require('express');

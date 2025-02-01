@@ -95,7 +95,7 @@ Now search "noEmitOnError" and uncomment it, basically when we have errors insid
 generate its equivalnet js fiel which is not good so this option prevent that thing.
 with this setting we now only type "tsc" in terminal without specifying any ts file name and it will compile all ts files into their js files.
 
-
+run : PS C:\Users\user\Desktop\Typescript> tsc; node dist/index.js
 
 Debugging Typescript Application:
 
@@ -658,18 +658,52 @@ Optional Chaining:
 -> Optional chaining (?.) is a feature in TypeScript that allows you to safely access nested properties, 
 methods, or array elements without causing errors if a value is null or undefined.
 
+1. Why Use Optional Chaining?
+Without optional chaining, accessing a deeply nested property can cause runtime errors if any part of the chain is null or undefined.
 
-type customer = {
-    id: number,
-    fname: string
+Example Without Optional Chaining
+code:
+type User = {
+  name: string;
+  address?: {
+    city: string;
+    country: string;
+  };
+};
+
+const user: User = { name: "Alice" };
+console.log(user.address.city); // ❌ Error: Cannot read properties of undefined
+
+2. Using Optional Chaining (?.)
+With optional chaining (?.), TypeScript will return undefined instead of throwing an error.
+code:
+console.log(user.address?.city); // ✅ Output: undefined (No error)
+If user.address is undefined, TypeScript stops evaluating further and safely returns undefined.
+
+4. Optional Chaining with Arrays
+Use ?.[] to safely access array elements.
+
+code:
+const users = [{ name: "Alice" }, { name: "Bob" }];
+console.log(users[2]?.name); // ✅ Output: undefined (No error)
+If users[2] does not exist, ?. prevents an error.
+
+
+5. Optional Chaining with ??
+code :
+type User = {
+  name?: string;
+  age?: number;
 }
-
-function getCustomer(id: number): customer | null{
-    return id === 0? {id:101, fname: 'Adesh'}: null;
+const user: User = {
+  name: "Adesh"
 }
+console.log(user.age); // return undefined
+console.log(user.age ?? "Age not given"); // return fallback value if its undefined
 
-const customer = getCustomer(10);
-console.log(customer?.fname);
+
+
+
 
 
 
@@ -679,10 +713,52 @@ console.log(customer?.fname);
 The Nullish Coaelscing Operator (??): 
 ================================
 
-let speed = null;
-let obj = {
-    ride: speed ?? 30  // if speed is not null then use speed value otherwise use 30;
+-> The Nullish Coalescing Operator (??) is used to provide a "default value" when a variable is null or undefined.
+-> falsy values => undefined, null, 0, "", false
+-> only works for undefined and null.
+code: 
+let username: string | null = null;
+let displayName = username ?? "Guest";
+console.log(displayName); // ✅ Output: "Guest"
+explanation: 
+If username is null or undefined, "Guest" is used.
+If username is any other value (even "" or 0, false), it is used.
+code 2:
+function getDiscount(price: number | null) {
+  return price ?? 100; // Default price 100 is returned  if null or undefined provided
 }
+code: 3
+// Using ?? with Optional Properties
+type User = {
+  name?: string;
+  age?: number;
+};
+const user: User = { name: "Alice" };
+console.log(user.age ?? "Age not provided"); // ✅ Output: "Age not provided"
+
+code 4:
+//?? with Function Return Values
+function fetchUserData(): string | null {
+  return null;
+}
+let userData = fetchUserData() ?? "Default Data";
+
+code 5:
+type Config = {
+  theme?: string;
+};
+const settings: Config = {};
+let theme = settings.theme ?? "light"; // ✅ Default to "light"
+
+
+
+Difference Between ?? and ||(logical OR)
+code:
+let count = 0;
+console.log(count || 10); // 10
+console.log(count ?? 10); // 0
+
+
 
 
 =================================================================================================================================
@@ -690,6 +766,159 @@ let obj = {
 
 Type Assertions:
 ================
+
+-> Type Assertions allow you to tell TypeScript to treat a value as a specific type when TypeScript cannot 
+infer it correctly. 
+-> It’s like type casting in other languages but without runtime conversion.
+-> TypeScript often infers types automatically, but in cases where inference is not enough 
+(e.g., API responses, DOM elements, or unknown types), type assertions help avoid type errors.
+
+code 1:
+let value: unknown = "Hello, TypeScript";
+let strLength: number = (value as string).length;
+
+code 2:
+let data: unknown = "This is a string";
+let message = data as string; 
+
+code 3:
+const inputElement = document.getElementById("username") as HTMLInputElement;
+inputElement.value = "John Doe"; 
+
+
+When to Avoid Type Assertions:
+Avoid using type assertions unnecessarily because it removes TypeScript's safety checks.
+code 1:
+❌ Incorrect approach:
+let num = "123" as number;  // ❌ Incorrect, string is not a number
+console.log(num * 2);       // ❌ Runtime error!
+✅ Correct approach:
+let num = Number("123");    // ✅ Converts to number
+console.log(num * 2);       // ✅ Output: 246
+
+
+
+=================================================================================================================================
+
+
+unknown Type :
+--------------
+
+-> The unknown type is a safer alternative to any
+-> It allows you to store any value but requires type checking before use
+-> "any" disables all type checking, making it risky.
+-> "unknown" requires type validation before using the value
+-> "typeof" works on primitive data types, if you have custom objects created with objects we have to use 
+another operator called "instanceof".
+
+
+function render (data: unknown): void{
+    console.log(data.toUpperCase());  // Error: Cannot call toUpperCase() on unknown 
+
+    // you have to do "type check" for using "unknown"
+    if(typeof data === "string"){
+        console.log(data.toUpperCase());  // valid 
+    }else if(typeof data === 'number'){
+        console.log(Math.round(data));
+    }else if (data instanceof WordDocument){
+        //code
+    }
+}
+
+code 2:
+function fetchData(): unknown {
+  return "Hello";
+}
+
+let result = fetchData();
+
+console.log(result.toUpperCase());// ❌ Error
+
+// you have to do "type check" for using "unknown"
+if (typeof result === "string") {
+  console.log(result.toUpperCase()); // ✅ Works after checking
+}
+
+
+
+=================================================================================================================================
+
+never Type: 
+
+-> The "never" type in TypeScript represents values that never occur. 
+-> It's used in functions that do not return (e.g., infinite loops, errors) or in exhaustive type checking.
+because of this code after the function call will not executed.
+
+1. When to Use never?
+Functions that throw errors
+Infinite loops
+Exhaustive type checks (TypeScript ensures all cases are handled)
+
+code 1:
+// Functions that throw errors
+// This function does not return a value; it crashes the program instead.
+function reject(message: string): never {
+  throw new Error(message);
+}
+console.log("hi"); // this line is unreachable
+
+
+code 2:
+// Infinite Loops (Never Ends)
+function infiniteLoop(): never {
+  while (true) {
+    console.log("This runs forever...");
+  }
+}
+console.log("hi"); // this line is unreachable
+
+
+
+=================================================================================================================================
+
+
+
+keyof operator:
+
+-> The keyof operator in TypeScript is used to extract the keys of an object type as a union of string literals. 
+-> It is a powerful tool for working with object properties in a type-safe way.
+
+code:
+function getProperty<T, K extends keyof T>(obj: T, key: K) : T[K]{
+    return obj[key];
+}
+
+const user: User = { id: 1, name: "Alice", age: 30 };
+
+const name = getProperty(user, "name"); // "Alice"
+const age = getProperty(user, "age"); // 30
+const invalid = getProperty(user, "email"); // Error: Argument of type '"email"' is not assignable to parameter of type '"id" | "name" | "age"'.
+
+
+=================================================================================================================================
+
+
+type mapping:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

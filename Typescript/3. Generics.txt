@@ -1,0 +1,115 @@
+1. Generic classes
+2. Generic functions
+3. Generic Interfaces
+4. Generic constraints
+5. Type mapping
+
+
+
+1. Generic classes:
+---------------------
+-> If the constructor only accepts "id" as a number and "value" as a string then you can't pass any other 
+type of data.
+-> so Generic solve this problem.
+
+code: 
+class Demo<K, V> {
+    constructor(public id: K, public value: V){}
+}
+
+let pair1 = new Demo<number, string>(101, "Adesh");
+let pair2 = new Demo<string, number>("A1", 222);
+
+
+
+
+2. Generic functions:
+---------------------
+-> If the function only accepts "id" as a number then you can't pass any other type of data.
+code 1: 
+function demo<T> (value: T): T[] {
+    return [value];
+}
+
+const res1: string[] = demo("A");
+const res2: number[] = demo(10);
+
+code 2: 
+class Demo {
+    display<T>(value: T): T{
+        return value;
+    }
+
+    static show<T>(value: T): T{
+        return value;
+    }
+}
+
+let d1 = new Demo();
+d1.display("Adesh");
+
+Demo.show(101);
+
+
+
+3. Generic Interfaces:
+---------------------
+
+interface Result <T> {
+    data: T | null;
+    error: string | null;
+}
+
+function fetch <T> (url: string): Result<T> {
+    return { data: null, error: null};
+}
+
+interface User {
+    username: string;
+}
+
+interface Product {
+    title: string;
+}
+
+let res1: Result<User> = fetch<User>('url');
+let res2: Result<Product> = fetch<Product>('url');
+
+
+
+4. Generic constraints:
+-----------------------
+
+-> You can limit kind of data a function can receive, for ex function only receive number or string.
+
+code 1: 
+function echo<T extends number | string>(value: T): T{
+    return value;
+}
+
+
+code 2: 
+interface User {
+    fname: string;
+    age: number;
+}
+function echo<T extends User>(value: T): T {
+    return value;
+}
+echo({ fname: "Ad3esyh", age: 33});
+
+
+
+code 3: 
+class Person {
+    constructor(public name: string){}
+}
+function echo<T extends Person>(value: T): T {
+    return value;
+}
+echo(new Person("Adesh"))
+
+
+extending generic classes: 
+-------------------------
+
