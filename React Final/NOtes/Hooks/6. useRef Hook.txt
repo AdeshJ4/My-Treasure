@@ -9,7 +9,8 @@ useRef() = "use Reference" Does not cause re-renders when its value changes.
            2. Handling Focus, Animations, and Transitions
            3. Managing Timers and Intervals
 
--> useRef returns a "ref object"t with a single "current property" initially set to the "initial value" provided by you.
+-> useRef returns a "ref object" with a single "current property" initially set to the "initial value" 
+provided by you.
 
 
 -> The useRef Hook allows you to persist values between renders.
@@ -36,7 +37,7 @@ The useRef hook in React is primarily used for two main purposes:
 directly.
 
 
-
+code 1:
 import React, { useRef } from "react";
 const Login = () => {
   const nameRef = useRef(null);
@@ -62,24 +63,61 @@ const Login = () => {
 2. Persisting values between renders without causing re-renders:
 ================================================================
 
-
 -> Another important use case of useRef is to persist values across renders without triggering a re-render. 
 -> It can be used to store a mutable value that does not cause a re-render when updated.
+-> If you use local variable like "let count = 0" to store a value then after every render its value get 
+ re-initialized to 0 so you lost your previous data, to solcve this we use useRef hook.
+ 
 
+without useRef jook;
+--------------------
 
-const Fun = () => {
-  const count = useRef(0);  {/*This is mutable value */}
-  useEffect(()=> {
-    count.current += 1;  {/* This is not going to re-render component */}
-    console.log('Rendered : ', count.current);
+function App() {
+  let renderCount = 0;
+  const [someState, setSomeState] = useState(false);
+
+  useEffect(() => {
+    renderCount += 1; 
   });
-  return(
-    <>
-      <h1>Count: {count.current}</h1>  {/* This will print 0 because useEffect run after component rendered. */}
-    </>
-  )
+
+  const toggleState = () => {
+    setSomeState(prevState => !prevState);
+  };
+
+  return (
+    <div>
+      <p>This component has rendered {renderCount} times.</p>
+      <button onClick={toggleState}>Toggle State</button>
+    </div>
+  );
 }
 
+
+
+with useRef hook: 
+-----------------
+
+
+
+function App() {
+  let renderCount = useRef(0);
+  const [someState, setSomeState] = useState(false);
+
+  useEffect(() => {
+    renderCount.current += 1; 
+  });
+
+  const toggleState = () => {
+    setSomeState(prevState => !prevState);
+  };
+
+  return (
+    <div>
+      <p>This component has rendered {renderCount.current} times.</p>
+      <button onClick={toggleState}>Toggle State</button>
+    </div>
+  );
+}
 
 
 

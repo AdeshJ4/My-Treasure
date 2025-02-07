@@ -18,8 +18,9 @@ Here's a basic explanation:
 
 -> The reducer function contains your custom state logic.
 -> The reducer function takes the current state and an action as parameters and returns the new state.
-->  The action is an object with a type property (and optionally a payload).
--> Payload (Optional):The payload is an optional property within the action object. It contains additional data that is needed to perform the state update. suppose you want to increment or decrement value by 10 then you can send payload as 10 and do calculation in reducer function.
+-> The action is an object with a type property (and optionally a payload).
+->  "payload" contains additional data that is needed to perform the state update. 
+suppose you want to increment or decrement value by 10 then you can send payload as 10 and do calculation in reducer function.
 
   const reducer = (curState, action) => {
     switch (action.type) {
@@ -43,7 +44,7 @@ Here's a basic explanation:
 
 
 -> The reducer function contains your custom state logic and the initialState be a simple value but generally will contain an object.
--> The useReducer Hook returns the current state and a dispatch method.
+-> The useReducer Hook returns the "current state" and a "dispatch" method.
 
 
 

@@ -1,27 +1,42 @@
+In JavaScript, synchronous and asynchronous refer to how code is executed, particularly when dealing with tasks that take time to complete, such as network requests, 
+file I/O, or timers.
+
+
+
+
 Synchronous Code : 
 ------------------
 
--> Synchronous code is executed in a sequential and blocking manner.
--> it means first task/operation completes its execution then and only then 2nd task/operation will start its execution.
--> it means first task/operation is blocking the execution of 2nd task/operation
+-> Synchronous code is executed line by line (sequential) and blocking manner.
+-> Each operation must complete before the next one starts. it means first task/operation completes its execution then and only then 2nd task/operation will start 
+its execution.
+-> It blocks the next task execution until the current task completes
 -> other thing to notice is that the order of execution in sequential that means It follows a natural flow of execution which is 
 from top to bottom, and each line of code is executed one after the other.
 
 
-Here's an example of synchronous code:
+code:
 
-console.log("Start");
-console.log("End");
+console.log("task 1");
+function longCalculation() {
+  let sum = 0;
+  for (let i = 0; i < 1e9; i++) { // 1 billion iterations
+    sum += i;
+  }
+  console.log("Calculation Done:", sum);
+}
+longCalculation();// task 2
+console.log("task 3");
+
+📌 The UI freezes until the function completes because JavaScript executes synchronously by default.
 
 
 real life example: 
 
--> Back to our restaurant example.
--> waiter comes to your table and take your order and give it to the kitchen now the waiter is sitting in the kitchen waiting for the
-chef to prepare you meal. during that time a waiter is not doing anything he is just waiting he is not going to take order from 
-another tables until your meal is ready.
--> This is what we called blocking or synchronous way.
--> This is how applications are build using framework like ASP.NET or rails out of a box.
+🚦 Real-Life Analogy: A Toll Booth on a One-Lane Road
+Imagine a toll booth on a single-lane road where cars must stop one by one, pay the toll, and then continue.
+⛔ Each car must wait for the car in front to finish paying before it can proceed.
+
 
 Practical Knowledge: 
 
@@ -60,8 +75,15 @@ In essence, while the core JavaScript engine is single-threaded, the surrounding
 Asynchronous Code:
 ------------------
 
--> Asynchronous here refers to all those functions in JavaScript that are processed in the background without blocking any other 
-request.
+-> Asynchronous code does not block execution. 
+-> Instead of waiting for a task to finish, JavaScript moves on to the next task and handles the asynchronous operation in the background.
+-> Asynchronous here refers to all those "functions" in JavaScript that are processed in the background without blocking any other request.
+✅ Asynchronous functions in JavaScript include:
+1. setTimeout() / setInterval() (Delays execution)
+2. fetch() (API calls)
+3. async/await (Better syntax for Promises)
+4. Promises (Handles future values)
+
 -> Asynchronous code is executed in a simultaneously, parallelly and non-blocking manner.
 -> Asynchronous programming is a technique that enables your program to start a long-running task and still be able to be responsive 
 to other tasks while that long running task runs, rather than having to wait until that long running task has finished. 
@@ -78,6 +100,24 @@ There are three patterns to deal with asynchronous code :
 1. callBack
 2. Promises
 3. Async/Await  (basically syntactical sugar over promises)
+
+
+ex: 
+
+console.log("task 1");
+setTimeout(() => {
+    longCalculation();
+}); // task 2
+console.log("task 3");
+
+function longCalculation() {
+  let sum = 0;
+  for (let i = 0; i < 1e9; i++) { // 1 billion iterations
+    sum += i;
+  }
+  console.log("Calculation Done:", sum);
+}
+
 
 
 real life example: 

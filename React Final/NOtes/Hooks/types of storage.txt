@@ -1,8 +1,10 @@
 JavaScript Cookies vs Local Storage vs Session Storage
 
 -> three ways to store data inside a web browser.
--> any cookies, local storage, web browser that saves on user browser for ex chrome will not be available on the another browser for ex firefox on their same computer. in nutshell all of these storage are browser independent.
--> also user not share cookies and local storage between them so if you set the local storage for a certain user none of the other user that site will be able to see that because its stored  on that users computer. it really meant for storing information related to a single user. you can delete it these storage any time.
+-> any cookies, local storage, web browser that saves on user browser for ex chrome will not be available on the another browser for ex firefox on their same computer. 
+in nutshell all of these storage are browser independent.
+-> also user not share cookies and local storage between them so if you set the local storage for a certain user none of the other user that site will be able to see 
+that because its stored  on that users computer. it really meant for storing information related to a single user. you can delete it these storage any time.
 -> cookies are older than other storage. also they are supported by older browsers.
 
 

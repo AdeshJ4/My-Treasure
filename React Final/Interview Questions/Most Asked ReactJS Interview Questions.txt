@@ -19,6 +19,15 @@
 
 
 
+Q] Lifting State Up
+When multiple components need to share the same data, the state is "lifted up" to their closest common ancestor.
+
+The parent component manages the state and passes it down to the child components as props.
+
+
+
+
+
 Q1] What is React & SPA?
 
 -> React is a 'JavaScript library' created by 'Facebook' to build 'single-page applications'.
@@ -285,3 +294,27 @@ Functional components **don’t have lifecycle methods** explicitly, but the **`
 
 
 
+🔥 React Interview Questions on Data Flow
+1️⃣ Basic Questions
+What is unidirectional data flow in React?
+How does data flow from parent to child in React?
+Can a child component modify the props it receives?
+How do you pass data from a child component to a parent?
+2️⃣ State Management Questions
+What is the difference between props and state?
+When should you lift the state up in React?
+How does the Context API help in managing data flow?
+What are the alternatives to prop drilling?
+3️⃣ Advanced Questions
+How does Redux manage state across multiple components?
+Explain the difference between local state, global state, and server state.
+How does React Query differ from Redux for managing data flow?
+What is the purpose of useReducer, and how does it affect state updates?
+4️⃣ Performance & Optimization
+How does React optimize re-renders when passing props?
+What are React.memo and useMemo, and how do they help with data flow?
+Why should we avoid unnecessary state variables in React?
+5️⃣ Real-World Scenarios
+How would you structure data flow in a large-scale React application?
+How do you handle data flow in a form with multiple dependent fields?
+How do you sync UI state with server state in an e-commerce app?

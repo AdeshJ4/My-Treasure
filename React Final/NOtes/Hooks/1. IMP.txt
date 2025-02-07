@@ -2,7 +2,8 @@
 
 -> The component that owns the state is responsible for both defining and updating that state. Typically, this is a parent component.
 
--> In React, the principle "The component which holds the state is responsible for updating it" is a key part of the framework's architecture
+-> In React, the principle "The component which holds the state is responsible for updating it" is a key part of the framework's 
+architecture.
 
 -> This aligns with the concept of "unidirectional data flow", where data flows in a "single direction", from parent to child components.
 
@@ -32,4 +33,5 @@ function ParentComponent() {
 function ChildComponent({ increment }) {
   return <button onClick={increment}>Increment</button>;
 }
+
 

@@ -54,3 +54,64 @@ const res = multiply();
 res(10);
 res(10);
 
+
+
+what is meaning of useCallback with empty dependency array:
+
+
+
+When you use `useCallback` with an **empty dependency array** (`[]`), it means that the function you are memoizing will be created **only once**, 
+during the initial render of the component. This ensures that the same instance of the function is reused across all renders.
+
+### Syntax
+```javascript
+const memoizedFunction = useCallback(() => {
+  // Function logic here
+}, []);
+```
+
+### What It Means
+1. **"Create once and reuse":**  
+   The function is created only during the component's first render. On subsequent renders, React reuses the same instance of the function without recreating it.
+
+2. **No dependencies:**  
+   The function does not rely on any values or variables from the component that may change over time. If you include variables as dependencies (e.g., `[value]`), React will recreate the function whenever those variables change.
+
+### When to Use `useCallback([])`
+- **Stable function reference:**  
+   If a child component depends on the function (e.g., passed as a prop), using `useCallback([])` prevents unnecessary re-renders of the child component. React checks prop equality by reference, so keeping the function instance stable helps optimization.
+
+- **Dependencies are not needed:**  
+   The function does not rely on dynamic state, props, or other variables that can change.
+
+### Example
+```javascript
+import React, { useCallback, useState } from 'react';
+
+const MyComponent = () => {
+  const [count, setCount] = useState(0);
+
+  // Function that doesn't depend on any changing values
+  const handleClick = useCallback(() => {
+    console.log('Button clicked!');
+  }, []);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={handleClick}>Log Message</button>
+    </div>
+  );
+};
+```
+
+### Behavior in This Example:
+- `handleClick` is created once and reused, even if `count` changes.
+- React reuses the same instance of `handleClick` across renders, which can improve performance if `handleClick` is passed to child components.
+
+### Key Points
+- Use `useCallback([])` for functions that don’t rely on external variables.
+- Avoid overusing `useCallback` for all functions—use it only when there's a clear benefit, like preventing unnecessary re-renders.
+
+

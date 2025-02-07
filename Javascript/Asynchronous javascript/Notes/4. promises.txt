@@ -1,6 +1,9 @@
 JavaScript Promises:
 --------------------
 
+-> In JavaScript, a promise is a good way to handle result of asynchronous operations/task.
+asynchronous operations/task is a operations/task thats goint to take time ans running in background.
+-> It is used to find out if the asynchronous operation is successfully completed or not.
 -> promise is javascript object which holds the eventual(result of period of time) result of an asynchronous operation.
 -> when asynchronous operation completes it can either return result in value or an error.
 -> A promise basically promise you that it will give the result of an asynchronous operation.
@@ -25,38 +28,42 @@ successfully so here we have a value.
 in this we have an error object.
 
 
-example: 
+example 1: 
 function fetchUsers() {
-  return fetch("https://jsonplaceholder.typicode.com/users");
+  return fetch("https://jsonplaceholder.typicode.com/users");  // fetch() return promise which we have to handle by try-catch-finallyl
 }
+
 fetchUsers()
-  .then((res) => {
-    return res.json();
-  })
-  .then((users) => {
-    console.log(users);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-Note: In this version, the try-catch block is removed, and instead, the error handling is done using the .catch() method
+  .then((res) => res.json())
+  .then((users) => console.log(users[0]))
+  .catch((err) => err.message)
 
 
 
 
 Ex.
---
+-
 
+code 1:
+
+console.log('start');  // task 1
+
+// task 2
 let p = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        // resolve({id: 101, name: 'Adesh'});
-          reject(new Error("Message: Error...."));
-    }, 2000);
+  setTimeout(() => {
+      resolve({id: 101, name: 'Adesh'});
+        // reject(new Error("Message: Error...."));
+  }, 2000);
 });
 
 p
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err.message));
+.then((res) => console.log(res))
+.catch((err) => console.log(err.message));
+
+
+
+console.log('End');  // task 3
+
 
 
 
@@ -109,62 +116,46 @@ function getCommits(repoName) {
 Promise.all([])
 ---------------
 
--> when you have to run multiple promises parallelly/simultaneously with each other then we use Promise.all method.
--> Promise.all takes an array of promises and returns a new promise.
--> it will return you result when all promises get resolved, if any promise get rejected then it end result also rejected.
--> Sometimes we have to run few asynchronous operations in parallel,and when they all complete you wanna do something after.
--> for example you may call different api like facebook api and twitter api and when the result of both asynchronous operations 
-are ready then you are gonna return something to user.
+-> Promise.all() is a method that takes an array of Promises and returns a single Promise that:
+"Resolves" when all input Promises resolve, returning an array of results.
+"Rejects" immediately if any Promise rejects, returning the first error.
+-> Promise.all() waits for all to resolve, then returns [p1 result, p2 result, p3 result].
+-> If any Promise rejects, the entire Promise.all() fails.
+-> . In Promise.all, all promises are initiated almost simultaneously, not sequentially. 
+The event loop schedules their execution in quick succession
+-> Promise.all initiates all promises in the array without waiting for any of them to complete
+
 
 code: 
 -----
+const p1 = new Promise((resolve) => setTimeout(() => resolve("First Promise"), 1000));
+const p2 = new Promise((resolve) => setTimeout(() => resolve("Second Promise"), 2000));
+const p3 = new Promise((resolve) => setTimeout(() => resolve("Third Promise"), 1500));
 
-function f1() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      console.log("Async Operation 1...");
-      resolve({ id: 101, name: "Adesh" });
-    }, 2000);
-  });
-}
-
-function f2() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      console.log("Async Operation 2...");
-    //   resolve({ id: 102, name: "Akshay" });
-    reject(new Error('Error in 2nd Promise'))
-    }, 4000);
-  });
-}
-
-Promise.all([f1(), f2()])
-  .then((res) => console.log(res))
-  .catch((err) => console.log(err));
+Promise.all([p1, p2, p3])
+  .then((results) => console.log(results)) // ["First Promise", "Second Promise", "Third Promise"]
+  .catch((err) => console.error("Error:", err));
 
 
-Output: 
--------
+real example: 
 
-Async Operation 1...
-Async Operation 2...
-[ { id: 101, name: 'Adesh' }, { id: 102, name: 'Akshay' } ]
+const urls = [
+  "https://jsonplaceholder.typicode.com/users",
+  "https://jsonplaceholder.typicode.com/posts",
+  "https://jsonplaceholder.typicode.com/comments",
+];
+
+Promise.all(urls.map((url) => fetch(url).then((res) => res.json())))
+  .then((results) => {
+    console.log("Users:", results[0]);
+    console.log("Posts:", results[1]);
+    console.log("Comments:", results[2]);
+  })
+  .catch((err) => console.error("API Fetch Error:", err.message));
 
 
-Explanation: 
-------------
 
-Promise.all([p1, p2]):
-----------------------
 
--> in this ex we don't have real concurrency .
--> we don't have multi-thread. we are still dealing with single thread.
--> but that single thread is kicking off multiple asynchronous operations almost at the same time not exactly at the same time.
--> first it execute first async operation after that thread is release. so immediately after it start second async operation.
--> we are not waiting for result of first async operation to be ready
--> Both async operation starts almost at the same time.
--> when we get the res, the result is in array. 
--> if one of the promise failed then final promise is considered as a failed.
 
 
 Promise.race([p1, p2]):

@@ -27,9 +27,9 @@ ex:
 const UseMe = () => {
   const [count, setCount] = useState(0);
   useEffect(()=> {
-    setTimeout(() => {
+setTimeout(() => {
       setCount(count + 1);  // state variable changes its value 
-    }, 2000);
+    }, 2000);    
   });
   return (
     <div>I have rendered {count} times.</div>
@@ -381,7 +381,8 @@ const UseMe = () => {
   const [users, setUsers] = useState(null);
 
   useEffect(() => {
-  // AbortController allow us to cancel or abort asynchronous operations like fetch request or dom manipulation or any operation that might takes long time to complete
+  // AbortController allow us to cancel or abort asynchronous operations like fetch request or dom manipulation or any operation that 
+  // might takes long time to complete
     const controller = new AbortController();
     fetchUsers(controller);
     return () => controller.abort();
@@ -448,7 +449,7 @@ const Fun = () => {
                 throw new Error('Network Error');
             }
 
-            const result = await response.json(); // json() method used to extract the JSON body content from the HTTP response obtained using the Fetch API. 
+            const result = await response.json(); // json() is method provided by the "Response" object to parse the body of a response as JSON.
             setData(result);
             
         }catch(err){

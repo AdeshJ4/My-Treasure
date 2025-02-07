@@ -3,8 +3,8 @@ useContext Hook :
 
 Before understanding useContext, let's understand what context is:
 
-> Context in React is a mechanism for sharing values (like themes or authentication status) across components in a component tree without the need for explicit 
-prop passing (prop drilling).
+> Context in React is a mechanism for sharing values (like themes or authentication status) across components in a component tree without 
+the need for explicit prop passing (prop drilling).
 > To consume the context, we use the useContext hook.
 > The useContext hook allows a functional component to access values from a context directly, bypassing prop drilling.
 

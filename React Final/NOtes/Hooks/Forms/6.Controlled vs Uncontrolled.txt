@@ -6,8 +6,8 @@ Controlled Components:
 
 -> A controlled component is one where React manages the form element's value via the component's state.
 -> The value of the form element is controlled by React, meaning it is always driven by the component's state
--> In a controlled component, you provide a value prop to the form element (like input, textarea, etc.) and handle any changes to the element 
-using an onChange event handler, which updates the component's state.
+-> In a controlled component, you provide a "value" prop to the form element (like input, textarea, etc.) and handle any changes to the element 
+using an "onChange" event handler, which updates the component's state.
 -> The value of the input field is controlled by the state
 
 
@@ -36,9 +36,11 @@ function ControlledComponent() {
 Uncontrolled Components:
 ========================
 
-->  An uncontrolled component is one where React does not directly manage the form element’s state. Instead, the form element maintains its own internal state, 
-and you interact with it using refs (references) to get its current value.
-->  an uncontrolled component, you do not bind the form element's value to the state. Instead, you use a ref to access the DOM node and retrieve its value when needed.
+->  An uncontrolled component is one where React does not directly manage the form element’s state. 
+Instead, the form element maintains its own internal state, and you interact with it using refs (references) 
+to get its current value.
+->  an uncontrolled component, you do not bind the form element's value to the state. 
+Instead, you use a ref to access the DOM node and retrieve its value when needed.
 -> The input field does not have its value controlled by the state.
 -> The inputRef is used to reference the DOM node directly and access its value
 

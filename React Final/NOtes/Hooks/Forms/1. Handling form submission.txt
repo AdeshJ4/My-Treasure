@@ -64,12 +64,52 @@ const Form = () => {
 
 
 
+event.preventDefault(): 
+
+-> In React, event.preventDefault() is used to prevent the default behavior of an event from occurring. 
+It is commonly used in forms, links, and other event-driven elements. 
+Here’s why you might use it:
+
+1. Prevent Form Submission
+
+In a form with a submit button, the default behavior is to reload the page. 
+Using event.preventDefault(), we can prevent this and handle the submission via JavaScript.
+
+code:
+function handleSubmit(event) {
+  event.preventDefault(); // Prevents page reload
+  console.log("Form submitted!");
+}
+
+return (
+  <form onSubmit={handleSubmit}>
+    <button type="submit">Submit</button>
+  </form>
+);
 
 
 
 
+2. Prevent Link Navigation
+When clicking on an <a> tag, the browser navigates to the href. 
+If you want to prevent this (e.g., for custom navigation in a Single Page Application), use preventDefault().
+
+code:
+function handleClick(event) {
+  event.preventDefault();
+  console.log("Link clicked but not navigated!");
+}
+
+return <a href="https://example.com" onClick={handleClick}>Click Me</a>;
 
 
 
+3. 3. Prevent Default Drag and Drop Behavior
+By default, dropping an element on a webpage may open it. Preventing this allows custom drag-and-drop behavior
 
+code: 
+function handleDragOver(event) {
+  event.preventDefault();
+}
 
+return <div onDragOver={handleDragOver}>Drop Here</div>;

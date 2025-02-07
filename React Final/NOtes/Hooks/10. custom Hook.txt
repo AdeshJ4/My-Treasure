@@ -16,28 +16,158 @@ Example:
 
 App.jsx: 
 
-import useFetch from "./useFetch";
-const App = () => {
-  const [data] = useFetch("https://jsonplaceholder.typicode.com/users");
-  return <>{data && data.map((ele) => <li key={ele.id}>{ele.name}</li>)}</>;
-};
-export default App;
+useFetch.jsx: 
+-------------
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-
-
-useFetch.js
-import { useEffect, useState } from "react"
-import axios from 'axios';
 const useFetch = (url) => {
-    const [users, setUsers] = useState(null);
-    async function fetchUsers(){
-        const {data} = await axios.get(url)
-        setUsers(data);
-    }
+    const [data, setData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+
     useEffect(() => {
-        console.log('useEffect runs');
-        fetchUsers();
+        const fetchData = async (controller) => {
+            try{
+                const { data } = await axios.get(url, { signal: controller.signal});
+                setData(data); 
+            }catch(err){
+                setError(err.message);
+            }finally{
+                setIsLoading(false);
+            }
+        }
+
+        const controller = new AbortController();
+        fetchData(controller);
+        return () => controller.abort();
     }, [url]);
-    return [users];
+
+    return {
+        data,
+        isLoading,
+        error
+    }
 }
+
 export default useFetch;
+
+
+contact.jsx: 
+------------
+
+import React from 'react'
+import useFetch from '../hooks/useFetch';
+
+const Contact = () => {
+    const { data: posts, isLoading: isLoadingPosts, error: postsError } = useFetch("https://jsonplaceholder.typicode.com/posts");
+    const { data: comments, isLoading: isLoadingComments, error: commentsError } = useFetch("https://jsonplaceholder.typicode.com/comments");
+
+
+    const displayPosts = (posts) => {
+        if(isLoadingPosts) return <div>Loading Posts..</div>;
+        if(postsError) return <div>{postsError}</div>;
+
+        return posts && posts.length > 0 ? <table>
+        <thead>
+            <tr>
+                <th>userId</th>
+                <th>id</th>
+                <th>title</th>
+                <th>body</th>
+            </tr>
+        </thead>
+        <tbody>
+            {posts.map(d => (<tr key={d.id}>
+                <td>{d.userId}</td>
+                <td>{d.id}</td>
+                <td>{d.title}</td>
+                <td>{d.body.slice(0, 5)}</td>
+            </tr>))}
+        </tbody>
+    </table> : <div>No Posts</div>
+    }
+
+    const displayComments = (comments) => {
+        if(isLoadingComments) return <div>Loading Commnets..</div>;
+        if(commentsError) return <div>{commentsError}</div>;
+
+        return comments && comments.length > 0 ?  <table>
+            <thead>
+                <tr>
+                    <th>postId</th>
+                    <th>id</th>
+                    <th>email</th>
+                    <th>body</th>
+                </tr>
+            </thead>
+            <tbody>
+                {comments.map(d => (<tr key={d.id}>
+                    <td>{d.postId}</td>
+                    <td>{d.id}</td>
+                    <td>{d.email}</td>
+                    <td>{d.body.slice(0, 5)}</td>
+                </tr>))}
+            </tbody>
+        </table> : <div>No Commnets</div>
+    }
+
+
+    return (
+        <div style={{ display: 'flex', gap: "10px"}}>
+            {/* display Posts */}
+            <div style={{width: "50%", minHeight: '100vh', height: "100%", padding: "10px", border: '1px solid black', borderRadius: "50px"}}>
+                <h1>Posts</h1>
+                {displayPosts(posts)}
+            </div>
+            {/* display Comments */}
+            <div style={{width: "50%",minHeight: '100vh', height: "100%", padding: "10px", border: '1px solid black', borderRadius: "50px"}}>
+                <h1>Commnets</h1>
+                {displayComments(comments)}
+            </div>
+        </div>
+    )
+}
+
+export default Contact
+
+
+
+🚀 custom useThrottle hook: 
+============================
+
+const useThrottle = (callback, delay) => {
+  const lastCallRef = useRef(0);
+
+  return (...args) => {
+    const now = new Date().getTime();
+    if (now - lastCallRef.current >= delay) {
+      callback(...args);
+      lastCallRef.current = now;
+    }
+  };
+};
+
+export default useThrottle;
+
+
+
+
+🚀 custom useDebounce hook:
+----------------------------
+
+const useDebounce = (callback, delay) => {
+  const timeoutRef = useRef(null); // Explicitly initialize as null
+
+  useEffect(() => {  
+    return () => timeoutRef.current && clearTimeout(timeoutRef.current);
+  }, []);
+
+  return (value) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => callback(value), delay);
+  };
+};
+
+export default useDebounce;

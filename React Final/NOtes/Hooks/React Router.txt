@@ -1,0 +1,497 @@
+Here are some popular **React Router DOM** interview questions:
+
+### **Basic Questions**  
+1. What is React Router, and why do we use it?  
+2. How does React Router differ from traditional routing in web applications?  
+3. What are the primary components of React Router DOM?  
+4. What is the difference between `<BrowserRouter>` and `<HashRouter>`?  
+5. How do you define routes in React Router?  
+
+### **Intermediate Questions**  
+6. What is the purpose of the `useNavigate` hook? How is it different from `useHistory` (React Router v5)?  
+7. How do you create a nested route in React Router?  
+8. What is the difference between `useParams` and `useSearchParams`?  
+9. How do you pass and retrieve query parameters in React Router?  
+10. How does `Link` differ from `NavLink`?  
+11. What is `Outlet` in React Router, and how is it used?  
+12. How do you handle protected routes in React Router?  
+13. How do you implement route redirection in React Router?  
+
+### **Advanced Questions**  
+14. How do you handle 404 pages in React Router?  
+15. How does lazy loading work with React Router?  
+16. How do you programmatically navigate between routes?  
+17. What are the major differences between React Router v5 and v6?  
+18. How do you implement route guards for authentication and authorization?  
+19. How do you handle dynamic routes in React Router?  
+20. How can you animate route transitions in React Router?  
+
+
+
+
+
+
+
+
+
+Q] Difference Between <Link> and <NavLink> in React Router:
+
+-> There is only main difference between Link and navLink is that option for styling active link.
+
+<Link> → Basic navigation, no styles for active link.
+<NavLink> → Adds an active class when the link is active, useful for styling.
+
+code: 
+
+const Navbar = () => {
+  return (
+    <nav>
+      <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
+        Home
+      </NavLink>
+    </nav>
+  );
+};
+
+css:
+.active {
+  font-weight: bold;
+  color: red;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Basic Example:
+
+create an application with multiple page routes:
+src\pages\:
+Layout.js
+Home.js
+Blogs.js
+Contact.js
+NoPage.js
+
+
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./pages/Layout";
+import Home from "./pages/Home";
+import Blogs from "./pages/Blogs";
+import Contact from "./pages/Contact";
+import NoPage from "./pages/NoPage";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="blogs" element={<Blogs />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+
+Layout.js:
+----------
+import { Outlet, Link } from "react-router-dom";
+
+const Layout = () => {
+  return (
+    <>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/blogs">Blogs</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+
+      <Outlet />
+    </>
+  )
+};
+
+export default Layout;
+
+
+
+
+========================================================================================
+
+Outlet:
+
+-> you can pass a data to all nested components. ex:  <Outlet context={user} />
+-> you can access that data using "useOutletContext()" hook : 
+ 
+code: 
+
+import { Link, Outlet } from 'react-router-dom'
+const Layout = () => {
+
+    // you can pass this object to all components
+    const user ={
+        fname: "adesh",
+        age: 23
+    }
+
+  return (
+    <>
+        <nav>
+            <li>
+                <Link to="/">Home</Link>
+            </li>
+            <li>
+                <Link to="about">About</Link>
+            </li>
+        </nav>
+        <Outlet context={user} />
+    </>
+  )
+}
+
+export default Layout
+
+
+// you can access that data using useOutletContext() hook : 
+import { useOutletContext } from 'react-router-dom'
+const Home = () => {
+  const user = useOutletContext();
+  return (
+      <h1>Home Page</h1>
+  )
+}
+
+
+========================================================================================
+
+
+useNavigate() hook: 
+-------------------
+
+-> The useNavigate hook in React Router v6 is used to programmatically navigate between routes in your application. 
+-> It provides a function that allows you to navigate to a specific route, go back, go forward, or replace the current entry in the history stack.
+-> useLocation(): Fetches the state data passed via navigate().
+
+code : 
+import { useNavigate } from 'react-router-dom';
+
+function HomePage() {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/about');
+    };
+
+    return (
+        <div>
+            <h1>Home Page</h1>
+            <button onClick={handleClick}>Go to About Page</button>
+        </div>
+    );
+}
+
+
+Advanced Usage of useNavigate:
+
+1. Navigate with State:
+-------
+You can pass state data to the route you're navigating to.
+
+code: 
+source component:
+  const handleClick = () => {
+    navigate("/about", { state: { username: "JohnDoe", age: 25 } });
+  };
+
+Destination Component:
+const About = () => {
+  const location = useLocation();
+  const userData = location.state; // { username: "JohnDoe", age: 25 }
+};
+
+code:
+source: navigate('/about', { state: { from: 'HomePage' }, replace: true });
+destination: <p>Navigated from: {location.state?.from}</p>
+
+2. Replace the Current History Entry:
+--------------
+replace: true: 
+--------------
+
+-> Without "replace: true" (Default Behavior) if you navigate without the replace option, the previous page stays in the history stack and you can go back to previous page.
+-> With "replace: true" (Replacing History Entry) you can't go back to previous page, useful in login/register page.
+
+code:
+const handleNavigation = () => {
+    navigate('/about', { replace: true });
+};
+
+
+3. Navigate Back or Forward:
+
+You can use negative or positive numbers to navigate backward or forward in the history stack.
+
+navigate(-1); // Go back one page
+navigate(1);  // Go forward one page
+
+
+========================================================================================
+
+useLocation():
+-------------
+
+The useLocation() hook returns the current location object, which contains information about the URL, including:
+
+pathname → The current route path (e.g., /about)
+search → Query parameters (e.g., ?id=123)
+hash → The hash fragment (e.g., #section1)
+state → Data passed via navigate()
+
+
+import { useLocation } from "react-router-dom";
+
+const PageInfo = () => {
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const category = queryParams.get("category"); // "electronics"
+
+
+  return (
+    <div>
+      <h1>Current Page Info</h1>
+      <p><strong>Pathname:</strong> {location.pathname}</p>
+      <p><strong>Search Query:</strong> {location.search}</p>
+      <p><strong>Hash:</strong> {location.hash}</p>
+      <p><strong>State:</strong> {JSON.stringify(location.state)}</p>
+    </div>
+  );
+};
+
+export default PageInfo;
+
+
+
+========================================================================================
+
+
+useParams(): 
+------------
+
+The useParams() hook allows you to access URL parameters (dynamic segments) in React Router.
+
+It is useful when you have dynamic routes, such as:
+
+/product/:id
+/user/:username
+/category/:categoryName
+
+
+code: 
+// If the user visits http://localhost:5173/product/123
+function App() {
+  return (
+      <Routes>
+        <Route path="/product/:id" element={<ProductDetails />} />
+      </Routes>
+  );
+}
+
+const ProductDetails = () => {
+  const { id } = useParams();
+  return (
+    <div>
+      <h1>Product Details</h1>
+      <p>Product ID: {id}</p>
+    </div>
+  );
+};
+
+Multiple URL Parameters:
+
+code :
+source: <Route path="/user/:username/post/:postId" element={<UserPost />} />
+destination: const { username, postId } = useParams(); // Extracts both params
+
+
+Handling Optional Parameters:
+source: <Route path="/profile/:username/:tab?" element={<Profile />} />
+destination:
+const { username, tab } = useParams();
+console.log(tab); // Undefined if not present
+
+
+
+========================================================================================
+
+
+final example: 
+
+
+
+App.jsx: 
+
+const App = () => {
+  return (
+    <>
+      {/* <Routes location="/">
+        <Route path="/" element={<h1>Extra COntent</h1>} />
+        <Route path="/ok1" element={<h1>ok1</h1>} />
+        <Route path="/ok2" element={<h1>ok2</h1>} />
+        <Route path="/ok3" element={<h1>ok3</h1>} />
+      </Routes> */}
+
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="books" element={<BookLayout />}>
+            <Route index element={<BookList />} />
+            <Route path="new" element={<NewBook />} />
+            <Route path=":id" element={<Book />} />
+          </Route>
+          <Route path="blogs" element={<BlogLayout />}>
+            <Route index element={<Blogs />} />
+            <Route path="travel" element={<Travel />} />
+            <Route path="education" element={<Education />} />
+            <Route path="programming" element={<Programming />} />
+          </Route>
+          <Route path="contact" element={<ContactLayout />}>
+            <Route index element={<Contact />} />
+            <Route path="office" element={<Office />} />
+            <Route path="police" element={<Police />} />
+          </Route>
+          <Route path="about" element={<About />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </>
+  );
+};
+
+export default App;
+
+
+
+// creating separate folder called "routes" to store individula routes. like routes related to blogs, products etc.
+
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import NoPage from './pages/NoPage';
+import Layout from './pages/Layout';
+import BookRoutes from './routes/BookRoutes';
+import BlogRoutes from './routes/BlogRoutes';
+import ContactRoutes from './routes/ContactRoutes';
+
+const App = () => {
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          {BookRoutes}
+          {BlogRoutes}
+          {ContactRoutes}
+          <Route path="about" element={<About />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </>
+  );
+};
+
+export default App;
+
+
+create routes folder:
+
+import React from 'react';
+import { Route } from 'react-router-dom';
+import BlogLayout from '../pages/BlogLayout';
+import Blogs from '../pages/Blogs';
+import Travel from '../pages/Travel';
+import Education from '../pages/Education';
+import Programming from '../pages/Programming';
+
+const BlogRoutes = [
+  <Route key="blogs" path="blogs" element={<BlogLayout />}>
+    <Route index element={<Blogs />} />
+    <Route path="travel" element={<Travel />} />
+    <Route path="education" element={<Education />} />
+    <Route path="programming" element={<Programming />} />
+  </Route>
+];
+
+export default BlogRoutes;
+
+
+import React from 'react';
+import { Route } from 'react-router-dom';
+import BookList from '../pages/BookList';
+import Book from '../pages/Book';
+import NewBook from '../pages/NewBook';
+import BookLayout from '../pages/BookLayout';
+
+const BookRoutes = [
+  <Route key="books" path="books" element={<BookLayout />}>
+    <Route index element={<BookList />} />
+    <Route path="new" element={<NewBook />} />
+    <Route path=":id" element={<Book />} />
+  </Route>
+];
+
+export default BookRoutes;
+
+
+import React from 'react';
+import { Route } from 'react-router-dom';
+import ContactLayout from '../pages/ContactLayout';
+import Contact from '../pages/Contact';
+import Office from '../pages/Office';
+import Police from '../pages/Police';
+
+const ContactRoutes = [
+  <Route key="contact" path="contact" element={<ContactLayout />}>
+    <Route index element={<Contact />} />
+    <Route path="office" element={<Office />} />
+    <Route path="police" element={<Police />} />
+  </Route>
+];
+
+export default ContactRoutes;
