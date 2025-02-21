@@ -13,44 +13,6 @@
 11.$slice
 
 
-data: 
-
-db.senwell.insertMany([
-  {
-    _id: ObjectId("65658eeb0cea2748b06400af"),
-    name: 'Max',
-    hobbies: [
-      { title: 'Sports', frequency: 3 },
-      { title: 'Cooking', frequency: 6 }
-    ],
-    phone: 131782734
-  },
-  {
-    _id: ObjectId("65658eeb0cea2748b06400b0"),
-    name: 'Manuel',
-    hobbies: [
-      { title: 'Cooking', frequency: 5 },
-      { title: 'Cars', frequency: 2 }
-    ],
-    phone: '012177972',
-    age: 30
-  },
-  {
-    _id: ObjectId("65658eeb0cea2748b06400b1"),
-    name: 'Anna',
-    hobbies: [
-      { title: 'Sports', frequency: 2 },
-      { title: 'Yoga', frequency: 3 }
-    ],
-    phone: '80811987291',
-    age: null
-  },
-  {
-    _id: ObjectId("65658eeb0cea2748b06400b2"),
-    name: 'Chris',
-    hobbies: [ 'Sports', 'Cooking', 'Hiking' ]
-  }
-])
 
 
 Note : You can access 'array elements' like objects means using 'dot notation'.
@@ -61,186 +23,191 @@ eg. db.hobbies.find({'hobbies.title': {$eq: 'Sports'}});
 1. $all :
 ---------
 
-The $all operator in MongoDB is a "query operator" used to match documents where the array field contains all the specified elements. 
-This operator is useful when you need to ensure that all specified values are present in the array, regardless of their order or 
-additional elements
+The $all operator is used to match documents where an array contains all the specified values, regardless of order. 
+It is useful when searching for documents that contain multiple values in an array.
 
-Input Document:
-db.tb1.insertMany([
-  { "_id": 1, "tags": [ "red", "blue", "green", "orange" ] },
-  { "_id": 2, "tags": [ "red", "yellow" ] },
-  { "_id": 3, "tags": [ "blue", "green", "yellow" ] },
-  { "_id": 4, "tags": "orange" },
-  { "_id": 5, "scores": [ [ 10, 20 ], [ 30, 40 ] ] },
-  { "_id": 6, "scores": [ [ 10, 20 ], [ 50, 60 ] ] },
-  { "_id": 7, "features": [ { name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" } ] },
-  { "_id": 8, "features": [ { name: "Processor", value: "Microsoft" }, { name: "RAM", value: "12GB" } ] }
-])
+1️⃣ Basic Example – Find Users with Multiple Interests
 
-// Find documents where the tags array contains both "red" and "blue".
-db.tb1.find({ tags: { $all: [ "green", "blue" ] } }) ;  // Order of Values Does Not Matter, _id 1 & 3 returned
+db.users.insertMany([
+  { name: "Alice", interests: ["sports", "music", "reading"] },
+  { name: "Bob", interests: ["music", "gaming", "reading"] },
+  { name: "Charlie", interests: ["sports", "music", "anime"] },
+  { name: "Charlie", interests: "anime" },
+]);
+
+🔹 Query – Find users who like both "music" and "reading":
+db.users.find({ interests: { $all: ["music", "reading"] } });
+
+✅ Result:
+Alice (["sports", "music", "reading"])
+Bob (["music", "gaming", "reading"])
+
+
 
 // Using $all with Non-Array Fields, 
-db.tb1.find({ tags: { $all: [ "orange" ] } });  // _id 1 & 3 returned
+db.tb1.find({ interests: { $all: [ "anime" ] } }); 
+result: [
+  { name: "Charlie", interests: ["sports", "music", "anime"] },
+  { name: "Charlie", interests: "anime" },
+]
 Note: The $all operator works with non-array fields by treating the field value as an array of one element.
 
 
 // Combining $all with Nested Arrays
-db.tb1.find( { scores: { $all: [ [ 30, 40 ] ] } });  // _id 5 returned.
+db.users.insertMany([
+  { name: "Alice", interests: ["sports", "music", "reading"], scores:[[10, 20], [30, 40]]},
+  { name: "Bob", interests: ["music", "gaming", "reading"], scores:[[10, 20], [60, 70]]},
+]);
+db.tb1.find( { scores: { $all: [ [ 30, 40 ] ] } });  // Alice returned.
 Note: MongoDB treats the sub-array [30, 40] as a single element when using $all.
 
+
 // Combining $all with Nested Objects
+db.users.insertMany([
+  { "_id": 7, "features": [ { name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" } ] },
+  { "_id": 8, "features": [ { name: "Processor", value: "Microsoft" }, { name: "RAM", value: "12GB" } ] }
+]);
 db.tb1.find({features: { $all: [{ name: "Processor", value: "Intel" }, { name: "RAM", value: "8GB" }]}}); //  "_id": 7 returned
 Note: MongoDB treats the sub-object as a single element when using $all.
 
 
-//  Combining $all with Other Operators
-db.collection.find(
-   {
-      $and: [
-         { tags: { $all: [ "red", "blue" ] } },
-         { _id: { $gt: 1 } }
-      ]
-   }
-);   
+2️⃣ $all vs $in – Key Difference
+$all → Ensures all specified values exist in the array.
+$in → Matches if at least one value exists in the array.
+🔹 Example with $in (matches any value):
+
+db.users.insertMany([
+  { name: "Alice", interests: ["sports", "music", "reading"] },
+  { name: "Bob", interests: ["music", "gaming", "reading"] },
+  { name: "Charlie", interests: ["sports", "music"] }
+]);
+
+
+db.users.find({ interests: { $in: ["music", "reading"] } });
+✅ This would return all three users (Alice, Bob, and Charlie), even if they have only one of the specified values.
+
+🔹 Example with $all (matches all values):
+db.users.find({ interests: { $all: ["music", "reading"] } });
+✅ This returns only Alice and Bob, because they both have both "music" and "reading" in their interests.
+
+
+
 
 =============================================================================================================
 
 
 2. $elemMatch
 
--> this operator return documents which contain 'array field' and 'at least one element' of array field should 
-'satisfy condition' specify by the $elemMatch operator.
+-> The $elemMatch operator is used to filter documents based on conditions inside an array of objects. 
+It ensures that at least one array element matches all conditions specified inside $elemMatch.
 
 The $elemMatch operator is used to match documents where at least one element in an array field matches all specified query criteria. 
 This is particularly useful when querying "arrays with objects" or when multiple conditions need to be applied to a single element within 
 an array.
 
-Syntax:
-db.collection.find( { <arrayField>: { $elemMatch: { <query1>, <query2>, ... } } })
-<query1>, <query2>, ...: The conditions to match on a single element of the array.
 
 
+1️⃣ Basic Example – Find a Student with a Specific Score
 Input : 
-db.tb1.insertMany([
-   { "_id": 1, "scores": [ { "subject": "math", "score": 85 }, { "subject": "english", "score": 90 } ] },
-   { "_id": 2, "scores": [ { "subject": "math", "score": 70 }, { "subject": "english", "score": 80 } ] },
-   { "_id": 3, "scores": [ { "subject": "math", "score": 95 }, { "subject": "english", "score": 85 } ] }
+db.students.insertMany([
+  { name: "Alice", scores: [{ subject: "Math", score: 85 }, { subject: "English", score: 78 }] },
+  { name: "Bob", scores: [{ subject: "Math", score: 92 }, { subject: "English", score: 88 }] },
+  { name: "Charlie", scores: [{ subject: "Math", score: 75 }, { subject: "English", score: 90 }] }
 ]);
 
+🔹 Find students who scored more than 80 in Math
+> db.students.find({scores: { $elemMatch: { subject: "Math", score: { $gt: 80 } } } })
 
-// Find documents where the scores array contains an object with subject equal to "math" and score greater than 80.
-db.tb1.find({ scores: { $elemMatch: { subject: "math", score: { $gt: 80 } } } }); // _id 1 & 3 returned
-
-
-
-
-
+✅ Result:
+Alice (Math: 85)
+Bob (Math: 92)
 
 
+2️⃣ Using $elemMatch with Multiple Conditions
+🔹 Find students who have:
+Math score > 80
+English score < 80
+
+db.students.find({
+  scores: { $elemMatch: { subject: "Math", score: { $gt: 80 } } },
+  scores: { $elemMatch: { subject: "English", score: { $lt: 80 } } }
+});
+
+✅ Result:
+Alice (Math: 85, English: 78)
 
 
+3️⃣ Example with Employees – Find a Developer with Specific Skills:
 
+db.employees.insertMany([
+  { name: "John", skills: [{ tech: "JavaScript", level: "Advanced" }, { tech: "Python", level: "Intermediate" }] },
+  { name: "Jane", skills: [{ tech: "Java", level: "Expert" }, { tech: "C++", level: "Beginner" }] },
+  { name: "Mike", skills: [{ tech: "JavaScript", level: "Beginner" }, { tech: "Python", level: "Advanced" }] }
+]);
+
+🔹 Find employees with JavaScript skills at an Advanced level:
+db.employees.find({
+  skills: { $elemMatch: { tech: "JavaScript", level: "Advanced" } }
+});
+✅ Result:
+John (JavaScript: Advanced, Python: Intermediate)
+
+
+4️⃣ Example – Finding Orders with Specific Items and Quantities
+db.orders.insertMany([
+  { orderId: 1, items: [{ product: "Laptop", quantity: 2 }, { product: "Mouse", quantity: 1 }] },
+  { orderId: 2, items: [{ product: "Laptop", quantity: 1 }, { product: "Keyboard", quantity: 2 }] },
+  { orderId: 3, items: [{ product: "Monitor", quantity: 1 }, { product: "Mouse", quantity: 3 }] }
+]);
+
+🔹 Find orders where a customer bought more than 1 Laptop:
+
+db.orders.find({
+  items: { $elemMatch: { product: "Laptop", quantity: { $gt: 1 } } }
+});
+
+✅ Result:
+Order ID 1 (Laptop: 2, Mouse: 1)
 
 
 ex.1:
-find user who has grade above 91 or grade array must contain grade element $gte 90
+find user who has grade above 90
 I/P: 
-[
-  { _id: 1, name: 'Alice', grades: [ 85, 90, 88 ] },
-  { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] }
-]
+db.tb1.insertMany([
+  { _id: 1, name: 'Alice', grades: [ 10,20, 30 ] },
+  { _id: 2, name: 'Bob', grades: [ 30, 40, 50 ] },
+  { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] },
+  { _id: 4, name: 'Mosh', grades: [ 10, 20, 10 ] },
+])
 o/p: [ { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] } ]
 Query> db.tb1.find({grades: {$elemMatch: {$gt: 90}}})
-
-example 3: 
-hobbies is array, and each element of hobbies contain title and frequency.
-find all users which have hobby of 'Sports' and frequency gte 3.
-that means you have to check each element of array that it contains title='Sports' and frequency>=3.
-array element should contain both title: 'Sports' and frequency: 3
-eg> 
-correct array element: 
-{
-  title: 'Sports',
-  frequency: 3
-}
-
-Data: 
-db.tb1.insertMany([
-  {
-    "name": "Max",
-    "hobbies": [
-      {
-        "title": "Sports",
-        "frequency": 3
-      },
-      {
-        "title": "Cooking",
-        "frequency": 6
-      }
-    ],
-    "phone": 131782734
-  },
-  {
-    "name": "Manuel",
-    "hobbies": [
-      {
-        "title": "Cooking",
-        "frequency": 5
-      },
-      {
-        "title": "Cars",
-        "frequency": 2
-      }
-    ],
-    "phone": "012177972",
-    "age": 30
-  },
-  {
-    "name": "Anna",
-    "hobbies": [
-      {
-        "title": "Sports",
-        "frequency": 2
-      },
-      {
-        "title": "Yoga",
-        "frequency": 3
-      }
-    ],
-    "phone": "80811987291",
-    "age": null
-  },
-  {
-    "name": "Chris",
-    "hobbies": ["Sports", "Cooking", "Hiking"]
-  }
+output: [
+  { _id: 2, name: 'Bob', grades: [ 30, 40, 50 ] },
+  { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] }
 ]
-);
-Query:  db.tb1.find({hobbies: {$elemMatch: {$and: [{title: 'Sports'}, {frequency: {$gte: 3}}]}}})
-output: 
-[
-  {
-    _id: ObjectId("65a37b7e4a21c3f9948b4b18"),
-    name: 'Max',
-    hobbies: [
-      { title: 'Sports', frequency: 3 },
-      { title: 'Cooking', frequency: 6 }
-    ],
-    phone: 131782734
-  }
-]
+
+
 
 =============================================================================================================
 
 3. $size: 
 ---------
--> the size operator returns the documents which contain array field and size of that array field equal to the value specified 
-inside $size operator.
--> size operator only takes number and not another document with operator.
-eg. find({hobbies: {$size: {$gt: 3}}}) // not acceptable
-eg.return me all documents who has hobbies elements equal to 3.
--> db.tb1.find({hobbies: {$size: 3}})
+-> the size operator returns the documents which contain array field and size of array field equal to the value specified inside $size operator.
+-> It is useful when filtering documents based on the length of an array.
+-> $size only checks for exact values
+You cannot use $size: { $gt: 2 } to find arrays with more than 2 elements.
+Instead, use $expr with $size for range queries.
+
+
+db.users.insertMany([
+  { name: "Alice", interests: ["sports", "music", "reading"] },
+  { name: "Bob", interests: ["music", "gaming"] },
+  { name: "Charlie", interests: ["sports", "music", "reading", "traveling"] }
+]);
+Query – Find users who have exactly 3 interests
+db.users.find({ interests: { $size: 3 } });
+✅ Result: Alice (["sports", "music", "reading"])
+
 
 =============================================================================================================
 
@@ -252,7 +219,6 @@ value.
 { "_id": 1, "name": "John" }
 db.tb1.updateOne({_id: 101}, {$push: {hobbies: 'Swimming'}})
 { "_id": 1, "name": "John", "hobbies": ["Swimming"] }
-
 
 Append a Value to an Array
 { _id: 1, scores: [ 44, 78, 38, 80 ] } 
@@ -289,10 +255,7 @@ $addToSet:
 -> The $addToSet operator in MongoDB is used to 'add unique elements' to an array.
 -> prevent duplication elements.
 
-db.tb1.updateOne(
-  { _id: 1 },
-  { $addToSet: { scores: { $each: [10, 20, 30] } } }
-)
+db.tb1.updateOne({ _id: 1 }, { $addToSet: { scores: { $each: [10, 20, 30] } } })
 
 =============================================================================================================
 

@@ -121,7 +121,7 @@ Promise.all([])
 "Rejects" immediately if any Promise rejects, returning the first error.
 -> Promise.all() waits for all to resolve, then returns [p1 result, p2 result, p3 result].
 -> If any Promise rejects, the entire Promise.all() fails.
--> . In Promise.all, all promises are initiated almost simultaneously, not sequentially. 
+-> In Promise.all, all promises are initiated almost simultaneously, not sequentially. 
 The event loop schedules their execution in quick succession
 -> Promise.all initiates all promises in the array without waiting for any of them to complete
 

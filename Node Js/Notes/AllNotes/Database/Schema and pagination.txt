@@ -65,7 +65,7 @@ const courseSchema = mongoose.Schema({
     },
     min: 10,
     max: 300,
-    get: value => Math.round(value),  // round the price at the time of getting / retrieving its value : 15.9 => 16
+    get: value => Math.round(value),  // round the price at the time of getting / retrieving its value : 15.4 => 15, 15.5 => 16, 15.9 => 16 
     set: value => Math.round(value)   // round the price at the time of setting its value : 15.9 => 16  Note: some documents have value in decimal so they will be round
   },
 });

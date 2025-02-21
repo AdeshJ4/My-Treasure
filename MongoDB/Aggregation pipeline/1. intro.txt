@@ -34,26 +34,41 @@ proceed to the next pipeline stage.
 -> To optimize the pipeline place $match as early in the aggregation Pipeline
 -> The $match query syntax is identical to the read operation query syntax;
 
+1. Match documents where status is "active":
 db.users.aggregate([
-    {
-        $match: {name: {$eq: 'India'}}  // only return documents which has name = 'India'
-    }
-])
-output: 
-[
-  { _id: 4, name: 'India', category: 'Clothing' },
-  { _id: 5, name: 'India', category: 'Electronics' }
-]
+  {
+    $match: { status: "active" }
+  }
+]);
+
+2. Match documents with an age greater than 25:
 db.users.aggregate([
-    {
-        $match: {name: 'India'}   // only return documents which has name = 'India'
+  {
+    $match: { age: { $gt: 25 } }
+  }
+]);
+
+3. Match documents with multiple conditions (AND condition):
+db.orders.aggregate([
+  {
+    $match: { 
+      status: "shipped",
+      totalAmount: { $gt: 100 }
     }
-])
-db.users.aggregate([
-    {
-        $match: {age: {$gt: 22}}   // only return documents where age gt 22
+  }
+]);
+
+4. Match documents with an OR condition using $or
+db.orders.aggregate([
+  {
+    $match: { 
+      status: "shipped",
+      totalAmount: { $gt: 100 }
     }
-])
+  }
+]);
+
+
 db.users.aggregate([
     {
         $match: {age: {$in: [20, 30, 40]}}
@@ -73,81 +88,130 @@ max, min, avg) on the grouped data.
 documents in the collection together, treating them as a single group.
 
 
-// count the total number of documents in the aggregation pipeline
+
+1️⃣ Grouping by a Single Field and calculting total Sales
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$category",         // Group by category
+      totalSales: { $sum: "$amount" }
+    }
+  }
+]);
+
+
+2️⃣. Grouping by Multiple Fields
+db.orders.aggregate([
+  {
+    $group: {
+      _id: { cat: "$category", ye: "$year" }, // Group by category and year
+      totalSales: { $sum: "$amount" }
+    }
+  }
+]);
+o/p
+[
+  { "_id": { "cat": "Electronics", "ye": 2024 }, "totalSales": 100 },
+  { "_id": { "cat": "Electronics", "ye": 2023 }, "totalSales": 200 },
+  { "_id": { "cat": "Clothing", "ye": 2024 }, "totalSales": 150 },
+  { "_id": { "cat": "Clothing", "ye": 2023 }, "totalSales": 250 }
+]
+
+
+3️⃣. Using Expressions in _id
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: { decade: { $subtract: ["$year", "$amount"] } },
+      totalSales: { $sum: "$amount" }
+    }
+  }
+]);
+
+
+4️⃣. Counting Documents in Each Group
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      orderCount: { $sum: 1 }
+    }
+  }
+]);
+
+5️⃣. Count the total number of documents in the aggregation pipeline:
+
 db.users.aggregate([
     {
         $group:{_id: null, totalCount: {$sum: 1}}   // each time increment document by 1 number
     }
 ]);
-
-// we are grouping documents by the "category" field 
-db.users.aggregate([
-  {
-    $group: {
-      _id: "$category",   // category is field name
-    }
-  }
-]);
-output: 
-[ { _id: 'Furniture' }, { _id: 'Stationery' }, { _id: 'Electronics' } ]
+o/p: [ { _id: null, totalCount: 5000 } ]
 
 
-// grouping documents by the "category" field & count the number of documents in each group.
-db.products.aggregate([  
-    { $group: {_id: '$category', totalCount: {$sum:1}}  }  
-])
-output: 
+
+6️⃣ group based on city:
+db.users.aggregate([ { $group: { _id: '$location.city' } }])
+o/p: 
 [
-  { _id: 'Electronics', totalCount: 3 },
-  { _id: 'Stationery', totalCount: 2 },
-  { _id: 'Furniture', totalCount: 2 }
+  { _id: 'Pune' },
+  { _id: 'Mumbai' },
+  { _id: 'Ratnagiri' }
 ]
 
 
-db.products.aggregate([
-  {
-    $group: {
-      _id: "$category",
-      totalCount: {$sum: 1},  
-      totalQuantity: { $sum: "$quantity" },
-      averagePrice: { $avg: "$price" }
-    }
-  }
-]);
+7️⃣ Grouping and Finding Min, Max, Avg
 
-output: 
+playGround> db.shops.aggregate([ 
+  { $group: { 
+    _id: '$category', 
+    totDocuments: {$sum: 1}, 
+    totalSum: { $sum: '$amount' }, 
+    average: { $avg: '$amount' }, 
+    minAmount: { $min: '$amount' }, 
+    maxAmout: { $max: '$amount' } } 
+    }
+]);
+o/p: 
+
 [
   {
     _id: 'Electronics',
-    totalCount: 3,
-    totalQuantity: 23,
-    averagePrice: 700
+    totDocuments: 5,
+    totalSum: 1500,
+    average: 300,
+    minAmount: 100,
+    maxAmout: 500
   },
   {
-    _id: 'Stationery',
-    totalCount: 2,
-    totalQuantity: 80,
-    averagePrice: 12.5
+    _id: 'Clothing',
+    totDocuments: 5,
+    totalSum: 1750,
+    average: 350,
+    minAmount: 150,
+    maxAmout: 550
   },
   {
-    _id: 'Furniture',
-    totalCount: 2,
-    totalQuantity: 5,
-    averagePrice: 225
+    _id: 'Home Appliances',
+    totDocuments: 5,
+    totalSum: 2500,
+    average: 500,
+    minAmount: 300,
+    maxAmout: 700
+  },
+  {
+    _id: 'Books',
+    totDocuments: 5,
+    totalSum: 750,
+    average: 150,
+    minAmount: 50,
+    maxAmout: 250
   }
 ]
 
 
-// project the data
-db.users.aggregate([
-    {
-        $group: {_id: null, avgAge: {$avg: '$age'}}
-    },
-    {
-        $project: {_id: 0}
-    }
-])
-[ { totalCount: 516 } ]
 
 
 
@@ -187,41 +251,68 @@ db.users.aggregate([
 ========================================================================================================================
 
 
-$project: 
+$project :
 -> Reshapes the documents by including/excluding fields, or renaming fields.
 
-// include or exclude a field.
-db.users.aggregate([
+1️⃣
+playGround> db.users.aggregate([
     {
-        $match: {
-            _id: {$gt: 3} // return documents will all fields like {_id: 0, fname: 'Adesh', age: 4, school: 'GSM'}
-        }
-    },
-    {// input: {_id: 0, fname: 'Adesh', age: 4, school: 'GSM'}
         $project: {
-            _id: 0 // except _id, all fields will returned like {fname: 'Adesh', age: 4, school: 'GSM'}
+                    _id: 0,  // exclude
+                    gender: 1, // include
+                    email: 1
         }
-    },
-    {// input: {fname: 'Adesh', age: 4, school: 'GSM'}
-        $project: {
-            fname: 1  // documents with only name field will be returned. eg: {fname: 'Adesh' } // other fields are not returned
-        }
-    }
+     }
 ])
+[
+  { gender: 'male', email: 'victor.pedersen@example.com' },
+  { gender: 'male', email: 'carl.jacobs@example.com' }
+]
 
-// rename a field
+
+2️⃣. Rename a Field (it will not rename field in real documents, its just for the next stage)
 db.users.aggregate([
-    {
-        $match: {
-            _id: {$gt: 3} // output: {_id: 0, fname: 'Adesh', age: 4, school: 'GSM'}
-        }
-    },
-    {
-        $project: {
-            name: "$fname"  // {_id: 0, name: 'Adesh' }
-        }
+  {
+    $project: {
+      _id: 0,
+      fullName: "$name",  // Rename `name` to `fullName`
+      age: 1
     }
-])
+  }
+]);
+
+
+3️⃣ Add a New Computed Field / new field
+db.users.aggregate([
+  {
+    $project: {
+      _id: 0,
+      name: 1,
+      age: 1,
+      isAdult: { $gte: ["$age", 18] }  // Add `isAdult` field
+    }
+  }
+]);
+same as : db.users.find({}, {_id: 0, firstName: '$name.first',  'dob.age': 1, isAdult: { $gte: ["$dob.age", 18]}})
+
+
+4️⃣ Concatenate Fields:
+db.users.aggregate([
+  {
+    $project: {
+      _id: 0,
+      fullName: { $concat: ["$name", " - ", "$city"] } // Merge name & city
+    }
+  }
+]);
+same as : db.users.find({}, {_id: 0, fullName: { $concat: ["$name.first", " - ", "$location.city"]}})
+o/p
+[
+  { "fullName": "Adesh - Mumbai" },
+  { "fullName": "Shubham - Delhi" },
+  { "fullName": "Swar - Pune" }
+]
+
 
 
 ========================================================================================================================
@@ -256,23 +347,12 @@ db.students.aggregate([
 
 4. $unwind 
 
--> The $unwind operator is typically used in the context of aggregation queries rather than basic find 
-queries.
--> It's specifically designed for cases where you have documents with array field, and you want to perform 
-operations on each element of the array independently.
-db.users.aggregate([
-  {
-    $unwind: '$tags'
-  },
-  {
-    $match: {
-      'tags': {
-        $gt: 5
-      }
-    }
-  }
-]);
-Data: 
+-> The $unwind stage in MongoDB's aggregation pipeline is used to deconstruct an array field, creating a separate document 
+for each element in the array. This is useful when you need to work with individual array elements rather than the entire array.
+-> By default, $unwind removes documents where the array is empty or null.
+
+0️⃣. 
+Input: 
 [
     {_id: 1, age: 21, tags: [10, 20]},
     {_id: 2, age: 22, tags: [10, 20, 30]},
@@ -280,7 +360,7 @@ Data:
     {_id: 4, age: 24, tags: [10, 20]},
     {_id: 5, age: 25, tags: [10]},
 ]
-db.users.aggregate([
+Query> db.users.aggregate([
   {
     $unwind: '$tags'
   }
@@ -302,6 +382,76 @@ output:
   { _id: 5, age: 25, tags: 10 }
 ]
 
+
+1️⃣
+input: 
+[
+  { "_id": 1, "customer": "Alice", "items": ["Laptop", "Mouse"] },
+  { "_id": 2, "customer": "Bob", "items": ["Keyboard"] },
+  { "_id": 3, "customer": "Charlie", "items": [] }
+]
+
+Query> db.orders.aggregate([
+  { $unwind: "$items" }
+]);
+
+Output: 
+[
+  { "_id": 1, "customer": "Alice", "items": "Laptop" },
+  { "_id": 1, "customer": "Alice", "items": "Mouse" },
+  { "_id": 2, "customer": "Bob", "items": "Keyboard" }
+]
+
+
+
+2️⃣. By default, $unwind removes documents where the array is empty or null.but if you want them then use:
+input: 
+[
+  { "_id": 1, "customer": "Alice", "items": ["Laptop", "Mouse"] },
+  { "_id": 2, "customer": "Bob", "items": ["Keyboard"] },
+  { "_id": 3, "customer": "Charlie", "items": [] }
+]
+
+Query> db.users.aggregate([
+  { $unwind: { path: "$items", preserveNullAndEmptyArrays: true } }
+]);
+
+output:
+[
+  { _id: 1, customer: 'Alice', items: 'Laptop' },
+  { _id: 1, customer: 'Alice', items: 'Mouse' },
+  { _id: 2, customer: 'Bob', items: 'Keyboard' },
+  { _id: 3, customer: 'Charlie' }
+]
+
+3️⃣. Include Array Index: 
+db.orders.aggregate([
+  { $unwind: { path: "$items", includeArrayIndex: "itemIndex" } }
+]);
+output: 
+[
+  { "_id": 1, "customer": "Alice", "items": "Laptop", "itemIndex": 0 },
+  { "_id": 1, "customer": "Alice", "items": "Mouse", "itemIndex": 1 },
+  { "_id": 2, "customer": "Bob", "items": "Keyboard", "itemIndex": 0 }
+]
+
+
+
+4️⃣. Count Total Items Sold Per Customer:
+db.users.aggregate([
+  {
+    $unwind: '$tags'
+  },
+  {
+    $match: {
+      'tags': {
+        $gt: 5
+      }
+    }
+  }
+]);
+
+
 ========================================================================================================================
 
 
@@ -309,44 +459,145 @@ $addFields:
 
 -> $addFields is used to update the value of an existing field or to add a new field
 
-eg1>
+
+ex: add 'active' field in all documents.
+db.tb1.aggregate([ { $addFields: { active: true } }])
+[
+  { _id: 1, age: 21, tags: [ 10, 20 ], active: true },
+  { _id: 6, age: 26, active: true }
+]
+
+
+ex: Adding a Nested Field
+[
+  { "_id": 1, "name": "Alice", "age": 25},
+  { "_id": 2, "name": "Bob", "age": 30}
+]
+
 db.users.aggregate([
-    {
-        $addFields: {
-            college: 'Raisoni'
-        }
+  {
+    $addFields: {
+      contact: { email: "example@example.com", phone: "1234567890" }
     }
+  }
 ])
 
-eg2>
-db.users.aggregate([
-    {
-        $addFields: {
-            isAdult: {
-                $gte: ["$age", 25]
-            }
-        }
+[
+  { "_id": 1, "name": "Alice", "age": 25, "contact": { "email": "example@example.com", "phone": "1234567890" } },
+  { "_id": 2, "name": "Bob", "age": 30, "contact": { "email": "example@example.com", "phone": "1234567890" } }
+]
+
+
+
+
+1️⃣. add 'isAdult field':
+Input: 
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Bob", "age": 30 }
+]
+
+Query> db.users.aggregate([
+  {
+    $addFields: {
+      isAdult: { $gte: ["$age", 18] }
     }
+  }
 ])
 
-eg.3>
-db.books.aggregate([
-    {
-        $match: {
-            _id: 101   // o/p: {_id: 101, fname: 'Adesh', age: 22}
-        }
-    },
-    {
-        $addFields: { 
-            fname: "Ram"   // o/p: {_id: 101, fname: 'Ram', age: 22}
-        }
+Output:
+[
+  { "_id": 1, "name": "Alice", "age": 25, "isAdult": true },
+  { "_id": 2, "name": "Bob", "age": 30, "isAdult": true }
+]
+
+
+2️⃣ update the value of an existing field:
+Input: 
+[
+  { "_id": 1, "name": "Alice", "salary": 5000 },
+  { "_id": 2, "name": "Bob", "salary": 7000 }
+]
+
+Query> db.users.aggregate([
+  {
+    $addFields: {
+      salary: { $multiply: ["$salary", 1.10] } // Increases salary by 10%
     }
+  }
 ])
+
+Output:
+[
+  { "_id": 1, "name": "Alice", "salary": 5500 },
+  { "_id": 2, "name": "Bob", "salary": 7700 }
+]
+
+
 
 ========================================================================================================================
 
 $first: 
--> $first operator is used to project the value of the first element in an array
+
+-> $first is an accumulator in the MongoDB aggregation pipeline that returns the first value of a specified field within a group. 
+-> It is commonly used in the $group stage to retrieve the first occurrence of a field when documents are grouped.
+-> $first cannot be used as a "standalone stage" in the aggregation pipeline. It is an accumulator operator, meaning it must be 
+used within a stage like $group, $setWindowFields, or $project (inside an expression).
+When to Use $first?
+-> To get the earliest record in a grouped dataset
+-> When flattening arrays using $unwind, and you only need the first value
+-> To extract first occurring values after a $sort.
+
+example: 
+Input:
+[
+  { "_id": 1, "category": "Electronics", "item": "Laptop", "price": 1000 },
+  { "_id": 2, "category": "Electronics", "item": "Phone", "price": 500 },
+  { "_id": 3, "category": "Furniture", "item": "Table", "price": 200 },
+  { "_id": 4, "category": "Furniture", "item": "Chair", "price": 100 }
+]
+
+Query> db.orders.aggregate([
+  { $sort: { _id: 1 } }, // Ensuring order before grouping
+  {
+    $group: {
+      _id: "$category",
+      firstItem: { $first: "$item" }, // Get the first item per category
+      firstPrice: { $first: "$price" } // Get the first price per category
+    }
+  }
+])
+
+Output:
+[
+  { "_id": "Electronics", "firstItem": "Laptop", "firstPrice": 1000 },
+  { "_id": "Furniture", "firstItem": "Table", "firstPrice": 200 }
+]
+
+
+2️⃣ Example 2: Using $first After $unwind
+[
+  { "_id": 1, "name": "Alice", "scores": [90, 85, 80] },
+  { "_id": 2, "name": "Bob", "scores": [88, 92, 79] }
+]
+
+Query> db.students.aggregate([
+  { $unwind: "$scores" }, // Flatten scores array
+  {
+    $group: {
+      _id: "$name",
+      firstScore: { $first: "$scores" } // Get the first score per student
+    }
+  }
+])
+
+Output>
+[
+  { "_id": "Alice", "firstScore": 90 },
+  { "_id": "Bob", "firstScore": 88 }
+]
+
+
 
 ========================================================================================================================
 
@@ -383,14 +634,14 @@ books
   }
 ]
 Query> db.books.aggregate([
-{
-$lookup: {
-    from: 'authors',
-    localField: "author_id",
-    foreignField: "_id",
-    as: "author_details"
+    {
+        $lookup: {
+            from: 'authors',
+            localField: "author_id",
+            foreignField: "_id",
+            as: "author_details"
+        }
     }
-}
 ])
 output: 
 [

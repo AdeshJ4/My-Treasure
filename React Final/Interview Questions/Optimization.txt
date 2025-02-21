@@ -329,6 +329,8 @@ components into a single JavaScript file/bundle.
 
 -> Lazy loading is a technique that delays the loading of non-critical resources until they are needed, ensuring that these chunks/compoents/imagges/pages are 
 loaded on demand when the user requires them.
+-> Lazy loading is a technique where resources (like images, components, or scripts) are loaded only when they are needed, typically when they come into the viewport 
+or are about to be rendered or we navigate to them. This improves performance by reducing the initial load time and bandwidth usage.
 In React, we use React.lazy() for lazy loading components and "Suspense" to handle the fallback UI while the component is being loaded.
 
 
@@ -336,7 +338,8 @@ Relationship between Code Splitting and Lazy Loading:
 Code splitting refers to the process of breaking the app’s code into smaller bundles (chunks).
 Lazy loading refers to the technique of loading these bundles on demand (when the user needs them).
 
-
+1️⃣ Lazt load with Pages
+------------------------
 
 import React, { lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -367,8 +370,15 @@ export default App;
 
 
 
-lazy load images : 
+2️⃣. lazy load images : 
 
+you can implement lazy loading using multiple ways: 
+
+-> rendering images using an "infinite scrolling technique" can be considered a form of lazy loading.
+-> Native HTML loading="lazy": The loading="lazy" attribute on the <img> tag is a native browser feature that defers loading images until they are near the viewport. 
+This is a form of lazy loading, but it is not React-specific. This approach works well for images but does not involve React's lazy loading mechanisms.
+code: 
+Note : Open Network tab and select "Img".
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import img1 from './assets/img1.jpg';

@@ -1,0 +1,194 @@
+
+-> It is possible after we executed 1st operation something may goes wrong. may be our server crashes or connection to mongoDB drop.
+-> then 2nd operation will not complete.
+-> thats where we need transaction.
+-> so with transcation we insure that the both operations wil update the state of our data in the database or none of the will update/applied. 
+so they are atomic. they both completes they both rollback.
+
+
+
+-> In MongoDB, a transaction is a sequence of one or more operations—such as insertions, updates, deletions, and reads—that are executed as a single, atomic unit. 
+-> This means that either all operations within the transaction are successfully applied, or none are, ensuring data integrity and consistency. 
+-> Transactions in MongoDB adhere/stick to the ACID properties: Atomicity, Consistency, Isolation, and Durability.
+-> MongoDB transactions are particularly useful in scenarios where multiple related operations need to be executed atomically
+
+Use Cases for MongoDB Transactions:
+
+1️⃣. Financial Transactions
+Use Case: Transferring funds between two accounts.
+Details:
+In a banking system, transferring money from one account to another involves two operations:
+Deducting the amount from the source account.
+Adding the amount to the destination account.
+Both operations must succeed or fail together to ensure the total balance remains consistent.
+Without transactions, a failure in one operation could lead to inconsistencies (e.g., money deducted but not credited).
+Example:
+
+ const createAccount = async (accountId, balance) => {
+    try{
+        const createdAccount = new Account({accountId, balance})
+        await createdAccount.save();
+        console.log(createdAccount);
+    }catch(err){
+        console.log(err.message);
+    }
+ }
+
+//  createAccount("1", 12345);
+//  createAccount("2", 678910);
+
+const transferMoney = async (senderId, receiverId, amount) => {
+    const session = await mongoose.startSession();
+
+    try {
+        session.startTransaction();
+
+        // Deduct money from sender
+        const sender = await Account.findOneAndUpdate(
+            { accountId: senderId },
+            { $inc: { balance: -amount } },
+            { session, returnDocument: "after" } // Fix: Correct option
+        );
+
+        if (!sender) {
+            throw new Error("Sender not found");
+        } else if (sender.balance < 0) {
+            throw new Error("Insufficient funds in sender's account");
+        }
+
+        console.log(`Updated Sender Balance: ${sender.balance}`);
+
+        // Add money to receiver
+        const receiver = await Account.findOneAndUpdate(
+            { accountId: receiverId },
+            { $inc: { balance: amount } },
+            { session, returnDocument: "after" }
+        );
+
+        if (!receiver) {
+            throw new Error("Receiver not found");
+        }
+
+        console.log(`Updated Receiver Balance: ${receiver.balance}`);
+
+        // Commit transaction
+        await session.commitTransaction();
+        console.log("Transaction Committed Successfully");
+
+        return { success: true, senderBalance: sender.balance, receiverBalance: receiver.balance };
+
+    } catch (err) {
+        await session.abortTransaction();
+        console.log("Transaction Aborted:", err.message);
+        return { success: false, error: err.message };
+    } finally {
+        await session.endSession();
+    }
+};
+
+
+
+
+
+
+
+
+2️⃣. If we deleted a Author then we have to delate all books related to that author which he wrote.
+so this operation must be atomic.
+
+example: 
+const mongoose = require('mongoose');
+
+const connectDB = async () =>  {
+    try{
+        const connect = await mongoose.connect("mongodb+srv://obiuch1234:a7zvaIFFmKz5KFkE@cluster0.q92we.mongodb.net/vidly?retryWrites=true&w=majority&appName=Cluster0");
+        console.log(`host name: ${connect.connection.host}`)
+        console.log(`DB Name: ${connect.connection.name}`)
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+connectDB();
+
+
+const Author = mongoose.model("Author", new mongoose.Schema({
+    name: String
+}));
+
+const Book = mongoose.model("Book", new mongoose.Schema({
+    title: String,
+    authorId: { 
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Author'
+    }
+}));
+
+
+async function createAuthor(name){
+    try{
+        const author = new Author({
+            name
+        })
+        await author.save();
+        console.log(author)
+    }catch(err){
+        console.log(err.message)
+    }
+}
+
+// createAuthor("Max Maviilian");
+
+
+async function createBook(title, authorId) {
+    try {
+        const book = new Book({ title, authorId })
+        await book.save();
+
+        console.log(book)
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+// createBook("React Js", "67b059aa344b6b5756d4f080")
+// createBook("Node Js", "67b059aa344b6b5756d4f080")
+// createBook("MongoDB", "67b059aa344b6b5756d4f080")
+
+
+
+// when we delete authoe then all the books related to him must be deleted.
+
+// method 1
+const deleteAuthor = async (authorId) => {
+    const session = await mongoose.startSession();
+    
+    try {
+        session.startTransaction();
+        // Delete the author
+        const deletedAuthor = await Author.findByIdAndDelete(authorId, { session });
+        if (!deletedAuthor) {
+            throw new Error("Author not found");
+        }
+
+        console.log('deleted author: ', deletedAuthor)
+
+        // Delete all books associated with the author
+        const deleteBooksResult = await Book.deleteMany({ authorId }, { session });
+        console.log(`Deleted ${deleteBooksResult.deletedCount} books`);
+
+        // Commit the transaction
+        await session.commitTransaction();
+        console.log("Transaction committed.");
+    } catch (error) {
+        // Abort the transaction on error
+        await session.abortTransaction();
+        console.error("Transaction aborted:", error.message);
+    } finally {
+        // End the session
+        await session.endSession();
+    }
+};
+
+deleteAuthor("67b059aa344b6b5756d4f080");

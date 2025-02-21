@@ -62,6 +62,7 @@ db.tb4.insertOne({id: 101, age: null});
 8. **Date:** Stores the current date or a specific date.
 Note: MongoDB will store the date as a BSON Date type, which is automatically converted to ISO format (YYYY-MM-DDTHH:mm:ss.sssZ) when retrieved.
 db.tb4.insertOne({id: 102, birth_date: new Date()});
+db.tb4.insertOne({id: 102, birth_date: new Date("2001-06-22")});
 db.tb4.insertOne({id: 102, birth_date: ISODate('2001-06-22')});
 db.tb4.insertOne({id: 102, birth_date: ISODate("2023-01-01T12:00:00Z")});
 

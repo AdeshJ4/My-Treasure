@@ -1,4 +1,43 @@
-1. Using references (Normalization)
+1. Using references (Normalization) 
+
+
+Normalization in MongoDB 🚀
+
+-> Normalization in MongoDB (or any database) is the process of structuring data to reduce redundancy and improve data integrity. 
+This is done by splitting data into multiple collections Why Normalize?
+✅ Avoids data duplication
+✅ Maintains consistency (Updates are easier)
+✅ Reduces storage size
+
+Example: 
+Authors Collection:
+{
+  "_id": ObjectId("123456789"),
+  "name": "Mosh Hamwdani",
+  "age": 50
+}
+
+Books Collection:
+{
+  "_id": ObjectId("67a..."),
+  "title": "The Alchemist",
+  "author": ObjectId("123456789")  // Reference to Author
+}
+
+When to Use Normalization?
+✅ When the same data is used in multiple places (e.g., authors, users, categories).
+✅ When updates to shared data should be consistent.
+✅ When data size matters (e.g., reducing redundant storage in large databases).
+
+🚫 Disadvantages:
+
+1️⃣ Increased Query Complexity:
+Since data is split across multiple collections, you need to perform multiple queries or use $lookup (aggregation), populate()  to retrieve related data.
+2️⃣ Slower Read Performance:
+Fetching a book along with its author requires a join operation ($lookup in MongoDB), which is slower than a single query.
+In high-traffic applications, too many joins can affect performance.
+
+
 
 -> for understating this concept suppose we have two collections : 1. Courses 2. Authors
 -> Each course object should have author name. for that we store id of author document from author collection inside a course document. 
@@ -57,143 +96,366 @@ Summary :
 
 
 
-code : 
+const mongoose = require('mongoose');
 
-const mongoose = require("mongoose");
 
 const connectDB = async () => {
-    try {
-        const connect = await mongoose.connect("mongodb://127.0.0.1:27017/mongoDB");
-        console.log("Database Connected", connect.connection.name);
-    } catch (err) {
+    try{
+        const connect = await mongoose.connect("mongodb://localhost:27017/playGround");
+        console.log('Host Name', connect.connection.host);
+        console.log('DB Name: ', connect.connection.name);
+    }catch(err){
+        console.log('Database not connected');
         console.log(err.message);
     }
-};
+}
 connectDB();
 
-const Author = mongoose.model(
-    "Author",
-    new mongoose.Schema({
-        name: String,
-        age: Number,
-    })
-);
 
-const Customer = mongoose.model(
-    "Customer",
-    new mongoose.Schema({
-        name: String,
-        age: Number,
-    })
-);
+const Author = mongoose.model("Author", new mongoose.Schema({
+    name: String,
+    email: String,
+    publisher: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Publisher'
+    }
+}))
 
-const Book = mongoose.model(
-    "Book",
-    new mongoose.Schema({
-        title: String,
-        author: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Author",
-        },
-        fans: [{ type: mongoose.Schema.Types.ObjectId, ref: "Customer" }],
-    })
-);
 
-async function createCustomer(name, age) {
-    try {
-        const customer = await Customer.create({ name, age });
+const Publisher = mongoose.model("Publisher", new mongoose.Schema({
+    name: String,
+    location: String
+}))
+
+
+const Customer = mongoose.model("Customer", new mongoose.Schema({
+    name: String,
+    age: Number
+}));
+
+
+const Book = mongoose.model("Book", new mongoose.Schema({
+    title: String,
+    writer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Author'
+    },
+    readers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}]
+}));
+
+
+
+//---------------------------------------------------------------------------------------------------------------
+// create Data:
+const createCustomer = async (name, age) => {
+    try{
+        const customer = new Customer({ name, age });
+        await customer.save();
+
         console.log(customer);
-    } catch (err) {
-        console.log(err.message);
-    }
-};
-
-// createCustomer('Adesh Jadhav', 23);
-// createCustomer('Swarnima Jadhav', 27);
-// createCustomer('Pramod Jadhav', 51);
-// createCustomer('Rohini Jadhav', 50);
-// createCustomer('Suvrna Jadhav', 74);
-
-async function createAuthor(name, age) {
-    try {
-        const author = await Author.create({ name, age });
-        console.log("author", author);
-    } catch (err) {
+        
+    }catch(err){
         console.log(err.message);
     }
 }
-// createAuthor("J.R.R. Tolkien", 87);
-// createAuthor("J.K. Rowling", 70);
-// createAuthor("George R.R. Martin", 60); 
-// createAuthor("Patrick Rothfuss", 99); 
-// createAuthor("Brandon Sanderson", 45); 
+
+// createCustomer("reader 1", 20)
+// createCustomer("reader 2", 21)
+// createCustomer("reader 3", 22)
+// createCustomer("reader 4", 23)
 
 
-async function createBook(title, author, fans) {
-    try {
-        const book = await Book.create({ title, author, fans });
+const createAuthor = async (name, email, publisher) => {
+    try{
+        const author = await Author.create({name, email, publisher});
+        console.log(author);
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+// createAuthor("Author 1", "auth_1@test.com", "67ac66f143aaecb0601cefbc");
+// createAuthor("Author 2", "auth_2@test.com", "67ac66f143aaecb0601cefbd");
+// createAuthor("Author 3", "auth_3@test.com", "67ac66f143aaecb0601cefbe");
+// createAuthor("Author 4", "auth_4@test.com", "67ac66f143aaecb0601cefbf");
+
+
+
+async function createPublisher(name, location){
+    try{
+        const publisher = new Publisher({ name, location });
+        await publisher.save();
+
+        console.log(publisher);
+        
+    }catch(err){
+        console.log(err.message);
+    }
+}
+
+// createPublisher("Publisher 1", "Pune");
+// createPublisher("Publisher 2", "Mumbai");
+// createPublisher("Publisher 3", "Ratnagiri");
+// createPublisher("Publisher 4", "Goa");
+
+
+
+const createBook = async (title, writer, readers ) => {
+    try{
+        const book = new Book({ title, writer, readers });
+        await book.save();
+
         console.log(book);
-    } catch (err) {
+    }catch(err){
         console.log(err.message);
     }
 }
 
-// createBook("The Hobbit", "668e3aa5c7ff80fc615f1043", ["668e3aa5c7ff80fc615f103e", "668e3aa5c7ff80fc615f103f"])
-// createBook("Harry Potter and the Sorcerer's Stone", "668e3aa5c7ff80fc615f1044", ["668e3aa5c7ff80fc615f1042", "668e3aa5c7ff80fc615f1041"])
-// createBook("A Game of Thrones", "668e3aa5c7ff80fc615f1045", ["668e3aa5c7ff80fc615f103f", "668e3aa5c7ff80fc615f103e"])
-// createBook("The Name of the Wind", "668e3aa5c7ff80fc615f1046", ["668e3aa5c7ff80fc615f1040", "668e3aa5c7ff80fc615f1041"])
+// createBook("Book 1", "67ac6743432782cc93b8ccf4", ["67ac66f143aaecb0601cefb8", "67ac66f143aaecb0601cefb9"]);
+// createBook("Book 2", "67ac6743432782cc93b8ccf5", ["67ac66f143aaecb0601cefbb", "67ac66f143aaecb0601cefba"]);
+// createBook("Book 3", "67ac6743432782cc93b8ccf6", ["67ac66f143aaecb0601cefb8"]);
+// createBook("Book 4", "67ac6743432782cc93b8ccf7", ["67ac66f143aaecb0601cefba"]);
 
 
-async function getBooks() {
-    try {
-        const books = await Book.find().populate("author").populate("fans");
-        console.log(books);
-    } catch (err) {
+/*---------------------------------------------------------------------------------------------------------------*/
+
+// Get Data
+
+async function getCustomers () {
+    try{
+        const customers = await Customer.find({});
+        // const customers = await Customer.aggregate([
+        //     {
+        //         $match: {}
+        //     },
+        //     {
+        //             $project: {
+        //                 _id: 0,
+        //                 firstName: '$name',
+                        
+        //             }      
+        //     },
+        //     {
+        //         $sort: {
+        //             'name': 1
+        //         }
+        //     },
+        //     {
+        //         $skip: 1
+        //     },
+        //     {
+        //         $limit: 2
+        //     },
+        // ])
+        console.log(customers)
+    }catch(err){
         console.log(err.message);
     }
 }
-getBooks();
+// getCustomers()
 
-async function getAuthors() {
-    try {
-        const authors = await Author.find();
+
+const getAuthors = async () => {
+    try{
+        const authors = await Author.find({}, {_id: 0, fullName: '$name', publisher: 1}).populate("publisher", "name location");
         console.log(authors);
-    } catch (err) {
+    }catch(err){
+        console.log(err.message);
+    }
+}
+// getAuthors()
+
+
+const getPublishers = async () => {
+    try{
+        const publishers = await Publisher.find({}).limit(2).skip(1);
+        console.log(publishers);
+    }catch(err){
+        console.log(err.message);
+    }
+}
+// getPublishers()
+
+
+const getBooks = async () => {
+    try{
+        // const books = await Book.find({});
+        // const books = await Book.aggregate([ { $match: {} } ]);
+        // const books = await Book.find({}).populate("writer").populate("readers");
+        // const books = await Book.find({}).populate({ path: "writer", populate: { path: "publisher", select: "name"}}).populate({ path: 'readers', select: "name age"})        
+        const books = await Book.aggregate([
+            // Lookup for the author
+            {
+                $lookup: {
+                    from: "authors",          // The collection to join (should be lowercase "authors")
+                    localField: "writer",    // Field in the "books" collection
+                    foreignField: "_id",      // Field in the "authors" collection
+                    as: "authorDetails"      // The output array name
+                }
+            },
+            // Unwind the authorDetails array
+            {
+                $unwind: {
+                    path: '$authorDetails',
+                    preserveNullAndEmptyArrays: true // Include books without an author
+                }
+            },
+            // Lookup for the publisher (nested within authorDetails)
+            {
+                $lookup: {
+                    from: 'publishers',                          // The collection to join (should be lowercase "authors")
+                    localField: 'authorDetails.publisher',       // Field in the "authors" collection
+                    foreignField: '_id',                         // Field in the "publishers" collection
+                    as: 'authorDetails.publisherInfo'            // The output array name
+                }
+            },
+            // Unwind the publisherInfo array (nested within authorDetails)
+            {
+                $unwind: {
+                    path: '$authorDetails.publisherInfo',
+                    preserveNullAndEmptyArrays: true // Include authors without a publisher
+                }
+            },
+            {
+                $lookup: {
+                    from: 'customers',
+                    localField: "readers",
+                    foreignField: "_id",
+                    as: "readersInfo"
+                }
+            },
+            // simple project 
+            // {
+            //     $project: {
+            //         _id: 0,
+            //         title: 1,
+            //         writer: '$authorDetails',
+            //         readers: '$readersInfo'
+            //     }
+            // },
+            // if you want specific properties from each field then do this : advance project
+            {
+                $project: {
+                    _id: 0, 
+                    title: 1, 
+                    writer: {
+                        // _id: '$authorDetails._id', // not included
+                        name: '$authorDetails.name', 
+                        email: '$authorDetails.email', 
+                        publisherInfo: {
+                            // _id: '$authorDetails.publisherInfo._id', 
+                            name: '$authorDetails.publisherInfo.name', 
+                            location: '$authorDetails.publisherInfo.location' 
+                        }
+                    },
+                    readers: {
+                        $map: {
+                            input: '$readersInfo',
+                            as: 'reader',
+                            in: {
+                                // _id: '$$reader._id',  // not included
+                                name: '$$reader.name', 
+                                age: '$$reader.age' 
+                            }
+                        }
+                    }
+                }
+              }
+              
+        ]);
+        console.log(books);
+        
+    }catch(err){
+        console.log(err.message);
+    }
+}
+// getBooks();
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------
+// delete data 
+
+
+const deleteCustomer = async (_id) => {
+    try{
+        const deletedCustomer = await  Customer.findOneAndDelete({_id}, {returnDocument: 'after', projection: {_id: 1, name: 1}});
+        console.log(deletedCustomer);
+    }catch(err){
+        console.log(err.message)
+    }
+}
+// deleteCustomer("67acb25661ac7d213d5ab122");
+
+
+const deleteAuthor = async (_id) => {
+    try{
+        const deletedAuther = await Author.deleteOne({_id});
+        console.log(deletedAuther);
+    }catch(err){
+        console.log(err.message)
+    }
+}
+
+// deleteAuthor("67acb33661ac7d213d5ab124");
+
+
+const deletePublisher = async (_id) => {
+    try{
+        const deletedPublisher = await Publisher.findOneAndDelete({_id}, {returnOriginal: true, projection: {_id: 0, name: 1}});
+        console.log(deletedPublisher);
+    }catch(err){
+        console.log(err.message)
+    }
+}
+// deletePublisher("67acb3fc61ac7d213d5ab126");
+
+async function deleteBook (_id) {
+    try{
+        const deletedBook = await Book.findOneAndDelete({_id}, {returnDocument: 'after', projection: {_id: 0, name: 1}})
+        console.log(deletedBook);
+    }catch(err){
+        console.log(err.message)
+    }   
+}
+
+// deleteBook("67ac67f2cd948489e8df3657");
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------
+// update data 
+
+async function updateCustomer(_id, updatedData) {
+    try{
+        const updatedCustomer = await Customer.findOneAndUpdate( {_id: new mongoose.Types.ObjectId(_id)}, updatedData,  { returnDocument: 'after', projection: { name:1, isAdult: 1} });
+        console.log(updatedCustomer);
+    }catch(err){
         console.log(err.message);
     }
 }
 
-async function getCustomers() {
-    try {
-        const customers = await Customer.find();
-        console.log(customers);
-    } catch (err) {
+// updateCustomer("67acd20461ac7d213d5ab12a", { name: "Rajhhhhh" });
+
+
+const updateBook = async (bookId, updatedBookData) => {
+    try{
+        if(!mongoose.Types.ObjectId.isValid(bookId)){
+            throw new Error("Invalid Book Id")
+        }
+
+        const updatedBook = await Book.findByIdAndUpdate(bookId, { $set: updatedBookData }, { new: true })
+
+        if(!updatedBook) {
+            throw new Error("Book not found");
+        }
+
+        console.log('Updated Book', updatedBook)
+    }catch(err){
         console.log(err.message);
     }
 }
 
-
-async function deleteAuthorBook() {
-    try {
-        const author = await Author.deleteMany({});
-        const books = await Book.deleteMany({});
-    } catch (err) {
-        console.log(err.message);
-    }
-}
-
-async function updateAuthor(author) {
-    try {
-        const a = await Author.findByIdAndUpdate(author.id, author, { new: true });
-        if (!a) console.log('Author Not found');
-        console.log('author', a);
-    } catch (err) {
-        console.log(err.message);
-    }
-}
-// updateAuthor({
-//   id: "668e3aa5c7ff80fc615f1043",
-//   name: "J.R.R. Tolkien",
-//   age: 100,
-// });
-
+updateBook("67adbe71cd8f02aa45b82450", {title: "Ramayana", writer: "67adbf59cd8f02aa45b82453", readers: ["67acd20461ac7d213d5ab12a"]});
