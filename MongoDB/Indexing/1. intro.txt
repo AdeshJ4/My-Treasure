@@ -17,6 +17,18 @@ For collections with a high write-to-read ratio, indexes are expensive because e
 
 ⚠️ When Indexes Don’t Help (With Examples):
 
+📝 Conclusion:
+0-5 indexes per collection → ✅ Good
+5-10 indexes → ⚠️ Monitor performance
+10+ indexes → 🔴 Likely slowing down writes
+Use only necessary indexes and avoid indexing fields with frequent updates.
+
+
+don't create index on numeric fields like phone number even though its string because it doen not support partial search.
+Text Index Does Not Support Partial Matching → If you search "987", it won’t match "9876543210".
+
+
+
 ❌ 1️⃣Indexes Won’t Help If a Query Uses $regex (Without Prefix)
 🔹 Example ($regex Without a Prefix)
 db.users.find({ name: { $regex: "esh", $options: "i" } });
@@ -25,7 +37,7 @@ Problem: ❌ Index won’t be used because MongoDB must scan the entire collecti
 Why? Indexes only work well if you search from the beginning (/^pattern/).
 ✅ Solution:
 db.users.find({ name: { $regex: /^Adesh/i } });
-✔ Uses the index because it searches from the start.
+✔ Uses the index because it searches from the start.   
 
 ❌ 2️⃣ Indexes Won’t Help When Filtering on a Low-Cardinality Field
 🔹 Example (Boolean Fields)
@@ -60,6 +72,9 @@ Example:
 db.users.createIndex({ name: 1 }); // Index on "name" field
 db.users.find({ name: "Adesh" }); // Uses index for fast lookup
 
+
+MongoDB will use the existing { name: 1 } index for sorting in descending order, but it will scan the index in reverse order instead of creating a separate 
+descending index. This process is still optimized, as MongoDB can traverse the index efficiently in both directions
 ============================================================================================================================================================
 
 
@@ -122,6 +137,18 @@ db.users.find({ name: "Adesh" }, { age: 1, _id: 0 }); // Covered Query
 
 
 
+MongoDB will split each email into separate tokens (words) like this:
+
+Email	                          Tokenized Words  
+adejad1234@gmail.com	          adejad1234, gmail, com  
+jadhavadesh13061@gmail.com	    jadhavadesh13061, gmail, com  
+pramod1461@hotmail.com	        pramod1461, hotmail, com  
+rohjad@test.com	                rohjad, test, com  
+
+How Searching Works?
+Query: { $text: { $search: "gmail" } } → Matches the first two documents because gmail is a token.
+Query: { $text: { $search: "hotmail" } } → Matches only the third document.
+Query: { $text: { $search: "com" } } → Matches all documents because com is a token in each
 ============================================================================================================================================================
 
 
@@ -680,12 +707,6 @@ db.users.insertMany([
 ============================================================================================================================================================
 
 
-
-
-
-
-
-
 Multi Key Index
 
 -> A multi key index is an index that created on an array field.
@@ -749,77 +770,205 @@ When to Use Multi-Key Indexes?
 
 
 
+📌 Text Index:
+==============
 
-
-
-
-Text Index: 
-============
-
-
--> Single Text Index per collection.
--> Tokenization and stemming
--> Relevance score
-
-db.bio.insert([
-    {_id: 1, name: 'Adesh', bio: 'I am youtuber'},
-    {_id: 2, name: 'Akshay', bio: 'I am youtuber and actor'},
-    {_id: 3, name: 'Manoj', bio: 'student'},
-    {_id: 4, name: 'Ram', bio: 'swimmer'},
-    {_id: 5, name: 'Swarali', bio: 'youtuber'}
-])
-
-db.users.createIndex({name: "text"})  -> name_text
-db.users.createIndex({name: 'text', bio: 'text'})  -> name_text_bio_text
-
-myDB> db.bio.createIndex({name: 'text', bio: 'text'})
-name_text_bio_text
-myDB> db.bio.getIndexes()
-[
-  { v: 2, key: { _id: 1 }, name: '_id_' },
-  {
-    v: 2,
-    key: { _fts: 'text', _ftsx: 1 },
-    name: 'name_text_bio_text',
-    weights: { bio: 1, name: 1 },
-    default_language: 'english',
-    language_override: 'language',
-    textIndexVersion: 3
-  }
+-> A Text Index in MongoDB allows you to perform "full-text search" on string fields within a collection. This is useful for searching words, phrases, or matching 
+text efficiently even in the middle of a string.
+🚫 MongoDB's text index does not support partial word matching, meaning it only searches for whole words and does not match substrings within a word.
+suppose you have a products collection and have text index on title.
+products: [
+  { _id: 1, title: "Smartphone", description: "Latest 5G smartphone with AI camera" },
 ]
+❌ Example: Searching for a Partial Word
+> db.products.find({ $text: { $search: "phone" } });
+🛑 No Results!
+✅ This query will NOT return the Smartphone document because "phone" is a substring of "smartphone", and MongoDB text search only matches whole words.
 
-myDB> db.bio.find({$text: {$search: 'youtube'}})
-[
-  { _id: 5, name: 'Swarali', bio: 'youtuber' },
-  { _id: 1, name: 'Adesh', bio: 'I am youtuber' },
-  { _id: 2, name: 'Akshay', bio: 'I am youtuber and actor' }
-]
-
-
-myDB> db.bio.find({$text: {$search: 'youtube and actor'}})
-[
-  { _id: 2, name: 'Akshay', bio: 'I am youtuber and actor' },
-  { _id: 5, name: 'Swarali', bio: 'youtuber' },
-  { _id: 1, name: 'Adesh', bio: 'I am youtuber' }
-]
-
-// exclude actor
-myDB> db.bio.find({$text: {$search: 'youtube -actor'}})
-[
-  { _id: 5, name: 'Swarali', bio: 'youtuber' },
-  { _id: 1, name: 'Adesh', bio: 'I am youtuber' }
-]
-
-myDB> db.bio.find({$text: {$search: 'student Ram'}})
-[
-  { _id: 4, name: 'Ram', bio: 'swimmer' },
-  { _id: 3, name: 'Manoj', bio: 'student' }
-]
+⚠️ Alternative: Using Regex for Partial Matches  (costly)
+If you must search for substrings (e.g., "phone" in "smartphone"), use regex instead of a text index:
+db.products.find({ title: { $regex: "phone", $options: "i" } });
+✅ This will return the Smartphone document but is slower than text search.
 
 
-// check score of query
-db.bio.find({$text: {$search: 'student Adesh'}}, {hamaraScore: {$meta: 'textScore'}})
-[
-  { _id: 1, name: 'Adesh', bio: 'I am youtuber', hamaraScore: 1.1 },
-  { _id: 3, name: 'Manoj', bio: 'student', hamaraScore: 1.1 }
-]
+
+🔍 How MongoDB Text Index Works?
+
+When you create a text index, MongoDB performs the following steps:
+
+1️⃣ Tokenization
+
+Breaks the text into words (tokens).
+Example: "MongoDB is amazing" → ["mongodb", "is", "amazing"].
+2️⃣ Stemming
+
+Reduces words to their root form based on the language.
+Example: "running", "runs", "run" → "run".
+3️⃣ Stop Words Removal
+
+Common words like "is", "the", "and" are ignored.
+Example: "MongoDB is amazing" → ["mongodb", "amazing"].
+4️⃣ Index Storage
+
+Stores the words in a special inverted index with pointers to documents.
+This allows quick lookup when searching for words.
+
+
+Practical : 
+
+1️⃣ How to Create a Text Index?
+By default, MongoDB does not create text indexes. You must create them manually.
+
+🔹 Example – Creating a Text Index on the title Field
+db.articles.createIndex({ title: "text" });  // single field index
+db.articles.createIndex({ title: "text", bio: 'text' });  // compound index
+
+
+2️⃣ Basic Full-Text Search ($text)
+Once a text index is created, you can search using $text and $search.
+🔹 Query – Find Articles Containing the Word "MongoDB"
+db.articles.find({ $text: { $search: "MongoDB" } });
+✅ Matches documents where title contains "MongoDB" anywhere in string.
+
+
+3️⃣ Searching for Multiple Words
+MongoDB treats multiple words as an OR condition by default.
+🔹 Query – Find Articles Containing "MongoDB" OR "Index"
+db.articles.find({ $text: { $search: "MongoDB Index" } });
+✅ Matches documents that contain either "MongoDB" OR "Index".
+
+
+4️⃣ Exact Phrase Search
+Use double quotes (" ") for exact phrase matching.
+🔹 Query – Find Articles Containing the Exact Phrase "MongoDB Index"
+db.articles.find({ $text: { $search: "\"MongoDB Index\"" } });
+✅ Matches documents where "MongoDB Index" appears exactly in that order.
+
+
+5️⃣ Exclude Words (Negative Search)
+Use a - (minus sign) to exclude words from search results.
+🔹 Query – Find Articles Containing "MongoDB" but NOT "Index"
+db.articles.find({ $text: { $search: "MongoDB -Index" } });
+✅ Matches documents with "MongoDB" but excludes those with "Index".
+
+
+6️⃣ Text Index on Multiple Fields
+You can create a compound text index on multiple fields.
+🔹 Example – Create a Text Index on title and description Fields
+db.articles.createIndex({ title: "text", description: "text" });
+✅ Now, searches will match text in either title or description.
+
+
+7️⃣ Sorting by Relevance ($meta: "textScore")
+The relevance score (often referred to as textScore in MongoDB) is a numerical value that indicates how well a document matches a search query when using MongoDB's 
+text search feature.
+It does not consider user behavior like how often a document is searched or viewed
+🔹 Query – Find and Sort Articles by Relevance
+db.articles.find({ $text: { $search: "MongoDB" } },{ score: { $meta: "textScore" } }).sort({ score: { $meta: "textScore" } }); // Sort by highest relevance, 2nd object is projection object
+✅ Documents with the highest relevance appear first.
+ex: 2
+in bellow example we serach for "awesome t-shirt" and it return two documents one with only one keyword "awesome" and another have both keywords "awesome t-shirt".
+so document with only one keyword have lower score than the document who have both keywords.
+
+> db.products.find({$text: {$search: "awesome t-shirt"}})
+{
+    "title": "A Book",
+    "description": "This is an awesome book about a young artist!"
+}
+{
+    "title": "Red T-Shirt",
+    "description": "This T-Shirt is red and it's pretty awesome!"
+}
+
+> db.products.find({$text: {$search: "awesome t-shirt"}}, {score: {$meta: "textScore"}}).sort({ score: { $meta: "textScore" }}) // highest matching result be on top
+{
+    "title": "Red T-Shirt",
+    "description": "This T-Shirt is red and it's pretty awesome!",
+    "score": 1.7999999999999998
+}
+{
+    "title": "A Book",
+    "description": "This is an awesome book about a young artist!",
+    "score": 0.625
+}
+
+
+
+
+
+🚀 Advantages of `$text` Search:**
+  - **Much faster** than regex.
+  - **Uses indexes** instead of scanning the whole collection.
+  - **Supports multiple fields** (e.g., name, description).
+  - **Finds words even in the middle** of a string.
+
+
+
+🚫 Limitations of Text Index
+
+❌ Only one text index per collection (but it can include multiple fields).
+❌ MongoDB's text index does not support partial word matching, meaning it only searches for whole words and does not match substrings within a word.
+❌ Not case-sensitive, but language-specific stemming applies (e.g., "run" and "running" may match).
+❌ Cannot be used for sorting directly, except with $meta: "textScore".
+❌ Does not support wildcard (*) searches.
+
+
+data to pr5actise: 
+db.products.insertMany([
+  { _id: 1, title: "Gaming Laptop", description: "A powerful laptop for gaming and work", category: "Electronics" },
+  { _id: 2, title: "Wireless Headphones", description: "Noise-canceling headphones with deep bass", category: "Audio" },
+  { _id: 3, title: "Mechanical Keyboard", description: "RGB backlit keyboard for gaming and coding", category: "Accessories" },
+  { _id: 4, title: "Smartphone", description: "Latest 5G smartphone with AI camera", category: "Mobile" },
+  { _id: 5, title: "Gaming Mouse", description: "Ergonomic gaming mouse with programmable buttons", category: "Accessories" },
+  { _id: 6, title: "Bluetooth Speaker", description: "Portable speaker with crystal-clear sound", category: "Audio" },
+  { _id: 7, title: "4K Monitor", description: "Ultra HD monitor with stunning display", category: "Electronics" },
+  { _id: 8, title: "Fitness Tracker", description: "Track your health and fitness goals", category: "Wearables" }
+]);
+
+
+❌ MongoDB's text index does not support partial word matching, meaning it only searches for whole words and does not match substrings within a word.
+
+
+
+============================================================================================================================================================
+
+
+
+
+### **Creating Indexes in MongoDB – Foreground vs. Background**  
+
+MongoDB provides two ways to create indexes:  
+
+1️⃣ **Foreground Indexing**  
+   - When you create an index in the **foreground**, it **locks the collection**.  
+   - No other operations (insert, update, delete) can be performed on the collection while the index is being built.  
+   - If the indexing process takes time, all read and write operations on that collection are blocked until the index is created.  
+   - **Example:**  
+     ```js
+     db.collection.createIndex({ field: 1 })  // Foreground index by default
+     ```
+   - **Best for:** Small datasets where indexing completes quickly.  
+
+2️⃣ **Background Indexing** (Deprecated since MongoDB 4.2)  
+   - Allows you to **create an index while the collection is still writable**.  
+   - Other operations (insert, update, delete) **can continue** while the index is being built.  
+   - Used when you need minimal downtime.  
+   - **Example (before MongoDB 4.2):**  
+     ```js
+     db.collection.createIndex({ field: 1 }, { background: true })  
+     ```
+   - **Note:** In **MongoDB 4.2+, all indexes are created in the foreground**, but the **default behavior is optimized** for minimal impact.  
+
+### **Key Differences**  
+
+| Feature            | Foreground Indexing | Background Indexing (Deprecated) |
+|--------------------|--------------------|--------------------------------|
+| Collection Locking | **Yes** (blocks operations) | **No** (other operations continue) |
+| Performance Impact | High (especially for large datasets) | Low (less impact on running queries) |
+| Use Case | Small datasets or when downtime is acceptable | Large collections needing continuous access |
+
+### **Which One to Use?**  
+- If using **MongoDB 4.2+**, background indexing is no longer an option—**use default index creation**.  
+- If using an **older version**, background indexing is useful for large datasets where operations must continue during indexing.  
+
+Let me know if you need further clarification! 🚀

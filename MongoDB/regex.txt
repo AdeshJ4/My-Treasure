@@ -2,6 +2,18 @@ Yes, you're absolutely right! **Using `$regex` in MongoDB can be costly**, espec
 
 ---
 
+❌ Indexes Won’t Help If a Query Uses $regex (Without Prefix)
+🔹 Example ($regex Without a Prefix)
+db.users.find({ name: { $regex: "esh", $options: "i" } });
+Scenario: Searching for users where "esh" appears anywhere in the name.
+Problem: ❌ Index won’t be used because MongoDB must scan the entire collection to find matches.
+Why? Indexes only work well if you search from the beginning (/^pattern/).
+✅ Solution: Use:
+db.users.find({ name: { $regex: /^Adesh/i } });
+✔ Uses the index because it searches from the start.
+
+
+
 ## **🚨 Why is `$regex` Costly?**
 1. **No Index Usage (for Prefix Searches)**
    - If the search pattern is **not anchored** (`/^pattern/`), MongoDB **cannot** use indexes efficiently.
@@ -45,6 +57,7 @@ If you need **case-insensitive, partial matching**, use **text indexes** instead
 #### **✅ Step 1: Create a Text Index**
 ```js
 db.users.createIndex({ name: "text" });
+db.users.createIndex({ name: "text", bio: "text" });
 ```
 #### **✅ Step 2: Query Using `$text`**
 ```js
@@ -61,24 +74,8 @@ User.find({ $text: { $search: "Adesh" } });
 ### **3️⃣ Use Autocomplete with MongoDB Atlas Search**
 If you need **Google-like search**, use **MongoDB Atlas Full-Text Search** with the **Autocomplete feature**.
 
-Would you like help implementing this? 🚀
 
 
 
 
-❌ 3️⃣ Indexes Won’t Help If a Query Uses $regex (Without Prefix)
-🔹 Example ($regex Without a Prefix)
-js
-Copy
-Edit
-db.users.find({ name: { $regex: "esh", $options: "i" } });
-Scenario: Searching for users where "esh" appears anywhere in the name.
-Problem: ❌ Index won’t be used because MongoDB must scan the entire collection to find matches.
-Why? Indexes only work well if you search from the beginning (/^pattern/).
-✅ Solution: Use:
 
-js
-Copy
-Edit
-db.users.find({ name: { $regex: /^Adesh/i } });
-✔ Uses the index because it searches from the start.
