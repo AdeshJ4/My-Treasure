@@ -1,5 +1,12 @@
 Indexes: Retrieving data efficently
 
+Note: 
+
+If your collection has only a few thousand documents (5000 to 10000), indexing may not make a noticeable difference.
+Indexing shines when dealing with millions of records.
+
+
+
 📌 Indexes are most effective when they significantly reduce the number of documents MongoDB needs to retrieve.
 
 In MongoDB, an index is a data structure that improves the speed of data retrieval operations on a collection.
@@ -765,6 +772,67 @@ When to Use Multi-Key Indexes?
 
 
 
+example 2: 
+{ "genres": [ { "name": "Action" }, { "name": "Sci-Fi" } ] }
+you can create a multi-key index on the genres field, but there are some limitations when using an embedded schema (customeGenreSchema inside movieSchema).
+
+✅ What is a Multi-Key Index?
+A multi-key index allows MongoDB to index array fields, meaning each value inside the array is indexed separately.
+
+📌 Example:
+If a document contains:
+
+json
+Copy
+Edit
+{ "genres": [ { "name": "Action" }, { "name": "Sci-Fi" } ] }
+A multi-key index on genres.name would index both "Action" and "Sci-Fi" separately.
+
+
+🚨 Issue with Your Schema
+Currently, your genres field is an array of subdocuments (customeGenreSchema).
+
+MongoDB does allow creating a multi-key index on genres.name, but not on the entire subdocument.
+💡 Solution:
+✅ You can create a multi-key index only on genres.name, but not on genres itself.
+
+✅ Correct Way to Create a Multi-Key Index
+Modify your schema like this:
+
+js
+Copy
+Edit
+movieSchema.index({ "genres.name": 1 });  // Multi-key index on genres.name
+This will allow efficient querying on genres.name, for example:
+
+js
+Copy
+Edit
+Movie.find({ "genres.name": "Action" }) // Efficient search using the multi-key index
+❌ What You Cannot Do
+MongoDB does not allow indexing an array of full objects directly.
+For example, this would not work:
+
+js
+Copy
+Edit
+movieSchema.index({ genres: 1 });  // ❌ This is NOT allowed
+This is because genres is an array of objects, and MongoDB does not support indexing full objects within arrays.
+
+✅ Final Answer
+Yes, you can create a multi-key index on genres.name, but not on genres itself.
+Use this:
+
+js
+Copy
+Edit
+movieSchema.index({ "genres.name": 1 });
+This ensures efficient searching when filtering by genre name. 🚀
+
+Let me know if you need further clarifications! 😊
+
+
+
 
 =============================================================================================================
 
@@ -773,8 +841,13 @@ When to Use Multi-Key Indexes?
 📌 Text Index:
 ==============
 
+-> You can't create text index on number.
 -> A Text Index in MongoDB allows you to perform "full-text search" on string fields within a collection. This is useful for searching words, phrases, or matching 
 text efficiently even in the middle of a string.
+-> You need to create both a text index and a normal index on the name field, if you want to:
+Perform text search on the name field.
+Sort the name field.
+
 🚫 MongoDB's text index does not support partial word matching, meaning it only searches for whole words and does not match substrings within a word.
 suppose you have a products collection and have text index on title.
 products: [
@@ -860,6 +933,12 @@ db.articles.createIndex({ title: "text", description: "text" });
 
 
 7️⃣ Sorting by Relevance ($meta: "textScore")
+
+can i omit "score" from projection.
+db.movies.find({ $text: { $search: "cat"}}, { score: { $meta: "textScore"}}).sort({score: { $meta: "textScore"}})
+ans> Yes, you can omit the score from the projection in your MongoDB query. However, if you omit the score, you won’t be able to sort the results by the text search relevance score (textScore). 
+
+
 The relevance score (often referred to as textScore in MongoDB) is a numerical value that indicates how well a document matches a search query when using MongoDB's 
 text search feature.
 It does not consider user behavior like how often a document is searched or viewed

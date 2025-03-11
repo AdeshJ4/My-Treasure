@@ -1,0 +1,48 @@
+The has() method is used in JavaScript with data structures like Set and Map to check whether a specific key or value exists
+
+
+1️⃣. has() Method in Set
+
+In a Set, the has() method checks whether a specific value exists in the set.
+
+Returns true if the value exists.
+Returns false if the value does not exist.
+
+Example:
+---
+const languages = new Set(["english", "hindi", "spanish"]);
+console.log(languages.has("hindi"));  // true
+console.log(languages.has("french")); // false
+---
+
+
+2️⃣.  has() Method in Map
+
+In a Map, the has() method checks whether a specific key exists in the map.
+
+Returns true if the key exists.
+Returns false if the key does not exist.
+
+
+Example:
+---
+const userPermissions = new Map([
+    ["john", "admin"],  // key-value
+    ["sarah", "editor"],
+    ["mike", "viewer"]
+]);
+
+console.log(userRoles.has("john"));  // true
+console.log(userRoles.has("MAx"));  // false
+
+---
+
+
+
+
+| Feature           | has() (Used with Set & Map)                       | includes() (Used with Array & String)                         |
+|-------------------|-------------------------------------------------- |---------------------------------------------------------------|
+| Data Structures   | Works on Set and Map                              | Works on Array and String                                     |
+| Checks for        | Existence of a key (Map) or value (Set)           | Existence of a value in an Array or a substring in a String   |
+| Performance       | Faster (O(1) for Set, O(1) to O(log n) for Map)   | Slower (O(n) for Array and String)                            |
+| Use Case          | When working with Set or Map                      | When working with Array or String                             |

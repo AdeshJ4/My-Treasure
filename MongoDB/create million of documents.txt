@@ -14,3 +14,99 @@ for (let i = 0; i < 1000000; i++) {
 
 
 then open terminal and type> mongosh credit-rating.js
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+🚀Customers: 
+add dynamic customers in db (cloud Mongodb);
+
+step 1: create a customer.js file and paste bellow code.
+step 2: OPEN TERMINAL AND PASTE type> node customer.js.
+---
+const mongoose = require("mongoose");
+// const { Customer } = require('./models/customerModel');  // if you already have Customer then just import it.
+
+const mongoURI = "mongodb+srv://obiuch1234:GKc0eYtcszRbM7dd@cluster0.ni2im.mongodb.net/movify?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose
+  .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Connected to MongoDB Atlas"))
+  .catch((err) => console.error("Error connecting to MongoDB", err));
+
+const customerSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  age: { type: Number, required: true, min: 18, max: 100 },
+  email: { type: String, required: true, unique: true, trim: true },
+  phone: { type: String, required: true, unique: true, trim: true },
+  address: {
+    street: { type: String, required: true, trim: true },
+    city: { type: String, required: true, trim: true },
+    state: { type: String, required: true, trim: true },
+    zipCode: { type: String, required: true, match: /^[1-9][0-9]{5}$/ },
+    country: { type: String, required: true, trim: true, default: "India" },
+  },
+  membership: { type: String, required: true, enum: ["bronze", "silver", "gold"] },
+  isActive: { type: Boolean, default: true },
+});
+
+const Customer = mongoose.model("Customer", customerSchema);
+
+
+const firstNames = [
+    "Rohini", "Amit", "Neha", "Vikram", "Suresh", "Meera", "Rajesh", "Pooja", "Kunal", "Anita", 
+    "Emma", "Liam", "Olivia", "Noah", "Ava", "William", "Sophia", "James", "Isabella", "Oliver",
+    "Mia", "Benjamin", "Charlotte", "Elijah", "Amelia", "Lucas", "Harper", "Mason", "Evelyn", "Logan",
+    "Abigail", "Alexander", "Emily", "Ethan", "Elizabeth", "Jacob", "Mila", "Michael", "Ella", "Daniel"
+];
+const lastNames = [
+    "Jadhav", "Patil", "Sharma", "Verma", "Kulkarni", "Desai", "Joshi", "Kapoor", "Bajaj", "Mishra",  
+    "Patel", "Sharma", "Singh", "Gupta", "Kumar", "Joshi", "Reddy", "Mehta", "Malhotra", "Choudhary", 
+    "Agarwal", "Desai", "Bhatia", "Saxena", "Kapoor", "Verma", "Tiwari", "Trivedi", "Shah", "Das", 
+    "Chatterjee", "Banerjee", "Dubey", "Rao", "Mishra", "Iyer", "Nair", "Menon", "Sinha", "Pillai"
+];
+const cities = ["Mumbai", "Pune", "Nashik", "Nagpur", "Thane", "Kolhapur", "Ratnagiri", "Solapur", "Nanded", "Aurangabad"];
+const states = ["Maharashtra", "Gujarat", "Karnataka", "Madhya Pradesh", "Rajasthan"];
+const memberships = ["bronze", "silver", "gold"];
+
+const generateCustomers = async () => {
+  const customers = [];
+
+  for (let i = 0; i < 200; i++) {
+    let firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    let lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    let city = cities[Math.floor(Math.random() * cities.length)];
+    let state = states[Math.floor(Math.random() * states.length)];
+    let membership = memberships[Math.floor(Math.random() * memberships.length)];
+
+    customers.push({
+      name: `${firstName} ${lastName}`,
+      age: Math.floor(Math.random() * 50) + 18,
+      email: `${firstName.toLowerCase()}${lastName.toLowerCase()}${i}@gmail.com`,
+      phone: `9${Math.floor(100000000 + Math.random() * 900000000)}`,
+      address: {
+        street: `Street ${i + 1}`,
+        city: city,
+        state: state,
+        zipCode: `${Math.floor(400000 + Math.random() * 100000)}`,
+        country: "India",
+      },
+      membership: membership,
+      isActive: true,
+    });
+  }
+
+  try {
+    await Customer.insertMany(customers);
+    console.log("✅ Successfully added 150 customers to MongoDB Atlas!");
+  } catch (error) {
+    console.error("❌ Error inserting customers:", error);
+  } finally {
+    mongoose.connection.close();
+  }
+};
+
+generateCustomers();
+---

@@ -1,6 +1,11 @@
+-> The object you recied from mongoose/mongodb is not plain javascript object rather its a mongoose document, so you hava to convert it into plain js objecty to perform
+operastions.
+ex: const customer = await Customer.findById(customerId);
+
+
+
 2. Using Embedded Documents (DeNormalization)
--> There is another approach instead of having different collection for storing authors we can embedded an author document inside a 
-course document.
+-> There is another approach instead of having different collection for storing authors and courses we can embedded an author document inside a course document.
 -> so basically we are embedding one document inside another document. and this we called demoralization.
 
 ex: 
@@ -14,26 +19,30 @@ let course = {
 }
 
 
-1st approach advantage and disadvantages
--> In 1st approach we have single place to define a author which is inside a author collection. if tomorrow i decided to change 
-name of author from 'A' to 'B' there is single place that i need to modify. and all courses which are referencing that author will 
-see updated author.
--> so in 1st approach we have consistency. 
--> However when we query a course document we need to do extra query to load related author from author collection. 
 
-2nd approach advantage and disadvantages
--> in this approach we can easily load course document with author document without extra query to author collection because author 
-is inside a course document.
--> However with this approach tomorrow we have decide to change the name of author from 'A' to 'B', chances are their are multiple 
-course documents that need to updated and if our update operation doesn't complete successfully it is possible that we have some 
-documents which are not updated. so will end up with unconsistent data.
+🚀 Advantages of Embedded Documents (Denormalization)
 
-Summary : 
--> 1st approach gives us consistency 
--> 2nd approach gives us performance
--> Each approach have strength and weaknesses.
--> which approach you use is really depends on your application and its querying requirements.
--> so thats why we have to do trade off between to approaches, we can't have both at the same time.
+1. Single Query: Fetching a course document with its embedded author data requires only one query to the database. Since the data is stored together, it can be retrieved 
+and processed more quickly.
+2. Atomicity: All related data (e.g., course and author) is stored in a single document, making it easier to ensure data consistency
+3.Ideal for Small, Nested Data: Embedding works well when the related data (e.g., author) is small and doesn’t change frequently.
+
+
+
+🚫 Disadvantages of Embedded Documents (Denormalization)
+
+1. Duplication: If the same author writes multiple courses, their data will be duplicated in each course document.
+2. Storage Overhead: This can lead to increased storage requirements.
+3. Update Challenges: If the embedded data (e.g., author’s name) changes, you must update it in all documents where it is embedded. This can be error-prone and inefficient.
+4. Document Size Limit: MongoDB has a 16 MB document size limit. If the embedded data grows too large (e.g., many authors or nested documents), it can exceed this limit.
+5. Performance Issues: Large embedded documents can slow down read and write operations
+6. No Indexing on Embedded Fields: While MongoDB allows indexing on embedded fields, it can be less efficient than indexing top-level fields.
+7. Inefficient for Large Data: If the related data (e.g., authors) is large or frequently updated, embedding can become inefficient
+
+
+
+
+
 
 
 
@@ -94,6 +103,36 @@ const createCourse = async (courseName, author) => {
     console.log(err.message);
   }
 };
+
+terminal> createCourse("Node js", {authorName: 'Mosh hamedani', phone: '9527370288'});
+terminal> createCourse("react js", {authorName: 'Mosh hamedani', phone: '9527370288'});
+o/p: 
+{
+  courseName: 'Node js',
+  author: {
+    authorName: 'Mosh hamedani',
+    phone: 9527370288,
+    _id: new ObjectId('67c327a42d939466c9bb18f5')
+  },
+  _id: new ObjectId('67c327a42d939466c9bb18f4'),
+  __v: 0
+}
+{
+  courseName: 'react js',
+  author: {
+    authorName: 'Mosh hamedani',
+    phone: 9527370288,
+    _id: new ObjectId('67c328577f937518bf38cae2')
+  },
+  _id: new ObjectId('67c328577f937518bf38cae1'),
+  __v: 0
+}
+
+Note : even though both courses have same author, mongodb creates separate object ids for it.
+
+
+
+
 
 const updateInnerAuthor = async (courseId, authorObj) => {
   try {

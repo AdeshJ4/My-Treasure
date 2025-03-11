@@ -1,3 +1,8 @@
+-> The object you recied from mongoose/mongodb is not plain javascript object rather its a mongoose document, so you hava to convert it into plain js objecty to perform
+operastions.
+ex: const customer = await Customer.findById(customerId); 
+
+
 1. Using references (Normalization) 
 
 
@@ -275,6 +280,15 @@ const getPublishers = async () => {
     }
 }
 // getPublishers()
+
+const Book = mongoose.model("Book", new mongoose.Schema({
+    title: String,
+    writer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Author'
+    },
+    readers: [{type: mongoose.Schema.Types.ObjectId, ref: 'Customer'}]
+}));
 
 
 const getBooks = async () => {

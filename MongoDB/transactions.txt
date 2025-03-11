@@ -5,6 +5,12 @@
 -> so with transcation we insure that the both operations wil update the state of our data in the database or none of the will update/applied. 
 so they are atomic. they both completes they both rollback.
 
+📄Note: 
+
+Transactions are used for write operations (insert, update, delete) that need to be atomic. 
+For read-only operations like getRental, transactions are unnecessary and add unnecessary overhead.
+
+
 
 
 -> In MongoDB, a transaction is a sequence of one or more operations—such as insertions, updates, deletions, and reads—that are executed as a single, atomic unit. 
@@ -79,10 +85,9 @@ const transferMoney = async (senderId, receiverId, amount) => {
 
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();   // don't require await 
         console.log("Transaction Aborted:", err.message);
         return { success: false, error: err.message };
-    } finally {
-        await session.endSession();
     }
 };
 
@@ -161,21 +166,23 @@ async function createBook(title, authorId) {
 // when we delete authoe then all the books related to him must be deleted.
 
 // method 1
+
+In Mongoose, the { session } option is not valid for findByIdAndDelete or deleteMany. Instead, you should use the .session() method to attach the session to the query
+
 const deleteAuthor = async (authorId) => {
     const session = await mongoose.startSession();
     
     try {
         session.startTransaction();
+
         // Delete the author
-        const deletedAuthor = await Author.findByIdAndDelete(authorId, { session });
+        const deletedAuthor = await Author.findByIdAndDelete(authorId).session(session); // Correct session usage
         if (!deletedAuthor) {
             throw new Error("Author not found");
         }
 
-        console.log('deleted author: ', deletedAuthor)
-
         // Delete all books associated with the author
-        const deleteBooksResult = await Book.deleteMany({ authorId }, { session });
+        const deleteBooksResult = await Book.deleteMany({ authorId }).session(session); // Correct session usage
         console.log(`Deleted ${deleteBooksResult.deletedCount} books`);
 
         // Commit the transaction
@@ -185,9 +192,10 @@ const deleteAuthor = async (authorId) => {
         // Abort the transaction on error
         await session.abortTransaction();
         console.error("Transaction aborted:", error.message);
+        throw error; // Rethrow the error for further handling
     } finally {
-        // End the session
-        await session.endSession();
+        // End the session (cleanup)
+        session.endSession();
     }
 };
 

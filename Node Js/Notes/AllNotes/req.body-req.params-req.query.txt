@@ -57,10 +57,197 @@ Multiple Params         | /users/:userId/orders/:orderId  → /users/12345/order
 
 3. req.query
 req.query is mostly used for searching, sorting, filtering, pagination, etc.
+Query parameters from req.query are strings by default.
 
 
-1️⃣. Searching
+1️⃣. Searching 
 🔹 Example: Search for users by name (case-insensitive).
+whatever you type inside the search bar will be received as a single string in the route via req.query.
+ex> if you search this in search bar : "Adesh adejad1234@test.com gold" will be received as a single string in the route via req.query.
+
+🔍 Search bar input:
+Adesh adejad1234@test.com gold
+
+
+🔹 Example Frontend Request (Axios)
+const searchCustomers = async (query) => {
+    try {
+        const { data } = await axios.get(`/api/customers/search?q=${query}`);
+        console.log(data.customers);
+    } catch (error) {
+        console.error(error.response.data);
+    }
+};
+searchCustomers("Adesh adejad1234@test.com gold");
+
+🔹 Example Backend code:
+app.get('/api/customers/search', async (req, res) => {
+    try {
+        const { q } = req.query; // Get search input from query parameters
+
+        // Perform text search using MongoDB's `$text` operator
+        const customers = await Customer.find(
+            { $text: { $search: q } }, // { $text: { $search: "Adesh adejad1234@test.com gold" } },  MongoDB will search for: Adesh in name, adejad1234@test.com in email, gold in membership
+            { score: { $meta: "textScore" } } // Retrieve relevance score
+        ).sort({ score: { $meta: "textScore" } }); // Sort by relevance
+
+        res.status(200).json({ total: customers.length, customers });
+    } catch (err) {
+        res.status(500).json({ message: err.message || "Internal Server Error" });
+    }
+});
+
+
+
+
+
+
+
+full example: 
+
+import { useState } from "react";
+import axios from "axios";
+
+const RentalSearch = () => {
+    const [search, setSearch] = useState("");
+    const [dateOutStart, setDateOutStart] = useState("");
+    const [dateOutEnd, setDateOutEnd] = useState("");
+    const [dateReturnedStart, setDateReturnedStart] = useState("");
+    const [dateReturnedEnd, setDateReturnedEnd] = useState("");
+    const [sortBy, setSortBy] = useState("dateOut");
+    const [sortOrder, setSortOrder] = useState("desc");
+    const [rentals, setRentals] = useState([]);
+
+    const fetchRentals = async () => {
+        try {
+            const params = new URLSearchParams();
+            if (search) params.append("q", search);
+            if (dateOutStart) params.append("dateOutStart", dateOutStart);
+            if (dateOutEnd) params.append("dateOutEnd", dateOutEnd);
+            if (dateReturnedStart) params.append("dateReturnedStart", dateReturnedStart);
+            if (dateReturnedEnd) params.append("dateReturnedEnd", dateReturnedEnd);
+            if (sortBy) params.append("sortBy", sortBy);
+            if (sortOrder) params.append("sortOrder", sortOrder);
+
+            const { data } = await axios.get(`/api/rentals/search?${params.toString()}`);
+            setRentals(data.rentals);
+        } catch (error) {
+            console.error("Error fetching rentals:", error);
+        }
+    };
+
+    return (
+        <div>
+            <input 
+                type="text" 
+                placeholder="Search rentals..." 
+                value={search} 
+                onChange={(e) => setSearch(e.target.value)} 
+            />
+            <input 
+                type="date" 
+                value={dateOutStart} 
+                onChange={(e) => setDateOutStart(e.target.value)} 
+            />
+            <input 
+                type="date" 
+                value={dateOutEnd} 
+                onChange={(e) => setDateOutEnd(e.target.value)} 
+            />
+            <input 
+                type="date" 
+                value={dateReturnedStart} 
+                onChange={(e) => setDateReturnedStart(e.target.value)} 
+            />
+            <input 
+                type="date" 
+                value={dateReturnedEnd} 
+                onChange={(e) => setDateReturnedEnd(e.target.value)} 
+            />
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                <option value="dateOut">Date Out</option>
+                <option value="dateReturned">Date Returned</option>
+                <option value="totalFee">Total Fee</option>
+            </select>
+            <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+            <button onClick={fetchRentals}>Search</button>
+
+            <ul>
+                {rentals.map((rental) => (
+                    <li key={rental._id}>
+                        {rental.customer.name} - {rental.dateOut} - {rental.totalFee}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+};
+
+export default RentalSearch;
+
+// GET /api/rentals/search?q=Adesh%20adejad1234@gmail.com%20gold%2067b85a02a8d3e593d25e8932&dateOutStart=2024-02-01&dateOutEnd=2024-02-28&sortBy=dateOut&sortOrder=desc
+
+app.get("/api/rentals/search", async (req, res) => {
+    try {
+        const { q, dateOutStart, dateOutEnd, dateReturnedStart, dateReturnedEnd, sortBy = "dateOut", sortOrder = "desc" } = req.query;
+
+        let query = { $or: [] };
+
+        // Splitting search terms
+        if (q) {
+            const terms = q.split(" ");
+            const objectIds = terms.filter(term => mongoose.Types.ObjectId.isValid(term));
+            const textSearchTerms = terms.filter(term => !mongoose.Types.ObjectId.isValid(term));
+
+            if (objectIds.length > 0) {
+                query.$or.push({ _id: { $in: objectIds } });
+            }
+            if (textSearchTerms.length > 0) {
+                query.$or.push({ $text: { $search: textSearchTerms.join(" ") } });
+            }
+        }
+
+        // Filtering by dateOut
+        if (dateOutStart || dateOutEnd) {
+            query.dateOut = {};
+            if (dateOutStart) query.dateOut.$gte = new Date(dateOutStart);
+            if (dateOutEnd) query.dateOut.$lte = new Date(dateOutEnd);
+        }
+
+        // Filtering by dateReturned
+        if (dateReturnedStart || dateReturnedEnd) {
+            query.dateReturned = {};
+            if (dateReturnedStart) query.dateReturned.$gte = new Date(dateReturnedStart);
+            if (dateReturnedEnd) query.dateReturned.$lte = new Date(dateReturnedEnd);
+        }
+
+        // Sorting options
+        const sortOptions = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
+
+        // Fetch rentals
+        const rentals = await Rental.find(query).populate("customer").sort(sortOptions);
+
+        res.status(200).json({ rentals });
+
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
 app.get("/users", async (req, res) => {
     const { name } = req.query;
     const query = name ? { name: { $regex: name, $options: "i" } } : {};

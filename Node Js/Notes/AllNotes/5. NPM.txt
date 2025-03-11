@@ -12,7 +12,7 @@ npm i <packageName>
 npm i <packageName>@<version>
 
 // Install a package as a development dependency
-npm i <packageName> -dev
+npm install <packageName> --save-dev
 
 // Uninstall a package
 npm un <packageName>

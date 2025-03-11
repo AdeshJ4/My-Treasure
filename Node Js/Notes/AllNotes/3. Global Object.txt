@@ -1,58 +1,220 @@
--> Variables declared outside of any function or block are attached to the global object.
+🌍 Global Objects in JavaScript
 
-"process" is a global object in Node.js, just like "window" is a global object in the browser
-
-
-window object: 
-
--> In a browser we have this "window" object that represent our global scope.
--> So all the variables and functions that defined globally we can access them via this window object.
--> In the client side javascript which we run inside a browser, when we declare a variable or functions that is added to global scope means inside a window object and we can access them by window.variableName or window.functionName.
--> But there is problem with this approach. 
--> the problem with this approach is that if we have same variableName, functionName as in the window object then we can easily override the the variables, functions in genereal properties of window object which is not good.
--> so we have to stop using var keyword inside client side js which executes inside a browser.
+-> A global object is something that is available everywhere in your JavaScript code, without needing to import or require it.
+-> It contains properties and methods that are available globally across the entire runtime environment that you can use in your code.
 
 
+1️⃣ In the Browser (window): 
 
-global object: 
+-> In browsers, the global object is called window.
 
--> We don’t have the window object in Node.
--> The global object in Node is “global”. 
+Examples of global properties in the browser:
+
+---
+console.log(window); // The main global object in the browser
+console.log(window.setTimeout); // Function for delaying execution
+console.log(window.console.log); // Logging method
+console.log(window.alert); // Shows an alert box
+console.log(window.document); // Represents the webpage (DOM)
+
+var myName = "Hello, World!";      // Declare a variable in the global scope
+
+function demo() {                   // Declare a function in the global scope
+    console.log("This is a global function.");
+}
+
+console.log(window.myName); // Output: "Hello, World!"  -  Access them via the window object
+window.demo(); // Output: "This is a global function."
+
+---
+
+
+What window Contains: 
+
+1. Built-in Properties:
+
+window.document: Represents the DOM (Document Object Model).
+window.location: Provides information about the current URL.
+window.navigator: Contains information about the browser (e.g., user agent, platform).
+window.console: Provides methods for logging (e.g., console.log, console.error).
+window.localStorage and window.sessionStorage: For client-side storage.
+window.history: Manages the browser's session history.
+
+2. Built-in Functions:
+
+window.alert(): Displays an alert dialog.
+window.setTimeout() and window.setInterval(): For scheduling tasks.
+window.fetch(): For making HTTP requests.
+
+3. Browser-Specific APIs:
+
+window.XMLHttpRequest: For making AJAX requests.
+window.WebSocket: For real-time communication.
+window.Intl: For internationalization (e.g., date and number formatting).
+
+
+Issue: 
+Global Variables and Functions:
+
+Variables and functions declared with var or without any keyword are added to the window object.
+This means you can access these variables/functions using window.variableName or window.functionName.
+but this can lead to conflicts with existing properties of the window object, since our properties can override existing one.
+If you accidentally declare a variable or function with the same name as an existing property of the window object, you can override it.
+For example, window.alert is a built-in function. If you declare a variable or function named alert, you will override the built-in alert function.
+---
+var alert = "This is not a function anymore!";      // Overriding a built-in property of the window object
+window.alert("Hello!"); // TypeError: alert is not a function       // This will throw an error because alert is no longer a function
+---
+
+Solution:
+
+1. Use let and const Instead of var:
+let and const are block-scoped, meaning they are not added to the window object.
+Use const for variables that won’t change and let for variables that will change.
+---
+let myVariable = "Hello, World!";     // Declare variables using let and const
+const myFunction = () => {
+    console.log("This is not added to the window object.");
+};
+
+console.log(window.myVariable); // Output: undefined - These are not added to the window object
+window.myFunction(); // TypeError: window.myFunction is not a function
+---
+
+2. Use IIFE (Immediately Invoked Function Expression):
+Wrap your code in an IIFE to create a local scope and avoid adding variables/functions to the global scope.
+---
+(function () { // Wrap code in an IIFE to create a local scope
+    var myVariable = "Hello, World!";
+    function myFunction() {
+        console.log("This is not added to the window object.");
+    }
+
+  
+    console.log(window.myVariable); // Output: undefined - These are not added to the window object
+    window.myFunction(); // TypeError: window.myFunction is not a function
+})();
+---
+
+
+3. Use Modules:
+Use ES6 modules (import/export) to encapsulate code and avoid global scope pollution.
+
+useMe.js: 
+export const color = 'green';
+
+server.js: 
+import { color } from './useMe.js';
+
+
+
+===========================================
+
+
+
+
+2️⃣ In Node.js (global)
+
+-> In Node.js, the global object is called "global"
+-> In server-side JavaScript (Node.js), the concept of the global scope works differently compared to client-side JavaScript (running in a browser). 
+-> Node.js does not have window, because it is not running inside a browser. Instead, it has a different global object called "global".
 -> Unlike browser applications, variables we define are not added to the “global” object.
--> In node we don't have this "window" object instead we have "global" object.
--> so we can do like : global.console.log() or global.setTimeout()
--> variables and functions which we define in a file like app.js they are not added to a global object.
-They are only scoped to this file (app.js) so they are not available outside this app.js file.
-and this is because node module system.
+-> Variables and functions declared without a block scope (e.g., using var or without any keyword) are added to the module scope, not the global scope.
+-> Each file in Node.js is treated as a module, and variables/functions declared in a file are scoped to that module by default.
+
+---
+console.log(global); // The main global object in Node.js
+console.log(global.setTimeout); // Same as setTimeout in browser
+console.log(global.clearTimeout); // Cancels a timeout
+console.log(global.setInterval); // Runs a function repeatedly
+console.log(global.console.log); // Logs to the terminalconsole.log(global.process); // ✅ Exists (System info)
+---
 
 
 
-### **Detailed Comparison: `process` (Node.js) vs `window` (Browser)**  
+Example of Global Scope in Node.js: 
 
-| Feature                              | `process` (Node.js) 🌍                                                      | `window` (Browser) 🌐                                                      |
-| ------------------------------------ | ---------------------------------------------------------------------------  | -------------------------------------------------------------------------- |
-| **Scope**                            | Runs in **Node.js** (server-side).                                           | Runs in the **browser** (client-side).                                     |
-| **Purpose**                          | Manages the **environment**, system info, and processes.                     | Handles **DOM, events, and browser APIs**.                                 |
-| **Global Object?**                   | ✅ Yes, available everywhere in Node.js.                                     | ✅ Yes, available everywhere in the browser.                                |
-| **Access to Environment Variables?** | ✅ Yes, through `process.env`.                                               | ❌ No direct access to system environment variables.                        |
-| **Access to DOM?**                   | ❌ No, since Node.js runs outside the browser.                               | ✅ Yes, can manipulate the DOM (`document.querySelector()`).                |
-| **Example Usage**                    | `process.env.PORT`, `process.cwd()`                                          | `window.location.href`, `window.alert()`.                                  |
-| **Runs in JS Console?**              | ✅ Yes, in Node.js terminal.                                                 | ✅ Yes, in browser DevTools console.                                        |
-| **Handles System Info?**             | ✅ Yes, can access OS details (`process.platform`, `process.memoryUsage()`). | ❌ No, only browser-related info (`navigator.userAgent`).                   |
-| **Handles Asynchronous Events?**     | ✅ Yes, used in event-driven programming (`process.on('exit', callback)`).   | ✅ Yes, handles user events (`window.addEventListener('click', callback)`). |
-| **File System Access?**              | ✅ Yes, via `fs` module (`fs.readFileSync()`).                               | ❌ No, can't directly access local files (except `<input type="file">`).    |
-| **Security Considerations**          | Needs to be protected (`.env` file should not be exposed).                   | Can be accessed by any script running on the page.                         |
+File: useMe.js: 
+---
 
+var myVariable = "Hello, World!";      // Declare a variable in the global scope (module scope)
 
+function myFunction() {  // Declare a function in the global scope (module scope)
+    console.log("This is a module-scoped function.");
+}
 
-### **Key Takeaways to Remember**
-- **`process` is for the server (Node.js)** 🚀 – Deals with system-level tasks.  
-- **`window` is for the browser** 🌐 – Deals with UI and user interactions.  
-- **`process.env` is used for environment variables**, while **`window` is used for browser-related tasks** (DOM, location, alerts).  
-
-Would you like some **mnemonics or memory tricks** to remember this better? 😃
+console.log(global.myVariable); // Output: undefined - These are not added to the global object
+global.myFunction(); // TypeError: global.myFunction is not a function
+---
 
 
 
+How to Pollute the Global Scope in Node.js: 
+-> If you explicitly assign a variable or function to the global object, it will be added to the global scope and accessible across all modules. again its not recommended.
 
+---
+
+global.myGlobalVariable = "I am global!";      // Add a variable to the global object
+
+global.myGlobalFunction = function () {        // Add a function to the global object
+    console.log("I am a global function!");
+};
+
+console.log(global.myGlobalVariable); // Output: "I am global!"
+global.myGlobalFunction(); // Output: "I am a global function!"
+---
+
+
+
+
+What global Contains:
+---------------------
+
+1. Built-in Properties:
+
+global.process: Provides information about the current Node.js process (e.g., environment variables, command-line arguments).
+global.console: Provides methods for logging (e.g., console.log, console.error).
+global.Buffer: For handling binary data.
+global.__dirname and global.__filename: Provide the directory and file path of the current module.
+
+
+2. Built-in Functions:
+
+global.setTimeout() and global.setInterval(): For scheduling tasks.
+global.clearTimeout() and global.clearInterval(): For canceling scheduled tasks.
+global.require(): For importing modules.
+global.module and global.exports: For defining and exporting modules.
+
+
+3. Node.js-Specific APIs:
+
+global.setImmediate(): Schedules a callback to run after the current event loop iteration.
+global.URL and global.URLSearchParams: For working with URLs.
+global.TextEncoder and global.TextDecoder: For encoding and decoding text.
+Global Variables and Functions:
+
+
+
+Variables and functions declared with var or without any keyword are module-scoped by default (not added to global).
+
+To add something to the global object, you must explicitly assign it:
+
+javascript
+Copy
+global.myVar = "Hello";
+console.log(global.myVar); // Output: "Hello"
+
+===================================================
+
+
+
+
+
+
+Common Properties and Methods
+
+Both window and global share some common properties and methods:
+setTimeout(), setInterval(), clearTimeout(), clearInterval().
+console object for logging.
+JSON object for parsing and stringifying JSON.
 

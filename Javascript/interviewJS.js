@@ -586,21 +586,78 @@ page or close the window.
 
 // Q5] why it is bad to attach global variable define with 'var' to window object.
 /*
-Global variables defined with the var keyword belong to the global object.
-so don't define global variable with var keyword since it modify or overwrite the properties of global object.
-if global object have the same name with global variable then global variable will overwrite the value of window object.
--> so in browser we have 'window' object which is a complex object with a lot of properties.and methods.
--> var keyword attaches variable name to window object. so if you write window.myName it will log your name.
-eg.
 
-var myName = "Adesh";  // global variable
-window.myName; // write this code inside browser console.
-o/p => Adesh
+-> When you declare variables or functions using the var keyword (or without any keyword) in the browser, they become properties 
+of the window object. 
+-> This means you can access these variables/functions using window.variableName or window.functionName.
+-> but this can lead to conflicts with existing properties of the window object, since our properties can override existing one.
 
--> In contrast when we use let keyword to define a global variable that global variable is not attached to the window object.
--> then why it is bad to attach variable to window object ?
-Your global variables (or functions) can overwrite window variables (or functions).
-Any function, including the window object, can overwrite your global variables and functions.
+Example of the Problem:
+---
+// Declare a variable in the global scope
+var myName = "Hello, World!";
+
+// Declare a function in the global scope
+function demo() {
+    console.log("This is a global function.");
+}
+
+// Access them via the window object
+console.log(window.myName); // Output: "Hello, World!"
+window.demo(); // Output: "This is a global function."
+---
+
+The Issue:
+
+If you accidentally declare a variable or function with the same name as an existing property of the window object, you can override it.
+For example, window.alert is a built-in function. If you declare a variable or function named alert, you will override the built-in alert function.
+---
+// Overriding a built-in property of the window object
+var alert = "This is not a function anymore!";
+
+// This will throw an error because alert is no longer a function
+window.alert("Hello!"); // TypeError: alert is not a function
+---
+
+Solution:
+
+1. Use let and const Instead of var:
+let and const are block-scoped, meaning they are not added to the window object.
+Use const for variables that won’t change and let for variables that will change.
+---
+let myVariable = "Hello, World!";     // Declare variables using let and const
+const myFunction = () => {
+    console.log("This is not added to the window object.");
+};
+
+console.log(window.myVariable); // Output: undefined - These are not added to the window object
+window.myFunction(); // TypeError: window.myFunction is not a function
+---
+
+2. Use IIFE (Immediately Invoked Function Expression):
+Wrap your code in an IIFE to create a local scope and avoid adding variables/functions to the global scope.
+---
+(function () { // Wrap code in an IIFE to create a local scope
+    var myVariable = "Hello, World!";
+    function myFunction() {
+        console.log("This is not added to the window object.");
+    }
+
+  
+    console.log(window.myVariable); // Output: undefined - These are not added to the window object
+    window.myFunction(); // TypeError: window.myFunction is not a function
+})();
+---
+
+
+3. Use Modules:
+Use ES6 modules (import/export) to encapsulate code and avoid global scope pollution.
+
+useMe.js: 
+export const color = 'green';
+
+server.js: 
+import { color } from './useMe.js';
 
 */
 
@@ -1448,7 +1505,7 @@ res(10);
 JavaScript try...catch...finally Statement :
 -------------------------------------------
 
--> The try, catch and finally blocks are used to handle exceptions.
+-> The try, catch and finally blocks are used to handle "unhandled exceptions".
 
 Types of Errors: 
 
@@ -1474,7 +1531,7 @@ These runtime exceptions are generally thrown as Error objects with specific typ
 
 
 ex. 
-For example,Logic errors that don’t halt execution but cause crashing of program.
+For example,Logic errors that cause crashing of program.
 Invalid operations like calling a function that doesn’t exist or a Accessing an Undeclared Variable (Runtime Error), division by 
 zero, determining the square root of a negative number.
 
@@ -1528,6 +1585,77 @@ try {
   console.error("An exception occurred:", error.message);
 }
 console.log("Hello");  // rest of the code will be executed.
+
+
+
+without try-catch block: 
+---
+function calculate(n1, n2){
+  if(n2 === 0){
+    throw new Error("Cannot divide by 0");  // runtime error-exception
+  }
+    
+  return n1/n2;
+}
+
+start('start')
+calculate(10, 0);
+start('end')
+---
+  
+  
+output: 
+Admin@DESKTOP-ADESH MINGW64 ~/Desktop/Movify/server (master)
+$ node useMe.js
+start
+C:\Users\user\Desktop\Movify\server\useMe.js:27
+        throw new Error("Cannot Divide by 0")
+        ^
+
+Error: Cannot Divide by 0
+    at demo (C:\Users\user\Desktop\Movify\server\useMe.js:27:15)
+    at Object.<anonymous> (C:\Users\user\Desktop\Movify\server\useMe.js:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1369:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1427:10)
+    at Module.load (node:internal/modules/cjs/loader:1206:32)
+    at Module._load (node:internal/modules/cjs/loader:1022:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:135:12)
+    at node:internal/main/run_main_module:28:49
+
+Node.js v20.12.0
+
+
+----------
+
+with try-catch: 
+
+---
+function demo (num1, num2){
+    if(num2 === 0){
+        throw new Error("Cannot Divide by 0")
+    }    
+    return num1/num2;
+}
+
+
+console.log('start');
+try{
+    demo(10, 0)
+}catch(err){
+    console.log(err.message);
+}
+console.log('end');
+---
+
+output: 
+
+Admin@DESKTOP-ADESH MINGW64 ~/Desktop/Movify/server (master)
+$ node useMe.js
+start
+Cannot Divide by 0
+end
+
+
 
 
 JavaScript try...catch Statement : 
