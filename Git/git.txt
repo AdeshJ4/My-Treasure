@@ -16,11 +16,144 @@ git stash list
 git stash apply stash@{0}
 
 
-
-
 abort the merge if you don't want new changes: 
 if you have this : (poc/dev|MERGING)
 git merge --abort
+
+
+
+----------------------------
+
+
+### **Difference Between `git checkout branch_name` and `git switch branch_name`**
+
+#### **1. `git checkout branch_name` (Older & More General)**
+- Used in **older versions** of Git (before Git 2.23).
+- Can switch branches **or** checkout a specific commit.
+- If the branch doesn’t exist, you need to use `-b` to create it:  
+  ```bash
+  git checkout -b new_branch
+  ```
+- Can be **confusing** because it also allows checking out files (e.g., `git checkout file.txt`).
+
+#### **2. `git switch branch_name` (Newer & More Specific)**
+- Introduced in **Git 2.23+** to make branch switching more intuitive.
+- **Only** used for switching branches, making it safer.
+- If the branch doesn’t exist, use `-c` to create it:  
+  ```bash
+  git switch -c new_branch
+  ```
+- Cannot be used for checking out specific commits or files.
+
+---
+
+### **Which One Should You Use?**
+✅ **Use `git switch`** if you’re just changing branches (cleaner & safer).  
+✅ **Use `git checkout`** if you’re using an older Git version or need to check out specific files/commits.  
+
+Would you like to update your Git version to use `git switch`? 🚀
+
+
+
+
+------------------
+
+
+
+
+
+Merge changes :
+---------------
+
+I have two branches locally since my repository is not published on GitHub:
+1. master
+2. feat/button
+Currently, I am on the feat/button branch, and I have committed all my feature changes. Now, I want to merge this feature branch into the master branch.
+
+sol> 
+You can merge your feat/button branch into master by following these steps:
+
+1️⃣ Switch to the master Branch
+Since you are currently on feat/button, first switch to master:
+
+bash
+Copy
+Edit
+git checkout master
+2️⃣ Merge feat/button into master
+Run the following command to merge the changes from feat/button into master:
+
+bash
+Copy
+Edit
+git merge feat/button
+3️⃣ Resolve Any Merge Conflicts (If Any)
+If Git reports conflicts, open the affected files, resolve them, and then run:
+
+bash
+Copy
+Edit
+git add .
+git commit -m "Resolved merge conflicts"
+4️⃣ Verify the Merge
+Check if everything looks good:
+
+bash
+Copy
+Edit
+git log --oneline --graph --decorate --all
+5️⃣ Delete the feat/button Branch (Optional)
+If you no longer need the feat/button branch, delete it:
+
+bash
+Copy
+Edit
+git branch -d feat/button
+Now, your master branch has all the changes from feat/button. 🚀
+
+
+
+
+
+
+
+
+
+
+How to create branch locally ?
+-> git branch    
+This will list all existing branches and highlight the current branch.
+
+🚀Create a New Branch (Multiple ways):
+1️⃣. git branch branch_name       or  
+2️⃣. git checkout -b new_branch   or  
+3️⃣. git switch -c new_branch
+
+1. you have to use seprate checkout command to switch to that branch. ex: git checkout new_branch.
+2. Can switch branches or checkout a specific commit. If the branch doesn’t exist, you need to use -b to create it. Can be confusing because it also allows checking out files (e.g., git checkout file.txt).
+3. Only used for switching branches, making it safer. If the branch doesn’t exist, use -c to create it. Cannot be used for checking out specific commits or files.
+
+
+
+-> git checkout branch_name
+Switch to the New Branch if exists, if not then use -b ex: git checkout -b branch_name : this will create new branch and switch to that branch automatically.
+-> git checkout master  # or git switch master
+If you're not on master, switch to it:
+-> git pull origin master
+This merges the latest updates from the remote master branch into your local master branch.
+
+
+
+
+
+-> git branch -r
+See All Remote Branches (e.g., origin/branch_name)
+-> git branch -a
+To see both local and remote branches
+-> git fetch --all
+Download & fetch All Remote Branches Locally (without switching to them)
+
+
 
 
 
