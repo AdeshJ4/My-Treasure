@@ -70,8 +70,7 @@ These domains are popular because they are the addresses of some of the most vis
 
 
 
-
-
+============================================================================================================================================================
 
 
 
@@ -282,50 +281,19 @@ When you store your MongoDB data on **MongoDB Atlas**, it means:
 
 
 
-each computer or device connected to a network typically has a unique IP (Internet Protocol) address. This address is used to identify and communicate with the device on the network. There are two types of IP addresses:
+each computer or device connected to a network typically has a unique IP (Internet Protocol) address. 
+This address is used to identify and communicate with the device on the network. 
 
-1. **Private IP Address**: Used within a local network (e.g., your home or office network). Devices on the same local network have unique private IP addresses, but these addresses can be reused across different networks. For example, multiple devices in different homes might have the same private IP address (like 192.168.1.1).
+There are two types of IP addresses:
 
-2. **Public IP Address**: Used to identify your network on the internet. Each device on the internet has a unique public IP address. However, in many cases, devices within the same local network share a single public IP address (via NAT, or Network Address Translation).
+1. **Private IP Address**: Used within a local network (e.g., your home or office network). Devices on the same local network have unique private IP addresses, 
+but these addresses can be reused across different networks. 
+For example, multiple devices in different homes might have the same private IP address (like 192.168.1.1).
+
+2. **Public IP Address**: Used to identify your network on the internet. 
+Each device on the internet has a unique public IP address. 
+However, in many cases, devices within the same local network share a single public IP address (via NAT, or Network Address Translation).
 
 In summary:
 - Devices on the same local network have unique private IP addresses.
 - Devices on the internet have unique public IP addresses (though NAT can allow multiple devices to share one public IP).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

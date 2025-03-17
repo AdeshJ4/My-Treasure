@@ -203,6 +203,35 @@ macOS cannot run macOS containers, so it uses a Linux VM to run Linux containers
 -> You can create Docker images from a Dockerfile (a configuration file that defines the image) or pull them from a public or private registry like Docker Hub.
 You pull or build a Docker image → "docker pull node:18-alpine"
 -> we can package our application into a image and run it virtually everywhere. this is beauty of docker.
+-> Every Docker image has its own base image, either an official one, a custom one, or scratch.
+
+What is a Base Image?
+A base image is the foundation of a Docker image. It provides an operating system or runtime environment on which your application runs.
+How Docker Images Stack (Layers)
+Each base image creates a new layer in the final image.
+For example, this Dockerfile:
+
+dockerfile
+---
+FROM node:18
+WORKDIR /app
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD ["npm", "start"]
+---
+Creates the following layered structure:
+1️⃣ node:18 (Base image with Node.js)
+2️⃣ WORKDIR /app (Sets working directory)
+3️⃣ COPY . . (Copies project files)
+4️⃣ RUN npm install (Installs dependencies)
+5️⃣ EXPOSE 3000 (Opens port)
+6️⃣ CMD ["npm", "start"] (Defines the start command)
+
+Each layer is cached by Docker, making builds faster.
+
+
+
 
 Key Characteristics of a Docker Image:
 1️⃣ Immutable – Once built, an image cannot be changed. If modifications are needed, a new image must be created.
@@ -229,14 +258,29 @@ How They Work Together (Image - Container)
 2️⃣ You create and run a container from the image → docker run -d --name my-container node:18-alpine
 3️⃣ The image stays the same, but containers can be stopped, started, or deleted without affecting the original image.
 
+You can pull and run different versions of the same image in Docker. Each image version is identified by a tag.
+
+✅ Pull Different Versions of an Image
+For example, to pull different versions of Ubuntu:
+
+docker pull ubuntu:18.04   # Pull Ubuntu 18.04
+docker pull ubuntu:20.04   # Pull Ubuntu 20.04
+docker pull ubuntu:latest  # Pull the latest version (currently 22.04 or newer)
 
 
-3. Dockerfile
+3️⃣. Dockerfile
 -> A Dockerfile is a text document that contains "instructions on how to build a Docker image". It specifies the base image, installation steps, configuration, 
 and any commands that should run when a container starts.
 
+-> Since you modified the Dockerfile, you must rebuild the image before creating a new container
+---
+"docker build -t testapp:1.1 ." 
+---
+-t testapp:1.1 assigns a new tag to the updated image.
+The . at the end specifies the current directory (where the Dockerfile is located).
+
 Example: Simple Dockerfile for a Node.js App
-dockerfile:
+dockerfile 1:
 ---
 # Use an official Node.js image as the base
 FROM node:18-alpine
@@ -257,6 +301,19 @@ EXPOSE 3000
 # Run the app
 CMD ["node", "server.js"]
 ---
+
+Common instructions
+Some of the most common instructions in a Dockerfile include:
+
+FROM <image> - this specifies the base image that the build will extend.
+WORKDIR <path> - this instruction specifies the "working directory" or the path in the image where files will be copied and commands will be executed.
+COPY <host-path> <image-path> - this instruction tells the builder to copy files from the host and put them into the container image.
+RUN <command> - this instruction tells the builder to run the specified command.
+ENV <name> <value> - this instruction sets an environment variable that a running container will use.
+EXPOSE <port-number> - this instruction sets configuration on the image that indicates a port the image would like to expose.
+USER <user-or-uid> - this instruction sets the default user for all subsequent instructions.
+CMD ["<command>", "<arg1>"] - this instruction sets the default command a container using this image will run.
+
 
 This file creates an image that packages a Node.js app with all dependencies.
 You can build and run this image as a container.
@@ -505,6 +562,85 @@ Here’s your table in a proper format:
 
 
 
+A Dockerfile and a Docker Compose (YAML) file serve different purposes in Docker:
+
+-> A Dockerfile is a script containing instructions to build a Docker image.
+-> A Docker Compose YAML file is used to define and run multiple containers as a service.
+
+### 1. Dockerfile
+- A Dockerfile is a script containing instructions to build a Docker image.
+- It defines the environment, dependencies, and commands to run inside a container.
+- Used with `docker build` to create an image.
+
+Example of a Dockerfile:
+```dockerfile
+# Base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY package.json .
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Expose port and start application
+EXPOSE 3000
+CMD ["npm", "start"]
+```
+
+### 2. Docker Compose File (docker-compose.yml)
+- A Docker Compose YAML file is used to define and run multiple containers as a service.
+- Instead of managing individual containers manually, you can define services, networks, and volumes in one place.
+- Used with `docker-compose up` to start multiple services.
+
+**Example of a `docker-compose.yml` file:**
+```yaml
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+```
+
+### Key Differences:
+| Feature | Dockerfile | Docker Compose (YAML) |
+|---------|-----------|----------------------|
+| **Purpose** | Builds a single **Docker image** | Manages **multiple containers/services** |
+| **Scope** | Defines how a container is **built** | Defines how containers **run and interact** |
+| **Command** | Used with `docker build` | Used with `docker-compose up` |
+| **Usage** | Creates an image for a single service | Defines multi-container applications (e.g., app + DB) |
+| **Dependencies** | Only the image setup, no service dependencies | Allows linking containers using `depends_on` |
+
+### **How They Work Together**
+- A **Dockerfile** is used to build an image.
+- A **docker-compose.yml** file can reference this image and configure multiple services.
+
+Would you like an example where both are used together? 🚀
+
+
+
+
+
+
+
 7. Docker Volumes 🗄️
 
 A Docker Volume is a persistent storage (any data storage device that retains data after power to that device is shut off) mechanism used to store data outside of a 
@@ -518,9 +654,339 @@ Why Use Docker Volumes?
 ✅ Backup & Restore – Easily backup or migrate data between containers
 
 
+### Types of Docker Volumes  
+
+|-------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------|
+| Volume Type       | Description                                                                   | Use Case                                                      |
+|-------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------|
+| Anonymous Volume  | Temporary storage tied to a container, removed when the container is deleted. | Temporary logs, session data.                                 |
+| Named Volume      | Persistent storage that can be shared across multiple containers.             | Databases, application data.                                  |
+| Bind Mount        | Mounts a specific directory from the host machine into the container.         | Sharing host files with containers (e.g., local development). |
+|-------------------|-------------------------------------------------------------------------------|---------------------------------------------------------------|
+
+---
+
+### **Working with Volumes**  
+
+#### 1️⃣ Create & Use a Volume in a Container
+```sh
+docker volume create my_volume
+docker run -d --name my_container -v my_volume:/app/data my_image
+```
+📌 This stores `/app/data` inside `my_volume`, keeping it safe even if `my_container` is deleted.  
+
+#### 2️⃣ List All Volumes
+```sh
+docker volume ls
+```
+
+#### 3️⃣ Inspect a Volume
+```sh
+docker volume inspect my_volume
+```
+
+#### 4️⃣ Remove a Volume
+```sh
+docker volume rm my_volume
+```
+
+#### 5️⃣ Use a Volume in `docker-compose.yml`
+```yaml
+version: '3.8'
+
+services:
+  app:
+    image: my_app
+    volumes:
+      - my_data:/app/data
+
+volumes:
+  my_data:
+```
+📌 **This ensures `my_data` persists across container restarts.**  
+
+---
+
+### **When to Use Docker Volumes?**  
+✔ **Databases** – Store database files separately from containers.  
+✔ **Shared Data** – Allow multiple containers to access the same data.  
+✔ **Persistent Logs** – Store logs outside the container for debugging.  
 
 
 
+
+
+8️⃣. Port Binding in Docker: 
+
+-> Port binding is the process of mapping a port inside the container to a port on the host machine, allowing external access to services running inside the container.
+-> you cannot add port mapping (-p) to an existing container when using docker start.
+Port mappings (-p) are set at container creation (docker run).
+Once a container is created, you cannot change its port mappings.
+docker start can only restart an existing container with the same settings it was created with.
+
+✅ How Port Binding Works
+When you run a Docker container, it has its own network environment. Services inside the container (like a web server or database) listen on ports inside the container, 
+but they are not accessible from the host system unless you explicitly bind them
+
+Syntax for Port Binding:
+---
+docker run -p <host_port>:<container_port> <image>
+---
+host_port → The port on your local machine (host).
+container_port → The port inside the container.
+
+
+For example:
+---
+docker run -d -p 8080:80 nginx
+---
+This maps port 80 inside the container to port 8080 on the host.
+Now, you can access the Nginx web server at http://localhost:8080.
+
+
+🎯 Examples of Port Binding
+1️⃣ Running MySQL on a Specific Port
+---
+docker run -d -p 3307:3306 --name my_mysql mysql:8.0
+---
+3306 → MySQL default port inside the container.
+3307 → Exposes it on port 3307 on the host.
+
+Now, you can connect using: mysql -h 127.0.0.1 -P 3307 -u root -p
+
+
+2️⃣ Running Multiple Containers on Different Ports
+You can run multiple containers of the same image by binding them to different ports:
+---
+docker run -d -p 8081:80 nginx
+docker run -d -p 8082:80 nginx
+---
+The first Nginx container is accessible at http://localhost:8081
+The second Nginx container is accessible at http://localhost:8082
+
+✅ Checking Port Bindings
+To see all running containers and their port mappings:
+---
+docker ps
+---
+Example output:
+CONTAINER ID   IMAGE   PORTS                     NAMES
+a1b2c3d4e5f6   nginx   0.0.0.0:8080->80/tcp      my_nginx
+This shows port 8080 on the host is mapped to port 80 inside the container.
+
+
+
+
+
+
+9️⃣. Docker Network:🌐 
+
+
+-> Docker networking allows containers to communicate with each other and with the outside world. 
+-> It works like a private network inside your computer, where containers can talk to each other securely.
+
+Think of it like Wi-Fi in your home:
+
+Your laptop, phone, and smart TV are like containers.
+Your Wi-Fi router is like Docker’s network system, connecting all devices.
+
+
+🛠️ Types of Docker Networks
+
+Docker provides different network types, each suited for different use cases. You can check available networks using:
+---
+docker network ls
+---
+
+
+| **Network Type**          | **Description**                                                                                     | **Use Case** |
+|---------------            |-----------------                                                                                    |-------------|
+| **Bridge (Default)**      | Containers can talk to each other **inside the same network** 
+| **Host**                  | Containers **share** the host machine's network, removing isolation. | When you need the container to behave like a native app on your system. |
+| **None**                  | The container has **no network** access. | Running isolated workloads without external communication. |
+| **Overlay**               | Used in **Docker Swarm** to connect containers across multiple machines. | Scaling applications across multiple servers. |
+| **Macvlan**               | Assigns **real IP addresses** to containers, making them act like physical devices on a network. | Running services that need their own unique IPs. |
+
+---
+
+1️⃣ Default Bridge Network (Most Common)
+By default, when you run a container, Docker assigns it to the bridge network. Containers in the same bridge network can talk to each other using their names.
+
+---
+docker network create my_custom_network
+docker run -d --name db --network my_custom_network mysql
+docker run -d --name app --network my_custom_network myapp
+---
+
+Now, the app container can connect to db using:
+
+---
+mysql -h db -u root -p
+---
+
+
+### **🛠️ Useful Docker Network Commands**
+#### **Check all networks**
+```sh
+docker network ls
+```
+
+#### **Inspect a network**
+```sh
+docker network inspect bridge
+```
+
+#### **Create a custom network**
+```sh
+docker network create my_network
+```
+
+#### **Run a container in a specific network**
+```sh
+docker run -d --network my_network --name my_container nginx
+```
+
+#### **Connect a running container to a network**
+```sh
+docker network connect my_network my_container
+
+
+
+
+
+
+Dockerizing an Application 🚀
+------------------------------
+
+Dockerizing an application means packaging the application and its dependencies into a Docker container so that it can run consistently across different environments.
+
+
+
+
+
+
+
+
+
+### 🚀 **Most Common & Frequently Used Docker Commands**  
+
+
+🚀 Use `-d` when you want the container to keep running in the background!
+
+The `-d` flag in Docker stands for "detached mode". It allows you to run a container in the background instead of keeping it attached to your terminal.  
+The -d flag is used with "docker run" to start a new container in detached mode, but it is not used with "docker start", which is only for restarting an existing 
+stopped container.
+
+### Example Usage
+```
+docker run -d --name my_container ubuntu
+```
+🔹 This runs an Ubuntu container in the background.  
+
+### Why Use `-d`?
+✔ Keeps the terminal free – You can continue using the terminal while the container runs.  
+✔ Ideal for background services – Useful for running databases, web servers, or APIs.  
+✔ Still manageable – You can check logs (`docker logs my_container`) or attach back (`docker attach my_container`).  
+
+
+
+
+
+
+---
+
+### **🔹 Basic Docker Commands**
+|---------------------|-----------------------------------------------|
+| Command             | Description                                   |
+|---------------------|-----------------------------------------------|
+| `docker version`    | Check installed Docker version.               |
+| `docker info`       | Display system-wide information about Docker. |
+|---------------------|-----------------------------------------------|
+
+---
+
+### **📦 Image Management Commands**
+|---------------------------------|---------------------------------------------------------------|
+| Command                         | Description                                                   |
+|---------------------------------|---------------------------------------------------------------|
+| `docker pull <image>`           | Download an image from Docker Hub.                            |
+| `docker images`                 | List all downloaded Docker images.                            |
+| `docker rmi <image>`            | Remove a Docker image.                                        |
+| `docker build -t my-image .`    | Build an image from a `Dockerfile` in the current directory.  |
+|---------------------------------|---------------------------------------------------------------|
+
+---
+
+### **🚢 Container Management Commands**
+
+|-------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| **Command**                                           | **Description**                                                                               |
+|-------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| `docker run -d -p 8080:80 --name my-container nginx`  | Run a container in the background and map ports.                                              |
+| `docker ps`                                           | List all running containers.                                                                  |
+| `docker ps -a`                                        | List all containers (including stopped ones).                                                 |
+| `docker stop <container>`                             | Stop a running container.                                                                     |
+| `docker start -ai <container_id>`                     | Start a stopped container in interactive mode                                                 |
+| `docker start <container>`                            | Start a stopped container.                                                                    |
+| `docker restart <container>`                          | Restart a container.                                                                          |
+| `docker rm <container>`                               | Remove a container.                                                                           |
+| `docker logs <container>`                             | View logs of a container.                                                                     |
+| `docker exec -it <container> sh`                      | Access the container's shell while it is running.                                             |
+| `docker exec -it <container> bash`                    | Access the container's shell (for Debian/Ubuntu-based images).                                |
+|-------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+
+---
+
+### **🛠️ Volume Management Commands**
+|-----------------------------------|-------------------------|
+| Command                           | Description             |
+|-----------------------------------|-------------------------|
+| `docker volume create my-volume`  | Create a Docker volume. |
+| `docker volume ls`                | List all volumes.       |
+| `docker volume inspect my-volume` | Inspect volume details. |
+| `docker volume rm my-volume`      | Remove a volume.        |
+|-----------------------------------|-------------------------|
+
+---
+
+### **📂 Network Management Commands**
+|--------------------------------------------------|------------------------------------|
+| Command                                          |  Description                       |
+|--------------------------------------------------|------------------------------------|
+| `docker network ls`                              | List all networks.                 |
+| `docker network create my-network`               | Create a custom network.           |
+| `docker network connect my-network my-container` | Connect a container to a network.  |
+| `docker network inspect my-network`              | Inspect network details.           |
+| `docker network rm my-network`                   | Remove a network.                  |
+|--------------------------------------------------|------------------------------------|
+
+---
+
+### **📝 Docker Compose Commands**
+|-----------------------------------------|------------------------------------------------------|
+| Command                                 | Description                                          |
+|-----------------------------------------|------------------------------------------------------|
+| `docker-compose up`                     | Start all services defined in `docker-compose.yml`.  |
+| `docker-compose -f filename.yaml up -d` | Start all services defined in `docker-compose.yml`.  |
+| `docker-compose down`                   | Stop and remove all services.                        |
+| `docker-compose -f filename.yaml down`  | Start all services defined in `docker-compose.yml`.  |
+| `docker-compose ps`                     | List all running services.                           |
+| `docker-compose logs`                   | View logs of all services.                           |    
+|-----------------------------------------|------------------------------------------------------|
+
+---
+
+### **🔥 Clean Up Commands**
+|---------------------------------|---------------------------------------------------------------|
+| Command                         | Description                                                   |
+|---------------------------------|---------------------------------------------------------------|
+| `docker system prune`           | Remove unused images, containers, networks, and build cache.  |
+| `docker image prune`            | Remove unused images.                                         |
+| `docker container prune`        | Remove all stopped containers.                                |
+| `docker volume prune`           | Remove all unused volumes.                                    |   
+|---------------------------------|---------------------------------------------------------------|
+
+---
 
 
 
@@ -537,7 +1003,6 @@ environment variables and so on. so we create a docker file and give it to docke
 once we have image we tell the docker to start a container using that image.
 container is a process but special kind of process because it has its own file system which is provided by image.
 so our application is loaded inside a container and this is how we run our application locally on development machine.
-and this is how we run our application locally on our development machine.
 so instead of directly launching the application and running inside typical process we tell the docker to run it inside a container and in isolated environment.
 
 Once we have this "image" we can push it to docker registry like docker hub, docker to docker hub is similar to git to github, its a storage for docker images that 
@@ -548,271 +1013,76 @@ we do in development machine. we just tell docker to start a container using thi
 
 
 
-Shradha Ma'am: 
-==============
-
--> Manual process to install/set up dependencies for project, so manual error can occurred, 2nd error can be : different version of node or python can give errors 
-like project needs node V16 but new member installed latests node v20, 3rd error can be commands to run applications like you wrote commands for running application
-based on linux OS but new member have windows OS.
-
-SO DOcker solves this issue.
-Docker is a service which  helps you to create, build, update, destroy containers.
-Containers take code and its dependencies and pack them in single unit/package and can be shared with fellow developers or can be deploy as a single package. 
-Containers works on almost on every machine/OS.
-We don't have to make any special changes in any other machine for running the container.
-Containers are portable, we can share them from one machine to another.
-Containers are lightweight.
-Containers are instance of docker image.
-Docker Image is a executable file. This file contain instructions to build a container. Using One Image we can build multiple containers. 
-When we say that we are going to share a container with our fellow colleague/team then we are actually not sharing the container.
-first we create the docker image of our application then that docker image is shared with others, then anyone can build container with this image inside any OS.
-image is like a static screenshot/snapshot of what the code and dependencies is going to look like.
-
-
-Steps to download docker : 
-https://www.docker.com/products/docker-desktop/ 
-
-open terminal and paste this : "docker pull hello-world"
-
-to create a container from a image run : 
-
-When someone says **"A container has its own environment separate from your PC"**, it means that:
-
-### 1. **Isolation of Applications**  
-A container runs **independently** of the operating system and software installed on your computer.  
-- **Your PC (Host Machine)** might have different applications and libraries installed.  
-- A **container** packages everything it needs to run (e.g., code, dependencies, libraries) in its own isolated environment.  
-- This isolation prevents conflicts between applications and ensures that the containerized app behaves the same, no matter where it is deployed.
-
-👉 **Example**:  
-- On your PC, you might have Python 3.10 installed.  
-- A container can run an app that uses Python 3.7 without interfering with your PC's version of Python.  
-
-### 2. **Filesystem Isolation**  
-A container has its own **filesystem, processes, and networking** that are separate from the host machine.  
-- Even though a container runs on the same kernel as the host, it uses its own virtual filesystem, which comes from the container image.  
-- Changes made inside a container **do not affect your PC's filesystem** (unless explicitly configured to do so).  
-
-👉 **Example**:  
-- If a container deletes files in `/app` inside its environment, the `/app` directory on your PC remains untouched.  
-
-### 3. **Networking Isolation**  
-Containers have their own virtual network interfaces and IP addresses.  
-- They can communicate with each other or the outside world, but by default, they don’t have direct access to the host machine’s network unless configured.  
-
-👉 **Example**:  
-- A container can run a web server on port `80` without affecting other web servers running on your PC.  
-
-### 4. **Process Isolation**  
-Containers run their own processes, which are separate from processes running on the host machine.  
-- A container cannot see or interact with processes outside of its environment.  
-
-👉 **Example**:  
-- If you stop or kill a process inside the container, it **won’t affect any processes on your PC**.  
-
----
-
-### Why Does This Matter?  
-- **Consistency**: Apps run the same way in development, testing, and production.  
-- **Security**: Containers add a layer of isolation, reducing the risk of malicious software affecting the host.  
-- **Efficiency**: Multiple containers can run on the same machine without interfering with each other.  
-
-Would you like a hands-on example of creating a container to see this in action?
-
-
-
-
-
-Basic Docker Commands: 
-
-
-0]    docker version                  to check docker is installed or not.
-i]    docker build -t <image-name>:   Build a Docker image from a Dockerfile in the current directory.
-ii]   docker run <image-name>:        Run a container from a specified image
-iii]  docker ps:                      List running containers
-iv]   docker stop <container-id>:     Stop a running container
-v]    docker rm <container-id>:       Remove a stopped container
-vi]   docker images:                  List available images
-vii]  docker pull <image-name>:       Download an image from a registry like Docker Hub.
-
-
-Example Workflow:
-Write a Dockerfile: Define how the container should be built (e.g., which base image to use, what dependencies to install, etc.).
-
-Build the Image: Run docker build -t my-app . to create a Docker image based on the Dockerfile.
-
-Run a Container: Use docker run to start a container from the image. For example, docker run -d -p 80:80 my-app will run the application in the container and map port 80 to the host.
-
-Manage Containers: Use docker ps, docker stop, and docker rm to manage your running containers
-
-
-
-Imagine you're building a cool project, like a toy robot. You need a lot of parts to make it work — wires, motors, a power source, 
-sensors, and even a special controller. All these parts need to fit together perfectly, and they have to work on the same 
-"blueprint" so your robot behaves just as you want.
-
-Now, let's say you want to share this robot with your friend who lives far away. 
-You send all the parts, but when your friend tries to put them together, something doesn’t work right. 
-Maybe the power source doesn’t match, or the wires don’t fit. Your friend might have a slightly different setup than yours, 
-and now the robot doesn’t work the way you intended. Frustrating, right?
-
-This is the same problem people have with software! When we create programs, they rely on specific "parts" or environments, 
-like certain versions of libraries, configurations, or tools. If someone tries to run that program on a slightly different setup, 
-it might not work or might behave differently. 
-
-
-
-### Why Docker is Like a Magic Box for Programs
-
-Docker helps solve this problem by creating a "container." Think of a container as a magic box where you put your program and 
-everything it needs to run, perfectly packaged together. 
-This includes the specific versions of libraries, settings, and tools it relies on. 
-
-When your friend gets the container (the magic box) and opens it, everything inside is exactly how it should be, 
-and the program runs perfectly, no matter where it is. So, Docker containers make sure that programs can run anywhere without 
-surprises!
-
-
-
-
-### Why Do We Use Docker?
-
-1. **Consistency**: Docker makes sure that software works the same way on any computer, whether it’s your laptop, your friend's 
-computer, or a big server. This solves the "it works on my computer" problem.
-  
-2. **Efficiency**: Docker containers are light and fast. Instead of needing an entire computer for each program, multiple Docker 
-containers can run side by side on one machine, each with its own "environment." It’s like sharing one big house but having separate 
-rooms with everything each person needs.
-  
-3. **Easier Collaboration**: Developers can share containers with each other, so everyone is working with the exact same setup. 
-This helps teams avoid unexpected issues and speeds up development.
-
-4. **Quick Setup**: If you need a specific environment, you don’t have to install a bunch of things manually. You just grab a Docker 
-container with everything pre-set up.
-
-
-
-
-### What Problems Docker Solved
-
-Before Docker, developers had to spend a lot of time setting up their environments and making sure everything matched perfectly. 
-If a developer wrote code on one computer, it might not work on another because of tiny differences. 
-Docker solved this by making it easy to package programs with all their dependencies, so they run the same everywhere.
-
-In short, **Docker makes sure that programs work consistently and easily, no matter where you run them.**
-
-
-
-
-
-
-
-
-
-
 
 Docker In Action: 
 =================
 
-Typical development workflow: 
 
-Instructions if we are not using docker : 
+Question>
+i have simple node application inside my machine or you can say host machine and i have created a image from dockerfile and run the container from that image, 
+now i have to fix some minor bug so should i create image once again or is there any command to simplyfy the process?
 
-1. Start the machine which will start OS of that machine
-2. Then we have to install specific versions of node/python supported by project.
-3. Then we have to copy all the file and have to make chnges in file structure.
-4. Then Run the code.
+Answer>
+Since you have already created a Docker image and are running a container, here are your options for making changes without rebuilding everything from scratch:
+```
+https://stackoverflow.com/questions/62193878/docker-container-not-updating-on-code-change
+```
 
+🔹 Option 1: Modify Files Inside the Running Container (Temporary Fix)
 
-we can write all these above instructions in docker file and let docker package our application.
+If the change is small and you want to test it quickly, you can:
+-> However, changes made this way will be lost when you restart the container.
 
-create a hello-docker folder and open it inside vs code.
-create a "app.js" file and add js code.
-create a "Dockerfile", this file don't have extension.
-typically we start from base image.
+split terminal into two terminals, in one terminal enter this command to see logs of container: 
+```
+docker start -ai <container_id>
+```
 
-What is a Base Image?
-A base image is like a starting point for your Docker container.
-It contains a minimal operating system or runtime environment (e.g., Ubuntu, Node.js, Python).
-Base images can be official ones from Docker Hub (like ubuntu, node, or alpine) or custom-made by others
+Enter this in 2nd terminal to make changes and see if anything broke from 1st terminal:
+```
+docker exec -it <container_id> sh
+```
 
-Why Use a Base Image?
-Instead of creating everything from scratch, you start with a pre-built environment
-For example:  FROM node:16
-
-Adding Additional Files
-After selecting the base image, you add files or install additional software to customize the environment.
-Example: 
-FROM node:16
-WORKDIR /app
-COPY . .
-RUN npm install
-
-explanation:
-FROM node:16 – Start from Node.js 16 base image.
-WORKDIR /app – Set the working directory inside the container.
-COPY . . – Copy files from your project folder to the container.
-RUN npm install – Install dependencies inside the container
+Edit the file using nano in 2nd terminal:
+/app # nano server.js  // make changes in file and ctrl + O to save and ctrl + x to exit.
+again check anything broke from 1st terminal.
 
 
 
 
+🔹 Option 2: Mount Your Local Code Directory (Recommended for Development)
+If you’re actively developing, you can avoid rebuilding the image repeatedly by using volume mounts.
+```
+docker run -d -p 5000:8080 -v ${PWD}:/vidly --name vidly aa712f2ca09f    // img name: movie-rental-app(aa712f2ca09f)
+```
+This mounts your local folder ($(pwd)) to /app inside the container.
+Any changes in your local files will be reflected inside the container without rebuilding the image.
+we are using "bind mount" volume.
+What Happens to Data in a Bind Mount?
 
-node image is built on top of different distributions of linux, so linux have different distributions or different flavours use for different purposes.
-eg: FROM node:alpine
-the size of image that we are gonna download and build on top of is going to be small.
-then we copy our application files for that we use COPY command, we copy all the files in the current directory (.) into a app directory (/app) into that image. 
-that image have file system and in that file system we are gonna create a directory called "app".
-ex: 
-FROM node:alpine
-COPY . /app
-we use "CMD" command to execute command, what command should we execute here ? "node /app/app.js".
-ex:
-FROM node:alpine
-COPY . /app
-CMD node /app/app.js
-alternatively we can set current working directory, when we use this instructions all the following instructions assume you are currently inside a app directory.
-ex: 
-FROM node:alpine
-COPY . /app
-WORKDIR /app
-CMD node app.js
+Since you're using a bind mount (-v "E:\z Placement\Mosh\React 18\Project\nodejs-docker:/app"), the data in your local machine's folder remains even if the container 
+is stopped, restarted, or deleted.
 
-So these instructions clearly document our deployment process.
-now open terminal to tell docker to package our application
-type > docker build
-we have to give our image a tag, tag to identify, then we have to specify where docker can find this file. 
-terminal path: PS C:\Users\Anurag\Desktop\hello-world>
-so we are inside "hello-world" directory and our dockerfile is right here. so we use dot (.) to reference a current directory.
-type > docker build -t hello-docker .
-expected result: [+] Building 10.7s (8/8) FINISHED     
+✔️ If you restart the container (docker stop → docker start)
+→ Your data inside "E:\z Placement\Mosh\React 18\Project\nodejs-docker" stays intact and will be available inside /app in the container.
 
-to see all the images : 
-PS Desktop\hello-world> docker images
-REPOSITORY     TAG       IMAGE ID       CREATED         SIZE
-hello-docker   latest    b730f6678a28   3 minutes ago   228MB
-hello-world    latest    5b3cc85e16e3   20 months ago   24.4kB
+✔️ If you remove the container (docker rm vidly)
+→ The container is gone, but your local files in "E:\z Placement\Mosh\React 18\Project\nodejs-docker" are still there.
 
-
-since we use node from linux alpine we end up with only 228MB of data.
-so this image contain node, alpine, and our files 
-
-if you use different version of node based on different version of linux we will end up wth larger image and when deploying that image 
-we have to transfer the image from one computer to another.
-We build the image and that image can be run on any computer running docker.
-PS C:\Users\Anurag.LAPTOP-1QDKUF7J\Desktop\hello-world> docker run hello-docker
-Hello Docker
-
-i can go ahead and publish the image on docker hub so anyone can install this image.then i can go on another machine like test or production 
-machine and pull and run the image. 
+✔️ If you delete the image (docker rmi mynodeimage)
+→ The image is gone, but your local files are unaffected.
 
 
 
 
+🔹 Option 3: Rebuild the Image (When Changes Are Permanent)
+If you made changes to your Node.js files and want a fresh image, do:
 
-
-Linux Distributions: 
-
-also called linus distros.
-
-linux is opens sourse platform.
+sh
+Copy
+Edit
+docker build -t mynodeimage .
+docker stop <container_id>
+docker rm <container_id>
+docker run -p 8080:8080 --name mynodeapp mynodeimage
+(Replace mynodeimage and mynodeapp with your actual image and container names)

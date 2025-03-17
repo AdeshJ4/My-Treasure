@@ -1,0 +1,162 @@
+application: https://github.com/AdeshJ4/ApniKaksha-Docker
+
+C:\Users\user>docker images
+REPOSITORY      TAG       IMAGE ID       CREATED         SIZE
+mongo           latest    6551ff2e441b   2 weeks ago     887MB
+mongo-express   latest    870141b735e7   12 months ago   182MB
+
+C:\Users\user>docker network ls
+NETWORK ID     NAME            DRIVER    SCOPE
+10430e0b1c52   bridge          bridge    local
+8cb1403da343   host            host      local
+f9e4e44eef90   mongo-network   bridge    local
+fcb0a2db8f9b   none            null      local
+
+
+C:\Users\user>docker run -d -p27017:27017 --name mongo --network mongo-network -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=qwerty mongo
+C:\Users\user>docker run -d -p8081:8081 --name mongo-express --network mongo-network -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=qwerty -e ME_CONFIG_MONGODB_URL="mongodb://admin:qwerty@mongo:27017" mongo-express
+
+
+C:\Users\user>docker ps
+CONTAINER ID   IMAGE           COMMAND                  CREATED          STATUS          PORTS                      NAMES
+369da7bde0c6   mongo-express   "/sbin/tini -- /dock…"   2 minutes ago    Up 2 minutes    0.0.0.0:8081->8081/tcp     mongo-express
+fcbe80c3b764   mongo           "docker-entrypoint.s…"   22 minutes ago   Up 21 minutes   0.0.0.0:27017->27017/tcp   mongo
+
+
+
+go to "http://localhost:8081/" and enter username ands password.
+username: "admin", 
+password: "pass"
+
+
+
+go to this github repo and download it and enter: "node server.js".
+
+thenn visit : "localhost:5050"
+
+
+
+so basically what we have here is, we have a custom docker network called "mongo-network" in which we are running our "mongo" and "mongo-express" containers.
+but node js application is not insidfe sdocker.
+
+
+now delete all images and conmtainers and go iside a node application and create mongodb.yaml file which is alredy there in application.
+just run : `docker compose -f mongodb.yaml up -d`
+
+
+so this command will download and create two containers. you don't have to create a docker network because this command will automatically crete for us.
+then check application is working or not by above commnads.
+
+stop containers using this fcommand : 
+`
+docker compose -f mongodb.yaml down
+`
+
+
+
+
+
+
+
+
+
+
+
+
+
+============================================================================ Dockerize application ==========================================================================
+
+we have this node application : https://github.com/AdeshJ4/ApniKaksha-Docker
+
+so create a "Dockerfile" with same name and without extension.
+C:\Users\user\Desktop\docker-testapp-main\Dockerfile:
+---
+FROM node:20-alpine
+
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=qwerty
+
+WORKDIR /testapp 
+
+COPY . .  
+
+CMD [ "node", "./server.js" ]
+---
+
+
+
+PS C:\Users\user\Desktop\docker-testapp-main> docker build -t testapp:1.0 .
+
+after that check image created or not ?
+
+PS C:\Users\user\Desktop\docker-testapp-main> docker images
+REPOSITORY      TAG       IMAGE ID       CREATED          SIZE
+testapp         1.0       52713248348a   11 seconds ago   145MB   <---------------
+ubuntu          latest    a04dc4851cbc   6 weeks ago      78.1MB
+
+
+after that run :  
+PS C:\Users\user\Desktop\docker-testapp-main> "docker run 52713248348a"  or "docker run -p 5050:5050 52713248348a" or "docker run -it -p 5050:5050 --name testapp testapp:1.0 sh"
+
+Note: Once a container is created, you cannot change its port mappings.
+"docker start" can only restart an existing container with the same settings it was created with.
+
+
+
+if you run this command "docker run -it -p 5050:5050 --name testapp testapp:1.0 sh"
+then you will not see "server is running on port 5000" so do this : 
+Since you ran the container interactively (-it) and started a shell (sh), your CMD ["node", "/testapp/server.js"] did not execute automatically.
+---
+cd /testapp
+node server.js
+---
+because of port bidding you can access "http://localhost:5050" ourtside container.
+
+
+what happen here is : 
+
+Step-by-Step Execution:
+1️⃣ Docker Creates a New Container
+---
+When you run docker run <IMAGE_ID>, Docker creates a new container based on that image.
+---
+
+2️⃣ Docker Runs the CMD Instruction from the Dockerfile
+
+If your Dockerfile contains:
+---
+CMD ["node", "server.js"]
+---
+Then Docker executes:
+node server.js
+
+
+3️⃣ Your Node.js App Starts
+
+Your application (inside the container) starts, and the message:
+server running on port 5050
+
+appears, meaning your app has successfully launched inside the container.
+
+Where is the Server Running?
+✅ The server is inside the container, listening on port 5050 (as defined in your Node.js app).
+❌ But it's not accessible from your local machine unless you explicitly expose it.
+
+
+
+How to Access the Server from Your Local Machine?
+If your Node.js app is running on port 5050, you need to bind it to your local system by running:
+---
+docker run -p 5050:5050 52713248348a
+---
+
+
+What This Does:
+-p 5050:5050 binds port 5050 inside the container to port 5050 on your local machine.
+Now, you can access the app in your browser or Postman at:
+---
+http://localhost:5050
+---
+
+
+But if you alredy run 

@@ -1,0 +1,129 @@
+Install & Start Redis:
+
+
+1️⃣ Install Redis (If Not Installed)
+Download Redis for Windows from GitHub:
+📥 https://github.com/tporadowski/redis/releases
+Install Redis (use the MSI installer for an easy setup). ✅ Redis-x64-5.0.14.1.msi (6.79 MB)
+Make sure "Add Redis to PATH" is enabled during installation.
+
+
+2️⃣ Start Redis Server
+After installing, start Redis manually:  // check its Automatic or what inside services.msc
+```
+redis-server
+```
+
+3️⃣ Check If Redis is Running
+Open a new PowerShell window and run:
+```
+>redis-cli
+>ping
+```
+✅ If Redis is running, it will respond:
+```
+PONG
+```
+
+4️⃣ Restart Your Node.js App
+Now that Redis is running, restart your app:
+
+```
+npm run dev
+```
+OR
+```
+nodemon server.js
+```
+🔹 Summary
+✅ ioredis is a client library – you still need Redis installed and running.
+✅ Install Redis on Windows using the MSI installer.
+✅ Start Redis manually: redis-server
+✅ Check Redis with redis-cli ping
+✅ Restart your app.
+
+
+
+
+
+COMMON PROBLEMS: 
+    
+1. The error *"Could not create server TCP listening socket :6379: bind:
+The error *"Could not create server TCP listening socket :6379: bind: An operation was attempted on something that is not a socket." means Redis couldn't start because port 6379 is already in use or blocked.
+
+
+How to Fix It?
+✅ Step 1: Check if Redis is Already Running
+Run this command in PowerShell or CMD:
+```
+netstat -ano | findstr :6379
+```
+If you see a process using port 6379, Redis is already running.
+
+Your port 6379 is already in use by process PID 9144, which means Redis (or another application) is already running.
+
+✅ Solution: Kill the Process and Restart Redis
+Kill the process using port 6379
+Run this command in CMD (as Administrator):
+
+```
+taskkill /PID 9144 /F
+```
+This will forcefully stop whatever is using port 6379.
+
+Start Redis Server Again
+```
+redis-server
+```
+Verify Redis is Running Open a new terminal and run:
+
+```
+redis-cli ping
+```
+If Redis is working correctly, it should return:
+```
+PONG
+```
+
+
+
+Redis is already listed in your Windows Services and set to Automatic, it will start automatically when your system boots. You don’t need to manually start it every time. However, you can control it using the following commands:
+
+
+How to Stop Redis Service (Without Killing Process Manually)
+Open Command Prompt as Administrator.
+Run:
+```
+net stop Redis
+```
+This will stop the Redis service gracefully.
+
+How to Start Redis Again
+Open Command Prompt as Administrator.
+Run:
+```
+net start Redis
+```
+
+
+if too many services are set to Automatic, it can slow down your system startup and consume unnecessary resources (CPU, RAM, and Disk I/O).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

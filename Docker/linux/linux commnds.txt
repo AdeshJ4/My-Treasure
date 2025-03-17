@@ -1,0 +1,187 @@
+Since you've successfully pulled and run the Ubuntu image, here are some **important and useful commands** you can execute inside the Ubuntu container:  
+
+---
+
+### **📌 1. Basic System Commands**
+| **Command** | **Description** |
+|------------|---------------|
+| `ls -l` | List files and directories with details. |
+| `pwd` | Show the current directory path. |
+| `whoami` | Display the current user (should be `root`). |
+| `hostname` | Show the container's hostname (container ID). |
+| `cat /etc/os-release` | Display Ubuntu version details. |
+| `exit` | Exit the container and return to the host machine. |
+
+---
+
+### **📌 2. Package Management (Ubuntu's `apt` Package Manager)**
+| **Command** | **Description** |
+|------------|---------------|
+| `apt update` | Update package lists. |
+| `apt upgrade` | Upgrade installed packages. |
+| `apt install nano` | Install a package (e.g., `nano` text editor). |
+| `apt remove nano` | Remove a package. |
+| `apt search curl` | Search for a package. |
+
+---
+
+### **📌 3. Working with Files & Directories**
+| **Command** | **Description** |
+|------------|---------------|
+| `mkdir myfolder` | Create a new directory. |
+| `cd myfolder` | Navigate into a directory. |
+| `touch myfile.txt` | Create a new empty file. |
+| `echo "Hello, Docker!" > myfile.txt` | Write text into a file. |
+| `cat myfile.txt` | View file contents. |
+| `rm myfile.txt` | Delete a file. |
+
+---
+
+### **📌 4. Process & Memory Management**
+| **Command** | **Description** |
+|------------|---------------|
+| `ps aux` | Show running processes. |
+| `top` | Display system resource usage. |
+| `free -m` | Show memory usage in MB. |
+
+---
+
+### **📌 5. Networking**
+| **Command** | **Description** |
+|------------|---------------|
+| `ip a` | Show IP addresses of the container. |
+| `ping google.com` | Test internet connectivity. |
+| `curl ifconfig.me` | Get public IP of the container. |
+
+---
+
+### **📌 6. Running Background Processes**
+| **Command** | **Description** |
+|------------|---------------|
+| `sleep 100 &` | Run a process in the background. |
+| `jobs` | List background jobs. |
+| `fg` | Bring a background job to the foreground. |
+
+---
+
+### **📌 7. Cleaning Up & Exiting**
+| **Command** | **Description** |
+|------------|---------------|
+| `history` | Show command history inside the container. |
+| `clear` | Clear the terminal screen. |
+| `exit` | Exit the container. |
+
+---
+
+### **💡 Additional Tips**
+1. If you exit the container (`exit` or `Ctrl + D`), it **stops running**. You can **start it again** using:  
+   ```sh
+   docker start -ai <container_id>
+   ```
+2. To keep the container running in the background, use:  
+   ```sh
+   docker run -dit ubuntu
+   ```
+3. To **attach back** to a running container:  
+   ```sh
+   docker attach <container_id>
+   ```
+
+---
+
+These are the essential commands to **navigate, manage files, install software, check system details, and manage networking inside your Ubuntu container**. Let me know if you need more! 🚀
+
+
+
+
+
+
+
+
+
+
+
+create folder: `mkdir controller`
+create file: `touch customer.js`
+add content : `echo "Line 1" > customer.js`    // override existing one(>)
+append content: `echo "Line 2" >> customer.js` // append data (>>)
+view file: `cat customer.js`
+
+install nano: text editing tool
+
+1. Check if nano is Installed: `which nano`
+If nano is installed, this will return the path to the executable (e.g., /usr/bin/nano).
+If it is not installed, you'll see no output or an error like command not found.
+
+2. Install nano (If Not Installed)
+Update the package list: `apk update`
+Install nano: `apk add nano`
+Verify Installation: `nano --version` or `which nano`
+Uninstall nano (Optional): `apk del nano`
+
+basics of using nano to create, edit, view, and delete files, as well as some other important commands for working with files and folders in Linux.
+
+1️⃣ Create a Folder: `mkdir controller`
+
+2️⃣. Create a File: `touch movie.js`  or create and insert : echo "New file" > customer.js
+
+3️⃣. Edit a File with nano
+
+3️⃣. Edit a File with nano: `nano movie.js`
+If the file doesn’t exist, nano will create it.
+Add or modify text as needed.
+Save and exit: 
+Press Ctrl+O to save (Write Out), then press Enter.
+Press Ctrl+X to exit.
+
+4️⃣. View a File: `cat movie.js`
+
+5️⃣. remove file: `rm customer.js`
+
+6️⃣. remove empty folder: `rmdir controller`
+
+6️⃣. remove not-empty folder: `rm -r controller`  // delete recursivelly entire folder
+
+7️⃣. List Files and Folders: 
+To list the contents of a directory, use the ls command:  `ls`
+Show hidden files: `ls -a` 
+Show detailed information: `ls -l`  or `ls -a -l`
+
+8️⃣. Move or Rename a File or Folder
+rename file : `mv old-name.txt new-name.txt`
+rename folder: `mv old-name new-name`
+move file: `mv myfile.txt /path/to/destination/` 
+ex: move 'customer.js' inside 'controller' folder:
+/app/controller/Customer # ls
+customer.js
+/app/controller/Customer # mv customer.js ..
+/app/controller/Customer # ls
+/app/controller # ls
+Customer     customer.js
+
+9️⃣. Copy a File or Folder:
+cp [options] source destination
+source: The file or folder you want to copy.
+destination: The location where you want to copy the file or folder.
+
+Key Options for cp
+Option	Description
+-r	      Recursively copy a directory (required for copying folders).
+-i	      Prompt before overwriting files (interactive mode).
+-v	      Verbose mode: Show the files as they are copied.
+-n	      No-clobber: Do not overwrite an existing file.
+-u	      Update: Copy only if the source is newer than the destination.
+
+-v:
+/app/controller/Movie # ls
+movie.js
+/app/controller/Movie # cp -v movie.js /app/controller/Customer
+'movie.js' -> '/app/controller/Customer/movie.js'    // automatically printed by '-v' command
+/app/controller/Movie # cd /app/controller/Customer
+/app/controller/Customer # ls
+movie.js
+
+
+
+
+1️⃣0️⃣.
