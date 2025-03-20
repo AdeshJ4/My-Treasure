@@ -1,0 +1,321 @@
+Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files. 
+NOTE: Multer will not process any form which is not multipart (multipart/form-data).
+
+
+
+Normal File Upload: 
+
+🔹 Allowed File Types with Your Code:
+✅ Images (.jpg, .jpeg, .png, .gif, .svg, .webp)
+✅ Documents (.pdf, .doc, .docx, .txt)
+✅ Spreadsheets (.xls, .xlsx, .csv)
+✅ Videos (.mp4, .avi, .mov)
+✅ Audio Files (.mp3, .wav)
+✅ Other Files (.zip, .rar, .json, .xml)
+
+
+🚀 multipart/form-data: 
+Used when a form contains files (e.g., images, PDFs, etc.).
+multipart/form-data contains both req.body (text fields) and req.file or req.files (uploaded files) when using Multer in Express.js.
+When a form is submitted with enctype="multipart/form-data", the request contains:
+Text fields → Stored in req.body.
+Files → Stored in req.file (for a single file) or req.files (for multiple files).
+
+Client-Side Form
+```
+<form action="/upload" method="POST" enctype="multipart/form-data">
+  <input type="text" name="username" value="john_doe">
+  <input type="file" name="profilePic">
+  <button type="submit">Upload</button>
+</form>
+```
+
+backend-Side Code: 
+```
+app.post('/upload', upload.single('profilePic'), (req, res) => {
+  console.log(req.body);  // Text fields
+  console.log(req.file);  // Uploaded file details
+  res.send('File uploaded successfully!');
+});
+```
+
+
+How to Use multipart/form-data in Postman for File Uploads?
+1️⃣ Open Postman and Create a POST Request
+Method: POST
+URL: http://localhost:3000/customer (or your API endpoint)
+
+
+2️⃣ Select Body Tab
+Click on Body.
+
+Select "form-data".
+
+Now add your fields:
+
+---------------------------------
+Key	        Value	        Type
+---------------------------------
+name	    John Doe	    Text
+profilePic	(Select file)	File
+---------------------------------
+
+For text fields: Select Text from the dropdown.
+For file upload: Select File and choose a file from your system
+
+
+3️⃣ Send the Request
+Click Send.
+Your API should receive:
+```
+req.body: { name: "John Doe" }
+req.file: { originalname: "myphoto.jpg", mimetype: "image/jpeg", path: "uploads/myphoto.jpg" }
+```
+
+
+4️⃣ Verify req.body and req.file in Your Express App
+If req.body is undefined, make sure you have added:
+```
+app.use(express.json());
+```
+
+
+final example: 
+```
+app.post('/customer', upload.single('profilePic'), (req, res) => {
+    console.log('Body:', req.body); // ✅ Should contain { name: "John Doe" }
+    console.log('File:', req.file); // ✅ File details
+    res.status(201).json({ message: 'File uploaded successfully!' });
+});
+```
+
+
+🚀 Difference Between application/x-www-form-urlencoded and raw in Postman:
+
+When sending data in Postman, you can choose different formats under the Body tab.
+Two common formats are application/x-www-form-urlencoded and raw.
+
+1️⃣ application/x-www-form-urlencoded
+👉 Works like sending form data via an HTML form (<form method="POST">).
+application/x-www-form-urlencoded is rarely used in modern applications, especially when working with React, modern APIs, and RESTful services. 
+Instead, we primarily use application/json (raw JSON format).
+Modern REST APIs and GraphQL Use JSON
+
+99% of modern APIs (including public APIs like Twitter, Stripe, Firebase, etc.) expect JSON.
+Even GraphQL uses JSON for requests and responses.
+Works Better with React & Redux
+
+React apps use fetch() or Axios, which both work seamlessly with JSON.
+Redux actions usually send/receive JSON data.
+
+
+
+
+Data is URL-encoded (special characters are replaced, e.g., spaces become + or %20).
+Sent as "key=value" pairs in the request body.
+Used when sending form data without files.
+
+👉How to Use in Postman:
+Go to Body → x-www-form-urlencoded.
+Add key-value pairs (like a form submission).
+Set Headers → Content-Type: application/x-www-form-urlencoded.
+Example
+Postman Request (x-www-form-urlencoded)
+
+-------------------------
+Key	    Value
+-------------------------
+name	John Doe
+email	john@example.com
+-------------------------
+
+Sent Request Body:
+name=John+Doe&email=john%40example.com
+
+Express.js Example
+```
+app.use(express.urlencoded({ extended: true })); // Required to parse URL-encoded data
+
+app.post('/submit', (req, res) => {
+    console.log(req.body); // { name: 'John Doe', email: 'john@example.com' }
+    res.send('Form submitted!');
+});
+```
+✅ Use case: Submitting login forms, registration forms, API requests with simple data.
+
+
+
+2️⃣ raw
+👉 Sends data as-is (without encoding), in different formats like JSON, text, or XML.
+-> application/x-www-form-urlencoded is rarely used in modern applications, especially when working with React, modern APIs, and RESTful services. 
+Instead, we primarily use application/json (raw JSON format).
+Modern REST APIs and GraphQL Use JSON
+
+99% of modern APIs (including public APIs like Twitter, Stripe, Firebase, etc.) expect JSON.
+Even GraphQL uses JSON for requests and responses.
+Works Better with React & Redux
+
+React apps use fetch() or Axios, which both work seamlessly with JSON.
+Redux actions usually send/receive JSON data.
+
+Supports JSON, text, XML, HTML, etc.
+Does not use key-value pairs like x-www-form-urlencoded.
+Commonly used for REST APIs that accept JSON payloads.
+
+👉 How to Use in Postman:
+Go to Body → raw.
+Choose JSON (or another format from the dropdown).
+Set Headers → Content-Type: application/json.
+Example: Postman Request (raw - JSON)
+```
+{
+    "name": "John Doe",
+    "email": "john@example.com"
+}
+```
+Express.js Example
+```
+app.use(express.json()); // Required to parse JSON data
+app.post('/submit', (req, res) => {
+    console.log(req.body); // { name: 'John Doe', email: 'john@example.com' }
+    res.send('JSON received!');
+});
+```
+✅ Use case: Sending structured JSON data to APIs, interacting with modern REST APIs.
+
+
+
+
+🚀 storage: 
+If you want more control over your uploads, you'll want to use the "storage" option instead of "dest".
+Multer ships with storage engines "DiskStorage" and "MemoryStorage"; More engines are available from third parties.
+
+
+### **🎯 When to Use Which?**
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------------------------------|
+| Storage Engine                    | `diskStorage`                                 | `memoryStorage`                                                            |
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------------------------------|
+| **Where files are stored?**       | Saves files to disk (filesystem)              | Stores files in memory (RAM) as a `Buffer`                                 |
+| **How files are accessed?**       | Stored in a specific directory                | Stored in `req.file.buffer` as binary data                                 |
+| **Use Case**                      | When you need to save files permanently       | When you need to process files immediately                                 |
+| **Performance**                   | Slightly slower (writes to disk)              | Faster (stored in RAM, no disk I/O)                                        |
+| **Example Use Cases**             | Uploading profile pictures, saving documents  | Image processing, sending files to cloud storage (e.g., AWS S3, Cloudinary)|
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------------------------------|
+
+
+
+1️⃣. DiskStorage
+-> The disk storage engine gives you full control on storing files to disk.
+code: 
+```
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb){
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage })
+```
+
+There are two options available, "destination" and "filename". 
+They are both functions that determine where the file should be stored.
+
+"destination": destination is used to determine within which folder the uploaded files should be stored. 
+This can also be given as a string (e.g. '/tmp/uploads'). If no destination is given, the operating system's default directory for temporary files is used.
+
+"filename": filename is used to determine what the file should be named inside the folder. If no filename is given, each file will be given a random name that 
+doesn't include any file extension.
+Note: Multer will not append any file extension for you, your function should return a filename complete with an file extension.
+
+
+
+2️⃣ MemoryStorage: 
+The memory storage engine stores the files in memory as Buffer objects. It doesn't have any options.
+```
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+```
+When using memoryStorage, the uploaded file is not saved to disk but stored in RAM as a buffer inside req.file.buffer. 
+You can access it and perform operations like processing, uploading to cloud storage, or converting the file.
+If you're uploading files to Cloudinary (or any cloud storage like AWS S3, Firebase, etc.), you should use memoryStorage in Multer.
+
+
+
+
+
+final Example : 
+
+```
+
+const express = require('express');
+const app = express();
+const multer = require('multer');
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb){
+//         cb(null, 'uploads/')
+//     },
+//     filename: function(req, file, cb){
+//         cb(null, file.originalname)
+//     }
+// }); // use it if you want to keep files on server file system
+const storage = multer.memoryStorage();  // use it for uploading images on cloudinary, aws
+// const upload = multer({ dest: 'uploads/' });  // simple
+const upload = multer({ storage: storage });
+
+
+
+app.use(express.json()); // Enable JSON parsing (if needed)\
+
+// accepting single file from input name 'profilePic'
+app.post('/api/upload', upload.single('profilePic'), (req, res) => {
+    const file = req.file;
+    return res.status(201).json({ file })
+});
+
+
+// accepting multiple file from input name 'photos' with maximum upload limit of 5
+app.post('/api/photos/upload', upload.array('photos', 5), (req ,res) => {
+    const photos = req.files;
+    return res.status(201).json({ photos })
+});
+
+
+// accepting multiple files from different input fields having names ('avatar', 'gallery')
+const cpUpload = upload.fields([{ name: 'avatar', maxCount: 1}, { name: 'gallery', maxCount: 5}])
+app.post('/cool-profile', cpUpload, (req, res) => {
+    const files = req.files;
+    return res.status(201).json({ files });
+});
+
+
+// select profileImage along with data.
+// go to postman, Select Body Tab, Select form-data, Now add your fields: name, age, profilePic
+// For text fields: Select Text from the dropdown. For file upload: Select File and choose a file from your system.
+app.post('/api/customer', upload.single('profilePic'), (req, res) => {
+    console.log('file', req.file);  // ✅ Works fine
+    console.log('body', req.body);  // ✅ Should now contain text fields
+    return res.status(201).json({ file: req.file, body: req.body });
+});
+
+
+app.listen(5000, () => {
+    console.log(`server listning on port 5000`);
+})
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,43 +1,413 @@
 1. Reverse a String
 
+Problem: Given a string, return its reverse.
+Input: "hello"
+Output: "olleh"
+
+Input: "Adesh Jadhav"
+Output: "vahdaJ hsedA"
+
+Solution 1: buit in methods
 function reverseString(str) {
   return str.split('').reverse().join('');
 }
 
+Solution 2: for loop
+function reverseString(str) {
+    let reversed = "";
+    for (let i = str.length - 1; i >= 0; i--) {
+        reversed += str[i]; // Appending characters from end to start
+    }
+    return reversed;
+}
+
+Solution 3: recursion
+function reverseStringRecursive(str) {
+    if (str === "") return ""; // Base case
+    return reverseStringRecursive(str.slice(1)) + str[0];
+}
+
+
+Solution 4: while loop
+function reverseStringWhile(str) {
+    let reversed = "";
+    let i = str.length - 1;
+    while (i >= 0) {
+        reversed += str[i];
+        i--;
+    }
+    return reversed;
+}
+
+
+
+1. Reverse a String Advance:
+
+Input: "Adesh Jadhav"
+Output: "hsedA vahdaJ"
+
+
+Solution 1:  built in methods: 
+function reverseStr(str) {
+    return str.split(' ').map(curEle => curEle.split('').reverse().join('')).join(' ');
+}
+
+=============================================================================================================
+
+
 
 2. Check if a String is a Palindrome
 
-function isPalindrome (str) {
-  return str.split('').reverse().join('') === str;
+Problem: A palindrome is a word or phrase that reads the same forward and backward. Check if a given string is a palindrome.
+
+Input: "madam"
+Output: true
+
+
+Solution 1: built in methods
+function checkPalidrome(str) {
+    return str === str.split('').reverse().join('');
 }
 
 
-3. Count the Number of Vowels in a String:
+solution 2: for loop
+function checkPalidrome(str) {
+    let reverseStr = '';
+    for (let i = str.length - 1; i >= 0; i--) {
+        reverseStr += str[i];
+    }
+    return str === reverseStr;
+}
 
-code 1: 
-function countVowels (str) {  // a e i o u
-  let count = 0;
-  const vowels = ['a', 'e', 'i', 'o', 'u'];
-  const strArr = str.toLowerCase().split(''); // [ 'a', 'n', 'u', 'r', 'a', 'g' ]  
-  for(let s of strArr){    
-    if(vowels.includes(s)){
-      console.log(s);
-      count++;
+
+=============================================================================================================
+
+
+
+
+3. Find the First Non-Repeating Character
+
+Problem: Given a string, find the first character that does not repeat and return it.
+
+Input: "aabbccdeff"
+Output: "d"
+
+solution 1: built in methods
+function firstNonRepeatingChar(str) {
+  for (let char of str) {
+    if (str.indexOf(char) === str.lastIndexOf(char)) {
+      return char;
     }
   }
-  return count;
+  return null;
+}
+
+console.log(firstNonRepeatingChar("aabbccdeff")); // "d"
+
+
+solution 2: 
+function firstNonRepeatingChar(str) {
+    let charCount = {}; // Object to store character counts   { A: 3, B: 1, C: 2}
+
+    // First pass: Count occurrences of each character
+    for (let i = 0; i < str.length; i++) {
+        let char = str[i];
+        charCount[char] = (charCount[char] || 0) + 1;
+    }
+
+    // Second pass: Find the first character with count 1
+    for (let i = 0; i < str.length; i++) {
+        if (charCount[str[i]] === 1) {
+            return str[i]; // Return the first non-repeating character
+        }
+    }
+
+    return null; // If no unique character is found
 }
 
 
-code 2: 
-function countVowels(str) {
-  const vowels = 'aeiou';
-  let count = 0;
-  for (let char of str.toLowerCase()) {
-    if (vowels.includes(char)) {
+
+
+=============================================================================================================
+
+
+
+4. Count the Occurrences of a Character
+
+solution 1: 
+function countChar(str, char) {
+  return str.split(char).length - 1;
+}
+
+
+solution 2: 
+function countOccurrences(str, char) {
+    let count = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === char) {
+            count++;
+        }
+    }
+
+    return count;
+}
+
+
+
+solution 3: Optimized Solution since we are not iterating over string afgain and again.
+funcrtion demo(str){
+
+    let charCount = {};
+
+    for (let i = 0; i < str.length; i++) {
+        charCount[str[i]] = (charCount[str[i]] || 0) + 1;
+    }
+
+    return charCount;
+}
+
+const frequencyMap = precomputeFrequencies("Adesh");
+console.log(frequencyMap["a"] || 0); // Output: 2
+console.log(frequencyMap["d"] || 0); // Output: 2
+console.log(frequencyMap["z"] || 0); // Output: 0 (not found)
+
+
+
+
+=============================================================================================================
+
+
+
+5. Remove Duplicates from a String
+
+Input: "banana"
+Output: "ban"
+
+
+solution 1: 
+function removeDuplicate(str){
+    return [...new Set(str)].join('');
+}
+
+solution 2: 
+let str = "banana";
+
+function removeDuplicate(str) {
+    let strObj = {};
+
+    for (let i = 0; i < str.length; i++) {
+        strObj[str[i]] = true; // No need to count, just store presence
+    }
+
+    return Object.keys(strObj).join('');
+}
+
+
+=============================================================================================================
+
+
+
+6. Check if Two Strings Are Anagrams
+
+Problem: Check if two strings are anagrams (i.e., they contain the same characters in a different order).
+
+Input: "listen", "silent"
+Output: true
+
+solution 1: 
+
+function areAnagrams(str1, str2) {
+  return str1.split('').sort().join('') === str2.split('').sort().join('');
+}
+
+
+solution 2: 
+
+function areAnagrams(str1, str2) {
+    if (str1.length !== str2.length) {
+        return false;
+    }
+
+    let count1 = {}, count2 = {};
+
+    for (let i = 0; i < str1.length; i++) {
+        let char1 = str1[i];
+        let char2 = str2[i];
+
+        count1[char1] = (count1[char1] || 0) + 1;
+        count2[char2] = (count2[char2] || 0) + 1;
+    }
+
+    for (let key in count1) {
+        if (count1[key] !== count2[key]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+
+=============================================================================================================
+
+
+7. Capitalize the First Letter of Each Word
+Problem: Given a sentence, capitalize the first letter of each word.
+
+Input: "hello world"
+Output: "Hello World"
+
+Solution 1:
+function capitalizeFirst(str) {
+    return str.split(' ').map(curEle => curEle[0].toUpperCase() + curEle.slice(1)).join(' ')
+}
+console.log(capitalizeFirst('adesh jadhav'));
+
+
+
+============================================================================================================================================================
+
+
+8. Find the Longest Word in a Sentence
+
+Problem: Given a sentence, return the longest word in it.
+
+Input: "I love programming"
+Output: "programming"
+
+solution 1:
+function longestWord(str) {
+  return str.split(' ').reduce((longest, word) => word.length > longest.length ? word : longest, "");
+}
+
+
+============================================================================================================================================================
+
+
+9. Check If a String Contains Only Digits
+
+Input: "12345"
+Output: true
+
+Input: "12345aaa"
+Output: false
+
+solution 1:
+function isNumeric(str) {
+    return str.split('').every(curEle => curEle >= '0' && curEle <= '9');
+}
+
+explanation: 
+'0' has a Unicode value of 48.
+'9' has a Unicode value of 57.
+'a' has a Unicode value of 97 (which is outside the range 48-57)
+
+
+solution 2:
+function isNumeric(str) {
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] < '0' || str[i] > '9') {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+solution 3: Using Number() Method
+
+let res = !isNaN(Number(s));
+console.log(res);
+
+
+solution 4: Using parseInt() Method
+
+let res = parseInt(s) == s;
+console.log(res);
+
+
+
+
+============================================================================================================================================================
+
+
+
+10. Compress a String (Run-Length Encoding)
+Problem: Implement basic string compression using the counts of repeated characters.
+
+Input: "aaabbc"
+Output: "a3b2c1"
+
+Input: "aaabbaacddd"
+Output: "a3b2a2c1d3"
+
+
+function compressString(str) {
+  let compressed = "";
+  let count = 1;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === str[i + 1]) {
       count++;
+    } else {
+      compressed += str[i] + count;
+      count = 1;
     }
   }
-  return count
+  
+  return compressed.length < str.length ? compressed : str;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

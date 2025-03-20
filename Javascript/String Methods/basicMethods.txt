@@ -3,7 +3,7 @@
 3. trim()
 4. trimStart()
 5. trimEnd()
-6. concat()
+6. concat()   // use two combine string and arrays
 7. substring()   -> support only +ve no
 8. slice()       -> support +ve -ve no. 
 9. includes()    -> check give character/word present inside string or not, return true/false
@@ -11,7 +11,7 @@
 11. split()      -> Split a string into substrings using the specified separator and return them as an array.
 12. indexOf(str)
 13. replace() : replace() does not modify the original string because strings are immutable. Instead, it returns a new string with the replacement applied.
-
+14. replaceAll()
 
 let str = 'ADESH';
 str.toLowerCase();  // adesh
