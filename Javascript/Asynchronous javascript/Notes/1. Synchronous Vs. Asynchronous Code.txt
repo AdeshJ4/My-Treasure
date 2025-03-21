@@ -31,13 +31,6 @@ console.log("task 3");
 📌 The UI freezes until the function completes because JavaScript executes synchronously by default.
 
 
-real life example: 
-
-🚦 Real-Life Analogy: A Toll Booth on a One-Lane Road
-Imagine a toll booth on a single-lane road where cars must stop one by one, pay the toll, and then continue.
-⛔ Each car must wait for the car in front to finish paying before it can proceed.
-
-
 
 
 
@@ -103,7 +96,7 @@ function longCalculation() {
 However, JavaScript achieves asynchronous, non-blocking behavior through: Event Loop, callbacks, promises, async-await
 -> Node.js uses a "single-threaded event loop" to handle requests asynchronously. It operates on a non-blocking, event-driven architecture, which allows it to 
 handle multiple requests concurrently without creating multiple threads for each request.
--> While the main event loop runs on a single thread, Node.js can delegate heavy tasks (like file system operations, cryptography, and database queries) to the 
+-> While the "main event loop" runs on a single thread, Node.js can delegate heavy tasks (like file system operations, cryptography, and database queries) to the 
 libuv thread pool, which uses multiple worker threads in the background. If you use the Worker Threads API, you can explicitly create multiple threads in Node.js
 -> In an asynchronous architecture, when a request arrives at a Node.js server, the event loop handles it using a single-threaded, non-blocking model. 
 If the request involves fetching data from a database, or reading a file, or making an API call, Node.js delegates the task to a background worker. 
@@ -116,8 +109,10 @@ I/O-intensive apps.
 
 Why is Node.js Ideal for I/O-Intensive Apps?
 💡 Reason: asynchronous, non-blocking, event-driven architecture.
-In traditional, multi-threaded servers (e.g., PHP, Java Spring), each request gets a dedicated thread. If the thread is waiting for a file read or database query, it blocks until the operation is complete, reducing efficiency.
-Node.js, however, does not block the execution while waiting for I/O operations. It delegates I/O tasks to background workers, freeing the main thread to handle other requests.
+In traditional, multi-threaded servers (e.g., PHP, Java Spring), each request gets a dedicated thread. 
+If the thread is waiting for a file read or database query, it blocks until the operation is complete, reducing efficiency.
+Node.js, however, does not block the execution while waiting for I/O operations. It delegates I/O tasks to background workers, freeing the main thread to handle other 
+requests.
 This allows Node.js to efficiently handle thousands of concurrent connections with minimal hardware resources.
 
 
@@ -209,7 +204,7 @@ read file content on a 'separate thread'.
 Step 5 : Now flow of execution moves to line 5. last log statement is pushed on the stack. 'Third' is log to the console and log 
 popped out of stack after Execution.
 Step 6 : Now there is no user written code in the call stack. so call stack is empty. At some point the file read task completed in 
-the thread pool. The associate call back function is now pushed to the call stack. Inside the callback function we have log statement
+the thread pool. The associate call back function is now pushedto the call sta ck. Inside the callback function we have log statement
 which is pushed to call stack. Second is log to the statement and the log is pop out. as there are no more code left in callback, 
 the callback also pop out from stack. 
 Step 7 : Now no more code to run so global() also pop out.

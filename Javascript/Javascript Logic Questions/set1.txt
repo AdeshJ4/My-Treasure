@@ -1,3 +1,68 @@
+
+
+============================================================================================================================================================
+
+
+Q] Sum of Digits Using Iteration
+
+INPUT: 1234
+OUTPUT: 10
+
+INPUT: 123
+OUTPUT: 6
+
+INPUT: 12
+OUTPUT: 3
+
+INPUT: 1235
+OUTPUT: 11
+
+
+code: 
+function sumDigitsIterative(n) {
+    let sum = 0;
+    while (n > 0) {
+        sum += n % 10; // Extract last digit and add to sum
+        n = Math.floor(n / 10); // Remove last digit
+    }
+    return sum;
+}
+
+
+
+
+============================================================================================================================================================
+
+Q] Count Digits:
+
+INPUT: 14445
+OUTPUT: 5
+
+INPUT: 1234
+OUTPUT: 4
+
+INPUT: 12
+OUTPUT: 2
+
+INPUT: 1
+OUTPUT: 1
+
+code: 
+function calculateDigits(n) {
+    let count = 0;
+    while (n > 0) {
+        count++;
+        n = Math.floor(n / 10);
+    }
+
+    return count;
+}
+
+
+============================================================================================================================================================
+
+
+
 Q] Reverse an array: 
 ====================
 Input: [10, 20, 30, 40, 50]

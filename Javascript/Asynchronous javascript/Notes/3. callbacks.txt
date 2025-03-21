@@ -20,84 +20,24 @@ When to Use a Callback ?
 
 //real life example
 
-function fetchUsers (callback){
-  fetch("https://jsonplaceholder.typicode.com/user")
-    .then((res)=>{
-      if(!res.ok){
-        throw new Error(`HTTP error! Status: ${res.status}`)
-      }
-      return res.json();
-    })
-    .then((users) => callback(null, users[0]))
-    .catch((err) => callback(err, null))
-} 
-
-fetchUsers((err, data) {
-  if(err){
-    console.log(err);
-  }else{
-    console.log(data);
-  }
-});
-
-
-Ex 1: 
------
-
-function calculate(num1, num2, callback){	
-	let res = num1 * num2;
-	callback(res);
+function fetchData(callback) {
+  console.log("Fetching data...");
+  
+  setTimeout(() => {
+    const data = { name: "John Doe", age: 30 };
+    console.log("Data fetched successfully!");
+    callback(data); // Invoking the callback with fetched data
+  }, 2000); // Simulating an asynchronous operation
 }
 
-function display(res){
-	log(res);
+function handleData(data) {
+  console.log("Processing data:", data);
 }
 
-calculate(10, 10, display);
-
-output: 
--------
-
-100
+// Call fetchData and pass handleData as a callback function
+fetchData(handleData);
 
 
-
-
-Ex 1 :
-------
-
-function calculate(n1, n2, callback){
-    setTimeout(()=>{
-        let res = n1 * n2;
-        callback(res);
-    }, 2000);
-}
-
-function display(res){
-	log(res);
-}
-
-calculate(10, 10, display); 
-
-
-
-
-
-
-Ex 2: 
-------
-
-function calculate(num1, num2, callback){	
-	let res = num1 * num2;
-	callback(res);
-}
-
-calculate(10, 10, (res)=>log(res));
-
-output:
---=----
-
-100
 
 
 

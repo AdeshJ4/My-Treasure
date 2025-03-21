@@ -1,0 +1,144 @@
+The JavaScript Math object provides various built-in methods for mathematical operations. Here are the most important ones:
+
+
+1️⃣. Math.abs(x) → Returns the absolute value of x. always "+ve"
+```
+ex: Math.abs(-5); // 5
+ex: Math.abs(5); // 5
+```
+
+Absolute value means "how far a number is from zero", without thinking about direction. It’s like measuring distance—distance is always positive!
+Simple Rules:
+
+If the number is positive, it stays the same.
+Example: ∣7∣=7
+
+If the number is negative, remove the minus sign.
+Example: ∣−7∣=7
+
+Zero stays zero.
+Example: ∣0∣=0
+
+
+2️⃣. Math.max(a, b, c, ...) → Returns the maximum value.
+```
+Math.max(10, 20, 5); // 20
+```
+
+3️⃣. Math.min(a, b, c, ...) → Returns the minimum value.
+```
+Math.min(10, 20, 5); // 5
+```
+
+4️⃣ Math.pow(base, exponent) → Returns base^exponent.
+```
+Math.pow(2, 3); // 8
+```
+
+5️⃣Math.sqrt(x) → Returns the square root of x.
+```
+Math.sqrt(25); // 5
+```
+
+6️⃣ Math.cbrt(x) → Returns the cube root of x.
+```
+Math.cbrt(27); // 3
+```
+
+
+7️⃣. Math.round(x) → Rounds x to the nearest integer.
+```
+console.log(Math.round(2.1));   // 2
+console.log(Math.round(2.4));   // 2
+console.log(Math.round(2.5));   // 3
+console.log(Math.round(2.6));   // 3
+```
+
+8️⃣. Math.floor(x) → Returns the greatest integer "less than or equal to" its numeric argument
+```
+console.log(Math.floor(2.1));   // 2
+console.log(Math.floor(2.5));   // 2
+console.log(Math.floor(2.6));   // 2
+console.log(Math.floor(2.9));   // 2
+```
+
+9️⃣. Math.ceil(x) → Rounds x up to the nearest integer.
+```
+console.log(Math.ceil(2.1));    // 3
+console.log(Math.ceil(2.4));    // 3
+console.log(Math.ceil(2.5));    // 3
+console.log(Math.ceil(2.6));    // 3
+console.log(Math.ceil(2.8));    // 3
+```
+
+1️⃣0️⃣. Math.trunc(x) → Removes the decimal part, keeping only the integer.
+```
+console.log(Math.trunc(2.1));    // 2
+console.log(Math.trunc(2.4));    // 2
+console.log(Math.trunc(2.5));    // 2
+console.log(Math.trunc(2.6));    // 2
+console.log(Math.trunc(2.8));    // 2
+```
+
+
+1️⃣1️⃣. Math.random() → Returns a random number between 0 and 1.
+
+console.log(Math.random());
+function fun(min, max){
+    console.log(Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
