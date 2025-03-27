@@ -1,24 +1,98 @@
-countDocuments()
--> db.tb1.countDocuments()
-
-skip()
--> db.tb1.find().skip(10)
-
-limit()
--> db.tb1.find().limit(10)
-
-sort()
--> db.tb1.find().sort({"name": 1}) //ascending order
--> db.tb1.find().sort({"age": -1}) //descending  order
-
-distinct()
--> db.myCollection.distinct("city")   // unique values
 
 count() (deprecated) can be used with a cursor to get the count.
 -> db.person.find({"dob.age": {$gt: 60}}).count();
 
-countDocuments() is a more modern and efficient method designed specifically to count documents based on a filter, without chaining it with find().
--> db.person.countDocuments({"dob.age": {$gt: 60}});
+============================================================================================================================================================
+
+countDocuments()
+-> db.tb1.countDocuments()
+
+============================================================================================================================================================
+
+skip()
+-> db.tb1.find().skip(10)
+
+============================================================================================================================================================
+
+limit()
+-> db.tb1.find().limit(10)
+
+============================================================================================================================================================
+
+sort()
+-> db.collection.find().sort({ field1: order1, field2: order2, ... })
+-> db.tb1.find().sort({"name": 1}) //ascending order
+-> db.tb1.find().sort({"age": -1}) //descending  order
+-> db.users.find().sort({ age: 1, name: -1 }) 
+
+First, it sorts by age in ascending order (1 → smallest to largest).
+Then, if two documents have the same age, it sorts those by name in descending order (-1 → Z to A).
+
+1 → Ascending order (smallest to largest)
+-1 → Descending order (largest to smallest)
+
+
+============================================================================================================================================================
+
+
+distinct()
+-> The distinct() method in MongoDB retrieves unique values from a specified field in a collection.
+
+db.collection.distinct(field, query, options)
+
+field → The field from which to retrieve unique values.
+query (optional) → Filters the documents before extracting distinct values.
+options (optional) → Used for additional settings like collation.
+
+Examples:
+1. Get Unique Values from a Field
+```
+db.users.distinct("age")
+```
+Returns an array of unique ages from the users collection.
+
+
+Sample Data:
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Bob", "age": 30 },
+  { "_id": 3, "name": "Charlie", "age": 25 },
+  { "_id": 4, "name": "David", "age": 35 }
+]
+
+Output: [25, 30, 35]
 
 
 
+2. Get Unique Values with a Filter
+```
+db.users.distinct("age", { name: { $regex: "^A", $options: "i" } })
+```
+Finds distinct ages only for users whose names start with "A" (case-insensitive).
+
+
+3. Using distinct() with an Embedded Field
+If you have embedded documents, you can retrieve distinct values from nested fields.
+
+```
+db.orders.distinct("customer.name")
+```
+Retrieves unique customer names from an embedded field like:
+
+Sample Data:
+[
+  { "_id": 1, "customer": { "name": "Alice" }, "amount": 100 },
+  { "_id": 2, "customer": { "name": "Bob" }, "amount": 200 },
+  { "_id": 3, "customer": { "name": "Alice" }, "amount": 300 }
+]
+Output:
+["Alice", "Bob"]
+
+
+If You Need Full Documents with Distinct Values:
+------------------------------------------------
+
+db.users.aggregate([
+  { $group: { _id: "$age", firstDoc: { $first: "$$ROOT" } } },
+  { $replaceRoot: { newRoot: "$firstDoc" } }
+])

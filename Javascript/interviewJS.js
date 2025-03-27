@@ -108,9 +108,9 @@ Arrays
 Function
 Date
 RegExp
+Set
 Map
 WeakMap
-Set
 WeakSet
 
 
@@ -188,8 +188,6 @@ user.role = 'User';  // Overwrites the existing 'role' property
 console.log(user);  // { name: 'Alice', role: 'User' }
 In the example above, the role property gets overwritten by accident, which could lead to bugs and unexpected behavior.
 
-
-
 Solution Using Symbol (Avoiding Collisions):
 const role = Symbol('role');  // Symbol for role
 const anotherRole = Symbol('role');  // A different Symbol, even with the same description
@@ -260,6 +258,7 @@ i. Object
 -> In JavaScript objects are dynamic. once we create them we can add additional properties or can remove properties.
 -> In JavaScript, "object keys" are automatically converted to strings if they are not already strings. 
 This is because object keys must always be strings (or symbols) internally
+-> Almost everything in JavaScript is an object, except for primitive values.
 
 code : 
 const obj = {
@@ -309,9 +308,9 @@ code : const arr = [10, 'A', true, Symbol('Hey'), undefined, null, 4631668516451
 
 
 iii. Function
--> Functions are objects, but they are a specific kind of object.
+-> Functions in JavaScript are special types of objects.
 -> inside a function we write block of code which we can run again and again without repeating it.
--> Function inherit from the Function.prototype object and have properties and methods like call, apply, and bind.
+-> Function inherit from the "Function.prototype object" and have properties and methods like call, apply, and bind.
 -> Functions can be passed as arguments or returned from other functions (first-class citizens in JavaScript).
 
 why typeof operator return function instead of object?
@@ -323,8 +322,35 @@ function sayMyName(fname){
     log(fname);
 }
 
+🔍 Functions in JavaScript are special types of objects
+1️⃣ Functions can have properties and methods (like objects).
+function greet() {
+  console.log("Hello!");
+}
+greet.language = "English"; // Adding a property like an object
+console.log(greet.language); // Output: "English"
+2️⃣ Functions can be assigned to variables (First-Class Citizens).
+const sayHi = function() {
+  console.log("Hi!");
+};
+sayHi(); // Output: "Hi!"
+3️⃣ Functions can be passed as arguments (Higher-Order Functions).
+function execute(fn) {
+  fn(); // Call the passed function
+}
+execute(() => console.log("I'm a function!"));
+4️⃣ Functions can return other functions
+function outer() {
+  return function inner() {
+    console.log("Inner function");
+  };
+}
+const innerFunc = outer();
+innerFunc(); // Output: "Inner function"
 
-
+5️⃣ Functions have a prototype property (which regular objects don’t).
+function example() {}
+console.log(typeof example.prototype); 
 
 
 iv. Date: 
@@ -347,12 +373,128 @@ now.setMonth(0);       // Set month (January)
 Convert a date to a readable string:
 now.toDateString();  // "Wed Nov 20 2024"
 
+🔍 Difference Between new Date() and Date()
+## **🔥 Summary**
+|---------------------------|-----------------------------------------------|---------------------------------------------|
+| Feature                   | `new Date()`                                  | `Date()`                                    |
+|---------------------------|-----------------------------------------------|---------------------------------------------|
+| Returns                   | Date object                                   | String                                      |
+| Type                      | Object                                        | String                                      |
+| Can manipulate date/time? | ✅ Yes (e.g., `getFullYear()`, `getMonth()`)  | ❌ No                                       |
+| Example Output            | `2025-03-21T10:15:30.123Z`                    | `"Fri Mar 21 2025 10:15:30 GMT+0000 (UTC)"` |
+|---------------------------|-----------------------------------------------|---------------------------------------------|
+💡 **Use `new Date()` when you need to work with dates** (e.g., adding days, comparing dates).  
+💡 **Use `Date()` if you just need a quick string of the current time** for display.  
+
+
 
 v. RegExp (Regular Expressions)
 -> Represents patterns used for string matching and manipulation.
 
-vi. Map and WeakMap
+
 vii. Set and WeakSet
+🔷 Set (Collection of Unique Values)
+A Set is a collection of unique values (no duplicates allowed) regardless of type.
+It can store any data type (numbers, strings, objects, etc.).
+✅ Example of Set:
+```
+let mySet = new Set();
+let myNum = new Set([10, 20, 30, 40])
+mySet.add(10);
+mySet.add('Adesh');
+mySet.add(true);
+mySet.add(undefined);
+mySet.add(null);
+mySet.add(['a', 'b', 'c'])
+mySet.add({ id: 101, name: 'Adesh' })
+
+console.log(mySet);
+```
+✅ Looping through a Set
+```
+let numbers = new Set([1, 2, 3, 4]);
+
+// Using forEach
+numbers.forEach(num => console.log(num));
+
+// Using for..of
+for (let num of numbers) {
+  console.log(num);
+}
+  ```
+
+|-----------------------|---------------------------------------------|---------------------------------------------|
+|   Method	            |   Description	                              |     Example                                 |
+|-----------------------|---------------------------------------------|---------------------------------------------|
+|   add(value)	        |   Adds a value to the set	                  |     set.add(3)                              |
+|   delete(value)	      |   Removes a value from the set	            |     set.delete(2)                           |
+|   has(value)	        |   Checks if a value exists in the set	      |     set.has(1) // true                      |
+|   size	              |   Returns the number of elements in the set	|     set.size // 4                           |
+|   clear()	            |   Removes all elements from the set	        |     set.clear()                             |
+|   forEach(callback)	  |   Iterates over the set	                    |     set.forEach(val => console.log(val))    |
+|-----------------------|---------------------------------------------|---------------------------------------------|
+
+
+
+
+
+vi. Map:
+
+🔷 Map (Key-Value Pair Collection):
+A Map stores key-value pairs and remembers the original insertion order of the keys.
+Unlike objects, keys in a Map can be any type (objects, functions, etc.).
+
+
+🔹 Important Methods of Map
+
+|---------------------|-------------------------------------------|---------------------------------------------|
+|  Method	            |  Description	                            |  Example                                    | 
+|---------------------|-------------------------------------------|---------------------------------------------|
+|  set(key, value)	  |  Adds or updates a key-value pair	        |  map.set('age', 25)                         |
+|  get(key)	          |  Retrieves a value by key	                |  map.get('name') // 'John'                  |
+|  has(key)	          |  Checks if a key exists in the map	      |  map.has(1) // true                         |
+|  delete(key)	      |  Removes a key-value pair	                |  map.delete('name')                         |
+|  size	              |  Returns the number of key-value pairs	  |  map.size // 3                              |
+|  clear()	          |  Removes all key-value pairs	            |  map.clear()                                | 
+|  forEach(callback)	|  Iterates over the map	                  |  map.forEach((v, k) => console.log(k, v))   |
+|---------------------|-------------------------------------------|---------------------------------------------|
+
+
+```
+let myMap = new Map();
+let person = new Map([
+  ["name", "Alice"],
+  ["age", 30],
+  ["country", "USA"]
+]);
+
+
+myMap.set("name", "John");
+myMap.set(1, "One"); // Number as key
+myMap.set(true, "Boolean Value"); // Boolean as key
+
+console.log(myMap);
+// Output: Map(3) { 'name' => 'John', 1 => 'One', true => 'Boolean Value' }
+```
+
+✅ Looping through a Map
+let person = new Map([
+  ["name", "Alice"],
+  ["age", 30],
+  ["country", "USA"]
+]);
+
+// Using forEach
+person.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
+
+// Using for..of
+for (let [key, value] of person) {
+  console.log(`${key}: ${value}`);
+}
+
+
 viii. Class
 
 
@@ -361,7 +503,7 @@ Characteristics of Reference Types:
 1. Stored in Memory (Heap):
 The actual value is stored in a separate memory location (heap), and the variable holds a reference to that location.
 2.Mutability:
-Non-primitive types are mutable, meaning their contents can be changed without changing their reference.
+Non-primitive types are mutable, meaning their "contents" can be changed without changing their reference.
 3. Reference Equality:
 Two variables holding the same object reference point to the same data, not independent copies.
 Example:
@@ -384,22 +526,32 @@ console.log(obj1.key); // "new value"
 
 
 |-----------------------------------------------------------------------------------------------|
-| **Type**             | **Example**                            | **`typeof` Result**     	|
+| **Type**             | **Example**                            | **`typeof` Result**     	    |
 |----------------------|----------------------------------------|-------------------------------|
-| **Object**           | `{ name: "John", age: 25 }`            | `"object"`              	|
-| **Array**            | `[1, 2, 3]`                            | `"object"`              	|
-| **Function**         | `function greet() { return "Hello"; }` | `"function"`            	|
-| **Date**             | `new Date()`                           | `"object"`              	|
-| **RegExp**           | `/abc/`                                | `"object"`              	|
-| **Map**              | `new Map()`                            | `"object"`              	|
-| **WeakMap**          | `new WeakMap()`                        | `"object"`              	|
-| **Set**              | `new Set()`                            | `"object"`              	|
-| **WeakSet**          | `new WeakSet()`                        | `"object"`              	|
-| **Class**            | `class MyClass {}`                     | `"function"` (constructor) 	|
-| **`null` (special)** | `null`                                 | `"object"` (bug in JS)     	|
+| **Object**           | `{ name: "John", age: 25 }`            | `"object"`              	    |
+| **Array**            | `[1, 2, 3]`                            | `"object"`              	    |
+| **Function**         | `function greet() { return "Hello"; }` | `"function"`            	    |
+| **Date**             | `new Date()`                           | `"object"`              	    |
+| **RegExp**           | `/abc/`                                | `"object"`              	    |
+| **Map**              | `new Map()`                            | `"object"`              	    |
+| **WeakMap**          | `new WeakMap()`                        | `"object"`              	    |
+| **Set**              | `new Set()`                            | `"object"`              	    |
+| **WeakSet**          | `new WeakSet()`                        | `"object"`              	    |
+| **Class**            | `class MyClass {}`                     | `"function"` (constructor) 	  |
+| **`null` (special)** | `null`                                 | `"object"` (bug in JS)     	  |
 |-----------------------------------------------------------------------------------------------|
 
 */
+
+
+
+
+
+
+
+
+
+
 
 //Q2] Explain Hoisting in javascript.
 
@@ -431,6 +583,9 @@ function walk(){
 
 */
 
+
+
+
 //Q3] Difference between “ == “ and “ === “ operators.
 
 /*
@@ -446,6 +601,13 @@ var y = "2";
 
  */
 
+
+
+
+
+
+
+
 //Q4] explain different types of JavaScript Scope and Scope chain.
 /*
 JavaScript Scope : 
@@ -457,72 +619,95 @@ JavaScript Scope :
 	1. Block scope 
 	2. Local or Function scope
 	3. Global Scope
-
+  4. Lexical Scope
 
 1. Block Scope
 --------------
 -> Before ES6 (2015), JavaScript had only Global Scope and Function Scope.
 -> ES6 introduced two important new JavaScript keywords: 'let and const'.
 -> These two keywords provide 'Block Scope' in JavaScript
--> Variables declared inside a { } block cannot be accessed from outside the block
+-> Variables declared with let and const inside a block {} exist only within that block.
 -> variable from outside of block can be accessible inside block and you can change its value inside a block.
-
--> variable from outside of block can be accessible inside block and you can change its value inside a block.
-code : 
-let a = 10;
+✅ Example: Block Scope
 {
-  let x = 45;
-  a++;
-  console.log(a); // 11
+  let blockVar = "Inside block";
+  console.log(blockVar); // ✅ Accessible inside block
 }
-console.log(a);  // 11
-console.log(x);  // not accessible
+console.log(blockVar); // ❌ Error: blockVar is not defined
 
--> var does not support block scope, it only support function scope;
-code : 
-function fun() {
-  for(var i=0; i<10; i++){
-    console.log(i);
-  }
-  console.log('Inside a function : ' , i); // i is accessible
+
+✅ 1. if, else if, else Blocks Support Block Scope
+```
+if (true) {
+  let a = 10;
+  console.log(a); // ✅ Accessible inside block
 }
-fun();
-console.log('outside a function : ' , i); // i is not accessible
+console.log(a); // ❌ ReferenceError: a is not defined
+```
+
+✅ 2. Loops (for, while, do-while) Support Block Scope
+```
+for (let i = 0; i < 3; i++) {
+  console.log(i); // ✅ Accessible inside block
+}
+console.log(i); // ❌ ReferenceError
+```
+
+✅ 3. try...catch Blocks Support Block Scope
+```
+try {
+  let errorMessage = "Something went wrong!";
+  console.log(errorMessage); // ✅ Accessible inside block
+} catch (err) {
+  console.log(err); // ✅ Accessible inside catch block
+}
+console.log(errorMessage); // ❌ ReferenceError
+```
+
+✅ 4. switch Statements Support Block Scope
+```
+let num = 2;
+switch (num) {
+  case 1: {
+    let message = "One";
+    console.log(message); // ✅ Accessible inside case block
+    break;
+  }
+  case 2: {
+    let message = "Two";
+    console.log(message); // ✅ Accessible inside case block
+    break;
+  }
+}
+console.log(message); // ❌ ReferenceError
+```
+
+✅ 5. Function Blocks ({} inside functions)
+```
+function example() {
+  let value = 42;
+  console.log(value); // ✅ Accessible inside function
+}
+console.log(value); // ❌ ReferenceError
+```
 
 
 2. Function Scope: 
 -----------------
--> Variables define within a JavaScript function, become LOCAL to the function
+-> A variable declared inside a function is in the function scope. It can only be accessed inside that function.
+-> These variables called LOCAL variable.
 -> Local variables are created when a function starts, and deleted when the function is completed.
-case 1: Variables defined inside a function are not accessible outside.
-case 2: variable from outside of function can be accessible inside function and you can change its value inside a function.
-case 3: if we pass variable define and initialized outside the function to inside a function through a 'parameter' and if you changed its 
-value inside a function it will not affect the original variable, its value will be unaffected.
+-> If we pass a primitive type variable (such as a number, string, or boolean) that is defined and initialized outside a function as a parameter to a function, 
+changing its value inside the function will not affect the original variable. The original value remains unaffected because JavaScript passes primitive values 
+by value (not by reference).
 
-code : 
 case 1: 
+```
 function fun(num) {
   let num = 10;
 }
 console.log(num);  //  NOT ACCESSIBLE
-
-case 2: 
-let num = 10;
-function fun() {
-  num++;
-  console.log('Inside a function', num);  // 11
-}
-fun();
-console.log('Outside a Function: ', num);  // 11
-
-case 3: 
-let num = 10;
-function fun(num) {
-  num++;
-  console.log('Inside a function', num); // 11
-}
-fun(num);
-console.log('Outside a Function: ', num); // 10
+```
 
 
 
@@ -530,11 +715,18 @@ console.log('Outside a Function: ', num); // 10
 ----------------
 -> A variable declared outside a function, becomes GLOBAL.
 -> Global variables can be accessed from anywhere in a JavaScript program
--> Global variables defined with the var keyword belong to the global object.
-so don't define global variable with var keyword since it modify or overwrite the properties of global object.
-if global object have the same name with global variable then global variable will overwrite the value of window object.
+-> Global variables defined with the "var" keyword belong to the global object ("window" in browsers, "global" in Node.js).
+⚠ Avoid defining global variables with var because it can modify or overwrite existing properties of the global object.
+If a global object property has the same name as a global variable declared with var, the global variable will overwrite the existing property.
+🔍 Example: Overwriting alert Property
+````
+var alert = "This is a string"; // Overwrites the global alert function
+alert("Hello!"); // ❌ TypeError: alert is not a function
+````
 -> if we have local variable with the same name as global variable then function will give priority to the local variable which is 
 define inside it.
+✔ Global variables remain in memory as long as the script runs.
+❌ Too many global variables can cause conflicts.
 -> Variables created without a declaration keyword (var, let, or const) are always global, even if they are created inside a function.
 ex .
 function fun(){
@@ -543,46 +735,104 @@ function fun(){
 fun();
 console.log(num);  // 10
 
+✅ Example: Global Scope
+```
+let globalVar = "I am global"; // Global scope
 
-Scope Chain: JavaScript engine also uses Scope to find variables. Let’s understand that using an example:
--> if a variable is not found in a current scope(scope can be block scope or function scope) then js engine will search that 
-variable in its outer scope again if js engine not found that variable then he is going to search it in outer scope of outer scope.
-
-ex. 
-let y= 20;
-function mainFunction(){
-    let x = 10;
-    function fun1(){
-        console.log(x);
-    }
-    function fun2(){
-        console.log(y);
-    }
-    fun1();
-    fun2();
+function showMessage() {
+  console.log(globalVar); // ✅ Accessible inside function
 }
-mainFunction();
 
-ex. 2
+showMessage(); 
+console.log(globalVar); // ✅ Accessible outside function
+```
 
-{
-  let num = 10;
-  {
-    console.log(num);
+
+🔷 Lexical Scope in JavaScript:
+
+Lexical Scope means that a function has access to variables defined in its own scope, as well as in its parent (outer) scopes.
+It follows a hierarchical (nested) structure where inner functions can access outer function variables, but outer functions cannot access inner function variables.
+
+ex: 
+```
+function grandparent() {
+  let grandparentVar = "Grandparent";
+  function parent() {
+    let parentVar = "Parent";
+    function child() {
+      console.log(grandparentVar); // ✅ Accessible
+      console.log(parentVar); // ✅ Accessible
+    }
+    child();
   }
+  parent();
+}
+grandparent();
+```
+
+
+
+🔷 JavaScript Scope Chain:
+
+Scope Chain is the mechanism JavaScript uses to resolve variable names.
+When a variable is accessed inside a function, JavaScript searches for it in the current scope, then in its parent scope, then in the next parent, and so on until it reaches the global scope.
+
+🔹 If the variable is not found, JavaScript throws a ReferenceError.
+
+
+
+let globalVar = "I am global";
+
+function outer() {
+  let outerVar = "I am outer";
+
+  function inner() {
+    let innerVar = "I am inner";
+    console.log(innerVar); // ✅ Found in inner scope
+    console.log(outerVar); // ✅ Found in outer scope (parent)
+    console.log(globalVar); // ✅ Found in global scope
+  }
+
+  inner();
 }
 
+outer();
+console.log(globalVar); // ✅ Accessible
+console.log(outerVar); // ❌ ReferenceError: outerVar is not defined
+console.log(innerVar); // ❌ ReferenceError: innerVar is not defined
+```
+
+✔ JavaScript searches for variables from the inner scope to the outermost scope (global scope).
+✔ Variables in child functions can access their parent’s variables, but not vice versa.
 
 
-The Lifetime of JavaScript Variables:
--------------------------------------
+✅ Scope Chain is how JavaScript finds variables, searching from inner to outer scopes.
+✅ If JavaScript does not find a variable in any scope, it throws a ReferenceError.
+✅ Inner functions can access outer function variables but not vice versa.
 
--> The lifetime of local variable starts when function starts its execution and they destroy when function complete its execution.
--> In a web browser, global variables are initialized when they are declared, and are deleted like when you navigate to another 
-page or close the window.
+
+
+
+🔷 The Lifetime of JavaScript Variables: 
+------------------------------------------
+
+✅ Global Variables – Lifetime Until Page Closes
+Declared outside any function.
+Exists as long as the page (or tab) is open.
+Destroyed when the page is closed or refreshed.
+
+✅ Local (Function) Variables – Lifetime Until Function Ends
+Declared inside a function.
+Exists only while the function is running.
+Destroyed after the function finishes execution.
+
+✅ Block Scope Variables (let and const) – Lifetime Until Block Ends
 
 
  */
+
+
+
 
 // Q5] why it is bad to attach global variable define with 'var' to window object.
 /*
@@ -661,6 +911,10 @@ import { color } from './useMe.js';
 
 */
 
+
+
+
+
 //Q6] Difference between var and let keyword in javascript
 /*
 
@@ -671,6 +925,8 @@ import { color } from './useMe.js';
 -> let doesn't attach with window object                  -> attach with window object & can overwrite global properties
 
 */
+
+
 
 // Q7] Explain Type Conversion.
 /*
@@ -843,15 +1099,34 @@ console.log( "" && "Adesh");    // ""
 console.log( 10 && 0);          // 0 
 */
 
+
+
+
+
 // Q8] Is javascript a statically typed or a dynamically typed language?
 
 /*
--> JavaScript is a dynamically typed language
--> In a dynamically typed language, the type of a variable is checked during run-time
--> In static languages when we declare a variable The type of that variable is set and it cannot to change in the future.
--> In dynamic language the type of variable can change at runtime like from number to string vice versa.
--> the type of variable will be determine at runtime means at runtime we can change type of data to another data type.
+JavaScript is a dynamically typed language. This means that variable types are determined at runtime, not at compile time.
+
+🔹 In statically typed languages (like Java, C, C++), variable types are declared explicitly and checked at compile time.
+🔹 In dynamically typed languages (like JavaScript, Python), variable types are assigned based on the value they hold and can change at runtime.
+
+
+✅ Example: JavaScript is Dynamically Typed
+```
+let x = 10;     // x is a number
+x = "Hello";    // Now x is a string
+x = true;       // Now x is a boolean
+console.log(x); // ✅ Output: true
+```
+
+
+
+
 */
+
+
+
 
 // Q9] What is NaN property in JavaScript
 /*
@@ -870,6 +1145,10 @@ isNaN(undefined) // Returns true
 
 */
 
+
+
+
+
 // Q10]  Explain passed by value and passed by reference.
 /*
 
@@ -877,8 +1156,46 @@ isNaN(undefined) // Returns true
 languages. 
 -> Note:
 In JavaScript, primitive data types (like numbers, strings) are passed by value and non-primitive data types like objects and arrays
-are passed by reference. Functions are references, but their behavior is more complex and involves both value and 
+are passed by reference. 
+
+
+-> Functions are references, but their behavior is more complex and involves both value and 
 reference aspects.
+✅ Functions as References
+Since functions are objects, their memory reference is stored in a variable, similar to how objects are handled.
+```
+function greet() {
+  console.log("Hello");
+}
+
+let sayHello = greet;  // Assigning reference of 'greet' to 'sayHello'
+sayHello();            // ✅ Output: Hello
+```
+✔ sayHello does not copy the function but stores a reference to greet().
+✔ If we modify sayHello, it affects the original function reference.
+
+✅ Functions and Pass-by-Value vs. Pass-by-Reference
+```
+function modify(x) {
+  x = x + 10;   // Changes only the local copy
+}
+
+let num = 5;
+modify(num);
+console.log(num);  
+```
+✔ num is passed by value, so changes inside the function do not affect the original variable.
+
+🔹 Pass-by-Reference (Objects & Arrays)
+```
+function modify(obj) {
+  obj.name = "Updated";  // Modifies the original object
+}
+
+let person = { name: "John" };
+modify(person);
+console.log(person.name);  // ✅ Output: Updated
+```
 
 
 
@@ -954,6 +1271,9 @@ console.log('After value: ' + obj.value);//  reference type are pass by referenc
 
 
  */
+
+
+
 
 // Q11] Explain “this” keyword:
 
@@ -1152,6 +1472,8 @@ obj.showTags()
 
 */
 
+
+
 // Q12] Explain call(), apply() and, bind() methods.
 
 /*
@@ -1204,11 +1526,6 @@ function.
 -> In the apply method, we pass arguments in the form of an array this is only the primary difference between call and apply.
 
 
-ex.1
-
-ex.1
-cz
-
 ex.2
 function addition(n1, n2, n3){
     console.log(this.operation, (n1+n2+n3));
@@ -1242,6 +1559,12 @@ greetJohn(); // Output: Hello John
 
 
 */
+
+
+
+
+
+
 
 // Q13] What is an Immediately Invoked Function Expression(Self Invoking Functions ) in JavaScript?
 
@@ -1281,39 +1604,10 @@ console.log(insideVar);  // NOT ACCESSIBLE
 
 */
 
-// Q14] What do you mean by strict mode in javascript and characteristics of javascript strict-mode?
-
-/*
--> we define strict mode like "use strict"; to the beginning of a script or a function.
--> The purpose of "use strict" is to indicate that the code should be executed in "strict mode".
--> if you declare "use strict" at the beginning of the file then it has global scope and if you declare "use strict"; inside the 
-function then it have local scope.
-
-characteristics: 
-
--> variable is not allowed without declaring it
--> objects is not allowed without declaring it
--> Deleting a variable (or object) is not allowed.
-"use strict";
-let x = 3.14;
-delete x;                // This will cause an error
--> Deleting a function is not allowed.
-"use strict";
-function x(p1, p2) {};
-delete x;                // This will cause an error 
--> Duplicating a parameter name is not allowed
-"use strict";
-function x(p1, p1) {};   // This will cause an error
--> Octal numeric literals are not allowed:
-"use strict";
-let x = 010;             // This will cause an error
--> Octal escape characters are not allowed:
-"use strict";
-let x = "\010";            // This will cause an error
 
 
 
-*/
+
 
 // Q15] What is a Higher Order Function?
 
@@ -1340,14 +1634,20 @@ ex. 2
 map((item, index)=><li key={index}>{item.name}</li>)
 */
 
+
+
+
+
 // Q16] Explain Closures in JavaScript.
 
 /*
--> variables declare inside a function are local to that function and they are created when function starts its execution and 
-they are destroyed when function completes its execution.
--> Closures is  ability of a 'outer function' to 'store the variables and its value, and functions' that are declared inside it,
-instead of destroying them after execution, it saves them in the memory so that 'inner function can access them'.
--> we create a closure by returning 'inner function' from outer function.
+-> Variables declared inside a function are local to that function. They are created when the function starts execution and destroyed when the function 
+completes execution, unless they are captured in a closure.
+-> A closure is the ability of an "inner function" to remember and access variables from its outer function’s scope, even after the outer function has finished execution. 
+Instead of destroying those variables, JavaScript keeps them in memory as long as the inner function has a reference to them.
+-> A closure is created when an inner function is returned from an outer function, allowing the inner function to access the outer function’s variables even after 
+the outer function has completed execution
+
 ex: 
 function outer() {
   let num = 0;
@@ -1362,13 +1662,11 @@ fun();
 fun();
 fun();
 
--> Therefore outerFunction(), instead of destroying the value of 'num' after execution, saves the value in the memory for further 
-reference. when we called innerFunction(), instead of starting num from 0 it starts from previous value.
-
-In this example, `outerFunction()` returns `innerFunction`, creating a closure. Now, even after `outerFunction` has finished 
-executing, the returned `innerFunction` still has access to `num`.
-
 */
+
+
+
+
 
 // Q17] What is currying in JavaScript
 
@@ -2625,3 +2923,44 @@ obj.age = obj.age.toString();
 const myJSON = JSON.stringify(obj);
 
 */
+
+
+
+
+
+
+// Q14] What do you mean by strict mode in javascript and characteristics of javascript strict-mode?
+
+/*
+-> we define strict mode like "use strict"; to the beginning of a script or a function.
+-> The purpose of "use strict" is to indicate that the code should be executed in "strict mode".
+-> if you declare "use strict" at the beginning of the file then it has global scope and if you declare "use strict"; inside the 
+function then it have local scope.
+
+characteristics: 
+
+-> variable is not allowed without declaring it
+-> objects is not allowed without declaring it
+-> Deleting a variable (or object) is not allowed.
+"use strict";
+let x = 3.14;
+delete x;                // This will cause an error
+-> Deleting a function is not allowed.
+"use strict";
+function x(p1, p2) {};
+delete x;                // This will cause an error 
+-> Duplicating a parameter name is not allowed
+"use strict";
+function x(p1, p1) {};   // This will cause an error
+-> Octal numeric literals are not allowed:
+"use strict";
+let x = 010;             // This will cause an error
+-> Octal escape characters are not allowed:
+"use strict";
+let x = "\010";            // This will cause an error
+
+
+
+*/
+
+

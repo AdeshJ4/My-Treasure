@@ -29,7 +29,6 @@ db.tb1.insertMany([{name: 'Adesh'}, {name: 'Ram'}])
 
 
 
-
 DataTypes: 
 1. **String:** This is the most commonly used data type to store textual data.
 db.tb4.insertOne({id: 101, name: 'Adesh'})
@@ -65,31 +64,6 @@ db.tb4.insertOne({id: 102, birth_date: new Date()});
 db.tb4.insertOne({id: 102, birth_date: new Date("2001-06-22")});
 db.tb4.insertOne({id: 102, birth_date: ISODate('2001-06-22')});
 db.tb4.insertOne({id: 102, birth_date: ISODate("2023-01-01T12:00:00Z")});
-
-playGround> db.senwell.insertOne({name: "Raman", dob: new Date(), tob: new Date("2001-06-22"), mob: ISODate('2001-06-22'), zob: ISODate("2023-01-01T12:00:00Z")})
-{
-  acknowledged: true,
-  insertedId: ObjectId("6792009a219ff16946dbd2d5")
-}
-playGround> db.senwell.find({name: "Raman"})
-[
-  {
-    _id: ObjectId("6792009a219ff16946dbd2d5"),
-    name: 'Raman',
-    dob: ISODate("2025-01-23T08:40:58.221Z"),
-    tob: ISODate("2001-06-22T00:00:00.000Z"),
-    mob: ISODate("2001-06-22T00:00:00.000Z"),
-    zob: ISODate("2023-01-01T12:00:00.000Z")
-  }
-]
-playGround>
-
-
-
-
-
-
-
 
 
 9. **Timestamp:** Typically used to store the 'creation time of a document'.
@@ -141,8 +115,8 @@ db.users.find({name: {$regex: '^john', $options: 'i'}}); // J === j
 // Find documents where the "code" field starts with "ABC"
 db.users.find({name: {$regex: '^john'}}); J!==j
 
-// Find documents where the "name" field ends with "jadhav" (case-insensitive)
-db.users.find({name: {$regex: 'jadhav$', $options: 'i'}})  // j===J
+// Find documents where the "name" field ends with "jadhav" (case-insensitive)       
+db.users.find({name: {$regex: 'jadhav$', $options: 'i'}})  // j===J               
 
 // Find documents where the "name" field ends with "jadhav" (case-insensitive)
 db.users.find({name: {$regex: 'jadhav$'}})  // j!==J
@@ -151,7 +125,7 @@ db.users.find({name: {$regex: 'jadhav$'}})  // j!==J
 db.users.find({ "email": { "$regex": "example" } })  // j!==J
 
 // Find documents where the "email" field contains "example"
-db.users.find({ email: { $regex: "example", $options: 'i' } })  // j!==J
+db.users.find({ name: { $regex: "de", $options: 'i' } })  // Since "de" appears in "Dev", "Deepak", "Sandeep", and "ADELAIDE" (case insensitive match).
 
 
 // Find documents where the "version" field starts with a digit from '1' to '3'

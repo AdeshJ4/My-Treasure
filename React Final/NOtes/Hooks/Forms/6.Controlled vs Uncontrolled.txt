@@ -8,7 +8,7 @@ Controlled Components:
 -> The value of the form element is controlled by React, meaning it is always driven by the component's state
 -> In a controlled component, you provide a "value" prop to the form element (like input, textarea, etc.) and handle any changes to the element 
 using an "onChange" event handler, which updates the component's state.
--> The value of the input field is controlled by the state
+-> The value of the input field is controled by the statel
 
 
 function ControlledComponent() {

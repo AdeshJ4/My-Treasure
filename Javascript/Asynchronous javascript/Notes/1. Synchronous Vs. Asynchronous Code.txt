@@ -94,6 +94,7 @@ function longCalculation() {
 -> Node.js applications are asynchronous by default
 -> JavaScript is single-threaded by nature. This means it can only execute one operation at a time per execution context. 
 However, JavaScript achieves asynchronous, non-blocking behavior through: Event Loop, callbacks, promises, async-await
+-> In node we have a single thread to handle all requests.
 -> Node.js uses a "single-threaded event loop" to handle requests asynchronously. It operates on a non-blocking, event-driven architecture, which allows it to 
 handle multiple requests concurrently without creating multiple threads for each request.
 -> While the "main event loop" runs on a single thread, Node.js can delegate heavy tasks (like file system operations, cryptography, and database queries) to the 
@@ -114,6 +115,75 @@ If the thread is waiting for a file read or database query, it blocks until the 
 Node.js, however, does not block the execution while waiting for I/O operations. It delegates I/O tasks to background workers, freeing the main thread to handle other 
 requests.
 This allows Node.js to efficiently handle thousands of concurrent connections with minimal hardware resources.
+
+
+Event Loop: 
+
+-> 'Event loop' is a "C program" and is part of "libuv".
+-> Event loop is a loop that is alive as long as your node js application is up and running.
+-> The event loop is what allows Node.js to perform non-blocking I/O operations — despite the fact that JavaScript is single-threaded.
+-> The event loop manages both synchronous and asynchronous operations in JavaScript. However, its main role is to ensure non-blocking execution by handling 
+asynchronous tasks efficiently.
+-> The event loop does not execute tasks directly. Instead, it takes tasks from the event queue and pushes them onto the call stack, where they are executed.
+If the call stack is not empty, it keeps executing synchronous code.
+Before checking the event queue, the event loop runs all pending microtasks (Promises, queueMicrotask()).
+Only when the call stack is empty and microtasks are done, the event loop takes the next task from the event queue and executes it.
+-> It follows a FIFO (First In, First Out) principle, executing tasks in the order they were added.
+-> It prevents the program from getting stuck on one task, enabling it to handle multiple tasks concurrently.
+-> The event loop constantly checks whether the call stack is empty and executes tasks one by one
+-> The event loop executes tasks from the event queue and push it to call stack
+-> The event loop follows a cycle: it checks if the call stack is empty, and if so, it takes tasks from the event queue and adds 
+them to the call stack for execution.
+
+
+
+Event Queue: 
+
+The event queue is a "data structure" that primarily contains "callbacks of asynchronous tasks" that are waiting to be executed. 
+The event loop continuously checks the event queue and moves tasks to the call stack when it is empty.
+setTimeout, fetch, event listeners, I/O operations. These tasks don’t go directly to the call stack; instead, they are handled by the libuv library or web api.
+how it works:
+When an async operation is triggered (e.g., setTimeout, fetch, file I/O), it is sent to Web APIs (browser) or libuv (Node.js).
+These APIs handle the operation outside of the main thread to avoid blocking execution.
+After the operation finishes (e.g., timer expires, data is fetched, file is read), the callback function associated with it is ready to execute.
+The callback is not executed immediately because JavaScript follows a single-threaded, event-driven model
+Instead, the callback is placed in the event queue, waiting for the event loop to process it.
+The event loop constantly checks if the call stack is empty.
+Once the call stack is empty, the event loop takes the next task from the event queue and pushes it to the call stack for execution.
+The callback function is then executed
+
+
+
+libuv library: 
+
+-> libuv is a multi-platform C library
+-> whenever you execute async method it is off loaded to the libuv.
+-> Libuv provides the event loop that allows Node.js to perform non-blocking I/O operations asynchronously.
+-> The event loop is at the core of Node.js, managing and dispatching events and tasks and callbacks from asynchronous 
+operations.
+-> libuv then run the task using 'native async mechanism' of operating system.
+-> and if that is not possible it will utilized its thread pool to run that task ensuring the main thread is not block
+(main thread resides in call stack).
+
+
+
+What Does NOT Go into the Event Queue?
+1. Synchronous Code
+Regular function calls are executed immediately in the call stack.
+2. Promises (.then(), .catch(), .finally())
+Promise callbacks go into the Microtask Queue, not the event queue
+
+Microtask Queue vs. Event Queue: 
+1. Microtask Queue (Higher Priority)
+Contains Promises, queueMicrotask(), MutationObserver callbacks.
+Microtasks run before the next event loop iteration.
+2. Event Queue (Macrotask Queue)
+Contains setTimeout, setInterval, I/O operations, UI events, etc.
+Runs after the call stack is empty and microtasks are completed.
+
+
+
+
 
 
 

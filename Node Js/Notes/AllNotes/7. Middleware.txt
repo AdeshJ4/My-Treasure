@@ -11,8 +11,7 @@ by returning a response object or it will pass control to another function.
 -> So an express application is essentially nothing but a bunch of middleware functions
 -> Middleware functions are invoked in the order they are defined and are capable of modifying the request and response objects, 
 as well as passing control to the next middleware function in the stack.
--> Middleware allow programmer to add functionality to the request response cycle such as authentication, logging, error handling 
-and many more.
+-> Middleware allow programmer to add functionality to the request response cycle such as authentication, logging, error handling and many more.
 -> if you use lots of middleware functions inside your request processing pipeline then it will slow down your application.
 -> Middleware can be defined globally, for all routes, or can be defined for specific routes or groups of routes. 
 -> So an express application is essentially nothing but a bunch of middleware functions

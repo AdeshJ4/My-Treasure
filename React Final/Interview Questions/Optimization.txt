@@ -9,8 +9,7 @@ that component it will unnecessary rerender so we can stop it by memo function.
 2. useCallback hook: 
 -> The React useCallback Hook returns a "memoized callback function".
 -> Every time a component re-renders, its functions get recreated. 
--> The useCallback and useMemo Hooks are similar. The main difference is that useMemo returns a memoized value and 
-useCallback returns a memoized function. 
+-> The useCallback and useMemo Hooks are similar. The main difference is that useMemo returns a memoized value and useCallback returns a memoized function. 
 -> This allows us to isolate resource intensive functions so that they will not automatically run on every render
 -> The useCallback Hook only runs when one of its dependencies update
 -> refer react website ex
@@ -35,7 +34,7 @@ example video : https://www.meziantou.net/assets/demo-throttle.mp4?v=af81
 What is Debouncing?
 
 -> Debouncing is a technique that delays the execution of a function until the user stops performing a certain action/event for a specified amount of time and If 
-new events occur within the delay period, the timer is reset, and the function execution is started from beginning.
+new events occur within the delay period, the timer is reset, and the timer started from beginning.
 -> For example, if you have a search bar that fetches suggestions from the backend as the user types, you can "debounce the function" that makes the API call, 
 so that it only runs after the user stops typing for specified amount of time. This way, you can avoid making too many API calls that might overload your server or return 
 irrelevant results

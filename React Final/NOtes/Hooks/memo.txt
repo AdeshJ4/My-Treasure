@@ -1,5 +1,5 @@
 -> we use memo to skip unnecessary rendering of a component if its props have not changed. This can improve performance
--> The memo function is used to create a memoized version of a functional component.
+-> The memo function is used to "create a memoized version of a functional component".
 -> Memoization is a programming technique where we are storing the results of expensive function calls and returning the cached 
 result when the same inputs given which helps prevent unnecessary renders.
 

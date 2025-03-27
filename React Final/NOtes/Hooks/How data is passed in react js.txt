@@ -66,4 +66,6 @@ Here's how the unidirectional data flow works in React:
 
     export default ChildComponent;
 
-This unidirectional data flow simplifies the mental model of how data changes and updates in a React application. It makes it clear where the state is managed, where the data originates, and how it's consumed in the component tree. Additionally, this one-way flow helps in managing and debugging the application state more effectively.
+This unidirectional data flow simplifies the mental model of how data changes and updates in a React application. 
+It makes it clear where the state is managed, where the data originates, and how it's consumed in the component tree. 
+Additionally, this one-way flow helps in managing and debugging the application state more effectively.

@@ -3,14 +3,17 @@ Using `$regex` in MongoDB can be costly, especially for large datasets. Here’s
 Regex queries can perform well on small to medium-sized collections (e.g., up to 10,000 documents).
 For larger collections (e.g., millions of documents), regex queries can become slow and resource-intensive.
 
-When you use prefix search with a regular expression ($regex: "^searchTerm"), MongoDB can use a normal index (B-tree index),not a text index.
+When you use "prefix search" with a regular expression ($regex: "^searchTerm"), MongoDB can use a normal index (B-tree index),not a text index.
+Suffix searches (searchTerm$) or general substring searches (searchTerm) "cannot" use an index effectively because MongoDB has to scan all documents to check if the 
+string matches at the end or in the middle.
+
 
 
 
 🚨 Why is `$regex` Costly?
 1. No Index Usage (for Prefix Searches)
    - If the search pattern is not anchored (`/^pattern/`), MongoDB cannot use indexes efficiently.
-   - Example:       { name: { $regex: "adesh", $options: "i" } }
+   - Example: db.users.find({ name: { $regex: "adesh", $options: "i" } })
      - Problem: This **scans the entire collection**, making it slow for large datasets.
      - Reason: The regex can match anywhere in the string, preventing index optimization.
 
@@ -37,31 +40,37 @@ When you use prefix search with a regular expression ($regex: "^searchTerm"), Mo
 
 
 
-### **2️⃣ Use MongoDB's Full-Text Search (`$text`)**
+2️⃣ Use MongoDB's Full-Text Search (`$text`)
 If you need **case-insensitive, partial matching**, use **text indexes** instead of regex.
 
-#### **✅ Step 1: Create a Text Index**
-```js
+✅ Step 1: Create a Text Index
+```
 db.users.createIndex({ name: "text" });
 db.users.createIndex({ name: "text", bio: "text" });
 ```
-#### **✅ Step 2: Query Using `$text`**
+✅ Step 2: Query Using `$text`
 ```js
 User.find({ $text: { $search: "Adesh" } });
 ```
-- **Advantages of `$text` Search:**
-  - **Much faster** than regex.
-  - **Uses indexes** instead of scanning the whole collection.
-  - **Supports multiple fields** (e.g., name, description).
-  - **Finds words even in the middle** of a string.
+- Advantages of `$text` Search:
+  - Much faster than regex.
+  - Uses indexes instead of scanning the whole collection.
+  - Supports multiple fields (e.g., name, description).
+  - Finds words even in the middle of a string.
+
+
+
+🔹 Checking Index Usage
+db.users.find({ name: { $regex: "^A" } }).explain("executionStats");
+If it shows IXSCAN, the index is being used.
+If it shows COLLSCAN, MongoDB is scanning the entire collection (not using the index).
+
+
 
 ---
 
-### **3️⃣ Use Autocomplete with MongoDB Atlas Search**
-If you need **Google-like search**, use **MongoDB Atlas Full-Text Search** with the **Autocomplete feature**.
-
-
-
+3️⃣ Use Autocomplete with MongoDB Atlas Search
+If you need Google-like search, use MongoDB Atlas Full-Text Search with the Autocomplete feature.
 
 
 

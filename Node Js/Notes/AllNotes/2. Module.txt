@@ -26,6 +26,9 @@ required function.
 4. url
 5. path
 6. Events Module
+7. https
+8. querystring
+10. crypto
 
 syntax: 
 const module = require('module_name');
@@ -159,12 +162,32 @@ server.listen(PORT, () => {
 -----------------------------------------------------------------------------------
 
 
+2. https Module:
+================
+Similar to the http module but used for secure communication via HTTPS.
+Requires SSL certificates to function.
+
+Example:
+```
+const https = require('https');
+https.get('https://jsonplaceholder.typicode.com/todos/1', (res) => {
+  let data = '';
+  res.on('data', (chunk) => (data += chunk));
+  res.on('end', () => console.log(JSON.parse(data)));
+});
+```
+
+
+
+-----------------------------------------------------------------------------------
 
 
 
 
-2. File System Module:
-======================
+
+
+2. fs (File System) Module:
+==========================
 
 -> file system module allows you to work with the file system on your computer.
 -> With File System module you can do following operations :
@@ -381,8 +404,8 @@ console.log("Architecture: " + os.arch());
 5. Path Module: 
 ===============
 
--> url : https://www.w3schools.com/nodejs/ref_path.asp
--> The Path module provides a way of working with directories and file paths.
+-> Provides utilities for working with paths of file and directory .
+-> Helps handle platform-specific path issues (Windows uses \, while Linux/macOS uses /).
 
 syntax:
 var path = require('path');
@@ -406,12 +429,6 @@ const fileName = path.basename(filePath); //13 Integration Testing
 const fullPath = path.join(__dirname, 'files', 'example.txt'); // E:\z Placement\Node\2. Node Projects\useMe\files\example.txt
 const cleanPath = path.normalize(messyPath); // \path\files\example.txt
 
-console.log('Directory:', directory);
-console.log('File Name:', fileName);
-console.log('Full Path Name:', fullPath);
-console.log('Clean Path : ', cleanPath);
-
-
 
 --------------------------------------------------------------------------------------------------------------
 
@@ -422,6 +439,8 @@ console.log('Clean Path : ', cleanPath);
 =================
 
 -> The 'Events module' provides a way of 'working with events'.
+-> Implements an event-driven architecture
+-> Used to create and handle custom events.
 -> It 'enables' developers to 'create', 'emit', and 'listen' for 'custom events' within their applications.
 -> Event is basically a 'signal' that indicates something has happened in your application and you have to handle that event. 
 Like when a connection is made or a file is opened. Every action on a computer is an event. 
@@ -444,15 +463,13 @@ var eventEmitter = new events.EventEmitter();
 event is executed.
 -> To execute a event we use emit() method which takes a event name as a argument and called associated callback function og that event.
 code : 
+```
+const EventEmitter = require('events');
+const emitter = new EventEmitter();
+emitter.on('greet', () => console.log('Hello, Event!'));
+emitter.emit('greet');
+```
 
-var events = require('events');
-var eventEmitter = new events.EventEmitter();
-var myEventHandler = function () {//Create an event handler:
-  console.log('I hear a scream!');
-}
-eventEmitter.on('scream', myEventHandler);//Assign the event handler to an event:
-//Fire the 'scream' event:
-eventEmitter.emit('scream');  // signalling event happened.
 
 
 Method			        Description
@@ -466,16 +483,35 @@ on() or addListener() must be define before emit() method.
 emit() method iterate over all on() methods.
 
 
+--------------------------------------------------------------------------------------------------------------
 
 
 
+7. querystring:
+===============
+
+Parses and formats URL query strings.
+
+Example:
+```
+const querystring = require('querystring');
+const parsed = querystring.parse('name=John&age=25');
+console.log(parsed); // { name: 'John', age: '25' }
+```
+
+--------------------------------------------------------------------------------------------------------------
 
 
+8. crypto
+=========
+Provides cryptographic functionalities like hashing, encryption, and decryption.
 
-
-
-
-
+Example:
+```
+const crypto = require('crypto');
+const hash = crypto.createHash('sha256').update('Hello').digest('hex');
+console.log(hash);
+```
 
 
 

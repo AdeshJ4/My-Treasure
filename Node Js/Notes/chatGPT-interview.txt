@@ -1,0 +1,2280 @@
+❓ What are worker threads in Node.js?
+
+
+
+
+============================================================================================================================================================
+
+
+
+❓ What is the difference between V8 and libuv?
+
+
+👉 V8 and libuv are both core parts of Node.js, but they serve different purposes.
+
+
+1️⃣ V8 executes JavaScript code.
+2️⃣ libuv handles async operations (e.g., file reads, network requests).
+3️⃣ Once an async task is done, libuv sends the result back to the event loop, which V8 then processes.
+
+
+Example: How V8 and libuv Work Together
+
+```
+console.log("Start"); // V8 executes immediately
+
+setTimeout(() => {
+  console.log("Timeout callback"); // Handled by libuv, executes later
+}, 1000);
+
+console.log("End"); // V8 executes immediately
+```
+
+
+
+
+============================================================================================================================================================
+
+
+❓ How Garbage Collection Works in V8 🚀
+
+👉 Javascript:
+-> Garbage collection (GC) is the process of automatically freeing up memory by removing objects that are no longer needed or accessible.
+-> The garbage collector identifies and removes objects that are unreachable
+-> JavaScript uses an automatic garbage collector, meaning developers don't need to manually manage memory.
+
+
+example: 
+function demo() {
+    let obj = {
+        name: 'Sample'
+    };
+    
+    obj = null;  // The object "{name: 'Sample'}" is now unreachable
+}
+Explanation:
+Initially, obj holds a reference to an object.
+When obj = null; is assigned, the original object becomes unreachable because no variable is referencing it.
+The garbage collector will clean up this object during the next GC cyc
+
+
+👉 Node js: 
+
+V8 manages 'memory allocation' and 'garbage collection' (GC) automatically. 
+It uses a 'generational garbage collection strategy' to efficiently clean up unused memory.
+
+V8 uses two 'main types of garbage collection' based on object lifetime:
+
+✅ Young Generation (Scavenge GC) : 
+-> Contains short-lived objects
+-> Fast and efficient for short-lived objects.
+
+✅ Old Generation (Mark-Sweep & Mark-Compact GC)
+-> Contains long-lived objects that survive multiple Young GC cycles.
+-> More expensive than Young GC but necessary for long-lived objects.
+
+
+V8 divides memory into different heap regions:
+| ---------------------------- | -------------------------------- |
+| Heap Region                  | Purpose                          |
+| ---------------------------- | -------------------------------- |
+| New Space (Young Generation) | Stores short-lived objects.      |
+| Old Space (Old Generation)   | Stores long-lived objects.       |
+| Large Object Space           | Stores large objects separately. |
+| Code Space                   | Stores compiled JavaScript code. |
+| Map Space                    | Stores metadata about objects.   |
+| ---------------------------- | -------------------------------- |
+
+
+
+
+
+============================================================================================================================================================
+
+
+ ❓What is Deno, and how is it different from Node.js?
+
+
+Deno is a "modern runtime" for JavaScript and TypeScript, created by "Ryan Dahl" (the original creator of Node.js). It is designed to address some of Node.js's 
+shortcomings.
+
+Key Differences Between Deno and Node.js:
+
+Security – Deno runs in a sandbox and requires explicit permissions for file, network, and environment access.
+Built-in TypeScript Support – Deno natively supports TypeScript without needing extra configuration.
+Simpler Module System – Deno uses "URL-based module imports" instead of node_modules.
+Built-in Utilities – Deno provides built-in tools like a linter, formatter, and test runner.
+Standard Library – Deno includes a curated standard library, reducing the need for third-party dependencies.
+Deno aims for a more secure and modern developer experience compared to Node.js. 🚀
+
+
+============================================================================================================================================================
+
+
+
+❓❓  How Node.js Handles Memory Leaks:
+
+A memory leak occurs when a program fails to release unused memory, causing increased memory usage over time. This can lead to performance issues or crashes.
+
+
+Node.js uses "automatic garbage collection" to free up unused memory. 
+
+However, leaks can still happen due to:
+-> Global variables that persist in memory.
+-> Event listeners not being removed. Unremoved event listeners that keep references alive.
+-> Unclosed timers or intervals (setInterval, setTimeout).
+-> Closures and references that prevent garbage collection. Closures holding unnecessary references
+
+How to Prevent Memory Leaks
+✅ Use WeakMaps for caching to prevent memory retention.
+✅ Remove event listeners when no longer needed. Unremoved event listeners that keep references alive.
+✅ Clear timers and intervals using clearTimeout() and clearInterval().
+✅ Avoid global variables and use let/const instead of var.
+✅ Monitor memory usage with process.memoryUsage() or tools like Chrome DevTools and heapdump.
+
+Proper memory management helps keep Node.js applications efficient and stable. 🚀
+
+
+
+=========================================================================================================================================================================
+
+
+2️⃣ How do you implement caching in Node.js?
+
+Caching improves performance by storing frequently accessed data in memory, reducing database calls or expensive computations.
+
+Types of Caching in Node.js:
+
+1️⃣ In-Memory Caching
+
+Stores data in the application’s memory (RAM).
+Fastest but not persistent (data is lost on restart).
+Best for small datasets or temporary caching.
+Example: Using JavaScript objects, Map, or lru-cache.
+✅ Use Case: Fast lookups, session data, API responses.
+
+
+2️⃣ Distributed Caching
+
+Stores cached data in external services like Redis or Memcached.
+Can be shared across multiple servers, making it scalable.
+Suitable for large-scale applications and persistent caching.
+Example: Redis, Memcached.
+✅ Use Case: Caching database queries, authentication tokens, real-time data.
+
+
+3️⃣ Database Caching
+Stores cache inside the database to reduce query execution time.
+Methods:
+Indexing: Speeds up searches.
+Query caching: Stores query results.
+Materialized views: Precomputed results stored as a table.
+✅ Use Case: Repeated database queries, analytics dashboards.
+
+
+example: 
+
+1️⃣ In-Memory Caching example: 
+```
+function multiply() {
+  let calculationData = {};
+
+  return (num) => {
+    if (num in calculationData) {
+      console.log(`Data Coming from cache`);
+      return calculationData[num];
+    }
+    else {
+      calculationData[num] = num * num;
+      return calculationData[num]
+    }
+  }
+}
+```
+
+
+2️⃣ Using Redis for Distributed Caching
+
+'ioredis' is a powerful Redis client for Node.js that provides better performance, scalability, and advanced features compared to the default redis package.
+```
+const Redis = require('ioredis');
+const redis = new Redis();
+
+const cacheMiddleware = (req, res, next) => {
+  const { customerId } = req.params;
+  if(customerId){
+    const cachedCustomer = await redis.get(`customer:${customerId}`);   //customer:1
+    if(cachedCustomer)
+      return res.status(200).json({ data: cachedCustomer })
+  }else{
+    const cachedCustomers = await redis.get(`customers`);
+    if(cachedCustomers)
+      return res.status(200).json({ data: cachedCustomers });
+  }
+
+  next();
+}
+
+
+app.get('/', cacheMiddleware, (req, res) => {
+  try{
+    cost customers = await Customer.find({});
+    await redis.set('customers', JSON.stringfy(customers), "EX", 60);  // Cache for 60 seconds
+    return res.status(200).json({ data: customers});
+  }catch(err){
+
+  }
+})
+
+createsimiilar to getCustomer
+// await redis.set(`customer:${customerId}`, JSON.stringify(customer), "EX", 60); // Cache for 60 seconds
+
+```
+
+=========================================================================================================================================================================
+
+❓ What is Node.js Clustering? 🚀
+
+👉 Node.js runs on a 'single thread', meaning it can only use one CPU core at a time. But modern computers have multiple CPU cores.
+
+We need more CPU cores to handle multiple tasks at the same time efficiently.
+A CPU core is like a brain inside the processor that handles tasks.
+
+Think of it Like a Kitchen:
+A single-core CPU is like one chef cooking everything alone.
+A multi-core CPU (e.g., 4 cores) is like 4 chefs working together, making food faster.
+
+What Does a CPU Core Do?
+✔ Executes instructions (running apps, calculations, tasks).
+✔ The more cores, the more tasks can run simultaneously (better multitasking).
+✔ Modern CPUs have multiple cores (dual-core, quad-core, octa-core, etc.) for better speed and efficiency.
+
+A CPU with 8 cores can handle 8 different tasks at the same time, making everything faster and smoother! 🚀
+
+
+
+🟢 Clustering allows Node.js to use 'all CPU cores' by 'creating multiple processes' (called workers) that share the same server port. 
+This improves performance and handles more traffic efficiently.
+
+Why is Clustering Used?
+✅ Improves performance by using all CPU cores.
+✅ Handles more traffic without slowing down.
+✅ Fault tolerance – if one worker crashes, others keep running.
+✔ Handles More Traffic – Multiple workers process requests at the same time. 
+✔ Prevents Crashes – If one worker fails, the app doesn’t stop.
+✔ Uses Multi-Core CPUs – Most servers have multiple cores, so clustering makes full use of the system’s power.
+
+
+How Does Clustering Work? ⚙️
+
+👉 A master process is created and it checks the number of CPU cores
+👉 The master process forks (create) multiple "worker processes" (child) to handle tasks.
+👉 Each worker process runs its own Express.js server, handling incoming requests like API requests, static files, and database queries.
+👉 The master distributes incoming requests to different workers.
+👉 If a worker crashes, the master automatically restarts it.
+👉 A load balancer (Nginx) distributes requests among workers.
+👉 This allows Node.js to handle more requests in parallel and use all CPU power.
+
+
+
+In an Express.js application, a worker process handles HTTP requests, including:
+✅ API Requests (GET, POST, PUT, DELETE)
+✅ Static Files Requests (if serving files like images or HTML)
+✅ Database Queries (MongoDB, MySQL, PostgreSQL, etc.)
+✅ Computational Tasks (if not offloaded to another service)
+
+When to Use Clustering? 🤔
+🔹 If your app processes many requests (like an API or web server).
+🔹 When you need to scale performance on multi-core machines.
+🔹 For applications with CPU-heavy tasks (like image processing).
+
+
+## **🟢 Applications That Benefit from Clustering**
+| ----------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Application Type                    | Needs Clustering?               | Why?                                                                                                                                                                                   |
+| ----------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Movie Rental Application            | ❌ Not Necessary                 | APIs mostly wait for database responses (I/O-bound). Clustering **won't help much** unless API traffic is huge. Instead, optimize DB queries & caching (e.g., Redis).                  |
+| E-Commerce Application 🛒           | ✅ Yes (If High Traffic)         | Handles many users, carts, and payments. Clustering helps **scale API requests** across multiple CPU cores. Also consider a **load balancer (NGINX, AWS ALB)** for better performance. |
+| Image Processing App 🖼️            | ✅ Yes (Highly Recommended)      | CPU-heavy tasks like **resizing images, applying filters** are slow on a single thread. Clustering allows processing multiple images in parallel, speeding up performance.             |
+| Video/Image Converter 🎞️           | ✅ Yes (Critical)                | Converting formats (e.g., MP4 → MP3) is CPU-intensive. Clustering distributes workload across multiple processes for **faster conversions**.                                           |
+| Chat/Messaging App 💬               | ❌ No (Use WebSockets Instead)   | Mostly I/O-bound (real-time messages). Clustering **won’t improve performance much**. Instead, use **WebSockets (Socket.io) + Redis pub/sub** for scaling.                             |
+| Streaming Service (Like Netflix) 📺 | ✅ Yes (For API & Encoding)      | APIs for fetching movies need clustering **if millions of users**. Video encoding (converting 4K → 1080p) is CPU-heavy, so clustering helps.                                           |
+| Machine Learning/AI API 🤖          | ✅ Yes (If CPU-Based)            | AI models doing **heavy calculations** (e.g., image recognition) can use clustering. But if using a **GPU**, clustering may not be needed.                                             |
+| Web Scraping App 🕷️                | ✅ Yes (For Speed)               | Scraping multiple pages from different websites can be parallelized using clustering to **speed up extraction**.                                                                       |
+| File Upload & Compression App 📂    | ✅ Yes (For Faster Processing)   | If users upload **large files**, clustering allows multiple uploads to be **processed in parallel** instead of queuing.                                                                |
+| Authentication API 🔐               | ❌ No (I/O-Bound, Not CPU-Heavy) | Mostly handles **database queries (login, signup, JWT tokens, OAuth)**. Clustering **won’t help** much here. Instead, optimize DB queries & caching.                                   |
+| ----------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+
+
+
+🛑 When NOT to Use Clustering?
+❌ If your application is I/O-bound (mostly waiting for databases, APIs, or file reads).
+❌ If you’re using in-memory storage (like storing sessions in-memory, which isn’t shared across workers).
+❌ If your app is running inside a containerized environment like Docker, where scaling is handled at a higher level.
+
+=========================================================================================================================================================================
+
+❓❓ Clustering and the Cluster Module are related but not exactly the same
+
+=========================================================================================================================================================================
+
+
+What is a Load Balancer? 🤔
+
+A load balancer is like a "traffic cop" for your servers. 
+It "distributes" incoming requests across multiple servers so that no single server gets overloaded. 
+This improves speed, reliability, and scalability of your application.
+
+Why Do We Need a Load Balancer? 🚦
+Imagine you have a website or an app with millions of users. If all users send requests to one server, it will crash under heavy traffic. 
+Instead, a load balancer will:
+✅ Distribute traffic evenly across multiple servers.
+✅ Prevent overload & crashes by redirecting requests if a server fails.
+✅ Improve speed by sending users to the nearest or least busy server.
+✅ Ensure high availability so users always get a response.
+
+How Does a Load Balancer Work? ⚙️
+User requests a website (e.g., opening example.com).
+The request first goes to the load balancer instead of a direct server.
+The load balancer decides which server should handle the request.
+The server processes the request and sends a response back to the user.
+
+
+
+Types of Load Balancers 🏗️
+
+
+1️⃣ NGINX (Software Load Balancer) 🖥️
+
+NGINX is an open-source web server that can also work as a load balancer.
+Nginx is a 'web server' that can also be used as a 'reverse proxy', 'load balancer', mail proxy and 'HTTP cache'. 
+It is installed on a server and distributes traffic to backend servers.
+Good for small to medium-sized applications.
+
+🔹 Example: A company has 3 servers running a web app. NGINX balances traffic among them:
+```
+User  →  NGINX Load Balancer  →  Server 1 / Server 2 / Server 3
+```
+
+2️⃣ AWS ALB (Amazon Application Load Balancer) ☁️
+
+AWS ALB is a cloud-based load balancer offered by Amazon Web Services.
+It works at the application layer (Layer 7) and routes traffic based on URL paths.
+Ideal for large-scale cloud applications.
+
+🔹 Example: An e-commerce app has different servers for products and payments. AWS ALB routes traffic accordingly:
+```
+User  →  AWS ALB  
+      →  `/products` → Product Server  
+      →  `/checkout` → Payment Server 
+```
+
+
+Final Thoughts 🚀
+If you're managing your own servers → Use NGINX.
+If you're using AWS and need a scalable solution → Use AWS ALB.
+Both ensure high availability, performance, and reliability for your app.
+
+
+Reverse Proxy vs. Load Balancer: Are They the Same?
+A Reverse Proxy is server that forwards client requests to one or more backend servers.
+A Load Balancer can be a dedicated hardware device or software that distributes traffic among multiple servers.
+
+Key Difference:
+A reverse proxy can act as a load balancer, but a load balancer is not always a reverse proxy.
+A load balancer's main job is distributing traffic, while a reverse proxy provides additional features like security, caching, and SSL termination.
+
+| Feature  | Reverse Proxy 🛡️      | Load Balancer ⚖️                      |
+| Examples | Nginx, Apache, HAProxy | NGINX Load Balancer, AWS ELB, HAProxy |
+
+
+=========================================================================================================================================================================
+
+❓ What is a reverse proxy, and why would you use one with Node.js?
+
+👉 A reverse proxy is a 'server' that sits between clients and backend servers, forwarding client requests to the appropriate backend service.
+
+Why Use a Reverse Proxy with Node.js?
+✅ Load Balancing – Distributes traffic across multiple Node.js instances.
+✅ Security – Hides internal server details, preventing direct exposure.
+✅ SSL Termination – Handles HTTPS encryption, offloading SSL processing.
+✅ Caching & Compression – Improves response time and reduces load.
+✅ Rate Limiting & DDoS Protection – Filters and blocks malicious requests.
+
+
+Reverse Proxy vs. Load Balancer: Are They the Same?
+A Reverse Proxy is server that forwards client requests to one or more backend servers.
+A Load Balancer can be a dedicated hardware device or software that distributes traffic among multiple servers.
+
+Key Difference:
+A reverse proxy can act as a load balancer, but a load balancer is not always a reverse proxy.
+A load balancer's main job is distributing traffic, while a reverse proxy provides additional features like security, caching, and SSL termination.
+
+| Feature  | Reverse Proxy 🛡️       | Load Balancer ⚖️                      |
+| Examples | Nginx, Apache, HAProxy | NGINX Load Balancer, AWS ELB, HAProxy |
+
+=========================================================================================================================================================================
+
+
+🚀 How can you optimize API response time in a Node.js application?
+
+
+1️⃣ Implement Caching (Memory & Redis)
+Store frequently requested data in memory (Map, lru-cache) or Redis.
+Reduces redundant database queries.
+
+
+2️⃣ Optimize Database Queries
+Use Indexing for frequently queried fields.
+
+Use pagination (LIMIT, OFFSET) to fetch only required data.
+
+4️⃣ Use Compression (Gzip, Brotli)
+Reduce response payload size to improve speed.
+```
+const compression = require("compression");
+app.use(compression());
+```
+✅ Result: Smaller response size, faster loading
+
+
+5️⃣ Optimize Middleware & Reduce Unnecessary Code
+Remove unused middleware.
+Avoid blocking operations in middleware.
+
+✅ Result: Faster request processing.
+
+
+6️⃣ Use Load Balancing & Clustering
+
+Use Node.js Clustering to utilize multiple CPU cores.
+Deploy load balancers (NGINX, AWS ALB) for distributing traffic.
+
+
+7️⃣ Reduce Payload Size (Use Proper Response Formats)
+Use GraphQL or select only required fields in REST APIs.
+
+Example (Selecting Required Fields in MongoDB):
+```
+const user = await User.findById(userId).select("name email");
+```
+✅ Result: Lighter responses, faster API calls.
+
+
+8️⃣ Use HTTP/2 for Faster Request Handling
+HTTP/2 allows multiplexing, reducing the number of requests.
+✅ Setup Nginx as a reverse proxy to enable HTTP/2.
+
+9️⃣ Implement Connection Pooling in Databases
+"Reuse" database connections instead of "creating" a new one for each request.
+```
+const connectDB = async () => {
+  try {
+    await mongoose.connect("mongodb://localhost:27017/myDatabase", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 10, // Set max connections in the pool
+      minPoolSize: 5,  // Maintain at least 5 connections
+      serverSelectionTimeoutMS: 5000, // Timeout if the server is unreachable
+      socketTimeoutMS: 45000, // Close unused connections after 45s
+    });
+    console.log("MongoDB Connected with Connection Pooling ✅");
+  } catch (err) {
+    console.error("MongoDB Connection Failed ❌", err);
+  }
+};
+```
+
+Key Connection Pooling Settings:
+|---------------------------|-----------------------------------------------------------|
+| Option                    | Description                                               |
+|---------------------------|-----------------------------------------------------------|
+| `maxPoolSize`             | Maximum number of connections in the pool (default: 100). |
+| `minPoolSize`             | Minimum connections to keep open.                         |
+| `serverSelectionTimeoutMS`| Time to wait for a database connection before failing.    |
+| `socketTimeoutMS`         | How long to keep an idle connection open before closing.  |
+|---------------------------|-----------------------------------------------------------|
+
+Why is Connection Pooling Important?
+✅ Prevents excessive database connections (avoids MongoServerError: Too many connections).
+✅ Reduces request latency (reuses open connections).
+✅ Handles concurrent users better in high-traffic apps.
+
+
+
+🔟 Monitor & Optimize Performance
+Use New Relic, PM2, or Datadog for API performance monitoring.
+Identify slow endpoints using console.time() or profiling tools.
+✅ Result: Continuous optimization.
+
+
+
+
+
+=========================================================================================================================================================================
+
+
+
+1️⃣ What are the core modules in Node.js?
+
+check module file.
+
+
+
+=========================================================================================================================================================================
+
+
+2️⃣ How do you install Node.js and check its version?
+
+1. Install Node.js:
+Download the latest LTS version from Node.js official website.
+Run the installer and follow the setup instructions
+
+2. Verify Installation
+After installation, open Command Prompt (Windows) or Terminal (macOS/Linux) and run:
+```
+node -v   # Check Node.js version
+npm -v    # Check npm (Node Package Manager) version
+```
+
+✔ If installed correctly, it will display the installed versions, e.g., v18.17.1. 🚀
+
+
+Note: 
+As of March 24, 2025, the latest Long-Term Support (LTS) version of Node.js is v22.14.0
+
+Node.js v18, which was released on: October 25, 2022 (became LTS)
+Node.js v20, which was released on: October 24, 2023 (became LTS)
+
+
+=========================================================================================================================================================================
+
+
+
+3️⃣ What is npm? How does it work?
+
+
+NPM : 
+
+-> NPM Stands for "Node package manager".
+-> npm is the default "package manager" for Node.js. 
+-> It installed automatically with Node.js.
+-> It helps developers install, manage, and share JavaScript packages (libraries or dependencies) easily.
+-> We use NPM to download  3rd-party packages from NPM registry. as well as to create a node application.
+-> NPM registry have millions of npm packages that you can download according to your application need.
+-> popular npm packages are express, mongoose, nodemon, dotenv, bcrypt, helmet, joi
+
+// Install a package
+npm i <packageName>
+
+// Install a specific version of a package 
+npm i <packageName>@<version>
+
+// Install a package as a development dependency
+npm install <packageName> --save-dev
+
+// Uninstall a package
+npm un <packageName>
+
+// List installed packages 
+npm list —depth=0
+
+// View outdated packages
+npm outdated
+
+// Update packages 
+npm update
+
+// bypass peer dependency conflicts
+npm i --legacy-peer-deps 
+
+If one package depends on another and you update a package, it can create dependency conflicts when the required versions don’t match.
+This can cause installation failures because npm strictly enforces peer dependencies in v7+. To bypass these conflicts, we use above command.
+
+
+
+=========================================================================================================================================================================
+
+
+
+3️⃣ several ways to create a Node.js application:
+
+There are several ways to create a Node.js application, depending on your project requirements. Here are the most common methods:
+
+1️⃣ Using npm init (Manual Setup)
+The traditional way to start a Node.js application by manually setting up a package.json file.
+```
+npm init
+```
+
+2️⃣ Using npx (Boilerplate Generator)
+npx runs CLI tools without installing them globally.
+```
+npx express-generator my-app
+```
+
+3️⃣ Using a Custom JavaScript File (Simple Script)
+👉 You can create a simple Node.js app without npm.
+Create a new file, app.js
+Write this code:
+```
+console.log("Hello, Node.js!");
+```
+RUN > node app.js
+
+
+4️⃣ Using a Framework (e.g., Express.js)
+👉 If building a web server, Express.js is the most common choice.
+
+
+
+=========================================================================================================================================================================
+
+
+
+2️⃣ What is the purpose of package.json?
+
+package.json is the "main configuration file" for a Node.js project.
+ It contains metadata, dependencies, and scripts for he project.
+
+🔹 Purpose of package.json
+Defines the project name, version, and description.
+Lists dependencies required to run the project.
+Specifies scripts to automate tasks (npm start, npm test, etc.).
+Helps in versioning and package management.
+
+🛠 Example of package.json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "A sample Node.js project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
+
+
+
+📌 2. What is package-lock.json?
+package-lock.json is automatically generated when you install dependencies using npm install. 
+It locks the exact versions of installed packages.
+
+🔹 Purpose of package-lock.json
+Ensures the exact same package versions are installed on different systems.
+Improves dependency resolution speed in future installations.
+Helps team members and CI/CD pipelines install the same dependency tree.
+🛠 Example of package-lock.json (Simplified)
+
+✅ Always commit both to Git to maintain a stable project setup! 🚀
+
+
+
+
+=========================================================================================================================================================================
+
+
+8️⃣ What are global objects in Node.js?
+
+
+👉 In Node.js, global objects are built-in objects that are available in all modules and can be accessed anywhere in the application without importing them.
+👉 The main global object is 'global', similar to 'window' in browsers.
+👉 Useful built-in objects include process, console, setTimeout(), and more.
+
+- **Global objects** are properties of `global` (e.g., `global.process`).  
+
+
+## 🔹 List of Important Global Objects in Node.js
+|-----------------------|---------------------------------------------------------------------------|
+| Global Object         | Description                                                               |
+|-----------------------|---------------------------------------------------------------------------|
+| `global`              | The root object that contains all global variables.                       |
+| `process`             | Provides information about the **current Node.js process**.               |
+| `console`             | Provides methods like `console.log()` for logging messages.               |
+| `setTimeout()`        | Executes a function **after a delay**.                                    |
+| `setInterval()`       | Executes a function **repeatedly at a fixed interval**.                   |
+| `setImmediate()`      | Executes a function **immediately after the current execution cycle**.    |
+| `clearTimeout()`      | Cancels a timeout set by `setTimeout()`.                                  |
+| `clearInterval()`     | Cancels an interval set by `setInterval()`.                               |
+| `clearInterval()`     | Cancels an interval set by `setInterval()`.                               |
+|-----------------------|---------------------------------------------------------------------------|
+
+
+🛠️ Examples of Global Objects
+
+1️⃣ global (Root Object)
+console.log(global); // Prints all global properties
+
+4️⃣ process (System Info & Environment Variables)
+console.log(process.env.NODE_ENV); // Prints the environment (e.g., 'development')
+console.log(process.version); // Prints Node.js version
+console.log(process.platform); // Prints OS platform (e.g., 'win32', 'linux')
+
+
+============================================================================================================================================================
+
+
+
+
+
+
+
+process:
+The process object is a global object in Node.js that provides information and control over the current Node.js process
+It allows interaction with the environment, system, and command-line arguments.
+
+
+🛠️ Main Operations of process
+
+1️⃣ Get Node.js and System Info
+console.log("Node Version:", process.version);    // Node Version: v18.16.0
+console.log("Platform:", process.platform);         // Platform: win32
+
+
+2️⃣ Read Environment Variables (process.env)
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("Custom Variable:", process.env.MY_VAR);
+
+
+3️⃣ Get Command-Line Arguments (process.argv)
+console.log("Arguments:", process.argv);
+Running in Terminal > node app.js hello world
+
+5️⃣ Process Events (process.on())
+
+📌 Handle Process Exit
+```
+process.on("exit", (code) => {
+  console.log(`Process exited with code: ${code}`);
+});
+```
+👉 This event triggers before the process exits, allowing cleanup tasks.
+
+📌 Handle Uncaught Exceptions
+```
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Error:", err);
+});
+```
+👉 Prevents the app from crashing immediately due to unhandled errors.
+
+
+6️⃣ Exit the Process (process.exit())
+```
+console.log("Exiting process...");
+process.exit(0); // 0 means success, any other number means error
+```
+👉 Useful when you need to terminate the script manually.
+
+
+
+
+============================================================================================================================================================
+
+
+1️⃣ How do you import and export modules in Node.js?
+
+
+In Node.js, we use modules to organize code into reusable files. There are two ways to import/export modules:
+1️⃣ CommonJS (require & module.exports) – Default in Node.js
+2️⃣ ES Modules (import & export) – Modern approach
+
+
+✅ Use import() for lazy-loading modules dynamically.
+
+📌 Which One Should You Use?
+Use CommonJS if working with traditional Node.js projects.
+Use ES Modules for modern projects and browser compatibility.
+
+Execution:
+(CommonJS)Synchronous (loads modules immediately)	
+(ES Modules)Asynchronous (supports top-level await)
+
+Browser Support (Where It Works):
+CommonJS    :❌ No (Node.js only)	
+ES Modules  :✅ Yes (Works in both Node.js and Browsers)
+
+
+File Extension	
+CommonJS:       .js	
+ES Modules:     .js (with "type": "module") or .mjs
+
+
+🚀 Both methods allow you to create modular, reusable code in Node.js!
+
+
+🔹 1. Using CommonJS (Default in Node.js)
+✅ Exporting with module.exports
+```
+function add(a, b) {
+  return a + b;
+}
+module.exports = add;
+```
+
+
+✅ Importing with require
+```
+const add = require("./math");
+console.log(add(5, 3)); // Output: 8
+```
+
+🔹 Exporting Multiple Values
+```
+module.exports = {
+  add: (a, b) => a + b,
+  multiply: (a, b) => a * b,
+};
+```
+
+🔹 Importing Multiple Values
+```
+const math = require("./math");
+console.log(math.add(5, 3)); // Output: 8
+console.log(math.multiply(5, 3)); // Output: 15
+```
+
+
+
+
+🔹 2. Using ES Modules (import/export)
+📝 Note: ES Modules require "type": "module" in package.json
+
+
+✅ Exporting with export
+```
+export function add(a, b) {
+  return a + b;
+}
+export function multiply(a, b) {
+  return a * b;
+}
+```
+
+✅ Importing with import
+
+import { add, multiply } from "./math.js";   or
+import { add } from "./math.js";
+console.log(add(5, 3)); // Output: 8
+console.log(multiply(5, 3)); // Output: 15
+
+
+🔹 Exporting a Default Function
+```
+export default function add(a, b) {
+  return a + b;
+}
+```
+
+🔹 Importing a Default Export
+```
+import add from "./math.js";
+console.log(add(5, 3)); // Output: 8
+```
+
+
+============================================================================================================================================================
+
+
+
+1️⃣ How do you create a simple HTTP server in Node.js?
+
+
+📌 Creating a Simple HTTP Server in Node.js
+
+In Node.js, you can create an HTTP server using the built-in http module.
+
+🔹 Steps to Create an HTTP Server
+Import the http module
+Create a server with http.createServer()
+Define a request handler function
+Listen on a specific port using server.listen()
+
+
+🔹 Handling Different Routes
+```
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/html" });
+
+  if (req.url === "/") {
+    res.end("<h1>Welcome to Home Page</h1>");
+  } else if (req.url === "/about") {
+    res.end("<h1>About Page</h1>");
+  } else {
+    res.writeHead(404);
+    res.end("<h1>404 Not Found</h1>");
+  }
+});
+
+server.listen(3000, () => {
+  console.log("Server running on http://localhost:3000");
+});
+
+```
+
+
+
+============================================================================================================================================================
+
+
+
+### **📌 Difference Between `fs.readFileSync()` and `fs.readFile()` in Node.js**  
+
+Both methods are used to **read files** in Node.js but differ in how they handle execution.
+
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------|
+| Feature                           | `fs.readFileSync()`                           | `fs.readFile()`                                    |
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------|
+| **Execution Type**                | Synchronous (Blocking)                        | Asynchronous (Non-Blocking)                        |
+| **Blocks Code Execution?**        | ✅ Yes                                        | ❌ No                                             |
+| **Callback Required?**            | ❌ No                                         | ✅ Yes                                            |
+| **Performance**                   | 🚫 Slower for large files (blocks event loop) | ✅ Faster (does not block event loop)             |
+| **Use Case**                      | When immediate file reading is needed         | For better performance, especially in servers      |
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------|
+
+
+
+✅ Example of fs.readFileSync() (Synchronous)
+```
+const fs = require("fs");
+const data = fs.readFileSync("example.txt", "utf8");
+console.log(data);
+```
+📝 Explanation:
+Blocks execution until the file is read.
+The next line does not execute until the file reading is complete.
+
+
+✅ Example of fs.readFile() (Asynchronous)
+
+```
+fs.readFile("example.txt", "utf8", (err, data) => {
+  if (err) {
+    console.error("Error reading file:", err);
+    return;
+  }
+  console.log(data); // Output: File content
+});
+```
+
+📝 Explanation:
+Does not block execution.
+Uses a callback function to handle the file content.
+
+
+
+📌 When to Use Which?
+✅ Use fs.readFileSync()
+When reading small files.
+When execution must wait for file reading (e.g., configuration files).
+
+✅ Use fs.readFile()
+When handling large files or performing multiple tasks.
+For better performance, especially in web servers.
+
+🚀 For high-performance applications, always prefer fs.readFile() to avoid blocking the event loop!
+
+============================================================================================================================================================
+
+
+8️⃣ What is middleware in Express.js?
+
+👉 So an express application is essentially nothing but a bunch of middleware functions.
+👉 Middleware is a function that runs before the actual route handler.
+👉 Middleware is basically a function that has access to the request (req), response (res) and either returns a response to the client by terminating req processig 
+pipeline or passes control to another middleware function using next().
+👉 at runtime, when we receive a request on the server that request goes through a pipeline called "Request Processing Pipeline". In this pipeline we have one or more 
+middleware functions. Each middleware function is capable of terminates the request response cycle.
+👉 Middleware functions are invoked in the order they are defined and are capable of modifying the request and response objects, 
+as well as passing control to the next middleware function in the stack.
+👉 Middleware allow programmer to add functionality to the request response cycle such as authentication, logging, error handling and many more.
+👉 if you use lots of middleware functions inside your request processing pipeline then it will slow down your application.
+👉 Middleware can be defined globally, for all routes, or can be defined for specific routes or groups of routes. 
+👉 app.use() method is used for adding middleware function.
+
+
+🔹 Types of Middleware in Express.js
+1️⃣ Built-in Middleware – Provided by Express
+2️⃣ Third-party Middleware – Installed via npm
+3️⃣ Custom Middleware – Created by developers
+
+
+🔹 1. Built-in Middleware
+✅ Example: express.json() Middleware
+```
+app.use(express.json()); // Parses JSON request body
+``` 
+🚀 `express.json()` middleware parses 'the JSON data' and makes it available as a 'JavaScript object' in the `req.body` property. so you don't have to manually 
+parse the incoming data using `JSON.parse()`. 
+
+
+✅ Example: app.use(express.urlencoded({ extended: true }))
+
+👉 is used to parse incoming URL-encoded data from the request body and convert it into js.
+👉 This is used in traditional html pages where react is not used.
+👉 If you're submitting a React form then you typically send JSON data, not x-www-form-urlencoded. so no need to use this middleware but 
+make sure to use express.json().
+
+
+✅ Example: app.use(express.static('public'));
+
+👉 It is used to serve static files (like HTML, CSS, JavaScript, images, etc.) from the "public" directory.
+👉 The folder does not have to be named "public". You can name it anything, but you must use the same name in express.static().
+for ex: app.use(express.static("assets"));
+
+my-app/
+│── server.js
+│── public/
+│   ├── index.html
+│   ├── styles.css
+│   ├── script.js
+│   ├── images/
+│       ├── logo.png
+
+app.use(express.static("public"));   // static file are aserve from root "/"
+
+URL                                     Serves File
+--------------------------------------  ------------------------
+http://localhost:3000/                  public/index.html
+http://localhost:3000/styles.css        public/styles.css
+http://localhost:3000/script.js         public/script.js
+http://localhost:3000/images/logo.png   public/images/logo.png
+
+
+🔹 What If You Want a Custom Path?
+You can serve static files from a custom URL path like /static: 
+app.use("/static", express.static("public"));
+
+Now, files must be accessed like this:
+http://localhost:3000/static/styles.css
+http://localhost:3000/static/images/logo.png
+
+
+
+🔹 2. Third-Party Middleware
+
+You can install middleware via npm
+
+✅ Example: Using morgan for Logging
+```
+app.use(morgan("tiny")); // Logs request details
+```
+🚀 morgan logs every request with useful details.
+
+
+
+🔹 3. Custom Middleware
+You can define your own middleware
+like authenticatio, logger, error
+
+
+code:
+```
+const express = require("express");
+const app = express();
+
+function middleware(req, res, next) {
+  console.log("Front Middleware");
+  next();
+}
+
+function middleware1(req, res, next) {
+  console.log("Middleware 1");
+  next();
+}
+
+function middleware2(req, res, next) {
+  console.log("Middleware 2");
+  next();
+}
+
+function middleware3(req, res, next) {
+  console.log("Last Middleware");
+  next();
+}
+
+app.use(middleware);
+app.get("/part1", [middleware1, middleware2], (req, res, next) => {
+  res.send("2 middleware function : [middleware1, middleware2]");
+  next();
+});
+app.get("/part2", middleware1, (req, res) => {
+  res.send("1 middleware function: middleware1 -> we terminate req-res cycle");
+});
+app.use(middleware3);
+
+const port = 5000;
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
+
+```
+
+============================================================================================================================================================
+
+6️⃣ How do you handle errors in Node.js?
+
+
+🔹 1. Using Try-Catch
+```
+try {
+  let result = JSON.parse("invalid JSON");
+} catch (error) {
+  console.error("Error parsing JSON:", error.message);
+}
+```
+
+🔹 2. Using callback
+```
+fs.readFile("nonexistent.txt", "utf8", (err, data) => {
+  if (err) {
+    console.error("File read error:", err.message);
+    return;
+  }
+  console.log(data);
+});
+```
+
+✅ Using .catch()
+
+```
+fs.readFile("nonexistent.txt", "utf8")
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Promise error:", error.message));
+```
+
+🔹 4. Global Error Handling
+
+✅ Handling Uncaught Exceptions
+```
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught Exception:", err.message);
+  process.exit(1); // Exit the process (optional)
+});
+```
+
+✅ Handling Unhandled Promise Rejections
+```
+process.on("unhandledRejection", (err, promise) => {
+  console.error("Unhandled Rejection:", err.message);
+});
+```
+
+
+🔹 Express.js Error Handling Middleware
+```
+const express = require("express");
+const app = express();
+
+// Middleware to simulate an error
+app.get("/", (req, res, next) => {
+  next(new Error("Something went wrong!"));
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  res.status(500).json({ error: err.message });
+});
+
+app.listen(3000, () => console.log("Server running on port 3000"));
+```
+
+
+
+============================================================================================================================================================
+
+
+
+9️⃣ How can you handle file uploads in Node.js?
+
+📌 Handling File Uploads in Node.js
+To handle file uploads in a Node.js application, we typically use multer, a popular middleware for handling multipart/form-data in Express.
+
+
+Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files. 
+NOTE: Multer will not process any form which is not multipart (multipart/form-data).
+
+
+Normal File Upload: 
+
+🔹 Allowed File Types with Your Code:
+✅ Images (.jpg, .jpeg, .png, .gif, .svg, .webp)
+✅ Documents (.pdf, .doc, .docx, .txt)
+✅ Spreadsheets (.xls, .xlsx, .csv)
+✅ Videos (.mp4, .avi, .mov)
+✅ Audio Files (.mp3, .wav)
+✅ Other Files (.zip, .rar, .json, .xml)
+
+
+🚀 storage: 
+If you want more control over your uploads, you'll want to use the "storage" option instead of "dest".
+Multer ships with storage engines "DiskStorage" and "MemoryStorage"; More engines are available from third parties.
+
+
+### **🎯 When to Use Which?**
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------------------------------|
+| Storage Engine                    | `diskStorage`                                 | `memoryStorage`                                                            |
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------------------------------|
+| **Where files are stored?**       | Saves files to disk (filesystem)              | Stores files in memory (RAM) as a `Buffer`                                 |
+| **How files are accessed?**       | Stored in a specific directory                | Stored in `req.file.buffer` as binary data                                 |
+| **Use Case**                      | When you need to save files permanently       | When you need to process files immediately                                 |
+| **Performance**                   | Slightly slower (writes to disk)              | Faster (stored in RAM, no disk I/O)                                        |
+| **Example Use Cases**             | Uploading profile pictures, saving documents  | Image processing, sending files to cloud storage (e.g., AWS S3, Cloudinary)|
+|-----------------------------------|-----------------------------------------------|----------------------------------------------------------------------------|
+
+
+
+1️⃣. DiskStorage
+-> The disk storage engine gives you full control on storing files to disk.
+code: 
+```
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb){
+        cb(null, file.originalname)
+    }
+})
+const upload = multer({ storage: storage })
+```
+
+There are two options available, "destination" and "filename". 
+They are both functions that determine where the file should be stored.
+
+"destination": destination is used to determine within which folder the uploaded files should be stored. 
+This can also be given as a string (e.g. '/tmp/uploads'). If no destination is given, the operating system's default directory for temporary files is used.
+
+"filename": filename is used to determine what the file should be named inside the folder. If no filename is given, each file will be given a random name that 
+doesn't include any file extension.
+Note: Multer will not append any file extension for you, your function should return a filename complete with an file extension.
+
+
+
+2️⃣ MemoryStorage: 
+The memory storage engine stores the files in memory as Buffer objects. It doesn't have any options.
+```
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+```
+When using memoryStorage, the uploaded file is not saved to disk but stored in RAM as a buffer inside req.file.buffer. 
+You can access it and perform operations like processing, uploading to cloud storage, or converting the file.
+If you're uploading files to Cloudinary (or any cloud storage like AWS S3, Firebase, etc.), you should use memoryStorage in Multer.
+
+
+
+
+How to Use multipart/form-data in Postman for File Uploads?
+1️⃣ Open Postman and Create a POST Request
+Method: POST
+URL: http://localhost:3000/customer (or your API endpoint)
+
+
+2️⃣ Select Body Tab
+Click on Body.
+
+Select "form-data".
+
+Now add your fields:
+
+---------------------------------
+Key	        Value	        Type
+---------------------------------
+name	    John Doe	    Text
+profilePic	(Select file)	File
+---------------------------------
+
+For text fields: Select Text from the dropdown.
+For file upload: Select File and choose a file from your system
+
+
+3️⃣ Send the Request
+Click Send.
+Your API should receive:
+```
+req.body: { name: "John Doe" }
+req.file: { originalname: "myphoto.jpg", mimetype: "image/jpeg", path: "uploads/myphoto.jpg" }
+```
+
+
+4️⃣ Verify req.body and req.file in Your Express App
+If req.body is undefined, make sure you have added:
+```
+app.use(express.json());
+```
+
+
+
+
+final Example : 
+
+```
+
+const express = require('express');
+const app = express();
+const multer = require('multer');
+ const storage = multer.diskStorage({
+     destination: function(req, file, cb){
+         cb(null, 'uploads/')
+     },
+     filename: function(req, file, cb){
+         cb(null, file.originalname)
+     }
+ }); // use it if you want to keep files on server file system
+
+const storage = multer.memoryStorage();  // use it for uploading images on cloudinary, aws
+// const upload = multer({ dest: 'uploads/' });  // simple
+const upload = multer({ storage: storage });
+
+
+
+app.use(express.json()); // Enable JSON parsing (if needed)\
+
+// accepting single file from input name 'profilePic'
+app.post('/api/upload', upload.single('profilePic'), (req, res) => {
+    const file = req.file;
+    return res.status(201).json({ file })
+});
+
+
+// accepting multiple file from input name 'photos' with maximum upload limit of 5
+app.post('/api/photos/upload', upload.array('photos', 5), (req ,res) => {
+    const photos = req.files;
+    return res.status(201).json({ photos })
+});
+
+
+// accepting multiple files from different input fields having names ('avatar', 'gallery')
+const cpUpload = upload.fields([{ name: 'avatar', maxCount: 1}, { name: 'gallery', maxCount: 5}])
+app.post('/cool-profile', cpUpload, (req, res) => {
+    const files = req.files;
+    return res.status(201).json({ files });
+});
+
+
+// select profileImage along with data.
+// go to postman, Select Body Tab, Select form-data, Now add your fields: name, age, profilePic
+// For text fields: Select Text from the dropdown. For file upload: Select File and choose a file from your system.
+app.post('/api/customer', upload.single('profilePic'), (req, res) => {
+    console.log('file', req.file);  // ✅ Works fine
+    console.log('body', req.body);  // ✅ Should now contain text fields
+    return res.status(201).json({ file: req.file, body: req.body });
+});
+
+
+app.listen(5000, () => {
+    console.log(`server listning on port 5000`);
+})
+
+```
+
+
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+3️⃣ What is Buffer in Node.js?
+
+A Buffer in Node.js is a built-in class that allows "handling binary data directly in memory". 
+It is useful for "processing" files, network packets, or raw binary streams.
+
+
+🔹 Why Use Buffer?
+✅ Handles binary data (images, videos, etc.)
+✅ Works without a string encoding format
+✅ Efficiently manipulates raw data in memory
+
+
+✅ Creating a Buffer
+```
+const buf = Buffer.alloc(10); // Creates a buffer of 10 bytes (filled with zeros)
+console.log(buf); // <Buffer 00 00 00 00 00 00 00 00 00 00>
+```
+
+✅ Creating a Buffer from Data
+const buf = Buffer.from('Hello')
+console.log(buf); // <Buffer 48 65 6c 6c 6f>
+console.log(buf.toString()); // "Hello"
+
+
+✅ Writing to a Buffer
+buf.write("Node.js");
+console.log(buf.toString()); // "Node.js"
+
+
+✅ Reading Buffer Data
+const buf = Buffer.from("ABC");
+console.log(buf[0]); // 65 (ASCII code of 'A')
+console.log(buf[1]); // 66 ('B')
+console.log(buf[2]); // 67 ('C')
+
+
+
+============================================================================================================================================================
+
+
+3️⃣ How do you handle command-line arguments in a Node.js script?
+
+📌 Handling Command-Line Arguments in Node.js
+In Node.js, you can handle command-line arguments using the "process.argv" array or third-party packages like "yargs" and "commander".
+
+🔹 1. Using process.argv (Built-in)
+The process.argv array contains command-line arguments passed to the Node.js script.
+
+✅ Example
+// script.js
+console.log(process.argv);
+Run the script:
+
+node script.js arg1 arg2
+Output:
+[
+  'C:\\Program Files\\nodejs\\node.exe', // Node.js path
+  'C:\\Users\\User\\script.js',         // Script path
+  'arg1',                               
+  'arg2'
+]
+📌 The first two elements are always:
+1️⃣ Path to the Node.js executable
+2️⃣ Path to the script being executed
+3️⃣ Arguments start from index 2
+
+✅ Accessing Arguments
+
+const args = process.argv.slice(2); // Remove first two elements
+console.log("Arguments:", args);
+Run:
+```
+node script.js hello world
+```
+
+Output:
+Arguments: [ 'hello', 'world' ]
+
+
+
+
+
+============================================================================================================================================================
+
+
+📌 Difference Between __dirname and __filename in Node.js
+
+Both __dirname and __filename are global variables in Node.js that provide information about the current script's location.
+
+
+## **🔹 Global Variables (NOT Global Objects)**
+|-------------------|----------------------------------------------------------------|
+| Global Variable   | Description                                                    |
+|-------------------|----------------------------------------------------------------|
+| `__dirname`       | Returns the **absolute directory path** of the current script. |
+| `__filename`      | Returns the **absolute file path** of the current script.      |
+|-------------------|----------------------------------------------------------------|
+
+
+
+
+2️⃣ __dirname (Current Directory Path)
+console.log(__dirname); // Example: /home/user/project
+
+3️⃣ __filename (Current File Path)
+console.log(__filename); // Example: /home/user/project/index.js
+
+
+============================================================================================================================================================
+
+
+
+### **📌 Difference Between Absolute Path and Relative Path**  
+
+|-------------------|----------------------------------------------------------------------------|
+| Type              | Description                                                                |   
+|-------------------|----------------------------------------------------------------------------|
+| **Absolute Path** | The full path from the **root directory** to a file or folder.             |
+| **Relative Path** | The path **relative** to the current working directory or script location. |
+|-------------------|----------------------------------------------------------------------------|
+
+---
+
+🔹 Absolute Path
+✅ Always starts from the root (`/` in Linux/macOS, `C:\` in Windows)  
+✅ Same path regardless of where the script is executed  
+
+🔹 Example:
+- Windows: `C:\Users\John\Documents\file.txt`
+
+✅ Example in Node.js
+```
+const path = require("path");
+
+console.log(path.resolve("file.txt"));// Absolute path example
+```
+Output (depends on where you run it):
+```
+C:\Users\John\project\file.txt  (Windows)
+```
+
+---
+
+🔹 Relative Path
+✅ Depends on the current working directory (`cwd`)  
+✅ Shorter and flexible  
+
+🔹 Example:  
+- `./file.txt` → Refers to `file.txt` in the **current folder**  
+- `../file.txt` → Moves **one directory up** before looking for `file.txt`  
+
+✅ Example in Node.js
+```js
+const path = require("path");
+
+// Relative path
+console.log(path.join(__dirname, "file.txt"));
+```
+📌 `__dirname` helps resolve relative paths safely.
+
+---
+
+### 📌 Key Differences**
+|---------------------------|-------------------------------|--------------------|
+| Feature                   | Absolute Path                 | Relative Path      |
+|---------------------------|-------------------------------|--------------------|
+| Starts from?              | Root directory (`C:\`, `/`)   | Current directory  |
+| Changes with location?    | ❌ No                         | ✅ Yes            |
+| Example (Windows)         | `C:\Users\John\file.txt`      | `./file.txt`       |
+|---------------------------|-------------------------------|--------------------|
+
+🚀 **Use absolute paths when you need a fixed location, and relative paths for flexibility!**
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+📌 Debugging a Node.js Application in Development & Production:
+
+
+
+
+🔹 Debugging in Development
+
+
+1️⃣ Using console.log() (Basic Debugging)
+
+console.log("User Data:", user);
+
+
+4️⃣ Using VS Code Debugger
+
+Open your project in VS Code.
+Go to Run & Debug (Ctrl + Shift + D).
+Click "create launch.json file" → Select "Node" -> then delete everything inside "configurations" array and type "cmd" and enter first suggestion 
+"Run npm start in a debug terminal". then inside "command" property add "npm run dev" then click on "Run npm start" button in top left panal
+
+ex: launch.json file:
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "command": "npm run dev",
+            "name": "Run npm start",
+            "request": "launch",
+            "type": "node-terminal"
+        }
+    ]
+}
+
+
+
+
+
+🔹 Debugging in Production:
+
+
+1️⃣ Using winston for Logging
+3️⃣ Using Error Tracking (e.g., Sentry)
+
+
+
+============================================================================================================================================================
+
+
+3️⃣ How do you use environment variables in a Node.js application?
+
+
+Environment variables store configuration settings (like database credentials, API keys) outside your code, making apps more secure and flexible.
+
+
+🔹 1️⃣ Accessing Environment Variables
+Node.js provides process.env to access environment variables inside a code.
+
+✅ Example:
+console.log(process.env.NODE_ENV); // Output: development (if set)
+console.log(process.env.PORT);     // Output: 5000 (if set)
+
+
+There are multiples ways thjaty you can pass environmental variables.
+
+🔹 2️⃣ Setting Environment Variables
+
+✅ Temporary (Command Line)
+
+Windows (PowerShell): 
+```
+PS C:\Users\user\Desktop\ooo> $env:PORT=8000; node .\server.js
+```
+
+📌 These are temporary and reset after the terminal closes
+
+
+3️⃣ Using a .env File (Best Practice)
+Using a .env file makes configuration easier.
+✅ Step 1: Install dotenv
+
+
+🔹 4️⃣ Setting Environment Variables in package.json (Scripts)
+Define variables in package.json scripts.
+```
+"scripts": {
+  "start": "NODE_ENV=production node index.js"
+}
+```
+
+
+============================================================================================================================================================
+
+
+
+1️⃣  Explain the difference between process.nextTick() and setImmediate().
+
+Both process.nextTick() and setImmediate() schedule callbacks to execute asynchronously, but they have key differences in execution order.
+
+📌 process.nextTick() Has higher priority than setImmediate().
+📌 process.nextTick() executes before setImmediate().
+
+
+✅ Example:
+```
+console.log("Start");
+
+setImmediate(() => console.log("Executed in setImmediate"));
+process.nextTick(() => console.log("Executed in process.nextTick"));
+
+console.log("End");
+```
+
+📝 Output:
+```
+Start
+End
+Executed in process.nextTick
+Executed in setImmediate
+```
+
+
+## **🔹 4️⃣ When to Use?**
+|---------------------- |-----------------------------------------------|----------------------------------         |
+| Feature               | `process.nextTick()`                          | `setImmediate()`                          |        
+|---------------------- |-----------------------------------------------|----------------------------------         |
+| **Execution Timing**  | Before the event loop continues               | In the next event loop iteration          |
+| **Priority**          | Higher (executes before I/O)                  | Lower (executes after I/O)                |
+| **Use Case**          | For critical operations that must run ASAP    | For executing code after I/O operations   |
+|---------------------- |-----------------------------------------------|----------------------------------         |
+
+
+
+============================================================================================================================================================
+
+
+❓ Streams in Node.js:
+
+
+👉 Streams in Node.js are used to 'handle large amounts of data' efficiently by 'processing it chunk by chunk', instead of loading everything into memory at once.
+
+👉 With streams, instead of loading the entire file into memory at once, you load it chunk by chunk, process it, and then discard it before loading the next chunk. 
+This means:
+Without streams: The entire file is loaded into RAM, which can be problematic for large files (e.g., a 5GB video).
+With streams: Only small chunks (e.g., 64KB) are loaded into memory at a time, processed, and then discarded before the next chunk arrives.
+This reduces memory usage and allows Node.js to handle large files efficiently without exhausting system resources.
+
+
+👉 Streams in Node.js can handle any type of data that can be processed in chunks. This includes:
+
+1. Text files (.txt, .csv, .json, etc.) – Read and process line by line instead of loading the entire file into memory.
+
+2. DOCX, PDF, and other document files – Useful for generating or modifying documents without reading the whole file into memory.
+
+3. Images (.jpg, .png, etc.) – Streams are used for image uploads, processing, and compression.
+
+4. Videos and audio (.mp4, .mp3, .wav, etc.) – Essential for streaming services where loading an entire video/audio file would be inefficient.
+
+5. Binary files (.zip, .tar, etc.) – Streams can help process large compressed files efficiently.
+
+6. Network data (HTTP requests, WebSockets, etc.) – Handling real-time data, such as uploading or downloading large files.
+
+7. Database operations – Some databases support streaming large query results instead of returning everything at once.
+
+So, Node.js streams are not limited to text files; they can handle any type of data that can be processed in chunks.
+
+
+
+📌 Why use streams?
+✔ Faster than 'traditional I/O operations' like fs.readFile(), fs.writeFile() etc.
+✔ Efficient for large files (e.g., reading/writing logs, video streaming).
+✔ Memory-efficient (processes chunks instead of entire data).
+✔ Doesn’t load the full file into memory.
+✔ Processes data as it arrives and then discard it before loading the next chunk.
+
+
+|-----------------|---------------------------------------------------------------------|
+| Stream Type     | Function                                                            |
+|-----------------|---------------------------------------------------------------------|
+| Readable        | Read data from a source (e.g., file, API, socket).                  |
+| Writable        | Write data to a destination (e.g., file, response).                 |
+| Duplex          | Read and write simultaneously (e.g., network sockets).              |
+| Transform       | Modify data while reading/writing (e.g., compression, encryption).  |
+|-----------------|---------------------------------------------------------------------|
+
+
+🔹 1️⃣ Readable Stream (Reading Data)
+A Readable Stream allows data to be read in chunks.
+
+
+```
+const fs = require("fs");
+
+const readableStream = fs.createReadStream("example.txt", "utf-8");
+
+readableStream.on("data", (chunk) => {
+  console.log("Received chunk:", chunk);
+});
+
+```
+
+🔹 2️⃣ Writable Stream (Writing Data)
+
+A Writable Stream writes data in chunks.
+
+```
+const fs = require("fs");
+
+const writableStream = fs.createWriteStream("output.txt");
+
+writableStream.write("Hello, ");
+writableStream.write("world!");
+writableStream.end(); 
+```
+
+🔹 3️⃣ Duplex Stream (Read & Write)
+
+A Duplex Stream can both read and write data.
+
+```
+const { Duplex } = require("stream");
+
+const duplexStream = new Duplex({
+  read(size) {
+    this.push("Hello from Duplex Stream!");
+    this.push(null);
+  },
+  write(chunk, encoding, callback) {
+    console.log("Writable received:", chunk.toString());
+    callback();
+  },
+});
+
+duplexStream.on("data", (chunk) => console.log("Readable output:", chunk.toString()));
+
+duplexStream.write("Sending data");
+duplexStream.end();
+
+```
+
+
+
+🔹 4️⃣ Transform Stream (Modifies Data)
+
+A Transform Stream is a Duplex Stream that modifies data before passing it.
+
+
+```
+const { Transform } = require("stream");
+
+const transformStream = new Transform({
+  transform(chunk, encoding, callback) {
+    this.push(chunk.toString().toUpperCase()); // Convert data to uppercase
+    callback();
+  },
+});
+
+process.stdin.pipe(transformStream).pipe(process.stdout);
+
+```
+
+============================================================================================================================================================
+
+❓ How do you handle large file uploads efficiently in Node.js?
+
+ 👉
+ 
+ Uploading large files in Node.js can be challenging due to memory constraints. Instead of loading the entire file into memory, we use streaming and chunked uploads to handle large files efficiently.
+
+Best Practices for Handling Large File Uploads
+✅ Use Streaming – Process files in chunks instead of loading them into memory.
+✅ Use Multer or Busboy – Middleware for handling file uploads.
+✅ Store Files in Cloud Storage – Use Cloudinary, AWS S3, or Firebase instead of storing them locally.
+✅ Enable Chunked Uploads – Upload files in parts and merge them.
+✅ Use Nginx as a Reverse Proxy – Optimize request handling before reaching Node.js.
+
+
+
+1️⃣ Streaming Uploads Using Multer + Streams
+
+```
+const express = require('express');
+const multer = require('multer');
+const fs = require('fs');
+
+const app = express();
+const upload = multer({ dest: 'uploads/' }); // Temporary storage
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  const file = req.file;
+  const readStream = fs.createReadStream(file.path);
+  const writeStream = fs.createWriteStream(`uploads/${file.originalname}`);
+
+  readStream.pipe(writeStream);
+
+  writeStream.on('finish', () => {
+    res.send({ message: 'File uploaded successfully!' });
+  });
+
+  writeStream.on('error', (err) => {
+    res.status(500).send({ error: 'File upload failed!' });
+  });
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+```
+
+
+2️⃣ Uploading Directly to Cloud Storage (e.g., AWS S3)
+
+
+```
+const AWS = require('aws-sdk');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const express = require('express');
+
+const app = express();
+const s3 = new AWS.S3({ region: 'us-east-1' });
+
+const upload = multer({
+  storage: multerS3({
+    s3,
+    bucket: 'my-bucket-name',
+    key: (req, file, cb) => cb(null, file.originalname)
+  })
+});
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send({ message: 'File uploaded to S3 successfully!' });
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+
+```
+============================================================================================================================================================
+
+
+📌 What is child_process?
+
+🔹 child_process Module in Node.js
+
+The 'child_process module' allows us to create and manage 'child processes' in Node.js. 
+
+This is useful for:
+
+✔ Executing system commands (e.g., running shell commands)
+✔ Spawning new Node.js processes
+✔ Running CPU-intensive tasks asynchronously
+✔ Executing scripts in different languages (Python, Bash, etc.)
+
+---
+
+🔹 Ways to Create Child Processes**  
+The `child_process` module provides four main methods:  
+
+| Method | Description | Output Type |
+|--------|------------|------------|
+| `spawn()` | Used for streaming large output (handles I/O as streams) | Stream |
+| `exec()` | Used for small outputs (buffers the entire output) | Buffer (string) |
+| `execFile()` | Like `exec()`, but runs a file directly | Buffer (string) |
+| `fork()` | Used to create a separate Node.js process (for IPC) | Dedicated Node.js process |
+
+---
+
+## 🔹 1️⃣ `spawn()` - Used for Streaming Large Output
+✅ Best for handling large amounts of data (does not buffer).  
+✅ Returns a stream, so it processes data chunk by chunk.  
+
+### ✅ Example: Running a Shell Command (`ls -l` or `dir` on Windows)
+```js
+const { spawn } = require("child_process");
+
+const ls = spawn("ls", ["-l"]); // Use "dir" for Windows
+
+ls.stdout.on("data", (data) => {
+  console.log(`Output: ${data}`);
+});
+
+ls.stderr.on("data", (data) => {
+  console.error(`Error: ${data}`);
+});
+
+ls.on("close", (code) => {
+  console.log(`Process exited with code ${code}`);
+});
+```
+📌 Use Case: When you need real-time output (e.g., logging, data streaming).  
+
+---
+
+## 🔹 2️⃣ `exec()` - Runs a Command and Buffers Output
+✅ Best for commands with small output  
+✅ Buffers entire output before returning  
+
+### ✅ Example: Running a Command (`ls -l`)
+```js
+const { exec } = require("child_process");
+
+exec("ls -l", (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error: ${error.message}`);
+    return;
+  }
+  if (stderr) {
+    console.error(`Stderr: ${stderr}`);
+    return;
+  }
+  console.log(`Output:\n${stdout}`);
+});
+```
+📌 Use Case: When you don't need streaming and expect small output.  
+
+---
+
+## 🔹 3️⃣ `execFile()` - Runs an Executable File Directly
+✅ Similar to `exec()`, but runs an executable file directly.  
+
+### ✅ Example: Running a Python Script
+```js
+const { execFile } = require("child_process");
+
+execFile("python", ["script.py"], (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error: ${error.message}`);
+    return;
+  }
+  console.log(`Output: ${stdout}`);
+});
+```
+📌 Use Case: Running external executables like Python scripts or binaries.  
+
+---
+
+## **🔹 4️⃣ `fork()` - Spawning a New Node.js Process**
+✅ Best for running another Node.js script as a child process  
+✅ Supports Inter-Process Communication (IPC)  
+
+### ✅ Example: Forking a Child Node.js Process
+#### 📌 `child.js` (Child Process)
+```js
+process.on("message", (msg) => {
+  console.log(`Child received: ${msg}`);
+  process.send("Hello from Child");
+});
+```
+#### 📌 `parent.js` (Main Process)
+```js
+const { fork } = require("child_process");
+
+const child = fork("child.js");
+
+child.send("Hello from Parent");
+
+child.on("message", (msg) => {
+  console.log(`Parent received: ${msg}`);
+});
+```
+📌 **Use Case:** Running a separate Node.js script in a new process (e.g., parallel tasks).  
+
+---
+
+## **🔹 Summary**
+| Method | Best For | Output |
+|--------|---------|--------|
+| `spawn()` | Large data streaming (real-time output) | **Stream** |
+| `exec()` | Small output (buffers entire output) | **Buffer (string)** |
+| `execFile()` | Running executable files directly | **Buffer (string)** |
+| `fork()` | Running another Node.js script as a child process | **Dedicated Node.js process** |
+
+🚀 **Conclusion:**  
+The `child_process` module is powerful for executing system commands, running scripts, and handling background processes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+6️⃣ What is rate limiting, and how do you implement it in Node.js?
+
+Rate limiting is a technique used to control the number of requests a user can make to a server within a specific time period.  
+
+It helps to:  
+✅ Prevent API abuse (e.g., bots, DDoS attacks).  
+✅ Protect server resources (avoid overload).  
+✅ Ensure fair usage (limit per user/IP).  
+
+
+If they exceed the limit, they get an HTTP 429 Too Many Requests error.
+
+
+🔹 How to Implement Rate Limiting in Node.js using express-rate-limit package?
+
+1️⃣ Using `express-rate-limit` (for Express.js apps)
+However, this doesn't work well in distributed systems where multiple servers handle requests.
+
+
+🔹 Where is Rate Limiting Used?
+✅ Login attempts: Prevent brute-force attacks.  
+✅ API requests: Protect backend servers from overload.  
+✅ Search queries: Avoid excessive requests from bots.  
+✅ File uploads: Control how many files a user can upload in a short time.
+
+
+🔹 How to Implement Rate Limiting in Node.js using redis?
+
+💡 Redis is the best choice for rate limiting because it is:
+✅ Fast (stores data in RAM).
+✅ Persistent across multiple servers (unlike in-memory solutions).
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

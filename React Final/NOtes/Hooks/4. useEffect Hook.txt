@@ -109,7 +109,7 @@ const App = () => {
   }, []);
 
   useEffect(()=> {
-    users ? document.title = `Users: ${users.length}` : 'Loading...';
+    users ? documnt.titlee = `Users: ${users.length}` : 'Loading...';
   }, [users])
 
 

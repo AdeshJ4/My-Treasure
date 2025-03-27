@@ -3,7 +3,7 @@
 1. $all :
 2. $elemMatch
 3. $size
-4. $unwind
+4. $unwind    
 5. $ifNull
 6. $push
 8. $pop
@@ -14,9 +14,57 @@
 
 
 
-
 Note : You can access 'array elements' like objects means using 'dot notation'.
 eg. db.hobbies.find({'hobbies.title': {$eq: 'Sports'}});
+Sample Data:
+[
+  {
+    "_id": 1,
+    "name": "John",
+    "hobbies": [
+      { "title": "Sports", "level": "Expert" },
+      { "title": "Music", "level": "Beginner" }
+    ]
+  },
+  {
+    "_id": 2,
+    "name": "Alice",
+    "hobbies": [
+      { "title": "Reading", "level": "Intermediate" },
+      { "title": "Sports", "level": "Advanced" }
+    ]
+  },
+  {
+    "_id": 3,
+    "name": "Bob",
+    "hobbies": [
+      { "title": "Gaming", "level": "Professional" }
+    ]
+  }
+]
+
+
+
+output:
+[
+  {
+    "_id": 1,
+    "name": "John",
+    "hobbies": [
+      { "title": "Sports", "level": "Expert" },
+      { "title": "Music", "level": "Beginner" }
+    ]
+  },
+  {
+    "_id": 2,
+    "name": "Alice",
+    "hobbies": [
+      { "title": "Reading", "level": "Intermediate" },
+      { "title": "Sports", "level": "Advanced" }
+    ]
+  }
+]
+
 
 
 
@@ -170,23 +218,18 @@ db.orders.find({
 Order ID 1 (Laptop: 2, Mouse: 1)
 
 
-ex.1:
 find user who has grade above 90
 I/P: 
-db.tb1.insertMany([
+[
   { _id: 1, name: 'Alice', grades: [ 10,20, 30 ] },
   { _id: 2, name: 'Bob', grades: [ 30, 40, 50 ] },
   { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] },
   { _id: 4, name: 'Mosh', grades: [ 10, 20, 10 ] },
-])
-o/p: [ { _id: 2, name: 'Bob', grades: [ 92, 87, 95 ] } ]
-Query> db.tb1.find({grades: {$elemMatch: {$gt: 90}}})
-output: [
-  { _id: 2, name: 'Bob', grades: [ 30, 40, 50 ] },
-  { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] }
 ]
-
-
+output:
+[ { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] } ]
+Query> 
+db.tb1.find({ grades: { $gt: 90 }})
 
 =============================================================================================================
 
@@ -224,6 +267,46 @@ Append a Value to an Array
 { _id: 1, scores: [ 44, 78, 38, 80 ] } 
 db.students.updateOne({_id: 1}, {$push: {scores: 10}})
 { _id: 1, scores: [ 44, 78, 38, 80, 10 ] } 
+
+
+Append object:
+[
+  {
+    _id: 1,
+    name: 'Alice',
+    interests: [
+      { name: 'A', age: 22 },
+    ]
+  },
+  {
+    _id: 2,
+    name: 'Bob',
+    interests: [ { name: 'C', age: 12 }, { name: 'D', age: 239 } ]
+  },
+  {
+    _id: 3,
+    name: 'Charlie',
+    interests: [ { name: 'E', age: 32 }, { name: 'F', age: 29 } ]
+  }
+]
+Query> db.tb1.findOneAndUpdate({_id: 1}, {$push: { interests: {name:"Z", age: 23}}}, { returnDocument: 'after', {projection: { _id: 0, interests: 1 }}})
+[
+  {
+    interests: [
+      { name: 'A', age: 22 },
+      { name: 'Z', age: 23 }
+    ]
+  },
+  {
+    interests: [ { name: 'C', age: 12 }, { name: 'D', age: 239 } ]
+  },
+  {
+    interests: [ { name: 'E', age: 32 }, { name: 'F', age: 29 } ]
+  }
+]
+
+
+
 
 
 Append a Value to Arrays in Multiple Documents
@@ -278,6 +361,25 @@ ex.2: remove all occurrences of specified value according to condition.
 Query> db.users.updateOne({_id: 1}, {$pull: {grades: {$gt: 86}}})
 { "_id": 1, "grades": [85, 85] }
 
+
+ex.3 Removing an object where product is "Phone"
+[
+  { 
+    _id: 1,  customer: "Alice",  items: [{ product: "Laptop", quantity: 1 }, { product: "Phone", quantity: 2 } ]  
+  }
+]
+output:
+[
+  { 
+    _id: 1,  customer: "Alice",  items: [{ product: "Laptop", quantity: 1 } ]  
+  }
+]
+Query>
+db.orders.updateOne({_id: 1},  { $pull: { items: { product: "Phone" } } } )
+
+
+
+
 =============================================================================================================
 
 
@@ -293,12 +395,12 @@ $slice: $slice is used in combination with '$push' to 'control the size 'of the 
 
 ex. 1 store only last five elements inside array.
 {  "_id": 1, "grades": [10, 20, 30, 40, 50] }
-Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: -5 } } })
+Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: -5 } } })   // last 5
 {  "_id": 1, "grades": [30, 40, 50, 60, 70] }
 
 ex.2  store only first three elements inside array.
 {  "_id": 1, "grades": [10, 20, 30, 40, 50] }
-Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: 3 } } })
+Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: 3 } } })   // first 3
 {  "_id": 1, "grades": [10, 20, 30] }
 
 
@@ -307,4 +409,87 @@ db.users.updateOne({_id: 101}, {$push: {hobbies: {$each: ["A", "B"], $slice: 3}}
 
 
 
+=============================================================================================================
+
+
+$unwind stage:
+
+
+The $unwind stage in MongoDB's aggregation pipeline is used to deconstruct an array field, meaning it creates a separate document for each array element.
+Note: $unwind cannot be used in find() or simple queries because $unwind is part of the aggregation pipeline. 
+
+
+sample Data: 
+db.orders.insertMany([
+  { 
+    _id: 1, 
+    customer: "Alice", 
+    items: [
+      { product: "Laptop", quantity: 1 },
+      { product: "Phone", quantity: 2 }
+    ] 
+  },
+  { 
+    _id: 2, 
+    customer: "Bob", 
+    items: [
+      { product: "Tablet", quantity: 3 }
+    ] 
+  }
+])
+
+output: 
+[
+  { "_id": 1, "customer": "Alice", "items": { "product": "Laptop", "quantity": 1 } },
+  { "_id": 1, "customer": "Alice", "items": { "product": "Phone", "quantity": 2 } },
+  { "_id": 2, "customer": "Bob", "items": { "product": "Tablet", "quantity": 3 } }
+]
+
+
+Query>
+db.orders.aggregate([
+  { $unwind: "$items" }
+])
+
+
+=============================================================================================================
+
+
+
+ $ifNull: 
+
+
+The $ifNull operator in MongoDB is used to handle null or missing values by providing a "default value" when a field is null or does not exist.
+
+
+if age is null or absent then return it as "Unknown"
+
+Hint: $ifNull treats "undefined" and "missing" fields as null
+
+Input: 
+[
+  { _id: 1, name: "Alice", age: 25, city: "New York" },
+  { _id: 2, name: "Bob", age: null, city: "London" },             // Null is age
+  { _id: 3, name: "Charlie" }                                     // Missing `age` field
+]
+
+Output: 
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Bob", "age": "Unknown" },        // age was null, replaced with "Unknown"
+  { "_id": 3, "name": "Charlie", "age": "Unknown" }     // age was missing, replaced with "Unknown"
+]
+
+Query 1>
+db.users.find({}, { name: 1, age: { $ifNull: ["$age", "Unknown"] } })
+
+Query 2> 
+db.users.aggregate([
+  {
+    $project: {
+      name: 1,
+      age: { $ifNull: ["$age", "Unknown"] } // Replace null/missing age with "Unknown"
+    }
+  }
+])
 

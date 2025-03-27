@@ -1,0 +1,246 @@
+Arithmetic Operators in MongoDB (`$expr`)
+Arithmetic operators in MongoDB are used to perform calculations within queries, aggregations, and updates.
+
+
+Note: arithmetic operators ($add, $subtract, $multiply, $divide, $mod) should always be used inside $expr when querying in MongoDB.
+
+Why?
+$expr allows the use of aggregation expressions inside find() queries.
+Arithmetic operators return numbers, but find() requires a Boolean condition (e.g., true/false).
+To make a valid query, arithmetic results must be wrapped in a comparison operator like $gt, $lt, $eq, etc.
+
+
+
+
+
+|---------------|-------------------------------------------|-----------------------------------------------|
+| Operator      | Description                               | Example Usage                                 |
+|---------------|-------------------------------------------|-----------------------------------------------|
+| `$add`        | Adds numbers or combines date values      | `{ $add: [ "$price", "$tax" ] }`              |
+| `$subtract`   | Subtracts one number from another         | `{ $subtract: [ "$price", "$discount" ] }`    |
+| `$multiply`   | Multiplies two numbers                    | `{ $multiply: [ "$price", "$quantity" ] }`    |
+| `$divide`     | Divides one number by another             | `{ $divide: [ "$total", "$count" ] }`         |
+| `$mod`        | Returns the remainder of division         | `{ $mod: [ "$price", 2 ] }`                   |
+|---------------|-------------------------------------------|-----------------------------------------------|
+
+---
+
+Examples in `$expr`
+1. Find documents where `price + tax > total`
+```
+db.tb1.find({ 
+  $expr: { $gt: [{ $add: ["$price", "$tax"] }, "$total"] } 
+});
+```
+
+2. Find documents where `price - discount < 100`
+```
+db.tb1.find({ 
+  $expr: { $lt: [{ $subtract: ["$price", "$discount"] }, 100] } 
+});
+```
+
+3. Find documents where `price * quantity > 5000`
+```
+db.tb1.find({ 
+  $expr: { $gt: [{ $multiply: ["$price", "$quantity"] }, 5000] } 
+});
+```
+
+4. Find documents where `total / count > 50`
+```
+db.tb1.find({ 
+  $expr: { $gt: [{ $divide: ["$total", "$count"] }, 50] } 
+});
+```
+
+5. Find documents where `price` is an even number (`price % 2 == 0`)
+```
+db.tb1.find({ 
+  $expr: { $eq: [{ $mod: ["$price", 2] }, 0] } 
+});
+```
+
+---
+
+### Summary
+✅ Arithmetic Operators in MongoDB  
+1️⃣ `$add` ➝ Addition  
+2️⃣ `$subtract` ➝ Subtraction  
+3️⃣ `$multiply` ➝ Multiplication  
+4️⃣ `$divide` ➝ Division  
+5️⃣ `$mod` ➝ Modulo (Remainder)  
+
+Let me know if you need more details! 🚀🔥
+
+
+
+
+
+
+3. $expr: 
+
+-> useful when you need to 'compare fields from the same document' or 'perform more complex comparisons'
+-> find all documents where "age" is greater than "target" (both fields are in the same document).
+-> db.tb1.find( { $expr: { $eq:  [ "$age", "$target" ] } } )
+-> db.tb1.find( { $expr: { $ne:  [ "$age", "$target" ] } } )
+-> db.tb1.find( { $expr: { $gt:  [ "$age", "$target" ] } } )
+-> db.tb1.find( { $expr: { $lt:  [ "$age", "$target" ] } } )
+-> db.tb1.find( { $expr: { $gte: [ "$age", "$target" ] } } )
+-> db.tb1.find( { $expr: { $lte: [ "$age", "$target" ] } } )
+-> db.tb1.find( { $expr: { $gt:  [ "$age", "$target" ] } } )     
+-> db.tb1.find( { $expr: { $gt:  [ { $add: ['$price', '$total'] } , '$total']}})
+-> db.tb1.find( { $expr: { $gt:  [ { $subtract: ["$price", "$discount"] }, 100 ]}})
+-> db.tb1.find({  $expr: { $gt: [{ $multiply: ["$price", "$quantity"] }, "$total"] }   })
+-> db.tb1.find({  $expr: { $gte: [{ $divide: ["$price", "$cost"] }, 2] }    })
+
+
+Sample Data:
+[
+  { "_id": 1,  "price": 1000, "discountPrice": 900 },
+  { "_id": 2,  "price": 500, "discountPrice": 500 },
+  { "_id": 3,  "price": 300, "discountPrice": 350 }
+]
+
+1️⃣. Find documents where price is greater than discountPrice
+output:
+[
+  { "_id": 3, "price": 300, "discountPrice": 350 }
+]
+Query>
+db.products.find({  $expr: { $gt: ["$price", "$discountPrice"] } })
+
+
+2️⃣. Find products where price is equal to discountPrice
+output: 
+[
+  { "_id": 2, "name": "Phone", "price": 500, "discountPrice": 500 }
+]
+Query>
+db.products.find({ $expr: { $eq: ["$price", "$discountPrice"] }})
+
+3️⃣ Find products where the discount is more than $100
+output>
+[
+  { "_id": 1, "name": "Laptop", "price": 1000, "discountPrice": 900 }
+]
+Query>
+db.products.find({ $expr: { $gt: [{ $subtract: { '$price', '$discountPrice'} }, 100] } })
+
+
+4️⃣ Increase discountPrice by 10% where price is greater than discountPrice
+db.products.updateMany({ $expr: { $gt: ['$price', '$discountPrice'] }}, { $mul: { "discountPrice": 1.1 } })
+
+
+5️⃣ Delete products where price is less than discountPrice
+db.products.deleteMany({  $expr: { $lt: ["$price", "$discountPrice"] } })
+
+
+6️⃣ Find documents where "price" + "tax" is greater than "total":
+db.products.find({ $expr:{ $gt: [ { $add: ['$price', '$tax'] } , '$total' ]  } })
+
+
+7️⃣ 🔹 Find documents where salary is equal to expectedSalary
+db.emp.find({ $expr: { $eq: ["$salary", "$expectedSalary"] }  })
+
+
+🔹 Find documents where price - discount is exactly 100
+$expr: { $eq: [{ $subtract: ["$price", "$discount"] }, 100] }
+
+
+🔹 Find documents where price * quantity is greater than 5000
+db.users.find({   $expr: { $gt: [{ $multiply: ["$price", "$quantity"] }, 5000] } })
+
+
+🔹 Find documents where total / count is at least 50
+db.users.find({  $expr: { $gte: [{ $divide: ["$total", "$count"] }, 50] } })
+
+
+🔹 Find documents where price is an even number (i.e., divisible by 2)
+db.users.find({  $expr: { $eq: [{ $mod: ["$price", 2] }, 0] } })
+
+
+🔹 Find documents where price > cost AND discount < 50
+
+db.products.find({
+  $expr: { 
+    $and: [
+      { $gt: ["$price", "$cost"] },
+      { $lt: ["$discount", 50] }
+    ]
+  }
+});
+
+
+🔹 Find documents where age > 30 OR salary > 50000
+db.employees.find({
+  $expr: { 
+    $or: [
+      { $gt: ["$age", 30] },
+      { $gt: ["$salary", 50000] }
+    ]
+  }
+});
+
+or
+
+db.user.find({
+    $or: [
+        { age : { $gt: 30 }},
+        { salary : { $gt: 50000 }}
+    ]
+})
+
+
+
+🔹 Find documents where price is NOT greater than cost
+
+db.users.find({
+    $expr: {
+        $lte: ['$price', '$cost']
+    }
+})
+
+or
+
+db.users.find({
+ $expr: { $not: { $gt: ["$price", "$cost"] } }
+})
+
+
+🔹 Find documents where price - discount is greater than cost
+
+db.users.find({
+    $expr: {
+        $gt: [{ $subtract: ["$price", "$discount"] }, "$cost"]
+    }
+});
+
+
+🔹 Find documents where discountPrice exists and is less than price
+db.products.find({
+  discountPrice: { $exists: true }, // ✅ Ensures discountPrice exists
+  $expr: { $lt: ["$discountPrice", "$price"] } // ✅ Checks if discountPrice < price
+});
+
+
+
+🔹 Find all products where price is greater than cost using aggregation
+
+db.users.aggregate([
+    {
+        $match: {
+            $expr: {
+                $gt: ['$price', '$cost']
+            }
+        }
+    }
+])
+
+
+
+4️⃣ Date Comparisons with $expr
+
+db.products.find({
+  $expr: { $lt: ["$expiryDate", "$manufactureDate"] }
+});

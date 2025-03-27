@@ -33,7 +33,9 @@ Notes from Mosh :
 
 1. React updates state asynchronously means not immediately.
 -> when event handler completes its execution then only state updated.
--> This is for performance reason. because as part of handling an event we could set multiple state variable.and if every time we called set Function react rernder our component and we will end up to many rerenders this is unnecessory so for performane reason reacts taks all state variables and uopdates patches them at later time after event handler completes its execution. so at that time point  react applies all the update at once.and then it will rernder our componentwith updated state.
+-> This is for performance reason. because as part of handling an event we could set multiple state variable and if every time we called set Function react rernder 
+our component and we will end up to many rerenders this is unnecessory so for performane reason reacts taks all state variables and uopdates patches them at later 
+time after event handler completes its execution. so at that time point  react applies all the update at once.and then it will rernder our componentwith updated state.
 
 -> Ex. 
 

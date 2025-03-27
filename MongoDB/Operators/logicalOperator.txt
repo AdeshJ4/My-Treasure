@@ -28,19 +28,20 @@ documents where age is not equal to 20.
 -> db.tb1.find({runtime: {$not: {$eq: 60}}})  ===  db.tb1.find({runtime: {$ne: 60}})
 db.products.find({ price: { $not: { $gt: 500 } } });  // (i.e., price <= 500)
 
+
 4. $nor: 
 
 -> This operator 'return documents that do not match any of the specified conditions'.
 -> invert result of each condition
--> db.tb1.find({$nor: [{id: 101}, {name: "Adesh"}, {age : 21}]})
+-> db.tb1.find({$nor: [{id: 102}, {name: "Eva"}, {age : 30}]})
 -> the documents except having id 101, name = "Adesh", age = 21 all documents will returned.
 
 [
   { "_id": 1, "id": 101, "name": "Adesh", "age": 21, "city": "ExampleCity1" },
-  { "_id": 2, "id": 102, "name": "John", "age": 25, "city": "ExampleCity2" },
-  { "_id": 3, "id": 103, "name": "Alice", "age": 30, "city": "ExampleCity3" },
+  { "_id": 2, "id": 102, "name": "John", "age": 25, "city": "ExampleCity2" },   // Excluded (id: 102)
+  { "_id": 3, "id": 103, "name": "Alice", "age": 30, "city": "ExampleCity3" },  // Excluded (age: 30)
   { "_id": 4, "id": 104, "name": "Bob", "age": 22, "city": "ExampleCity4" },
-  { "_id": 5, "id": 105, "name": "Eva", "age": 28, "city": "ExampleCity5" }
+  { "_id": 5, "id": 105, "name": "Eva", "age": 28, "city": "ExampleCity5" }     // Excluded (name: Eva)
 ]
 db.tb1.find({$nor: [{id: 102}, {name: "Eva"}, {age : 30}]})
 [

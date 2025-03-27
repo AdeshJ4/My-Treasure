@@ -16,38 +16,257 @@
 1. $set
 -> $set field is used to 'update the value' of a field or to 'add a new field'.
 -> If the field does not exist, $set will add a new field with the specified value.
+ex: 
+🔹 1. Update a User's Name
+```
+db.users.updateOne(
+  { _id: ObjectId("650c0a9f8f1b6a1a5c9f9a7b") },  // Find user by ID
+  { $set: { name: "John Doe" } } 
+);
+```
+
+🔹 2. Add a New Field (status) if It Doesn’t Exist
+```
+db.users.updateOne(
+  {_id: 1},
+  { $set: { status: 'active' } }
+)
+```
+
+🔹 3. Update Multiple Fields at Once
+```
+db.users.updateOne(
+  { name: "Alice" },
+  { $set: { age: 30, city: "New York", job: "Engineer" } }
+) 
+```
+
+🔹 4. Update Multiple Documents (updateMany)
+```
+db.users.updateMany(
+  { country: 'India' },
+  { $set: { status: 'Active' } }
+)
+```
+
+🔹 5. Use $set Inside findOneAndUpdate
+```
+db.users.findOneAndUpdate(
+  { email: "alice@example.com" },
+  { $set: { subscription: "Premium" } },
+  { returnNewDocument: true }
+);
+```
+
+
+
+
+sample data: 
+[
+  {
+    "_id": 1,
+    "specs": [
+      { "feature": "RAM", "value": "16GB" },
+      { "feature": "Storage", "value": "512GB SSD" }
+    ],
+    "manufacturer": { "name": "TechCorp","location": { "city": "San Francisco", "country": "USA" }}
+  },
+  {
+    "_id": 2,
+    "specs": [
+      { "feature": "Camera", "value": "108MP" },
+      { "feature": "Battery", "value": "5000mAh" }
+    ],
+    "manufacturer": { "name": "PhoneMakers", "location": { "city": "Seoul", "country": "South Korea" }}
+  },
+  {
+    "_id": 3,
+    "specs": [
+      { "feature": "Graphics", "value": "4K UHD" },
+      { "feature": "Storage", "value": "1TB SSD" }
+    ],
+    "manufacturer": { "name": "GameWorld", "location": { "city": "Tokyo", "country": "Japan" }
+    }
+  }
+]
+
+
+✅ update nested object value:
+```
+db.tb1.updateOne(
+  {_id: 1},
+  { $set: { 'manufacturer.name': 'Tech', 'manufacturer.location.city': 'Pune' } }
+)
+```
+
+✅ add new value inside nested object:
+```
+db.tb1.updateOne(
+  { _id: 1 },
+  { $set: { 'manufacturer.founder': 'Adesh' } }
+)
+```
+
+
+
+============================================================================================================================================================
+
+
 
 2. $unset
 -> The $unset operator 'deletes a particular field'.
 -> If the field does not exist, then $unset does nothing.
 
 
+1️⃣ Remove a Field from a Document
+sample data: 
+{
+  age: 30,
+}
+```
+db.users.updateOne(
+  {_id: 1},
+  {$unset: { age: "" }}
+)
+```
+
+2️⃣ Remove a Nested Field
+{
+  contact: {
+    email: "alice@example.com",
+    phone: "123-456-7890"
+  }
+}
+```
+db.users.updateOne(
+  {_id: 1},
+  { $unset: { "contact.phone": "" } }
+)
+```
+
+3️⃣ Remove Multiple Fields at Once
+```
+db.users.updateOne(
+  {_id: 1},
+  { $unset:{ name: "", 'contact.email': ""} }
+)
+```
+
+
+============================================================================================================================================================
+
 3. $rename
 -> The $rename operator 'rename the name of a field '
 -> If the field does not exist, $rename does nothing
 
 
+
+1️⃣ Rename a Field
+{
+  name: "John Doe",   // make it "fullName"
+}
+```
+db.users.updateOne(
+  {_id: 1},
+  {$rename: { name: 'fullName' }}
+)
+```
+
+2️⃣ Rename Multiple Fields
+{
+  firstName: "Alice",
+  lastName: "Smith"
+}
+
+```
+db.users.updateOne(
+  {_id: 1},
+  {$rename: { firstName: 'fname', lastName: 'lname'}}
+)
+```
+
+
+============================================================================================================================================================
+
+
 4. $inc
--> The $inc operator 'increments' a field by a 'specified value'.
--> The $inc operator accepts 'positive and negative values'.
+-> The $inc operator "increments" or "decrements" a numeric field by a specified value.
 -> If it +ve number then increase the no. if its -ve no then decrees no.
 -> If the field does not exist, $inc creates the field and sets the field to the specified value.
 -> Use of the $inc operator on a field with a null value will generate an error.
 
+1️⃣ Increment a Number Field
+```
+db.users.updateOne(
+  {_id: 1},
+  {$inc: { age: 1}}
+)
+```
+
+2️⃣ Decrease score by 10:
+```
+db.users.updateOne(
+  {_id: 1},
+  {$inc: { score: -10 }}
+)
+```
+
+3️⃣Increment Multiple Fields
+```
+db.users.updateOne(
+  {_id: 1},
+  {$inc: { age: 1, score: -2 } }
+)
+```
+
+============================================================================================================================================================
+
+
 5. $min
 -> Only updates the field value if the 'specified value' is less than the 'existing field value'.
 -> If the field does not exist, the $min operator sets the field to the specified value
-Input: [{ _id: 1, highScore: 800, lowScore: 200 } ]
-Query: db.tb1.updateOne({_id: 1}, {$min: {lowScore: 150}})
-Output: [{ _id: 1, highScore: 800, lowScore: 150 } ]
 
+{
+  _id: 1,
+  name: "John",
+  age: 30
+}
+Try to Set age to 25:
+db.users.updateOne(
+  { _id: 1 },
+  { $min: { age: 25 } }
+);
+{
+  _id: 1,
+  name: "John",
+  age: 25
+}
+
+============================================================================================================================================================
 
  6. $max
 -> Only updates the field value if the specified value is greater than the existing field value.
 -> If the field does not exists, the $max operator sets the field to the specified value.
-Input: [{ _id: 1, highScore: 800, lowScore: 150 } ]
-Output: [{ _id: 1, highScore: 800, lowScore: 200 } ]
-Query: db.tb1.updateOne({_id: 1}, {$max: {lowScore: 200}})
+
+{
+  _id: 1,
+  name: "John",
+  age: 30
+}
+Try to Set age to 35
+db.users.updateOne(
+  { _id: 1 },
+  { $max: { age: 35 } }
+);
+{
+  _id: 1,
+  name: "John",
+  age: 35
+}
+
+
+============================================================================================================================================================
+
 
 7. $mul
 -> Multiplies the value of the field by the specified amount.

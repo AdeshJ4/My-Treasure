@@ -199,58 +199,13 @@ Async Operation 1...
 
 code: 
 ------
-const p1 = new Promise((resolve, reject)=>{
-    setTimeout(()=>{
-        console.log('Async Operation 1...');
-        resolve({id: 101, name: 'Adesh'});
-    }, 2000)
-});
-
-let p2 = new Promise((resolve, reject)=>{
-    setTimeout(() => {
-        console.log('Async Operation 2...');
-        // resolve({id: 102, name: "Akshay"});
-        reject(new Error('Something failed'))
-    }, 2000);
-})
-
+const p1 = new Promise((resolve) => setTimeout(() => resolve("First Promise"), 2000));
+const p2 = new Promise((resolve, reject) => setTimeout(() => reject(new Promise("Something went wrong)), 100));
 
 Promise
     .race([p1, p2])
     .then((res)=>console.log(res))
     .catch((err)=> console.log(err.message));
-
-
-output: 
--------
-
-Async Operation 1...
-{ id: 101, name: 'Adesh' }
-
-
-
-Creating Settled Promises:
---------------------------
-
--> Sometimes we have to create a promise that is already resolved. this is particularly used while writing unit tests.
--> in your unit test you have to write promise that is already resolved.
-
-code : 
-======
-
-const p = Promise.resolve({id: 101, name: "Adesh"});
-
-p.then((res)=> {
-    console.log(res);
-})
-
-output: 
-========
-{id: 101, name: 'Adesh'}
-
-
-
-
 
 
 
@@ -299,25 +254,24 @@ Promise.any([p1, p2, p3])
 
 
 
-Promise.prototype.finally()
 
--> The finally() method will help if you're going to do any processing or cleanup work once a promise is made, regardless of the 
-outcome.
 
-function add(n1, n2){
-    return new Promise((resolve, reject)=> {
-        if(typeof n1 === 'number' && typeof n2 === 'number'){
-            resolve(n1 + n2)
-        }else{
-            reject(new Error('Not a number'))
-        }
-    })
-}
 
-add
-    .then(res => console.log('result: ' + res))
-    .catch(err => console.log(err.message))
-    .finally(()=>console.log('Number are closed'));
+Creating Settled Promises:
+--------------------------
 
-expected output: 15 Numbers are added.
-                     
+-> Sometimes we have to create a promise that is already resolved. this is particularly used while writing unit tests.
+-> in your unit test you have to write promise that is already resolved.
+
+code : 
+======
+
+const p = Promise.resolve({id: 101, name: "Adesh"});
+
+p.then((res)=> {
+    console.log(res);
+})
+
+output: 
+========
+{id: 101, name: 'Adesh'}

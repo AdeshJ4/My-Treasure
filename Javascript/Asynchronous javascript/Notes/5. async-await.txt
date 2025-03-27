@@ -1,7 +1,8 @@
+-> async/await is a modern way to handle Promises that makes asynchronous code look and behave more like synchronous code
 -> async-await are nothing but syntactically sugar over the promise.
 -> "async and await make promises easier to write"
 -> async makes a function return a Promise
--> await makes a function wait for a Promise
+-> await pauses execution until the Promise resolves.
 
 -> we write 'async' keyword before a function which is going to return promise.
 -> The await keyword can only be used inside an async function.
@@ -9,47 +10,88 @@
 
 
 
+✅ Why Use async/await?
+Simplifies promise handling (.then() and .catch() become unnecessary).
+Avoids callback hell and improves readability.
+Error handling with try...catch is more intuitive
 
-fetch data : 
-------------
 
-const fetchUsers () {
-  return fetch('https://jsonplaceholder.typicode.com/users');
+✔️ async/await makes async code look like sync code, but it’s still non-blocking.
+✔️ The main thread never stops; await only pauses execution inside the async function.
+✔️ async/await improves readability while maintaining the benefits of asynchronous execution.
+
+
+
+🔥 How async/await Works
+
+1️⃣ Declaring an async Function
+
+When a function is marked with async, it always returns a Promise.
+
+async function fetchData() {
+  return "Hello, World!";
 }
-fetchUsers()
-  .then((res)=>{
-    return res.json();
-  })
-  .then((users)=>{
-    log(users)
-  })
-  .catch((err)=>{
-    log(err);
-  })
-  .finally(()=>{
-    log('cleanup process')
-  })
 
-using 
-const fetchData = async () => {
+fetchData().then(console.log); // Output: "Hello, World!"
+
+Even if we return a simple value, JavaScript automatically wraps it in a Promise.
+
+
+
+2️⃣ Using await to Wait for a Promise
+await pauses execution until the Promise resolves.
+It can only be used inside an async function.
+
+✅ Example: Fetching API Data with async/await
+Here’s how async/await makes fetching data from an API more readable:
+
+```
+async function fetchUsers() {
   try {
-    const data = await fetch("https://jsonplaceholder.typicode.com/users");
-    const res = await data.json();
-    console.log(res);
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-fetchData();
-
-
-using async-await:
-async function fetchUsers(){
-  try{
-    const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-    log(response.data);
-  }catch(err){
-    log(err)
+    let response = await fetch("https://jsonplaceholder.typicode.com/users");
+    let users = await response.json(); // Wait for JSON conversion
+    console.log(users[0]); // Print first user
+  } catch (error) {
+    console.error("Error fetching users:", error.message);
   }
 }
+```
+
+🔍 What's Happening?
+fetch() returns a Promise, and await waits for it to resolve.
+response.json() also returns a Promise, which await resolves.
+If an error occurs (e.g., network failure), the catch block handles it.
+
+
+
+
+🔥 Comparison: async/await vs then/catch
+
+🔵 Using .then() and .catch() (Promises)
+function fetchUsers() {
+  fetch("https://jsonplaceholder.typicode.com/users")
+    .then((response) => response.json())
+    .then((users) => console.log(users[0]))
+    .catch((error) => console.error("Error:", error.message));
+}
+
+
+🟢 Using async/await
+async function fetchUsers() {
+  try {
+    let response = await fetch("https://jsonplaceholder.typicode.com/users");
+    let users = await response.json();
+    console.log(users[0]);
+  } catch (error) {
+    console.error("Error:", error.message);
+  }
+}
+
+
+🎯 Key Takeaways
+Feature	async/await	.then().catch()
+Readability	✅ More readable (looks synchronous)	❌ Can get messy with multiple .then()
+Error Handling	✅ Uses try...catch	❌ Uses .catch() separately
+Code Complexity	✅ Cleaner and easier to debug	❌ Harder to read with nested Promises
+
 

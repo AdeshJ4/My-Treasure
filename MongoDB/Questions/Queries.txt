@@ -1,0 +1,234 @@
+Query: Find users with age exactly 25
+Input:
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Bob", "age": 30 },
+  { "_id": 3, "name": "Charlie", "age": 25 }
+]
+output: 
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 3, "name": "Charlie", "age": 25 }
+]
+Query>db.users.find({ age: { $eq: 25 }});
+
+
+============================================================================================================================
+
+
+Query: Find products with tags exactly ["electronics", "computer"]
+Input:
+[
+  { "_id": 1, "name": "Laptop", "tags": ["electronics", "computer"] },
+  { "_id": 2, "name": "Phone", "tags": ["electronics", "mobile"] },
+  { "_id": 3, "name": "Tablet", "tags": ["electronics", "computer"] }
+]
+output:
+[
+  { "_id": 1, "name": "Laptop", "tags": ["electronics", "computer"] },
+  { "_id": 3, "name": "Tablet", "tags": ["electronics", "computer"] }
+]
+Query>
+db.products.find({ tags: { $eq: ["electronics", "computer"] } })       
+db.products.find({ tags: [ 'electronics', 'computer' ] })
+
+
+============================================================================================================================
+
+Query: Find orders containing { product: "Laptop", quantity: 1 }
+
+Input:
+[
+  { "_id": 1, "customer": "Alice", "items": [{ "product": "Laptop", "quantity": 1 }] },
+  { "_id": 2, "customer": "Bob", "items": [{ "product": "Phone", "quantity": 2 }] },
+  { "_id": 3, "customer": "Charlie", "items": [{ "product": "Laptop", "quantity": 1 }] }
+]
+output:
+[
+  { "_id": 1, "customer": "Alice", "items": [{ "product": "Laptop", "quantity": 1 }] },
+  { "_id": 3, "customer": "Charlie", "items": [{ "product": "Laptop", "quantity": 1 }] }
+]
+Query>
+db.orders.find({ items: [ { product: 'Laptop', quantity: 1 } ] })
+============================================================================================================================
+
+
+Query: Find employees living in { city: "New York", zip: "10001" }
+Input:
+[
+  { "_id": 1, "name": "Alice", "address": { "city": "New York", "zip": "10001" } },
+  { "_id": 2, "name": "Bob", "address": { "city": "Los Angeles", "zip": "90001" } },
+  { "_id": 3, "name": "Charlie", "address": { "city": "New York", "zip": "10001" } }
+]
+output:
+[
+  { "_id": 1, "name": "Alice", "address": { "city": "New York", "zip": "10001" } },
+  { "_id": 3, "name": "Charlie", "address": { "city": "New York", "zip": "10001" } }
+]
+Query>
+db.employees.find({ address: { $eq: { city: "New York", zip: "10001" } } })
+db.employees.find({ address: { city: "New York", zip: "10001" } })
+
+
+============================================================================================================================
+
+
+Query: Find employees who live only in New York (matching only city)
+
+Input:
+[
+  { "_id": 1, "name": "Alice", "address": { "city": "New York", "zip": "10001" } },
+  { "_id": 2, "name": "Bob", "address": { "city": "Los Angeles", "zip": "90001" } },
+  { "_id": 3, "name": "Charlie", "address": { "city": "New York", "zip": "10001" } }
+]
+output:
+[
+  { "_id": 2, "name": "Bob", "address": { "city": "Los Angeles", "zip": "90001" } }
+]
+Query> 
+db.emp.find({ 'address.city': { $eq: 'Los Angeles' }})
+
+
+💡 Note: This matches any document where address.city is "Los Angeles", even if zip differs.
+
+
+
+============================================================================================================================
+
+
+find user who has grade above 90
+I/P: 
+[
+  { _id: 1, name: 'Alice', grades: [ 10,20, 30 ] },
+  { _id: 2, name: 'Bob', grades: [ 30, 40, 50 ] },
+  { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] },
+  { _id: 4, name: 'Mosh', grades: [ 10, 20, 10 ] },
+]
+output:
+[ { _id: 3, name: 'Max', grades: [ 80, 90, 100 ] } ]
+Query> 
+db.tb1.find({ grades: { $gt: 90 }})
+
+
+
+============================================================================================================================
+
+
+
+Removing an object where product is "Phone"
+[
+  { 
+    _id: 1,  customer: "Alice",  items: [{ product: "Laptop", quantity: 1 }, { product: "Phone", quantity: 2 } ]  
+  }
+]
+output:
+[
+  { 
+    _id: 1,  customer: "Alice",  items: [{ product: "Laptop", quantity: 1 } ]  
+  }
+]
+Query>
+db.orders.updateOne({_id: 1},  { $pull: { items: { product: "Phone" } } } )
+
+
+
+============================================================================================================================
+
+
+
+remove all occurrences of 85 
+[
+  { 
+    _id: 1,  customer: "Alice",  grades: [85, 90, 92, 85, 88]  
+  }
+]
+output:
+[
+  { 
+    _id: 1,  customer: "Alice",  grades: [90, 92, 88]  
+  }
+]
+Query>
+db.users.updateOne({_id: 1}, { $pull: { grades: 85 } })
+
+
+============================================================================================================================
+
+
+remove grades > 88
+[
+  { 
+    _id: 1,  customer: "Alice",  grades: [85, 90, 92, 85, 88]  
+  }
+]
+output:
+[
+  { 
+    _id: 1,  customer: "Alice",  grades: [85, 85, 88] 
+  }
+]
+Query>
+db.users.updateOne({ _id: 1}, { $pull: { items: { $gt:88 } } })
+
+============================================================================================================================
+
+
+
+remove grades 85, 90, 88
+[
+  { 
+    _id: 1,  customer: "Alice",  grades: [85, 90, 92, 85, 88]  
+  }
+]
+output:
+[
+  { 
+    _id: 1,  customer: "Alice",  grades: [ 92 ] 
+  }
+]
+Query>
+db.users.updateOne({ _id: 1 }, { $pull: { grades: { $in: [ 85, 90, 88 ] } }} )
+
+
+
+============================================================================================================================
+
+
+remove first or last element of array : 
+
+db.users.updateOne({ _id: 1 }, { $pop: { marks: 1 } }) // removes the last element
+db.users.updateOne({ _id: 1 }, { $pop: { marks: -1 } }) // removes the first element 
+
+============================================================================================================================
+
+if age is null or absent then return it as "Unknown"
+
+Hint: $ifNull treats "undefined" and "missing" fields as null
+
+Input: 
+[
+  { _id: 1, name: "Alice", age: 25, city: "New York" },
+  { _id: 2, name: "Bob", age: null, city: "London" },             // Null is age
+  { _id: 3, name: "Charlie" }                                     // Missing `age` field
+]
+
+Output: 
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Bob", "age": "Unknown" },        // age was null, replaced with "Unknown"
+  { "_id": 3, "name": "Charlie", "age": "Unknown" }     // age was missing, replaced with "Unknown"
+]
+
+Query 1>
+db.users.find({}, { name: 1, age: { $ifNull: ["$age", "Unknown"] } })
+
+Query 2> 
+db.users.aggregate([
+  {
+    $project: {
+      name: 1,
+      age: { $ifNull: ["$age", "Unknown"] } // Replace null/missing age with "Unknown"
+    }
+  }
+])
+

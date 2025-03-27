@@ -15,14 +15,11 @@ const App = () => {
   const [count, setCount] = useState(0);
   const calculation = expensiveCalculation(count);
 //const calculation = useMemo(expensiveCalculation(count), [count]);
-  const increment = () => {
-    setCount(count + 1);
-  };
 
   return (
     <div>
         Count: {count}
-        <button onClick={increment}>+</button>
+        <button onClick={() => setCount(count + 1)}>+</button>
         <h2>Expensive Calculation: {calculation}</h2>
     </div>
   );

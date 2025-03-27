@@ -23,6 +23,37 @@ comes to complex data manipulation and analysis tasks:
 
 
 
+✅ Purpose:
+
+Used mostly for querying, transforming, and analyzing data
+Helps group, filter, project, and calculate results
+Doesn't modify the original documents (unless $merge or $out is used)
+
+✅ Common Aggregation Stages:
+
+$match → Filters documents (like find)
+$group → Groups data (like SQL GROUP BY)
+$project → Selects/reshapes fields
+$sort → Sorts results
+$lookup → Performs joins (foreign key-like relations)
+
+
+
+
+🚀 Note: use aggregation for analysis & transformation, and use traditional methods for direct CRUD operations.
+
+
+
+🚀 Pro Interview Tips
+1️⃣ Master $sum, $avg, $max, $min, $addToSet, and $push.
+2️⃣ Use date functions ($year, $month, $week) for time-based grouping.
+3️⃣ Use $switch for custom groupings (like age ranges).
+4️⃣ Combine $group with $project and $match for powerful filtering.
+5️⃣ Practice performance optimization with indexes and $unwind (if needed).
+
+
+
+
 
 Popular Stages: 
 ===============
@@ -75,6 +106,14 @@ db.users.aggregate([
     }
 ])
 
+db.users.aggregate([
+  {
+      $match: {
+          _id: 1  or _id: ObjectId("454365465463456345")
+      }
+  }
+])
+
 
 ==================================================================
 
@@ -87,80 +126,308 @@ max, min, avg) on the grouped data.
 -> In $group, when you use '_id: null' within the $group stage, it means that you are grouping all the 
 documents in the collection together, treating them as a single group.
 
+Aggregate Functions:
+MIN() - returns the smallest value within the selected column
+MAX() - returns the largest value within the selected column
+COUNT() - returns the number of rows in a set
+SUM() - returns the total sum of a numerical column
+AVG() - returns the average value of a numerical column
 
 
-1️⃣ Grouping by a Single Field and calculting total Sales
+Sample Data: 
+[
+  { "_id": 1, "category": "Electronics", "amount": 500 },
+  { "_id": 2, "category": "Clothing", "amount": 200 },
+  { "_id": 3, "category": "Electronics", "amount": 700 },
+  { "_id": 4, "category": "Furniture", "amount": 1000 },
+  { "_id": 5, "category": "Clothing", "amount": 300 },
+  { "_id": 6, "category": "Electronics", "amount": 400 },
+  { "_id": 7, "category": "Furniture", "amount": 500 }
+]
+
+
+--------------
+
+
+1️⃣ group category: 
+````
 db.orders.aggregate([
-  {
-    $group: {
-      _id: "$category",         // Group by category
-      totalSales: { $sum: "$amount" }
+    {
+        $group: {
+          _id: '$category'
+        }
     }
-  }
-]);
+])
+````
 
+output: 
+[ { _id: 'Electronics' }, { _id: 'Clothing' }, { _id: 'Furniture' } ]
+
+
+--------------
+
+
+1️⃣ Counting Documents in Each Group
+```
+db.orders.aggregate([
+      {
+            $group: {
+                _id: '$category',
+                totalDocuments: { $count: {}}
+            }
+      }
+])
+```
+👉
+[
+  { _id: 'Electronics', totalDocuments: 3 },
+  { _id: 'Clothing', totalDocuments: 2 },
+  { _id: 'Furniture', totalDocuments: 2 }
+]
+
+--------------
+
+
+
+1️⃣ Count All Documents: 
+Query>
+db.orders.aggregate([
+      {
+            $group: {
+                  _id: null,
+                  totDoc: { $count: {}}
+            }
+      }
+])
+👉
+[ { _id: null, totDoc: 7 } ]
+
+
+--------------
+
+
+1️⃣ calculate Total Amount in each Category: 
+Query> 
+db.orders.aggregate([
+    {
+        $group: {
+            _id: '$category',
+            totAmou: { $sum: '$amount' }
+        }
+    }
+])
+👉
+[
+  { _id: 'Furniture', totalSum: 1500 },
+  { _id: 'Clothing', totalSum: 500 },
+  { _id: 'Electronics', totalSum: 1600 }
+]
+
+
+--------------
+
+
+1️⃣ Find Minimum Number from each category: 
+
+Query>
+db.orders.aggregate([
+        {
+            $group: {
+                _id: '$category',
+                minAmount: { $min: '$amount' }
+            } 
+        }
+])
+👉
+[
+  { _id: 'Furniture', minAmount: 500 },
+  { _id: 'Electronics', minAmount: 400 },
+  { _id: 'Clothing', minAmount: 200 }
+]
+
+
+--------------
+
+
+1️⃣ Find Maximum Number from each category: 
+Query>
+db.orders.aggregate([
+    {
+        $group: {
+            _id: '$category',
+            maxAmount: { $max: '$amount' }
+        }
+    }
+])
+👉 
+[
+  { _id: 'Electronics', maxAmount: 700 },
+  { _id: 'Clothing', maxAmount: 300 },
+  { _id: 'Furniture', maxAmount: 1000 }
+]
+
+
+--------------
+
+1️⃣ Calculate Average of each field:
+Query>
+db.orders.aggregate([
+    {
+        $group: {
+            _id: '$category',
+            avgAmount: { $avg: '$amount' }
+        }
+    }
+])
+👉
+[
+  { _id: 'Electronics', avgAmount: 533.3333333333334 },
+  { _id: 'Clothing', avgAmount: 250 },
+  { _id: 'Furniture', avgAmount: 750 }
+]
+
+--------------
+
+
+sample data: 
+[
+  { "_id": 1, "name": "Alice", "location": { "city": "New York", "country": "USA" } },
+  { "_id": 2, "name": "Bob", "location": { "city": "Los Angeles", "country": "USA" } },
+  { "_id": 3, "name": "Charlie", "location": { "city": "New York", "country": "USA" } },
+  { "_id": 4, "name": "David", "location": { "city": "Chicago", "country": "USA" } },
+  { "_id": 5, "name": "Eve", "location": { "city": "Los Angeles", "country": "USA" } },
+  { "_id": 6, "name": "Frank", "location": { "city": "San Francisco", "country": "USA" } }
+]
+1️⃣ nested object as a group key:
+db.users.aggregate([
+  {
+      $group: {
+          _id: '$location.city'
+      }
+  }
+])
+👉
+[
+  { _id: 'Los Angeles' },
+  { _id: 'San Francisco' },
+  { _id: 'Chicago' },
+  { _id: 'New York' }
+]
+
+
+-------------
+
+sample data:
+[
+  { "_id": 1, "category": "Electronics", "year": 2023, "amount": 500 },
+  { "_id": 2, "category": "Clothing", "year": 2023, "amount": 200 },
+  { "_id": 3, "category": "Electronics", "year": 2024, "amount": 700 },
+  { "_id": 4, "category": "Furniture", "year": 2023, "amount": 1000 },
+  { "_id": 5, "category": "Clothing", "year": 2024, "amount": 300 },
+  { "_id": 6, "category": "Electronics", "year": 2023, "amount": 400 },
+  { "_id": 7, "category": "Furniture", "year": 2024, "amount": 500 },
+  { "_id": 8, "category": "Clothing", "year": 2023, "amount": 100 }
+]
 
 2️⃣. Grouping by Multiple Fields
 db.orders.aggregate([
   {
     $group: {
       _id: { cat: "$category", ye: "$year" }, // Group by category and year
-      totalSales: { $sum: "$amount" }
-    }
+      totalSales: { $sum: "$amount" },
+      totalDocs: { $count: {}},
+      minSale: { $min: '$amount' },
+      maxSale: { $max: '$amount' },
+      avgSale: { $avg: '$amount' }
+    } 
   }
 ]);
 o/p
 [
-  { "_id": { "cat": "Electronics", "ye": 2024 }, "totalSales": 100 },
-  { "_id": { "cat": "Electronics", "ye": 2023 }, "totalSales": 200 },
-  { "_id": { "cat": "Clothing", "ye": 2024 }, "totalSales": 150 },
-  { "_id": { "cat": "Clothing", "ye": 2023 }, "totalSales": 250 }
+  {
+    _id: { cat: 'Clothing', ye: 2023 },
+    totalSales: 300,
+    totalDocs: 2,
+    minSale: 100,
+    maxSale: 200,
+    avgSale: 150
+  },
+  {
+    _id: { cat: 'Electronics', ye: 2024 },
+    totalSales: 700,
+    totalDocs: 1,
+    minSale: 700,
+    maxSale: 700,
+    avgSale: 700
+  },
+  {
+    _id: { cat: 'Clothing', ye: 2024 },
+    totalSales: 300,
+    totalDocs: 1,
+    minSale: 300,
+    maxSale: 300,
+    avgSale: 300
+  },
+  {
+    _id: { cat: 'Electronics', ye: 2023 },
+    totalSales: 900,
+    totalDocs: 2,
+    minSale: 400,
+    maxSale: 500,
+    avgSale: 450
+  },
+  {
+    _id: { cat: 'Furniture', ye: 2023 },
+    totalSales: 1000,
+    totalDocs: 1,
+    minSale: 1000,
+    maxSale: 1000,
+    avgSale: 1000
+  },
+  {
+    _id: { cat: 'Furniture', ye: 2024 },
+    totalSales: 500,
+    totalDocs: 1,
+    minSale: 500,
+    maxSale: 500,
+    avgSale: 500
+  }
 ]
 
+---------------
 
-3️⃣. Using Expressions in _id
+3️⃣. Grouping Users by First Letter of Their Name
 
-db.orders.aggregate([
-  {
-    $group: {
-      _id: { decade: { $subtract: ["$year", "$amount"] } },
-      totalSales: { $sum: "$amount" }
-    }
-  }
-]);
-
-
-4️⃣. Counting Documents in Each Group
-
-db.orders.aggregate([
-  {
-    $group: {
-      _id: "$category",
-      orderCount: { $sum: 1 }
-    }
-  }
-]);
-
-5️⃣. Count the total number of documents in the aggregation pipeline:
-
-db.users.aggregate([
-    {
-        $group:{_id: null, totalCount: {$sum: 1}}   // each time increment document by 1 number
-    }
-]);
-o/p: [ { _id: null, totalCount: 5000 } ]
-
-
-
-6️⃣ group based on city:
-db.users.aggregate([ { $group: { _id: '$location.city' } }])
-o/p: 
+sample Data:
 [
-  { _id: 'Pune' },
-  { _id: 'Mumbai' },
-  { _id: 'Ratnagiri' }
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Alex", "age": 30 },
+  { "_id": 3, "name": "Bob", "age": 22 },
+  { "_id": 4, "name": "Charlie", "age": 28 },
+  { "_id": 5, "name": "Chris", "age": 35 },
+  { "_id": 6, "name": "David", "age": 40 },
+  { "_id": 7, "name": "Diana", "age": 33 }
 ]
 
+Query>
+db.users.aggregate([
+  {
+      $group: {
+          _id: { $substr: ["$name", 0, 1] }, // Extract first letter of the name
+          totalUsers: { $sum: 1 }  
+      }
+  }
+])
+👉 
+[
+  { _id: 'A', totalUsers: 2 },
+  { _id: 'B', totalUsers: 1 },
+  { _id: 'C', totalUsers: 2 },
+  { _id: 'D', totalUsers: 2 }
+]
+
+
+-------------
 
 7️⃣ Grouping and Finding Min, Max, Avg
 
@@ -212,40 +479,559 @@ o/p:
 ]
 
 
+-------------
+
+1️⃣ Group and Count Unique Values
+db.users.aggregate([
+  {
+    $group: {
+      _id: "$location.city",
+      totalUsers: { $sum: 1 }
+    }
+  }
+]);
+
+-------------
+
+2️⃣ Find the Total Sales for Each Product Category
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalSales: { $sum: "$amount" }
+    }
+  }
+]);
+
+-------------
 
 
 
-
-
-
-multi stage pipeline
+3️⃣ Find the Average Age of Users per City
 
 db.users.aggregate([
-    {
-        $match: {
-            isActive: true
-        }
-    },
-    {
-        $group: {
-            _id: '$company.location.country',
-            totalCount: {$count: {}} 
-        }
-    },
-    {
-        $sort: {
-            totalCount: -1
-        }
-    },
-    {
-        $limit: 3
-    },
-    {
-        $project: {
-            _id: 0
-        }
+  {
+    $group: {
+      _id: "$city",
+      averageAge: { $avg: "$age" }
     }
+  }
+]);
+
+-------------
+
+
+4️⃣ Count the Number of Orders per Customer
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$customer",
+      orderCount: { $sum: 1 }
+    }
+  }
+]);
+
+
+-------------
+
+
+5️⃣ Find the Highest and Lowest Order Amount per Category
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      maxAmount: { $max: "$amount" },
+      minAmount: { $min: "$amount" }
+    }
+  }
+]);
+
+
+-------------
+
+6️⃣ Group Orders by Month and Find Total Sales
+
+sample data: 
+[
+  { "_id": 1, "date": ISODate("2024-01-15T00:00:00Z"), "amount": 500 },
+  { "_id": 2, "date": ISODate("2024-02-20T00:00:00Z"), "amount": 700 },
+  { "_id": 3, "date": ISODate("2024-01-30T00:00:00Z"), "amount": 300 },
+  { "_id": 4, "date": ISODate("2024-03-10T00:00:00Z"), "amount": 900 }
+]
+Expected Output:
+[
+  { "_id": 1, "totalSales": 800 },  // January
+  { "_id": 2, "totalSales": 700 },  // February
+  { "_id": 3, "totalSales": 900 }   // March
+]
+Query>
+db.orders.aggregate([
+  {
+    $group: {
+      _id: { $month: "$date" }, // Extract the month
+      totalSales: { $sum: "$amount" }
+    }
+  }
+]);
+
+
+-------------
+
+1️⃣ Write a query to calculate the average order amount for each year
+
+[
+  { "_id": 1, "date": ISODate("2023-06-15T00:00:00Z"), "amount": 500 },
+  { "_id": 2, "date": ISODate("2023-11-20T00:00:00Z"), "amount": 700 },
+  { "_id": 3, "date": ISODate("2024-03-10T00:00:00Z"), "amount": 400 }
+]
+Expected Output:
+[
+  { "_id": 2023, "avgOrderAmount": 600 },
+  { "_id": 2024, "avgOrderAmount": 400 }
+]
+Query> 
+db.orders.aggregate([
+  {
+    $group: {
+      _id: { $year: "$date" },
+      avgOrderAmount: { $avg: "$amount" }
+    }
+  }
+]);
+
+-------------
+
+
+7️⃣ count the number of "unique products" each customer has bought
+
+sample data: 
+[
+  { "_id": 1, "customer": "Alice", "product": "Laptop" },
+  { "_id": 2, "customer": "Alice", "product": "Mouse" },
+  { "_id": 3, "customer": "Alice", "product": "Laptop" },
+  { "_id": 4, "customer": "Bob", "product": "Keyboard" },
+  { "_id": 5, "customer": "Bob", "product": "Mouse" }
+]
+
+Expected Output:
+[
+  { "_id": "Alice", "uniqueProducts": 2 },
+  { "_id": "Bob", "uniqueProducts": 2 }
+]
+
+Query>
+db.orders.aggregate([
+  {
+      $group: {
+          _id: '$customer',
+          uniqueProducts: { $addToSet: '$product' }
+      }
+  },
+  {
+    $project: {
+      _id: 1, 
+      countProducts: { $size: '$uniqueProducts'}
+    }
+  }
 ])
+
+
+-----------
+
+
+8️⃣ Write a query to find the highest order amount each customer has placed.
+
+[
+  { "_id": 1, "customer": "Alice", "amount": 500 },
+  { "_id": 2, "customer": "Alice", "amount": 700 },
+  { "_id": 3, "customer": "Bob", "amount": 300 },
+  { "_id": 4, "customer": "Bob", "amount": 1000 }
+]
+Expected Output:
+[
+  { "_id": "Alice", "maxOrderAmount": 700 },
+  { "_id": "Bob", "maxOrderAmount": 1000 }
+]
+Query>
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$customer",
+      maxOrderAmount: { $max: "$amount" }
+    }
+  }
+]);
+
+
+
+-----------
+
+🔟 Write a query to group users into age ranges and count how many users fall into each range.
+
+[
+  { "_id": 1, "name": "Alice", "age": 22 },
+  { "_id": 2, "name": "Bob", "age": 34 },
+  { "_id": 3, "name": "Charlie", "age": 29 },
+  { "_id": 4, "name": "David", "age": 42 },
+  { "_id": 5, "name": "Eve", "age": 50 }
+]
+Expected Output:
+[
+  { "_id": "20-30", "count": 2 },
+  { "_id": "30-40", "count": 1 },
+  { "_id": "40-50", "count": 1 },
+  { "_id": "50+", "count": 1 }
+]
+Query> 
+db.users.aggregate([
+  {
+      $group: {
+        _id: {
+          $switch: {
+              branches: [
+                { case: { $lte: ["$age", 30] }, then: "20-30" },
+                { case: { $lte: ["$age", 40] } , then: "31-40" },
+                { case: { $lte: ["$age", 50] } , then: '41-50'}
+              ],
+              default: "50+"
+          }
+        },
+        count: { $count: {}}
+      }
+  }
+])
+
+
+
+-----------
+
+
+
+🟢 1. Write a query to find the most frequently purchased product by customers
+
+[
+  { "_id": 1, "product": "Laptop", "quantity": 2 },
+  { "_id": 2, "product": "Mouse", "quantity": 5 },
+  { "_id": 3, "product": "Laptop", "quantity": 3 },
+  { "_id": 4, "product": "Keyboard", "quantity": 4 },
+  { "_id": 5, "product": "Laptop", "quantity": 1 }
+]
+Expected Output:
+[
+  { "_id": "Laptop", "totalQuantity": 6 },
+  { "_id": "Mouse", "totalQuantity": 5 },
+  { "_id": "Keyboard", "totalQuantity": 4 }
+]
+Query>
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$product",
+      totalQuantity: { $sum: "$quantity" }
+    }
+  },
+  { $sort: { totalQuantity: -1 } }, // Sort in descending order
+  { $limit: 1 } // Get the most frequently purchased product
+]);
+
+
+
+-----------
+
+
+🟢 Write a query to calculate total revenue for each product.
+
+[
+  { "_id": 1, "product": "Laptop", "price": 1000, "quantity": 3 },
+  { "_id": 2, "product": "Phone", "price": 500, "quantity": 5 },
+  { "_id": 3, "product": "Tablet", "price": 300, "quantity": 2 },
+  { "_id": 4, "product": "Laptop", "price": 1000, "quantity": 2 },
+  { "_id": 5, "product": "Phone", "price": 500, "quantity": 1 }
+]
+
+Expected Output:
+[
+  { "_id": "Laptop", "totalRevenue": 5000 },  // (1000*3) + (1000*2) = 5000
+  { "_id": "Phone", "totalRevenue": 3000 },   // (500*5) + (500*1) = 3000
+  { "_id": "Tablet", "totalRevenue": 600 }    // (300*2) = 600
+]
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$product",
+      totalRevenue: { $sum: { $multiply: ["$price", "$quantity"] } }
+    }
+  }
+]);
+
+
+========================================================================================================================
+
+🟢 3. Write a query to find the user who has spent the most money on orders.
+
+[
+  { "_id": 1, "customer": "Alice", "amount": 500 },
+  { "_id": 2, "customer": "Bob", "amount": 700 },
+  { "_id": 3, "customer": "Alice", "amount": 300 },
+  { "_id": 4, "customer": "Charlie", "amount": 900 }
+]
+Expected Output:
+[
+  { "_id": "Charlie", "totalSpent": 900 },
+  { "_id": "Bob", "totalSpent": 700 },
+  { "_id": "Alice", "totalSpent": 800 }
+]
+Query>
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$customer",
+      totalSpent: { $sum: "$amount" }
+    }
+  },
+  { $sort: { totalSpent: -1 } }, // Sort in descending order
+  { $limit: 1 } // Get the top spender
+]);
+
+
+
+========================================================================================================================
+
+
+🟢 4. Find the Average Order Value Per Customer
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$customer",
+      avgOrderValue: { $avg: "$amount" }
+    }
+  }
+]);
+
+
+========================================================================================================================
+
+
+🟢 5. Count Orders Per Day
+
+[
+  { "_id": 1, "product": "Laptop", "price": 1000, "quantity": 3, "date": ISODate("2024-03-01T10:00:00Z") },
+  { "_id": 2, "product": "Phone", "price": 500, "quantity": 5, "date": ISODate("2024-03-01T14:30:00Z") },
+  { "_id": 3, "product": "Tablet", "price": 300, "quantity": 2, "date": ISODate("2024-03-02T09:15:00Z") },
+  { "_id": 4, "product": "Laptop", "price": 1000, "quantity": 2, "date": ISODate("2024-03-02T18:45:00Z") },
+  { "_id": 5, "product": "Phone", "price": 500, "quantity": 1, "date": ISODate("2024-03-03T12:00:00Z") }
+]
+output:
+[
+  { "_id": 1, "totalOrders": 2 },  // Two orders on March 1st
+  { "_id": 2, "totalOrders": 2 },  // Two orders on March 2nd
+  { "_id": 3, "totalOrders": 1 }   // One order on March 3rd
+]
+Query>
+db.orders.aggregate([
+  {
+      $group: {
+          _id: { $dayOfMonth: '$date'},
+          totOrders: { $count: {}}
+      }
+  }
+])
+
+
+
+========================================================================================================================
+
+
+🟢 6. Write a query to find the most popular product category (based on the number of orders)
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$category",
+      totalOrders: { $sum: 1 }
+    }
+  },
+  { $sort: { totalOrders: -1 } },
+  { $limit: 1 }
+]);
+
+
+
+========================================================================================================================
+
+
+🟢 7. Find the First Order Date Per Customer
+
+
+[
+  { "_id": 1, "customer": "Alice",   "product": "Laptop",  "price": 1000,  "quantity": 1, "date": ISODate("2024-03-05T10:00:00Z") },
+  { "_id": 2, "customer": "Bob",     "product": "Phone",   "price": 500,   "quantity": 2, "date": ISODate("2024-03-02T14:30:00Z") },
+  { "_id": 3, "customer": "Alice",   "product": "Tablet",  "price": 300,   "quantity": 1, "date": ISODate("2024-03-01T09:15:00Z") },
+  { "_id": 4, "customer": "Charlie", "product": "Laptop",  "price": 1000,  "quantity": 1, "date": ISODate("2024-03-07T18:45:00Z") },
+  { "_id": 5, "customer": "Bob",     "product": "Monitor", "price": 700,   "quantity": 1, "date": ISODate("2024-03-04T12:00:00Z") }
+]
+Expected Output:
+[
+  { "_id": "Alice", "firstOrderDate": ISODate("2024-03-01T09:15:00Z") },  // Alice's first order was on March 1st
+  { "_id": "Bob", "firstOrderDate": ISODate("2024-03-02T14:30:00Z") },    // Bob's first order was on March 2nd
+  { "_id": "Charlie", "firstOrderDate": ISODate("2024-03-07T18:45:00Z") } // Charlie's first order was on March 7th
+]
+
+Query>
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$customer",
+      firstOrderDate: { $min: "$date" }
+    }
+  }
+]);
+
+
+
+========================================================================================================================
+
+
+🟢 8. Calculate Total Sales Per Year
+
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: { $year: "$date" },
+      totalSales: { $sum: "$amount" }
+    }
+  }
+]);
+
+
+
+========================================================================================================================
+
+
+🟢 9. Find Customers Who Made More Than 5 Orders:
+
+[
+  { "_id": 1, "customer": "Alice", "product": "Laptop", "price": 1000, "quantity": 1, "date": ISODate("2024-03-01T10:00:00Z") },
+  { "_id": 2, "customer": "Alice", "product": "Phone", "price": 500, "quantity": 2, "date": ISODate("2024-03-02T14:30:00Z") },
+  { "_id": 3, "customer": "Alice", "product": "Tablet", "price": 300, "quantity": 1, "date": ISODate("2024-03-03T09:15:00Z") },
+  { "_id": 4, "customer": "Alice", "product": "Monitor", "price": 700, "quantity": 1, "date": ISODate("2024-03-04T18:45:00Z") },
+  { "_id": 5, "customer": "Alice", "product": "Keyboard", "price": 100, "quantity": 1, "date": ISODate("2024-03-05T12:00:00Z") },
+  { "_id": 6, "customer": "Alice", "product": "Mouse", "price": 50, "quantity": 1, "date": ISODate("2024-03-06T15:30:00Z") },
+  { "_id": 7, "customer": "Bob", "product": "Laptop", "price": 1000, "quantity": 1, "date": ISODate("2024-03-01T10:00:00Z") },
+  { "_id": 8, "customer": "Bob", "product": "Phone", "price": 500, "quantity": 1, "date": ISODate("2024-03-02T14:30:00Z") },
+  { "_id": 9, "customer": "Charlie", "product": "Tablet", "price": 300, "quantity": 1, "date": ISODate("2024-03-03T09:15:00Z") },
+  { "_id": 10, "customer": "Charlie", "product": "Monitor", "price": 700, "quantity": 1, "date": ISODate("2024-03-04T18:45:00Z") }
+]
+expected: 
+[
+  { "_id": "Alice", "totalOrders": 6 }
+]
+
+Query>
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$customer",
+      totalOrders: { $sum: 1 }
+    }
+  },
+  { $match: { totalOrders: { $gt: 5 } } }
+]);
+
+
+============================================================================================================================================================
+
+
+🟢 🔟 Find the Top 3 Selling Products
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: "$product",
+      totalSold: { $sum: "$quantity" }
+    }
+  },
+  { $sort: { totalSold: -1 } },
+  { $limit: 3 }
+]);
+
+============================================================================================================================================================
+
+
+🟢 Find the total number of active users per country
+
+db.users.aggregate([
+  {
+    $match: {
+      status: 'active'
+    }
+  },
+  {
+      $group: {
+        _id: '$country',
+        totUsers: { $sum: 1 }
+      }
+  }
+])
+
+
+========================================================================================================================
+
+🟢 Find the month with the highest revenue
+
+db.orders.aggregate([
+  {
+    $group: {
+      _id: { $month: "$date" },  // Extract month from date
+      totalRevenue: { $sum: { $multiply: ["$price", "$quantity"] } }  // Calculate total revenue per month
+    }
+  },
+  { $sort: { totalRevenue: -1 } },  // Sort by revenue in descending order
+  { $limit: 1 }  // Get the top month with the highest revenue
+]);
+
+
+
+========================================================================================================================
+
+🟢 Group orders by day of the week (Monday, Tuesday, etc.)
+
+[
+  { "orderId": 101, "orderDate": "2025-03-17", "dayOfWeek": "Monday", "amount": 250 },
+  { "orderId": 102, "orderDate": "2025-03-18", "dayOfWeek": "Tuesday", "amount": 180 },
+  { "orderId": 103, "orderDate": "2025-03-19", "dayOfWeek": "Wednesday", "amount": 300 },
+  { "orderId": 104, "orderDate": "2025-03-17", "dayOfWeek": "Monday", "amount": 150 },
+  { "orderId": 105, "orderDate": "2025-03-20", "dayOfWeek": "Thursday", "amount": 400 },
+  { "orderId": 106, "orderDate": "2025-03-21", "dayOfWeek": "Friday", "amount": 220 },
+  { "orderId": 107, "orderDate": "2025-03-22", "dayOfWeek": "Saturday", "amount": 310 },
+  { "orderId": 108, "orderDate": "2025-03-23", "dayOfWeek": "Sunday", "amount": 275 },
+  { "orderId": 109, "orderDate": "2025-03-18", "dayOfWeek": "Tuesday", "amount": 190 },
+  { "orderId": 110, "orderDate": "2025-03-19", "dayOfWeek": "Wednesday", "amount": 260 }
+]
+output:
+[
+  { "_id": 2, "totOrders": 15 }, // Monday
+  { "_id": 3, "totOrders": 10 }, // Tuesday
+  { "_id": 4, "totOrders": 8 },  // Wednesday
+  { "_id": 5, "totOrders": 12 }, // Thursday
+  { "_id": 6, "totOrders": 20 }, // Friday
+  { "_id": 7, "totOrders": 18 }, // Saturday
+  { "_id": 1, "totOrders": 9 }   // Sunday
+]
+
+
+
+
+
 
 
 ========================================================================================================================
@@ -411,11 +1197,6 @@ input:
   { "_id": 2, "customer": "Bob", "items": ["Keyboard"] },
   { "_id": 3, "customer": "Charlie", "items": [] }
 ]
-
-Query> db.users.aggregate([
-  { $unwind: { path: "$items", preserveNullAndEmptyArrays: true } }
-]);
-
 output:
 [
   { _id: 1, customer: 'Alice', items: 'Laptop' },
@@ -423,6 +1204,11 @@ output:
   { _id: 2, customer: 'Bob', items: 'Keyboard' },
   { _id: 3, customer: 'Charlie' }
 ]
+Query> db.users.aggregate([
+  { $unwind: { path: "$items", preserveNullAndEmptyArrays: true } }
+]);
+
+
 
 3️⃣. Include Array Index: 
 db.orders.aggregate([
@@ -437,7 +1223,31 @@ output:
 
 
 
-4️⃣. Count Total Items Sold Per Customer:
+4️⃣. Count Total Sum of tags  Per Customer:
+
+[
+  { "_id": 1, "name": "Alice", "tags": [2, 6, 8] },
+  { "_id": 2, "name": "Bob", "tags": [3, 4, 5] },
+  { "_id": 3, "name": "Charlie", "tags": [7, 10, 12] },
+  { "_id": 4, "name": "David", "tags": [1, 2, 3] }
+]
+Output:
+[
+  { "_id": 1, "name": "Alice", "tags": 6 },
+  { "_id": 1, "name": "Alice", "tags": 8 },
+  { "_id": 3, "name": "Charlie", "tags": 7 },
+  { "_id": 3, "name": "Charlie", "tags": 10 },
+  { "_id": 3, "name": "Charlie", "tags": 12 }
+]
+
+
+db.stud.aggregate([
+  {
+    $
+  }
+])
+
+
 db.users.aggregate([
   {
     $unwind: '$tags'
@@ -452,6 +1262,12 @@ db.users.aggregate([
 ]);
 
 
+
+db.users.aggregate([
+  {
+    $unwind: '$tags'
+  }
+])
 ========================================================================================================================
 
 
@@ -460,146 +1276,189 @@ $addFields:
 -> $addFields is used to update the value of an existing field or to add a new field
 
 
-ex: add 'active' field in all documents.
-db.tb1.aggregate([ { $addFields: { active: true } }])
+1️⃣ add 'active' field in all documents.
 [
-  { _id: 1, age: 21, tags: [ 10, 20 ], active: true },
-  { _id: 6, age: 26, active: true }
+  { _id: 1, name: 'Alice', age: 22 },
+  { _id: 2, name: 'Bob', age: 34 },
+  { _id: 3, name: 'Charlie', age: 29 }
 ]
+output: 
+[
+  { _id: 1, name: 'Alice', age: 22, status: 'active' },
+  { _id: 2, name: 'Bob', age: 34, status: 'active' },
+  { _id: 3, name: 'Charlie', age: 29, status: 'active' }
+]
+Query>
+db.users.aggregate([
+  {
+    $addFields: {
+      status: 'active'
+    }
+  }
+])
 
 
-ex: Adding a Nested Field
+
+2️⃣ Adding a Nested Field
 [
-  { "_id": 1, "name": "Alice", "age": 25},
-  { "_id": 2, "name": "Bob", "age": 30}
+  { _id: 1, name: 'Alice', age: 22 },
+  { _id: 2, name: 'Bob', age: 34 },
+  { _id: 3, name: 'Charlie', age: 29 }
 ]
+output: 
+[
+  {
+    _id: 1,
+    name: 'Alice',
+    age: 22,
+    address: { city: 'Pune', village: 'Lohegaon' }
+  },
+  {
+    _id: 2,
+    name: 'Bob',
+    age: 34,
+    address: { city: 'Pune', village: 'Lohegaon' }
+  },
+  {
+    _id: 3,
+    name: 'Charlie',
+    age: 29,
+    address: { city: 'Pune', village: 'Lohegaon' }
+  }
+]
+Query>
+db.users.aggregate([
+  {
+    $addFields: {
+      address: { city: 'Pune', village: 'Lohegaon' }
+    }
+  }
+])
+
+
+1️⃣. add 'isAdult field':
+[
+  { _id: 1, name: 'Alice', age: 22 },
+  { _id: 2, name: 'Bob', age: 34 },
+  { _id: 3, name: 'Charlie', age: 29 }
+]
+output: 
+[
+  { _id: 1, name: 'Alice', age: 22, isAdult: false },
+  { _id: 2, name: 'Bob', age: 34, isAdult: true },
+  { _id: 3, name: 'Charlie', age: 29, isAdult: false }
+]
+Query> 
+db.users.aggregate([
+  {
+    $addFields: {
+      isAdult: { $gte: ["$age", 30] }
+    }
+  }
+])
+
+
+
+2️⃣ update the value of an existing field:
+[
+  { _id: 1, name: 'Alice', age: 22 },
+  { _id: 2, name: 'Bob', age: 34 },
+  { _id: 3, name: 'Charlie', age: 29 }
+]
+output:
+[
+  { _id: 1, name: 'Alice', age: 44 },
+  { _id: 2, name: 'Bob', age: 68 },
+  { _id: 3, name: 'Charlie', age: 58 }
+]
+Query>
+db.users.aggregate([
+  {
+    $addFields: {
+      age: { $multiply: ['$age', 2]}
+    }
+  }
+])
+
+
+2️⃣ Query: Creating a fullName Field
 
 db.users.aggregate([
   {
     $addFields: {
-      contact: { email: "example@example.com", phone: "1234567890" }
+      fullName: { $concat: ["$fname", "$lname"] }
     }
   }
 ])
 
-[
-  { "_id": 1, "name": "Alice", "age": 25, "contact": { "email": "example@example.com", "phone": "1234567890" } },
-  { "_id": 2, "name": "Bob", "age": 30, "contact": { "email": "example@example.com", "phone": "1234567890" } }
-]
 
 
+1️⃣ add new field called "totalCost" by multiplying two fields of same collection.
 
-
-1️⃣. add 'isAdult field':
-Input: 
-[
-  { "_id": 1, "name": "Alice", "age": 25 },
-  { "_id": 2, "name": "Bob", "age": 30 }
-]
-
-Query> db.users.aggregate([
+db.users.aggregate([
   {
     $addFields: {
-      isAdult: { $gte: ["$age", 18] }
+        totalCost: {  $multiply: ["$age", "$amount"] }
     }
   }
 ])
-
-Output:
-[
-  { "_id": 1, "name": "Alice", "age": 25, "isAdult": true },
-  { "_id": 2, "name": "Bob", "age": 30, "isAdult": true }
-]
-
-
-2️⃣ update the value of an existing field:
-Input: 
-[
-  { "_id": 1, "name": "Alice", "salary": 5000 },
-  { "_id": 2, "name": "Bob", "salary": 7000 }
-]
-
-Query> db.users.aggregate([
-  {
-    $addFields: {
-      salary: { $multiply: ["$salary", 1.10] } // Increases salary by 10%
-    }
-  }
-])
-
-Output:
-[
-  { "_id": 1, "name": "Alice", "salary": 5500 },
-  { "_id": 2, "name": "Bob", "salary": 7700 }
-]
-
 
 
 ========================================================================================================================
 
 $first: 
 
--> $first is an accumulator in the MongoDB aggregation pipeline that returns the first value of a specified field within a group. 
--> It is commonly used in the $group stage to retrieve the first occurrence of a field when documents are grouped.
--> $first cannot be used as a "standalone stage" in the aggregation pipeline. It is an accumulator operator, meaning it must be 
-used within a stage like $group, $setWindowFields, or $project (inside an expression).
-When to Use $first?
--> To get the earliest record in a grouped dataset
--> When flattening arrays using $unwind, and you only need the first value
--> To extract first occurring values after a $sort.
+-> The $first operator is used inside aggregation stages like $group or $project to return the "first element of an array" or the "first document in a group".
 
-example: 
-Input:
-[
-  { "_id": 1, "category": "Electronics", "item": "Laptop", "price": 1000 },
-  { "_id": 2, "category": "Electronics", "item": "Phone", "price": 500 },
-  { "_id": 3, "category": "Furniture", "item": "Table", "price": 200 },
-  { "_id": 4, "category": "Furniture", "item": "Chair", "price": 100 }
-]
-
-Query> db.orders.aggregate([
-  { $sort: { _id: 1 } }, // Ensuring order before grouping
-  {
-    $group: {
-      _id: "$category",
-      firstItem: { $first: "$item" }, // Get the first item per category
-      firstPrice: { $first: "$price" } // Get the first price per category
-    }
-  }
+1️⃣ returns the first order for each customer
+db.orders.insertMany([
+  { "_id": 1, "customer": "Alice", "orderDate": "2001-12-22", "amount": 300 },
+  { "_id": 2, "customer": "Alice", "orderDate": "2025-03-01", "amount": 200 },
+  { "_id": 3, "customer": "Bob", "orderDate": "2025-03-02", "amount": 300 },
+  { "_id": 4, "customer": "Bob", "orderDate": "1999-01-30", "amount": 1000 }
 ])
-
 Output:
 [
-  { "_id": "Electronics", "firstItem": "Laptop", "firstPrice": 1000 },
-  { "_id": "Furniture", "firstItem": "Table", "firstPrice": 200 }
+  { "_id": 1, "customer": "Alice", "orderDate": "2001-12-22", "amount": 300 },
+  { "_id": 3, "customer": "Bob", "orderDate": "2025-03-02", "amount": 300 },
 ]
-
-
-2️⃣ Example 2: Using $first After $unwind
-[
-  { "_id": 1, "name": "Alice", "scores": [90, 85, 80] },
-  { "_id": 2, "name": "Bob", "scores": [88, 92, 79] }
-]
-
-Query> db.students.aggregate([
-  { $unwind: "$scores" }, // Flatten scores array
+Query>
+db.users.aggregate([
   {
     $group: {
-      _id: "$name",
-      firstScore: { $first: "$scores" } // Get the first score per student
+      _id: '$customer',
+      firstOrder: { $first: '$orderDate' }  
     }
   }
 ])
 
-Output>
-[
-  { "_id": "Alice", "firstScore": 90 },
-  { "_id": "Bob", "firstScore": 88 }
-]
 
+2️⃣  Using $first in $project with Arrays
+
+raisoni> db.products.find()
+[
+  { _id: 1, name: 'Laptop', reviews: [ 'Great', 'Good', 'Decent' ] },
+  { _id: 2, name: 'Phone', reviews: [ 'Awesome', 'Okay', 'Not bad' ] }
+]
+output: 
+[
+  { _id: 1, name: 'Laptop', reviews: 'Great' },
+  { _id: 2, name: 'Phone', reviews: 'Awesome' }
+]
+Query>
+db.products.aggregate([
+  {
+    $project: {
+      name: 1, 
+      reviews: { $first: '$reviews'}
+    }
+  }
+])
 
 
 ========================================================================================================================
+
+
 
 $lookup:
 
@@ -643,6 +1502,20 @@ Query> db.books.aggregate([
         }
     }
 ])
+
+
+
+db.books.aggregate([
+  {
+    $lookup: {
+        from: 'authors',
+        localField: 'author_id',
+        foreignField: '_id',
+        as: 'authorDetails'
+    }
+  }
+])
+
 output: 
 [
   {
@@ -690,3 +1563,99 @@ db.books.aggregate([
 
 
 
+To find **customers who haven’t placed any orders**, we need to compare two collections:  
+
+1. **`users` Collection** → Contains all customers  
+2. **`orders` Collection** → Contains placed orders  
+
+We'll use a **`$lookup` (left join)** to find customers who have **no matching orders**.
+
+---
+
+### **Aggregation Query:**
+```js
+db.users.aggregate([
+  {
+    $lookup: {
+      from: "orders",          // Join with the "orders" collection
+      localField: "_id",       // Match user ID from "users"
+      foreignField: "customer",// Match customer ID from "orders"
+      as: "orders"             // Store matching orders in "orders" array
+    }
+  },
+  {
+    $match: {
+      "orders": { $size: 0 }   // Keep only users with no orders
+    }
+  },
+  {
+    $project: {
+      _id: 1,
+      name: 1,
+      email: 1
+    }
+  }
+]);
+```
+
+---
+
+### **Sample Data**
+#### **`users` Collection**
+```json
+[
+  { "_id": 1, "name": "Alice", "email": "alice@example.com" },
+  { "_id": 2, "name": "Bob", "email": "bob@example.com" },
+  { "_id": 3, "name": "Charlie", "email": "charlie@example.com" },
+  { "_id": 4, "name": "David", "email": "david@example.com" }
+]
+```
+
+#### **`orders` Collection**
+```json
+[
+  { "_id": 101, "customer": 1, "product": "Laptop", "price": 1000 },
+  { "_id": 102, "customer": 3, "product": "Phone", "price": 500 }
+]
+```
+
+---
+
+### **Step-by-Step Breakdown**
+1. **`$lookup`** → Joins `users` with `orders` based on `_id (users)` and `customer (orders)`.  
+   - **Alice (ID: 1)** → Has orders ✅  
+   - **Charlie (ID: 3)** → Has orders ✅  
+   - **Bob (ID: 2)** → No orders ❌  
+   - **David (ID: 4)** → No orders ❌  
+
+2. **`$match: { "orders": { $size: 0 } }`** → Filters users who have **no orders**.  
+
+3. **`$project`** → Shows only relevant fields (`_id`, `name`, `email`).
+
+---
+
+### **Expected Output**
+```json
+[
+  { "_id": 2, "name": "Bob", "email": "bob@example.com" },
+  { "_id": 4, "name": "David", "email": "david@example.com" }
+]
+```
+✅ **Bob and David haven’t placed any orders.**
+
+Would you like any modifications? 🚀
+
+=============================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+============================================================================================================================================================

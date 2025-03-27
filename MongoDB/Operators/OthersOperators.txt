@@ -1,91 +1,50 @@
 1. $exists: 
-2. $type
-3. $expr: 
 4. $regex
-5. $ifNull operator: 
+
 
 
 
 1. $exists: 
 
--> if you want to know that 'given field is exists in document or not' we use $exists operator.
--> This operator takes 'boolean value as a input'.
--> if 'exists : true' then 'return all documents where that field exists'
--> if 'exists : false' then 'return you documents that don't have that field'.
+The $exists operator in MongoDB is used to check whether a field exists in a document. It can be used with true or false:
 
-// Find documents where the "fieldName" exists
-db.collectionName.find({ fieldName: { $exists: true } })
-// Find documents where the "fieldName" does not exist
-db.collectionName.find({ fieldName: { $exists: false } })
+$exists: true → Matches documents where the field exists.
 
-playGround> db.senwell.find({projects: {$exists: true}}, {_id: 1, name: 1})
+$exists: false → Matches documents where the field does not exist.
+
+
+1️⃣. Find documents where the director field exists:
+sample data: 
 [
-  { _id: 101, name: 'Adesh Yadav' },
-  { _id: 102, name: 'adesh Jadhav' },
-  { _id: 103, name: 'Rohan' },
-  { _id: 107, name: 'Rahul' },
-  { _id: 110, name: 'Kiran Mishra' }
+  { "_id": 1, "title": "Inception", "director": "Christopher Nolan" },
+  { "_id": 2, "title": "Titanic", "year": 1997 },
+  { "_id": 3, "title": "Avatar", "year": 2009, "director": "James Cameron" }
 ]
-
-
-2. $type
-
--> This operator is used to match documents based on the BSON type of a field's value.
--> BSON (Binary JSON) is the binary-encoded format used by MongoDB to store and exchange data.
-
--> count all documents whose type is "number" for given field.
--> this query will return all documents where age is a number.
-db.tb1.find({age: {$type: "number"}})
-
-1 for double
-2 for string
-3 for object
-4 for array
-8 for boolean
-16 for int32
-18 for int64
-
-db.addressBook.find( { "zipCode" : { $type : 1 } } )
-db.addressBook.find( { "zipCode" : { $type : "double" } } )
-
-db.addressBook.find( { "zipCode" : { $type : 2 } } );
-db.addressBook.find( { "zipCode" : { $type : "string" } } );
-
-
-3. $expr: 
-
--> useful when you need to 'compare fields from the same document' or 'perform more complex comparisons'
--> find all documents where "age" is greater than "target" (both fields are in the same document).
--> db.tb1.find({$expr: {$eq: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$ne: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$lt: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$gte: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$lte: ["$age", "$target"]}})
--> db.tb1.find({$expr: {$gt: ["$age", "$target"]}})     
-Question: find documents where the total revenue is greater than $10,000.
-hint: calculate total revenue by multiplying (quantity * price) and then compare it with 10000
-input: 
+output:
 [
-    { "_id": 1, "product": "Laptop", "quantity": 10, "price": 1200 },
-    { "_id": 2, "product": "Smartphone", "quantity": 15, "price": 800 },
-    { "_id": 3, "product": "Tablet", "quantity": 5, "price": 500 }
+  { "_id": 1, "title": "Inception", "director": "Christopher Nolan" },
+  { "_id": 3, "title": "Avatar", "year": 2009, "director": "James Cameron" }
 ]
-output: 
-[
-  { _id: 1, product: 'Laptop', quantity: 10, price: 1200 },
-  { _id: 2, product: 'Smartphone', quantity: 15, price: 800 }
-]
-query: 
-db.tb1.aggregate([
-    {
-        $match: {
-                $expr: {
-                    $gt: [{$multiply: ['$quantity','$price']}, 10000]
-                }
-        }
-    }
-])
+Query>
+db.movies.find({ director: { $exists: true } })
+
+
+2️⃣. Add a new field category: "Sci-Fi" where director exists
+
+db.movies.updateMany(  { "director": { $exists: true } },  { $set: { "category": "Sci-Fi" } });
+
+
+3️⃣ Delete documents where director does not exist
+
+db.movies.deleteMany({ "director": { $exists: false } });
+
+
+
+
+
+============================================================================================================================================================
+
+
 
 
 4. $regex
@@ -99,82 +58,86 @@ dataset grows.
 
 Input : 
 
-db.tb10.insertMany([
-    {_id: 1, name: 'abc'},
-    {_id: 2, name: 'ABC'},
-    {_id: 3, name: 'abcd'},
-    {_id: 4, name: 'xyz'},
-    {_id: 5, name: 'XYZ'},
-    {_id: 6, name: 'xyza'},
-    {_id: 7, name: 'mno'},
-    {_id: 8, name: 'MNO'},
-    {_id: 9, name: 'amnop'},
-    {_id: 10, name: 'a bcd e'},
-    {_id: 11, name: 'abcde'},
-])
-
-1. Find documents where "fieldName" starts with "abc" or "ABC" (case-insensitive)
--> db.t1.find({name: {$regex: /^abc/i}});
-[
-    {_id: 1, name: 'abc'},
-    {_id: 2, name: 'ABC'},
-    {_id: 3, name: 'abcd'},
-]
+db.users.insertMany([
+  { name: "Alice Johnson", email: "alice@example.com", bio: "Loves hiking and photography" },
+  { name: "Bob Smith", email: "bob@example.com", bio: "Enjoys coding and machine learning" },
+  { name: "Charlie Brown", email: "charlie@example.com", bio: "Avid reader and coffee lover" },
+  { name: "David White", email: "david@example.com", bio: "Passionate about music and sports" },
+  { name: "Emma Wilson", email: "emma@example.com", bio: "Traveler and food enthusiast" },
+  { name: "Franklin Dorsey", email: "frank@example.com", bio: "Tech entrepreneur and investor" },
+  { name: "Grace Lee", email: "grace@example.com", bio: "Yoga instructor and meditation expert" },
+  { name: "Hannah Carter", email: "hannah@example.com", bio: "Writes poetry and short stories" },
+  { name: "Isaac Newton", email: "isaac@example.com", bio: "Physicist and mathematician" },
+  { name: "Jack Ryan", email: "jack@example.com", bio: "Secret agent and world traveler" }
+]);
 
 
-db.tb1.find({name: {$regex: /mno/i}})
-
-2. Find documents where "fieldName" contains "mno" or "MNO" anywhere in the string (case-insensitive)
--> db.t1.find({name: {$regex: /mno/i}})
-[
-    {_id: 7, name: 'mno'},
-    {_id: 8, name: 'MNO'},
-    {_id: 9, name: 'amnop'},
-]
 
 
-3. Find documents where "fieldName" ends with "xyz" (case-insensitive)
--> db.tb1.find({name: {$regex: /xyz$/i}})
-[
-    {_id: 4, name: 'xyz'},
-    {_id: 5, name: 'XYZ'},
-]
+
+🔹 1. Find Users Whose Name Starts with "Al" (^Al)
+✅ Uses Index (if an index exists on name)
+```
+db.users.find({ name: { $regex: "^Al" } });
+```
+🔹 Matches: "Alex", "Alice", "Albert"
+❌ Does NOT match: "Daniel Alson"
 
 
-4. Find documents where "fieldName" contains the whole word "mno" (case-insensitive)
--> db.tb1.find({name: {$regex: /\bmno\b/i}})
--> db.tb1.find({name: {$regex: /^mno$/i}})
-[ 
-    { _id: 7, name: 'mno' }, 
-    { _id: 8, name: 'MNO' } 
-]
+🔹 2. Find Users Whose Name Ends with "son" (son$)
+❌ Does NOT Use Index (Full Collection Scan)
+```
+db.users.find({ name: { $regex: "son$" } });
+```
+🔹 Matches: "Jackson", "Emerson", "Johnson"
+❌ Does NOT match: "Sonny"
 
 
-=================================================================
 
-$ifNull operator: 
--> MongoDB has an $ifNull function within its aggregation framework.
--> if our array contain null value or document don't have any array field then it will give you error.
--> to solve this we use $ifNull operator.
--> this line will give you error: sizeOfTags1: {$size: '$tags'},
-so use : sizeOfTags: {$size: {$ifNull:['$tags', []]}},
+🔹 3. Find Users Whose Name Contains "tech" (tech)
+❌ Does NOT Use Index (Slow for Large Data Sets)
+```
+db.users.find({ name: { $regex: "tech" } });
+```
+🔹 Matches: "TechGuru", "Biotech", "Fintech"
+❌ Does NOT match: "Technology" (case-sensitive)
 
-data: 
-[
-    {_id: 1, age: 21, tags: [10, 20]},
-    {_id: 2, age: 22, tags: [10, 20, 30]},
-    {_id: 3, age: 23, tags: [10, 20, 30, 40, 50]},
-    {_id: 4, age: 24, tags: null},
-    {_id: 5, age: 25},
-]
 
-db.tb2.aggregate([
-    {
-        $project: {
-            _id: 1,
-            age: 1,
-            tags: 1,
-            sizeOfTags: {$size: {$ifNull:['$tags', []]}},   // if null then use [].
-        }
-    }
-])
+
+🔹 4. Case-Insensitive Search (/tech/i)
+❌ Does NOT Use Index (Full Scan)
+```
+db.users.find({ name: { $regex: "tech", $options: "i" } });
+```
+🔹 Matches: "TechGuru", "TECHnology", "finTECH"
+
+
+
+
+🔹 5. Match Users Whose Name Contains "john" OR "doe" (john|doe)
+❌ Does NOT Use Index (Slow for Large Data Sets)
+```
+db.users.find({ name: { $regex: "john|doe", $options: "i" } });
+```
+🔹 Matches: "John Smith", "Doe Williams", "Johnny"
+❌ Does NOT match: "Jonathan" (since "john" is part of another word)
+
+
+
+
+
+
+
+
+🔹 Which One Uses Index?
+✅ Only "^Al" Uses Index (Prefix search)
+❌ All other regex searches cause a full collection scan
+
+
+
+🔹 Best Practice: Use Full-Text Search Instead of $regex
+If you need efficient word searches, use text indexes instead:
+```
+db.users.createIndex({ name: "text", bio: "text" });
+db.users.find({ $text: { $search: "Tech" } });
+```

@@ -491,11 +491,11 @@ app.listen(3000, () => console.log("Server running on port 3000"));
 
 ---
 
-### **🔹 Where is Rate Limiting Used?**
-✅ **Login attempts:** Prevent brute-force attacks.  
-✅ **API requests:** Protect backend servers from overload.  
-✅ **Search queries:** Avoid excessive requests from bots.  
-✅ **File uploads:** Control how many files a user can upload in a short time.  
+🔹 Where is Rate Limiting Used?
+✅ Login attempts: Prevent brute-force attacks.  
+✅ API requests: Protect backend servers from overload.  
+✅ Search queries: Avoid excessive requests from bots.  
+✅ File uploads: Control how many files a user can upload in a short time.
 
 Would you like to add rate limiting to your project? 🚀
 

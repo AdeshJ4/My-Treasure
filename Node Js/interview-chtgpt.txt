@@ -1,0 +1,77 @@
+Here’s a list of **Node.js interview questions** categorized from **beginner** to **advanced** levels:
+
+---
+
+## 🔰 Beginner-Level Questions:
+1. What is Node.js, and how does it work?
+2. How is Node.js different from JavaScript in the browser?
+3. What is the difference between synchronous and asynchronous programming?
+4. Explain the event loop in Node.js.
+5. What are the core modules in Node.js?
+6. How do you install Node.js and check its version?
+7. What is npm? How does it work?
+8. What is the purpose of `package.json`?
+9. What are global objects in Node.js?
+10. How do you import and export modules in Node.js?
+11. What is the difference between `require()` and `import`?
+12. How do you create a simple HTTP server in Node.js?
+13. What is the difference between `fs.readFileSync()` and `fs.readFile()`?
+14. What is middleware in Express.js?
+15. How do you handle errors in Node.js?
+16. How can you handle file uploads in Node.js?
+17. What is `process` in Node.js?
+18. What is `Buffer` in Node.js?
+19. How do you handle command-line arguments in a Node.js script?
+20. What is the difference between `__dirname` and `__filename`?
+
+---
+
+## 🚀 Intermediate-Level Questions:
+21. What is the difference between callbacks, promises, and async/await?
+22. What are streams in Node.js? Explain different types.
+23. How does the cluster module work in Node.js?
+24. What is the purpose of the `child_process` module?
+25. Explain the difference between process.nextTick() and setImmediate().
+26. How do you implement authentication in Node.js?
+27. What are JWTs, and how are they used in Node.js?
+28. What are WebSockets, and how do you use them in Node.js?
+29. How do you optimize performance in a Node.js application?
+30. What is CORS, and how do you enable it in Node.js?
+31. How do you connect a Node.js app to MongoDB using Mongoose?
+32. How do you use Redis with Node.js?
+33. What is an event emitter in Node.js?
+34. Explain different HTTP methods and their use cases.
+35. What is rate limiting, and how do you implement it in Node.js?
+36. How do you prevent SQL injection in a Node.js application?
+37. What is the difference between session-based authentication and token-based authentication?
+38. How do you use environment variables in a Node.js application?
+39. What is dependency injection in Node.js?
+40. How do you debug a Node.js application?
+
+---
+
+## 🏆 Advanced-Level Questions:
+41. How does garbage collection work in V8?
+42. What is the difference between V8 and libuv?
+43. How does Node.js handle multi-threading?
+44. What are worker threads in Node.js?
+45. What is the event loop's role in handling async operations?
+46. Explain the difference between LTS and Current versions of Node.js.
+47. What is the CAP theorem, and how does it apply to Node.js applications?
+48. How do you implement microservices in Node.js?
+49. What are GraphQL and REST, and how do they differ?
+50. How do you secure a Node.js application from DDoS attacks?
+51. What is the purpose of middleware in Express.js? Can you write a custom middleware?
+52. How do you handle transactions in MongoDB and Node.js?
+53. What is the difference between fork and spawn in Node.js?
+54. What are message queues, and how do you implement them in Node.js?
+55. What is a reverse proxy, and why would you use one with Node.js?
+56. How do you handle large file uploads efficiently in Node.js?
+57. How can you optimize API response time in a Node.js application?
+58. How do you implement caching in Node.js?
+59. How does Node.js handle memory leaks, and how do you prevent them?
+60. What is Deno, and how is it different from Node.js?
+
+---
+
+Would you like me to provide detailed answers for any of these? 🚀

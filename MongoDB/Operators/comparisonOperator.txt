@@ -1,8 +1,20 @@
 1. $eq: 
 
 -> This operator 'return documents' if the 'value of given field is equal to specified value'.
--> db.voters.find({age: {$eq: 18}})
+-> db.users.find({ name: {$eq: 'Adesh'}})
 -> db.voters.find({age: 18})
+Sample Data:
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 2, "name": "Bob", "age": 30 },
+  { "_id": 3, "name": "Charlie", "age": 25 }
+]
+Query> db.users.find({ age: { $eq: 25 } })     or   db.users.find({ age: 25 })
+Output:
+[
+  { "_id": 1, "name": "Alice", "age": 25 },
+  { "_id": 3, "name": "Charlie", "age": 25 }
+]
 
 
 2. $ne
@@ -45,7 +57,6 @@
 
 -> This operator returned documents if the value of the given field is not in specified array.
 -> db.sales.find({category: {$nin: ['Cloth', 'Books']}})
-
 
 
 
