@@ -438,50 +438,112 @@ const cleanPath = path.normalize(messyPath); // \path\files\example.txt
 6. Events Module:
 =================
 
--> The 'Events module' provides a way of 'working with events'.
--> Implements an event-driven architecture
--> Used to create and handle custom events.
--> It 'enables' developers to 'create', 'emit', and 'listen' for 'custom events' within their applications.
--> Event is basically a 'signal' that indicates something has happened in your application and you have to handle that event. 
+👉 Events is core module.
+👉 The 'Events module' provides a way of 'working with events'.
+👉 Used to "create" and "handle" "custom events".
+👉 Implements an "event-driven architecture"
+👉 It allows developers to emit (trigger) and listen (handle) for custom events.
+👉 Event is basically a 'signal' that indicates something has happened in your application and you have to handle that event. 
 Like when a connection is made or a file is opened. Every action on a computer is an event. 
--> lots of node class/modules raises different kinds of events and in your code you have respond to that events.
-for ex in node we have a class called 'http.Server' which we can use to build the http server. so we listen on a given port and 
-every time we receive a request on that port that http.Server class raises an event. our job is to respond to that event which 
-basically involves reading that request and returning the right response.
--> The 'core' of the "Events module" is the "EventEmitter class". 
--> we create "Instances" of "EventEmitter class" so that we can 'emit events' with the help of 'emit()' method as well as we can 
-'register events' with the help of 'addListener()' and 'on()' method to respond to those events.
-
-var events = require('events');
-var eventEmitter = new events.EventEmitter();
+👉 lots of node class/modules raises different kinds of events and in your code you have respond to that events.
 
 
--> In the example below we have created a function that will be executed when a "scream" event is fired.
--> To fire an event, use the emit() method.
+EventEmitter class: 
 
--> we use on() or addListener() to define a event and as a second argument we give a callback function which will be executed when this
-event is executed.
--> To execute a event we use emit() method which takes a event name as a argument and called associated callback function og that event.
-code : 
+👉 "EventEmitter" is "class" provided by the "events module".
+👉 we create "Instances" of "EventEmitter class" 
+👉 Many built-in Node.js modules (like http, fs, net) inherit from EventEmitter, making them event-driven.
+allows us to:
+🟠  Define (listen for) events using .on() or .addListener().
+🟠  Emit (trigger) events using .emit().
+🟠  Remove event listeners(callback fucntion) using .off() or .removeListener().
+
+👉 It follows the "Publisher-Subscriber model", where:
+
+🟠 The publisher (emitter) generates events.
+🟠 The subscriber (listener) waits for and responds to those events.
+
+
+Example 1: Creating & Handling Events with EventEmitter
+```
+const EventEmitter = require('events'); 
+
+// Create an instance of EventEmitter
+const eventEmitter = new EventEmitter();
+
+// Define an event listener
+eventEmitter.on('greet', (name) => {   // callback function is called "event listener"
+    console.log(`Hello, ${name}!`);
+});
+
+// Emit (trigger) the event
+eventEmitter.emit('greet', 'John');
+
+```
+
+Example 2: Handling Multiple Listeners for the Same Event
 ```
 const EventEmitter = require('events');
-const emitter = new EventEmitter();
-emitter.on('greet', () => console.log('Hello, Event!'));
-emitter.emit('greet');
+const eventEmitter = new EventEmitter();
+
+eventEmitter.on('order', () => console.log('Order received.'));
+eventEmitter.on('order', () => console.log('Processing payment...'));
+eventEmitter.on('order', () => console.log('Order shipped.'));
+
+eventEmitter.emit('order');
+
+```
+
+Example 3: Removing Event Listeners (callback function)
+```
+const EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+
+const eventListener = (name) => {
+  console.log(`Welcom ${name}`)
+};
+
+eventEmitter.on("greet", eventListener)
+
+eventEmitter.emit("greet", 'Adesh');
+
+eventEmitter.off("greet",eventListener )
+```
+
+Example 4: Emitting Events Only Once with .once()
+```
+const EventEmitter = require('events');
+const eventEmitter = new EventEmitter();
+
+eventEmitter.once('connect', () => {
+    console.log('Connected to the server.');
+});
+
+eventEmitter.emit('connect');  // ✅ Will execute
+eventEmitter.emit('connect');  // ❌ Will NOT execute again
 ```
 
 
+🟠 Inheriting from EventEmitter (Custom EventEmitter Class): 
 
-Method			        Description
+👉 Many built-in Node.js modules (like http, fs, net) inherit from EventEmitter, making them event-driven.
+👉 In bellow ex we created a "custom class" that extends EventEmitter. This allows us to create our own event-driven objects.
 
-addListener()		    register the 'event handler' with event
-emit()			        used to fire an event by calling all the listeners(event handlers) registered with the specified name
-on()			          register the 'event handler' with event
+```
+const EventEmitter = require('events');  // Import the EventEmitter module
 
-on() and addListener() are basically same, but quite often we used on() method.
-on() or addListener() must be define before emit() method. 
-emit() method iterate over all on() methods.
+// Create a class that inherits from EventEmitter
+class MyEmitter extends EventEmitter {}  // ✅ Custom class extending EventEmitter
 
+const myEmitter = new MyEmitter();  // ✅ Create an instance of MyEmitter
+
+// Attach an event listener
+myEmitter.on('alert', (msg) => {
+    console.log(`ALERT: ${msg}`);
+});
+
+// Emit the 'alert' event
+myEmitter.emit('alert', 'Low disk space!');
 
 --------------------------------------------------------------------------------------------------------------
 

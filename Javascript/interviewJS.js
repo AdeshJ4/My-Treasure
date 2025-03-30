@@ -2256,12 +2256,16 @@ function extractPerson ({id, lname, address: {city}}) {
 /*
 You can create an object in three different ways:
 
-1. Using object literal -> {}
-2. By creating instance of Object directly ->  new Object({})
-3. By using constructor function -> Person
-4. factory method 
-5. Using the Object.create() method
-6. Using es6 classes
+1. Using Object Literal (Simplest and Most Common)
+2. Using the new Object() Constructor
+3. Using a Constructor Function
+4. Using Factory Functions 
+5. Using the Object.create() Method
+6. Using ES6 Class Syntax
+7. Using JSON (for Data Exchange)
+8. Using ES6 Object.assign()
+9. Using Singleton Pattern
+
 
 
 Example 1: Using object literal -> {}
@@ -2410,6 +2414,12 @@ const p1 = new Person('Adesh', 22); //The example above uses the Person class to
 
 
 */
+
+
+
+
+
+
 
 // Q26] What are arrow functions?
 

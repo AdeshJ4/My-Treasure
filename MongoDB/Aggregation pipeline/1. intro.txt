@@ -1466,190 +1466,236 @@ $lookup:
 collections based on a 'common field'.
 -> LEFT (OUTER) JOIN: Returns 'all records' from the 'left table', and the 'matched records' from the 'right table'
 
-authors
-[
-  { _id: 100, name: 'F. Scott Fitzgerald', birth_year: 1896 },
-  { _id: 101, name: 'George Orwell', birth_year: 1903 },
-  { _id: 102, name: 'Harper Lee', birth_year: 1926 }
-]
-books
+❓ Query: Write a MongoDB aggregation query to fetch orders along with customer details.
+customers:
 [
   {
-    _id: 1,
-    title: 'The Great Gatsby',
-    author_id: 100,
-    genre: 'Classic'
+    "_id": ObjectId("65a1b2c3d4e5f67890123456"),
+    "name": "John Doe",
+    "email": "john.doe@example.com"
   },
   {
-    _id: 2,
-    author_id: 101,
-    genre: 'Dystopian'
-  },
-  {
-    _id: 3,
-    title: 'To Kill a Mockingbird',
-    author_id: 102,
-    genre: 'Classic'
+    "_id": ObjectId("65a1b2c3d4e5f67890123457"),
+    "name": "Alice Smith",
+    "email": "alice.smith@example.com"
   }
 ]
-Query> db.books.aggregate([
-    {
-        $lookup: {
-            from: 'authors',
-            localField: "author_id",
-            foreignField: "_id",
-            as: "author_details"
-        }
-    }
-])
 
-
-
-db.books.aggregate([
+orders:
+[
   {
-    $lookup: {
-        from: 'authors',
-        localField: 'author_id',
-        foreignField: '_id',
-        as: 'authorDetails'
-    }
+    _id: ObjectId("67e560a5093897fb285ca506"),
+    customerId: ObjectId("65a1b2c3d4e5f67890123456"),
+    totalAmount: 150,
+    items: [ 'Laptop', 'Mouse' ]
+  },
+  {
+    _id: ObjectId("67e560a5093897fb285ca507"),
+    customerId: ObjectId("65a1b2c3d4e5f67890123457"),
+    totalAmount: 200,
+    items: [ 'Monitor', 'Keyboard' ]
   }
-])
-
+]
 output: 
 [
   {
-    _id: 1,
-    title: 'The Great Gatsby',
-    author_id: 100,
-    genre: 'Classic',
-    author_details: [ { _id: 100, name: 'F. Scott Fitzgerald', birth_year: 1896 } ]
+    "_id": ObjectId("70b1c2d3e4f5g67890123456"),
+    "customerId": ObjectId("65a1b2c3d4e5f67890123456"),
+    "totalAmount": 150,
+    "items": ["Laptop", "Mouse"],
+    "customerDetails": {
+        "_id": ObjectId("65a1b2c3d4e5f67890123456"),
+        "name": "John Doe",
+        "email": "john.doe@example.com"
+      }
   },
   {
-    _id: 2,
-    title: 'Nineteen Eighty-Four',
-    author_id: 101,
-    genre: 'Dystopian',
-    author_details: [ { _id: 101, name: 'George Orwell', birth_year: 1903 } ]
-  },
-  {
-    _id: 3,
-    title: 'To Kill a Mockingbird',
-    author_id: 102,
-    genre: 'Classic',
-    author_details: [ { _id: 102, name: 'Harper Lee', birth_year: 1926 } ]
+    "_id": ObjectId("70b1c2d3e4f5g67890123457"),
+    "customerId": ObjectId("65a1b2c3d4e5f67890123457"),
+    "totalAmount": 200,
+    "items": ["Monitor", "Keyboard"],
+    "customerDetails": {
+        "_id": ObjectId("65a1b2c3d4e5f67890123457"),
+        "name": "Alice Smith",
+        "email": "alice.smith@example.com"
+      }
   }
 ]
-
-
-db.books.aggregate([
-    {
-        $lookup:{
-            from: 'authors',
-            localField: "author_id",
-            foreignField: "_id",
-            as: "author_details"
-        }
-    },
-    {
-        $addFields: {
-            author_details: {
-                $first: "$author_details"
-            }
-        }
+Query>
+db.orders.aggregate([
+  {
+    $lookup: {
+      from: 'customers',
+      localField: 'customerId',
+      foreignField: '_id',
+      as: 'customerDetails'
     }
+  },
+  {
+      $addFields:{
+          customerDetails: { $first: '$customerDetails' }
+      } 
+  }
 ])
 
 
 
 
-To find **customers who haven’t placed any orders**, we need to compare two collections:  
 
-1. **`users` Collection** → Contains all customers  
-2. **`orders` Collection** → Contains placed orders  
 
-We'll use a **`$lookup` (left join)** to find customers who have **no matching orders**.
+❓ To find customers who haven’t placed any orders, we need to compare two collections:  
 
----
-
-### **Aggregation Query:**
-```js
-db.users.aggregate([
-  {
-    $lookup: {
-      from: "orders",          // Join with the "orders" collection
-      localField: "_id",       // Match user ID from "users"
-      foreignField: "customer",// Match customer ID from "orders"
-      as: "orders"             // Store matching orders in "orders" array
-    }
-  },
-  {
-    $match: {
-      "orders": { $size: 0 }   // Keep only users with no orders
-    }
-  },
-  {
-    $project: {
-      _id: 1,
-      name: 1,
-      email: 1
-    }
-  }
-]);
-```
-
----
-
-### **Sample Data**
-#### **`users` Collection**
-```json
+customers:
 [
   { "_id": 1, "name": "Alice", "email": "alice@example.com" },
   { "_id": 2, "name": "Bob", "email": "bob@example.com" },
   { "_id": 3, "name": "Charlie", "email": "charlie@example.com" },
   { "_id": 4, "name": "David", "email": "david@example.com" }
 ]
-```
-
-#### **`orders` Collection**
-```json
+orders:
 [
-  { "_id": 101, "customer": 1, "product": "Laptop", "price": 1000 },
-  { "_id": 102, "customer": 3, "product": "Phone", "price": 500 }
+  { "_id": 101, "customerId": 1, "product": "Laptop", "price": 1000 },
+  { "_id": 102, "customerId": 3, "product": "Phone", "price": 500 }
 ]
-```
-
----
-
-### **Step-by-Step Breakdown**
-1. **`$lookup`** → Joins `users` with `orders` based on `_id (users)` and `customer (orders)`.  
-   - **Alice (ID: 1)** → Has orders ✅  
-   - **Charlie (ID: 3)** → Has orders ✅  
-   - **Bob (ID: 2)** → No orders ❌  
-   - **David (ID: 4)** → No orders ❌  
-
-2. **`$match: { "orders": { $size: 0 } }`** → Filters users who have **no orders**.  
-
-3. **`$project`** → Shows only relevant fields (`_id`, `name`, `email`).
-
----
-
-### **Expected Output**
-```json
+Output:
 [
   { "_id": 2, "name": "Bob", "email": "bob@example.com" },
   { "_id": 4, "name": "David", "email": "david@example.com" }
 ]
-```
-✅ **Bob and David haven’t placed any orders.**
+Query>
+db.customers.aggregate([
+  {
+    $lookup: {
+      from: 'orders',
+      localField: '_id',
+      foreignField: 'customerId',
+      as: 'orderDetail'
+    }
+  },
+  {
+    $match: {
+      orderDetail: { $size: 0 }
+    }
+  }
+])
 
-Would you like any modifications? 🚀
-
-=============================================================================================================================================================
 
 
 
 
+Example: Joining More Than Two Collections
+
+
+students (contains student details)
+enrollments (links students to courses)
+courses (contains course details)
+
+
+Query> We want to retrieve each student's details, their enrollments, and the course details they are enrolled in.
+
+students:
+db.students.insertMany([
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com"
+  },
+  {
+    "_id": 2,
+    "name": "Bob Williams",
+    "email": "bob.williams@example.com"
+  }
+]);
+
+
+db.enrollments.insertMany([
+  {
+    "_id": 1,
+    "studentId": 1,
+    "courseId": 1,
+    "enrollmentDate": "2024-03-25"
+  },
+  {
+    "_id": 2,
+    "studentId": 2,
+    "courseId": 2,
+    "enrollmentDate": "2024-03-20"
+  }
+]);
+
+db.courses.insertMany([
+  {
+    "_id": 1,
+    "courseName": "Mathematics",
+    "instructor": "Dr. John Smith"
+  },
+  {
+    "_id": 2,
+    "courseName": "Physics",
+    "instructor": "Dr. Emily Davis"
+  }
+]);
+
+Output: 
+[
+  {
+    "_id": 1,
+    "name": "Alice Johnson",
+    "email": "alice.johnson@example.com",
+    "enrollments": {
+      "enrollmentDate": "2024-03-25"
+    },
+    "courseDetails": {
+      "courseName": "Mathematics",
+      "instructor": "Dr. John Smith"
+    }
+  },
+  {
+    "_id": 2,
+    "name": "Bob Williams",
+    "email": "bob.williams@example.com",
+    "enrollments": {
+      "enrollmentDate": "2024-03-20"
+    },
+    "courseDetails": {
+      "courseName": "Physics",
+      "instructor": "Dr. Emily Davis"
+    }
+  }
+]
+
+
+
+Query>
+db.students.aggregate([
+  {
+    $lookup: {
+      from: 'enrollments',
+      localField: '_id',
+      foreignField: 'studentId',
+      as: 'enrollments'
+    }
+  },
+  {
+    $unwind: {
+      path: '$enrollments',
+      preserveNullAndEmptyArrays: true
+    }
+  },
+  {
+    $lookup: {
+      from: 'courses',
+      localField: 'enrollments.courseId',
+      foreignField: '_id',
+      as: 'courseDetails'
+    }
+  },
+  {
+    $addFields: {
+      courseDetails: { $first: '$courseDetails' }
+    }
+  }
+])
 
 
 
@@ -1658,4 +1704,69 @@ Would you like any modifications? 🚀
 
 
 
-============================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+Basic Level
+Write an aggregation query to find the total number of documents in a collection.
+
+Find the total number of movies released after 2015 in a movies collection.
+
+Retrieve the total sales amount from an orders collection where each order has an amount field.
+
+Group customers by country and count how many customers belong to each country.
+
+Find all orders placed by a specific customer using $match and $lookup.
+
+Intermediate Level
+Find the top 5 most rented movies from a rentals collection.
+
+Calculate the average price of products in each category from a products collection.
+
+Find the most popular product category based on total sales amount.
+
+List the customers who have rented more than 5 movies.
+
+Perform a $lookup to join orders with customers, and display only customers who have placed an order.
+
+Find the total revenue generated per month from the orders collection.
+
+Find all users whose last login date is more than 30 days ago using $match and $dateSubtract.
+
+Count the number of products in each category and exclude categories that have fewer than 10 products.
+
+Find the highest-priced product in each category.
+
+Sort orders by total price in descending order and return only the top 10.
+
+Advanced Level
+Find the percentage of movies rented by premium vs. regular customers using $group and $facet.
+
+List the top 3 customers who have spent the most money on rentals in the last year.
+
+Perform a multi-level $lookup to join orders → customers → addresses to get customer addresses along with orders.
+
+Calculate the average movie rating per genre from a movies collection.
+
+Find customers who have placed an order but never rented a movie (using $lookup and $match).
+
+Find the top-selling products for each month in the last year using $group and $dateToString.
+
+Find the customer who rented the highest number of different movie genres.
+
+Find duplicate customer emails in a users collection using $group and $count.
+
+Calculate customer retention by counting how many customers placed orders in both the current and previous year.
+
+Write an aggregation query to paginate orders (limit + skip) and sort them by date.
+

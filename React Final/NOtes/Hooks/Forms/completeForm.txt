@@ -1,0 +1,338 @@
+import React, { useState } from 'react';
+
+const App = () => {
+
+  const [formData, setFormData] = useState({
+    name: '',
+    age: '',
+    email: '',
+    phoneNumber: '',
+    password: '',
+    confirmPassword: '',
+    gender: '',
+    category: '',
+    interests: [],
+    birthDate: '',
+    joningDate: '',
+    profileImage: null,
+    resume: null
+  });
+
+  const [errors, setErrors] = useState({});
+
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^\S+@\S+\.\S+$/;
+
+    return emailRegex.test(email);
+  }
+
+
+  const phone = (phone) => {
+    const phoenRegex = /^\d{10}$/
+  }
+
+
+  const isValidPassword = (password) => {
+    const numberRegex = /[0-9]/;
+    const upperCaseRegex = /[A-Z]/;
+    const lowerCaseRegex = /[a-z]/;
+    const symbolRegex = /[!@#$%^&*().,?<>]/;
+
+    return (
+      password.length >= 8 && 
+      numberRegex.test(password) &&
+      upperCaseRegex.test(password) &&
+      lowerCaseRegex.test(password) &&
+      symbolRegex.test(password)
+    )
+  }
+
+  const isValuidfPhopneNumber = (phone) => {
+    const phoneRegex = /^\d{10}$/
+    return phoneRegex.test(phoneRegex)
+  } 
+
+  const validateForm = () => {
+    const newErrors = {};
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
+
+    if (!formData.profileImage) {
+      newErrors.profileImage = 'Profile image is required';
+    } else {
+      const validImageTypes = ['image/jpeg', 'image/png'];
+      if (!validImageTypes.includes(formData.profileImage.type)) {
+        newErrors.profileImage = 'Only JPEG/PNG images are allowed';
+      }
+      if (formData.profileImage.size > MAX_FILE_SIZE) {
+        newErrors.profileImage = 'Image size must be less than 5MB';
+      }
+    }
+
+      // Resume Validation
+  if (!formData.resume) {
+    newErrors.resume = 'Resume is required';
+  } else {
+    if (formData.resume.type !== 'application/pdf') {
+      newErrors.resume = 'Only PDF files are allowed';
+    }
+    if (formData.resume.size > MAX_FILE_SIZE) {
+      newErrors.resume = 'Resume size must be less than 5MB';
+    }
+  }
+
+
+    if(!formData.name)
+      newErrors.name = `Name is required`
+    else if(formData.name.length < 3)
+      newErrors.name = `Name should be 3 characters long`
+    if(!formData.age)
+      newErrors.age = `Age is requried`
+    else if(formData.age < 18)
+      newErrors.age = `Age must be 18 yesrs old`
+    if(!formData.email)
+      newErrors.email = `Email is requried`
+    else if (!isValidEmail(formData.email))
+      newErrors.email = `Please enter a valid email address`
+    if(!formData.phoneNumber)
+      newErrors.phoneNumber = `Phone Number is required`
+    if(!formData.password) 
+      newErrors.password = `Password is required`
+    if(!formData.confirmPassword)
+      newErrors.confirmPassword = `ConfirmPassword is required`
+    else if(formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = `ConfirmPassword should match`
+    if(!formData.gender) 
+      newErrors.gender = `Gender is required`
+    if(!formData.category)
+      newErrors.category = `Category is required`
+    if(!formData.birthDate)
+      newErrors.birthDate = `Birth Date isb required`
+    if(formData.interests.length === 0) 
+      newErrors.interests = `Select at least one interest`
+    if(!formData.joningDate)
+      newErrors.joningDate = `Joning Date is required`
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  }
+
+  const getFormData = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+
+  const handleCheckBox = (e) => {
+    const { value, checked } = e.target;
+
+    setFormData(prev => ({ ...prev, interests: checked ? [ ...prev.interests, value ] : prev.interests.filter(interest => interest !== value)}))
+  }
+
+
+  
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: files[0] // Store the first selected file
+    }));
+  };
+
+  
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const isValid = validateForm();
+
+    if(isValid){
+      console.log(`call for api ${formData}`);
+      console.log(formData);
+      
+
+    }else{
+      console.log(`please resolve bugs`);
+    }
+  }
+
+
+
+  return (
+    <>
+        <h1>Form</h1>
+
+        <form onSubmit={handleSubmit}>
+          {/* Name */}
+          <div>
+            <label htmlFor="name">Name</label>
+            <input type="text" name='name' value={formData.name} onChange={getFormData}  />
+          </div>
+          { errors.name && (<p style={{ color: 'red' }}>{errors.name}</p>)}
+
+
+          {/* age */}
+          <div>
+            <label htmlFor="age">Age</label>
+            <input type="number'" name='age' value={formData.age} onChange={getFormData}/>
+          </div>
+          { errors.age && (<p style={{ color: 'red' }}>{errors.age}</p>)}
+
+
+
+          {/* email */}
+          <div>
+            <label htmlFor="email">Email</label>
+            <input type="email" name='email' value={formData.email} onChange={getFormData}/>
+          </div>
+          {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+
+
+          {/* phone number */}
+          <div>
+            <label htmlFor="phoneNumber">phoneNumber</label>
+            <input type="number" name='phoneNumber' value={formData.phoneNumber} onChange={getFormData} />
+          </div>
+          {
+            errors.phoneNumber && <p style={{ color: 'red' }}>{errors.phoneNumber}</p>
+          }
+
+
+          {/* password */}
+          <div>
+            <label htmlFor="password">Password</label>
+            <input type="password" name='password' value={formData.password} onChange={getFormData}  />
+          </div>
+          {
+            errors.password && <p style={{ color: 'red' }}>{errors.password}</p>
+          }
+
+
+          {/* confirm password */}
+
+          <div>
+            <label htmlFor="confirmPassword">confirmPassword</label>
+            <input type="password" name='confirmPassword' value={formData.confirmPassword} onChange={getFormData}/>
+          </div>
+          {
+            errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>
+          }
+
+
+          {/* Gender */}
+          <div>
+            {/* MALE */}
+            <div>
+              <input type="radio" id='male' name='gender' value="male" checked={formData.gender === 'male'} onChange={getFormData} />
+              <label htmlFor="male">male</label>
+            </div>
+            {/* FEMALE */}
+            <div>
+              <input type="radio" id='female' name='gender' value="female" checked={formData.gender === 'female'} onChange={getFormData} />
+              <label htmlFor="female">female</label>
+            </div>
+            {/* OTHERS */}
+            <div>
+              <input type="radio" id='others' name='gender' value="others" checked={formData.gender === 'others'} onChange={getFormData} />
+              <label htmlFor="others">Others</label>
+            </div>
+          </div>
+          {
+            errors.gender && <p style={{ color: 'red' }}>{errors.gender}</p>
+          }
+
+
+          {/* Select */}
+          <div>
+            <label htmlFor="category">Category</label>
+            <select name="category" value={formData.category} onChange={getFormData}>
+              <option value="">Please Choose</option>
+              <option value="technology">Technology</option>
+              <option value="health">Health</option>
+              <option value="finance">Finance</option>
+              <option value="education">Education</option>
+              <option value="others">Others</option>
+            </select>
+          </div>
+          {
+            errors.category && <p style={{ color: 'red' }}>{errors.category}</p>
+          }
+
+
+          {/* interserts */}
+          <div>
+              <label htmlFor=""></label>
+              <div>
+                <div>
+                  <input type="checkbox" id='sports' name='interests' value="sports" checked={formData.interests.includes("sports")} onChange={handleCheckBox} />
+                  <label htmlFor="sports">sports</label>
+                </div>
+                <div>
+                  <input type="checkbox" id='coding' name='interests' value='coding' checked={formData.interests.includes('coding')}  onChange={handleCheckBox}/>
+                  <label htmlFor="coding">Coding</label>
+                </div>
+                <div>
+                  <input type="checkbox" id='reading' name='interests' value="reading" checked={formData.interests.includes('reading')} onChange={handleCheckBox} />
+                  <label htmlFor="reading">Reading</label>
+                </div>
+              </div>
+          </div>
+          { errors.interests && <p style={{ color: 'red' }}>{errors.interests}</p>}
+
+          {/* Date */}
+          <div>
+            <label htmlFor="birthDate">Birth Date</label>
+            <input type="date" name='birthDate' id='birthDate' value={formData.birthDate} onChange={getFormData} />
+          </div>
+          {
+            errors.birthDate && <p style={{ color: 'red' }}>{errors.birthDate}</p>
+          }
+
+          {/* Joinning Date */}
+          <div>
+            <label htmlFor="joningDate">Joning Date</label>
+            <input type="date" name='joningDate' id='joningDate' value={formData.joningDate} onChange={getFormData} />
+          </div>
+          {
+            errors.joningDate && <p style={{ color: 'red' }}>{errors.joningDate}</p>
+          }
+
+
+          <div>
+              <label htmlFor="profileImage">Profile Image (JPEG/PNG)</label>
+              <input 
+                type="file" 
+                id="profileImage"
+                name="profileImage"
+                accept="image/jpeg, image/png"
+                onChange={handleFileChange}
+              />
+              {errors.profileImage && <p className="error">{errors.profileImage}</p>}
+            </div>
+
+            {/* Resume Upload */}
+            <div>
+              <label htmlFor="resume">Resume (PDF only)</label>
+              <input 
+                type="file" 
+                id="resume"
+                name="resume"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
+              {errors.resume && <p className="error">{errors.resume}</p>}
+            </div>
+
+
+
+          <button type='submit'>Submit</button>
+        </form>
+    </>
+  )
+}
+
+
+export default App;

@@ -8,6 +8,44 @@
 -> The await keyword makes the function pause the execution and wait for a resolved promise before it continues:
 
 
+The await keyword:
+
+Pauses execution until the Promise resolves
+Returns the actual resolved value (the order document)
+Automatically unwraps the Promise
+
+ex: is this returning  promise ?
+ex: 1
+const order = await Order.findById(orderId).populate("user").populate("products.product")
+-> No, this is not returning a Promise because you're using await
+
+ex 2: 
+is this return promise ?
+order.products.map(async (item) => {
+            const { data: product } = await axios.get(`http://localhost:5002/api/products/${item.productId}`);
+            return { ...item.toObject(), product };
+        });
+
+-> When you use async inside .map(), each iteration returns a Promise
+-> The await only applies to the individual axios.get() call inside each iteration, not the entire .map().
+-> You need to use Promise.all() to wait for all Promises to resolve:
+const productsWithDetails = await Promise.all(
+  order.products.map(async (item) => {
+    const { data: product } = await axios.get(
+      `http://localhost:5002/api/products/${item.productId}`
+    );
+    return { ...item.toObject(), product };
+  })
+);
+Key Points:
+Without Promise.all(): You get an array of pending Promises
+With Promise.all(): You get an array of resolved objects
+Error Handling: If any request fails, the whole Promise.all() rejects
+
+
+
+
+
 
 
 fetch data : 

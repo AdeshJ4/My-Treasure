@@ -7,19 +7,20 @@ Authentication and Authorization:
 
 1. Authentication: 
 
--> is the process of determining if the user is who he/she claims to be. It involves validating their email/password.
+-> The process of verifying a user's identity .  It involves validating their email/password.
 
 
 2. Authorization:
 
--> is the process of determining if the user has permission to perform a given operation.
+-> it is process of determining if the user has permission to perform a given operation.
 
 
 
-Token :
--------
 
--> In JWT (JSON Web Token), a token is a string that contains encoded information about a user or a client that is used for authentication and authorization purposes.
+JWT Token :
+-----------
+
+-> In JWT (JSON Web Token), a token is a string that contains encoded information about a user that is used for authentication and authorization purposes.
 Ex. token looks like this :  
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxLCJ1c2VybmFtZSI6IkFkZXNoIiwiZW1haWwiOiJhZGVqYWQxMjM0QGdtYWlsLmNvbSJ9LCJpYXQiOjE2Nzg3NzA2NTUsImV4cCI6MTY3ODc3MDk1NX0.0CmG7Ykj69lK0EbUtShPBbAV6pyKefSYKRZNUqJGTZU"
 
@@ -57,6 +58,12 @@ client can send the token back to the server in the HTTP headers to authenticate
 
 
 
+
+
+
+
+
+
 several ways to send and receive tokens between the frontend and backend:
 ------------------------------------------------------------------------
 
@@ -91,8 +98,6 @@ Simple: Easy to implement and understand.
 Cons:
 Non-Standard: Custom headers are not part of the HTTP/1.1 specification, so they might not be recognized by all tools or frameworks.
 Less Semantic: Custom headers don't convey the purpose of the header as clearly as standard headers.
-
-
 
 
 
@@ -145,7 +150,7 @@ The backend reads the token from the cookie.
 
 Example: 
 
-Backend (Setting Cookie):
+login route:
 ---
 res.cookie("token", "your-jwt-token-here", {
   httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
@@ -153,9 +158,21 @@ res.cookie("token", "your-jwt-token-here", {
 });
 ---
 
-Backend (Reading Cookie):
+Middleware:
 ---
-const { token } = req.cookies; // Extract token from cookie
+async function validateToken(req, res, next) {
+    const {token} = req.cookies;
+
+    if(!token) return handleResponse({res, status: 401,success: false, message: 'Unauthorized user. Access denied. No token provided'});
+
+    try{  
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
+        req.user = decoded;
+        next();
+    }catch(err){
+        return handleResponse({res, status: 401, message: 'Invalid token', success: false})
+    }
+}
 ---
 
 Why It’s Popular:
@@ -275,6 +292,126 @@ Scalability Issues: Storing sessions on the server can be problematic for distri
 Performance Overhead: Requires server-side storage and lookups for every request.
 CSRF Vulnerability: Requires additional measures to prevent Cross-Site Request Forgery (CSRF) attacks.
 
+
+code: 
+```
+const express = require("express");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const bcrypt = require("bcryptjs");
+const dotenv = require("dotenv");
+
+dotenv.config();
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("MongoDB connected"))
+    .catch(err => console.error(err));
+
+/* 
+Session Middleware (stores session in MongoDB)
+What happens here?
+express-session stores session data.
+MongoStore saves sessions in MongoDB.
+The session ID is stored in a cookie on the client.
+*/
+app.use(session({
+    secret: process.env.SESSION_SECRET,  // Keep it secure
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),  // Store in MongoDB
+    cookie: { maxAge: 1000 * 60 * 60 } // 1 hour session
+}));
+
+// User Model
+const UserSchema = new mongoose.Schema({
+    username: String,
+    email: String,
+    password: String
+});
+const User = mongoose.model("User", UserSchema);
+
+// Register Route
+app.post("/register", async (req, res) => {
+    const { username, email, password } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ username, email, password: hashedPassword });
+
+    await user.save();
+    res.status(201).json({ message: "User registered successfully" });
+});
+
+/*
+Login Route (Session-Based)
+🔹 What happens here?
+Find the user in the database using email.
+Compare the password using bcrypt.compare.
+If valid, store user._id in req.session (creates a session).
+Respond with success message.
+🛠️ Session is now stored on the server, and the session ID is sent to the client in a cookie.
+*/
+
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    req.session.userId = user._id;  // Store user ID in session
+    res.json({ message: "Logged in successfully" });
+});
+
+// Logout Route
+app.post("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.json({ message: "Logged out successfully" });
+    });
+});
+
+app.get("/session", (req, res) => {
+    res.json({ sessionId: req.sessionID });
+});
+
+
+// Authentication Middleware
+const authMiddleware = (req, res, next) => {
+    if (!req.session.userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+    next();
+};
+
+// Protected Route (Only logged-in users can access)
+app.get("/profile", authMiddleware, async (req, res) => {
+    const user = await User.findById(req.session.userId);
+    res.json({ message: "Welcome to your profile", user });
+});
+
+// Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+```
+
+env: 
+```
+MONGO_URI=mongodb://localhost:27017/auth_db
+SESSION_SECRET=supersecretkey
+PORT=5000
+```
+
+
+
+
+------------------------
 
 
 

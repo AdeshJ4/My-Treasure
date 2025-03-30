@@ -1,0 +1,232 @@
+3️⃣ Logging with console.log() (Basic but Effective)
+```
+const handleClick = () => {
+  console.log("Button clicked! Count:", count);
+};
+```
+
+Variations:
+
+console.table(data); → Logs arrays/objects in a table.
+console.group("Group Name"); → Logs messages in collapsible groups.
+console.trace(); → Shows the function call stack.
+
+
+
+==================================================================================================
+
+
+
+1️⃣ VS Code Run And Debug: 
+
+step 1: create "launch.json" file, select "Web App (Chrome)".
+{
+    "version": "0.2.0",
+    "configurations": [
+    
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:8080",               //  change port to "5173"
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
+
+
+step 2:  add breakpoints
+
+step 3: run your application normally "npm run dev"
+
+step 4: Press Start Debugging (F5) button.
+
+
+
+Continue (F5): Runs until the next breakpoint.
+Step Over (F10): Moves to the next line without entering functions.
+Step Into (F11): Moves into function calls.
+Step Out (Shift+F11): Exits the current function.
+
+code to practice: 
+
+```
+import { useState } from "react";
+
+const App = () => {
+  const [count, setCount] = useState(0);
+
+  const handleClick = () => {
+    console.log("Button clicked!"); // Set a breakpoint here
+
+    debugger;
+    
+    let num = count;
+    num += 1; // Step Over (F10)
+
+    if (num % 2 === 0) {
+      num = multiplyByTwo(num); // Step Into (F11)
+    } else {
+      num = addThree(num);
+    }
+
+    setCount(num); // Step Out (Shift+F11)
+    console.log("Updated count:", num);
+  };
+
+  const multiplyByTwo = (n) => {
+    return n * 2; // Step Into this function
+  };
+
+  const addThree = (n) => {
+    return n + 3;
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h2>VS Code Debugging Demo</h2>
+      <p>Count: {count}</p>
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  );
+};
+
+export default App;
+
+```
+
+=====================================================================================================
+
+
+
+2️⃣ debugger Statement (Built-in JavaScript Debugging)
+
+debugger is acts like a breakpoint. once hit you can use all methods like continue, step over, step into, step out
+When the browser hits this line, it will pause execution (if DevTools is open).
+
+
+=====================================================================================================
+
+
+
+3️⃣ Redux DevTools (For Redux Apps)
+
+If you're using Redux, install "Redux DevTools Extension".
+View dispatched actions.
+Track state changes over time.
+Time-travel debugging (undo/redo state changes).
+
+
+
+=====================================================================================================
+
+
+2️⃣ React Developer Tools extensions
+
+
+Components Tree:
+Inspect the component hierarchy in the Components tab.
+Check how components are nested and rendered.
+
+Props and State:
+Select a component and view its props and state in the right panel.
+See how props are passed from parent to child components.
+Check if the state updates correctly when interacting with the UI.
+
+Hooks:
+View the useState, useEffect, useReducer, and other hooks.
+Track how state updates when an event occurs.
+
+Rendering Performance:
+Use the Profiler tab to check component re-renders.
+Identify unnecessary re-renders and optimize performance (e.g., use React.memo or useCallback).
+
+Context and Redux (if used):
+If using Context API, see how values change across components.
+If using Redux, inspect the store and dispatched actions.
+
+
+code: 
+```
+import { useState } from "react";
+
+function Counter({ initialCount }) {
+  const [count, setCount] = useState(initialCount);
+
+useEffect(() => {
+    console.log('App')
+}, []);
+
+  return (
+    <div>
+      <h2>Counter: {count}</h2>
+      <button onClick={() => setCount(count + 1)}>Increase</button>
+      <button onClick={() => setCount(count - 1)}>Decrease</button>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <div>
+      <h1>React DevTools Practice</h1>
+      <Counter initialCount={0} />
+    </div>
+  );
+}
+
+export default App;
+```
+
+
+for profile: 
+
+```
+import React, { useState } from 'react';
+
+const ListItem = ({ text }) => {
+    return <li>{text}</li>;
+};
+
+const List = ({ numberOfItems }) => {
+    const listItems = [];
+    for (let i = 0; i < numberOfItems; i++) {
+        listItems.push(<ListItem key={i} text={i} />);
+    }
+    return <ul>{listItems}</ul>;
+};
+
+function App() {
+    const [name, setName] = useState('');
+    return (
+        <div>
+            <input 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+            />
+            <button onClick={() => alert('Hey ' + name)}>
+                Click me
+            </button>
+            <List numberOfItems={200} />
+        </div>
+    );
+}
+
+export default App;
+```
+
+
+
+=====================================================================================================================================
+
+
+
+4️⃣ Network Debugging (Check API Calls)
+Open DevTools → Network tab.
+
+Check API requests, status codes, and responses.
+
+fetch("https://api.example.com/data")
+  .then((res) => res.json())
+  .then((data) => console.log("Fetched data:", data))
+  .catch((error) => console.error("Error:", error));

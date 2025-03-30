@@ -1,6 +1,6 @@
 What is CORS?
 
-
+-> CORS is only needed for browser-to-server communication.
 -> CORS helps control which websites can communicate with your server, enhancing security.
 -> CORS is required whenever your frontend and backend run on different origins, regardless of whether it's in development or 
 production.
