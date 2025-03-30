@@ -88,72 +88,98 @@ This method takes a callback function that will be invoked for each incoming HTT
 -> In http module we have to write multiple if statements for checking multiple urls. To solve this problem we use Express js.
 
 
+res (Response Object)
+Represents the response sent to the client.
 
-code without using express js and then write same code using express js and explain it : 
-========================================================================================
+Important methods:
+res.writeHead(statusCode, headers) → Sets status and headers
+res.write(data) → Writes response body
+res.end(data) → Ends response
 
-with 'http' : 
+Important properties:
+req.url → URL requested
+req.method → HTTP method (GET, POST, etc.)
+req.headers → Request headers
 
+
+CODE: 
+```
 const http = require('http');
-// server here is eventEmitter. it has all the capabilities of eventEmitter like server.on() or server.emit() or server.addListener()
-const server = http.createServer((req, res) => {   
+
+const server = http.createServer((req, res) => {
   if (req.url === '/') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('Hello, Node.js!');
+    res.end('Home Page');
   } else if (req.url === '/about') {
     res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('About us');
+    res.end('About Page');
+  } else if (req.url === '/contact') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' })
+    res.end(JSON.stringify({ name: 'Adesh', age: 24 }));
   } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(`404 Not Found`);
   }
 });
 
-const port = 3000;
-server.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+server.listen(5000, () => console.log('Server running on port 5000'));
+
+```
+
+
+Handling POST Requests
+```
+const http = require('http');
+
+const server = http.createServer((req, res) => {
+  
+  if (req.method === 'POST') {
+    let body = "";
+    
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+
+    req.on("end", () => {
+      console.log(`Received data:`, body);
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end(`Data received successfully`);
+    });
+
+  } else if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Home Page');
+
+  } else if (req.url === '/about') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('About Page');
+
+  } else if (req.url === '/contact') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ name: 'Adesh', age: 24 }));
+
+  } else {
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(`404 Not Found`);
+  }
 });
 
+server.listen(5000, () => console.log('Server running on port 5000'));
 
-with "Express.js" : 
-
-const express = require('express');
-const app = express();
-app.get('/', (req, res) => {
-  res.send('Hello, Node.js!');
-});
-app.get('/about', (req, res) => {
-  res.send('About us');
-});
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
-
-
-with net module: 
-
-const net = require('net');
-const server = net.createServer((socket) => {
-  console.log('Client connected');
-  // Listen for data from the client
-  socket.on('data', (data) => {
-    console.log(`Received data from client: ${data}`);
-    // Send a response back to the client
-    socket.write('Hello from server!');
-  });
-  // Listen for the client to end the connection
-  socket.on('end', () => {
-    console.log('Client disconnected');
-  });
-});
-
-const PORT = 3000;
-
-// Start the server and listen on the specified port
-server.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+```
+Open Postman:
+Select POST as the HTTP method.
+Enter the URL: http://localhost:3000
+Go to the Body tab and choose raw → JSON format.
+Enter sample data:
+```
+{
+    "name": "John Doe",
+    "email": "john@example.com"
+}
+```
+Click Send.
+Check the response and console logs in Node.js.
 
 
 
@@ -281,6 +307,24 @@ vi. list all files from current directory
 // });
 
 
+vii. Creating a Directory
+fs.mkdir('newFolder', (err) => {
+    if (err) throw err;
+    console.log('Folder created!');
+});
+
+
+viii Removing a Directory
+fs.rmdir('newFolder', (err) => {
+    if (err) throw err;
+    console.log('Folder deleted!');
+});
+
+
+viii. Checking if a File or Directory Exists
+fs.access('server.txt', (err) => {
+  console.log(err ? 'File does not exist' : 'File exists');
+});
 
 
 
