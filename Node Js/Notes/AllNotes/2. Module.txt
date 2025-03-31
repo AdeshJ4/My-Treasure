@@ -80,9 +80,7 @@ send back responses on a given port and with this we can easily create a 'backen
 -> for creating 'http server' we use 'http.createServer()' method which creates an instance of 'http.Server'. 
 This method takes a callback function that will be invoked for each incoming HTTP request. 
 -> http.createServer() is implemented inside 'http.Server' class and this http.Server class is provided by http module. 
--> When you create an HTTP server using the http module, it uses the lower-level 'net module' which creates 'TCP Server' to handle 
-'TCP connections'.
--> 'net.Server' class is used to create a 'TCP server'. 
+-> When you create an 'HTTP server' using the 'http module', it uses the lower-level 'net module' which creates 'TCP Server' to handle 'TCP connections'.
 -> The 'http.Server' class inherits from 'net.Server' class which is part of the core 'net module'. 
 -> 'net.Server' is EventEmitter.
 -> In http module we have to write multiple if statements for checking multiple urls. To solve this problem we use Express js.
@@ -190,8 +188,21 @@ Check the response and console logs in Node.js.
 
 2. https Module:
 ================
-Similar to the http module but used for secure communication via HTTPS.
-Requires SSL certificates to function.
+
+👉 The https module in Node.js enables the creation of a 'secure server' using SSL/TLS (Secure Sockets Layer/Transport Layer Security) encryption. 
+SSL: It is a "cryptographic protocol" used to "secure communication" over the internet by encrypting data between the client (browser) and the server. 
+SSL has been deprecated and replaced by TLS (Transport Layer Security), but the term "SSL" is still commonly used.
+👉 It works similarly to the http module but ensures encrypted communication over the network.
+👉 It also has createServer method.
+| ------------ | -------------------------------------- | ---------------------------------------------- |
+| Feature      | `http` Module                          | `https` Module                                 |
+| ------------ | -------------------------------------- | ---------------------------------------------- |
+| Security     | Not secure, data is sent in plain text | Secure, encrypts data using SSL/TLS            |
+| Port         | Default 80                             | Default 443                                    |
+| Certificates | No SSL certificate required            | Requires an SSL certificate (key & cert files) |
+| Use Case     | Public APIs, local development         | Secure transactions, login, payments           |
+| ------------ | -------------------------------------- | ---------------------------------------------- |
+
 
 Example:
 ```
@@ -331,80 +342,45 @@ fs.access('server.txt', (err) => {
 ---------------------------------------------------------------------------------------------
 
 
-
-
-
 3. URL Module:
 ==============
 
--> The URL module splits up a 'web address' into 'readable parts'.
--> we use "url.parse()" method and it will parse your web address into readable parts like hostname, pathname, query object.
+👉 The url module in Node.js provides utilities for parsing, formatting, and resolving URLs.
+👉 It helps in handling web addresses efficiently.
+👉 we use "url.parse()" method and it will parse your web address into readable parts like hostname, pathname, query object.
+👉 "new URL()" is part of the url module, but it is a global API in Node.js.
+Although it's part of the url module, you don’t need to require (require('url')) it to use it in modern Node.js versions (v10+).
+
+⚡ Conclusion
+👉 Use "new URL()" for new projects 🚀
+👉 Use "url.parse()" only if working with old Node.js versions (< v10.0)
+
+
 
 code: 
 
-ex.1:
-var url = require('url');
-var adr = 'http://localhost:8080/default.htm?year=2017&month=february';
-var q = url.parse(adr, true);
-console.log(q.host); //returns 'localhost:8080'
-console.log(q.pathname); //returns '/default.htm'
-console.log(q.search); //returns 
-var qdata = q.query; //returns an object: { year: 2017, month: 'february' }
-console.log(qdata.month); //returns 'february'
-
-ex.2:
-
-Create two html files and save them in the same folder as your node.js files.
-
-summer.html
-<!DOCTYPE html>
-<html>
-<body>
-<h1>Summer</h1>
-<p>I love the sun!</p>
-</body>
-</html>
-
-winter.html
-<!DOCTYPE html>
-<html>
-<body>
-<h1>Winter</h1>
-<p>I love the snow!</p>
-</body>
-</html>
-
-	
-Create a Node.js file that opens the requested file and returns the content to the client. If anything goes wrong, throw a 404 error:
-
-app.js:
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
-
-http.createServer(function (req, res) {
-  var q = url.parse(req.url, true);
-  var filename = "." + q.pathname;
-  fs.readFile(filename, function(err, data) {
-    if (err) {
-      res.writeHead(404, {'Content-Type': 'text/html'});
-      return res.end("404 Not Found");
-    } 
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(data);
-    return res.end();
-  });
-}).listen(8080);
-
-visit following two websites: 
-1.http://localhost:8080/summer.html	
-2.http://localhost:8080/winter.html
-Remember to initiate the file: (Initiate demo_fileserver.js:) C:\Users\Your Name>node demo_fileserver.js
+ex.1: "new URL()" (Modern API)
+The URL class allows parsing and modifying a URL.
+```
+//  No need to import url module.
+const myUrl = new URL('https://example.com:8080/pathname?id=100&status=active');
+console.log(myUrl.href);          // 'https://example.com:8080/pathname?id=100&status=active'
+console.log(myUrl.origin);        // 'https://example.com:8080'
+console.log(myUrl.hostname);      // 'example.com'
+console.log(myUrl.pathname);      // '/pathname'
+console.log(myUrl.search);        // '?id=100&status=active'
+console.log(myUrl.searchParams);  // URLSearchParams { 'id' => '100', 'status' => 'active' }
+console.log(myUrl.port);          // '8080'
+```
 
 
+ex. 2:  url.parse() (Legacy API - Older Method)
 
-
-
+```
+const url = require('url');
+const parsedUrl = url.parse('https://example.com:8080/path?name=John');
+console.log(parsedUrl);
+```
 
 
 
@@ -417,7 +393,9 @@ Remember to initiate the file: (Initiate demo_fileserver.js:) C:\Users\Your Name
 4. OS Module:
 ==============
 
--> The OS module provides information about the computer's operating system. 
+👉 The os module in Node.js provides "operating system-related utilities" like fetching CPU info, memory details, system uptime, and more.
+
+
 
 type()	                  Returns the name of the operating system
 userInfo()	              Returns information about the current user
@@ -430,12 +408,16 @@ uptime()	                Returns the uptime of the operating system, in seconds
 platform()	              Returns information about the operating system's platform
 
 
-
 code : 
 
 var os = require('os');
-console.log("Platform: " + os.platform());
-console.log("Architecture: " + os.arch());
+console.log(os.type());
+console.log(os.userInfo());
+console.log(os.freemem());
+console.log(os.totalmem());
+console.log(os.cpus());
+console.log(os.uptime());
+
 
 
 
@@ -449,29 +431,47 @@ console.log("Architecture: " + os.arch());
 ===============
 
 -> Provides utilities for working with paths of file and directory .
--> Helps handle platform-specific path issues (Windows uses \, while Linux/macOS uses /).
+-> It helps in handling file paths across different operating systems (Windows, Linux, macOS) efficiently.
 
 syntax:
 var path = require('path');
 
-Method	                   Description
+1️⃣ path.basename() – Returns the last portion (filename) of a given path
+console.log(path.basename('/home/user/docs/file.txt')); // 'file.txt'
 
-basename()	               Returns the last part of a path
-dirname()	                 Returns the directories of a path
-join()	                   Joins the specified paths into one
-normalize()	               Normalizes the specified path
+2️⃣ path.dirname() – Returns the directory part of a path
+console.log(path.dirname('/home/user/docs/file.txt')); // '/home/user/docs'
 
-example: 
+3️⃣ path.extname() – Returns the file extension (including the dot .).
+console.log(path.extname('/home/user/docs/file.txt')); // '.txt'
 
-const path = require('path');
+4️⃣ path.join() – Join Paths, ✅ Automatically adds OS-specific path separators (/ for Linux/macOS, \ for Windows).
+console.log(path.join('/home', 'user', 'docs', 'file.txt'));  // '/home/user/docs/file.txt'
 
-const filePath = 'E:/z Placement/Mosh/Node Js/13 Integration Testing';
-const messyPath = '/path/to/../files/example.txt'
+5️⃣ path.resolve() – Get Absolute Path
+console.log(path.resolve('docs', 'file.txt'));
+// '/Users/yourname/currentdirectory/docs/file.txt' (Mac/Linux)
+// 'C:\Users\yourname\currentdirectory\docs\file.txt' (Windows)
 
-const directory = path.dirname(filePath); //E:/z Placement/Mosh/Node Js
-const fileName = path.basename(filePath); //13 Integration Testing
-const fullPath = path.join(__dirname, 'files', 'example.txt'); // E:\z Placement\Node\2. Node Projects\useMe\files\example.txt
-const cleanPath = path.normalize(messyPath); // \path\files\example.txt
+6️⃣ path.parse() – Parse Path into Object, Useful for extracting parts of a file path dynamically.
+console.log(path.parse('/home/user/docs/file.txt'));
+{
+  "root": "/",
+  "dir": "/home/user/docs",
+  "base": "file.txt",
+  "ext": ".txt",
+  "name": "file"
+}
+
+
+7️⃣  path.format() – Convert Object to Path
+const pathObj = {
+  dir: '/home/user/docs',
+  base: 'file.txt'
+};
+console.log(path.format(pathObj)); // '/home/user/docs/file.txt'
+
+
 
 
 --------------------------------------------------------------------------------------------------------------
@@ -596,33 +596,761 @@ myEmitter.emit('alert', 'Low disk space!');
 7. querystring:
 ===============
 
-Parses and formats URL query strings.
+The querystring module in Node.js provides utilities for parsing and formatting "URL query strings". 
+It allows you to convert a query string into an object and vice versa.
 
-Example:
+
+code: 
 ```
 const querystring = require('querystring');
-const parsed = querystring.parse('name=John&age=25');
-console.log(parsed); // { name: 'John', age: '25' }
+const queryString = 'name=John&age=30&city=NewYork';
+const parsedObj = querystring.parse(queryString);
+console.log(parsedObj);
+// Output: { name: 'John', age: '30', city: 'NewYork' }
 ```
+
+
+Converts an object into a query string:
+```
+const querystring = require('querystring');
+const obj = { name: 'John', age: 30, city: 'NewYork' };
+const queryString = querystring.stringify(obj);
+console.log(queryString); // Output: 'name=John&age=30&city=NewYork'
+```
+
+Escapes special characters in a query string: 
+```
+const querystring = require('querystring');
+const escapedStr = querystring.escape('name=John Doe&city=New York');
+console.log(escapedStr); // Output: 'name%3DJohn%20Doe%26city%3DNew%20York'
+```
+
+Unescapes a query string that was previously escaped.
+```
+const querystring = require('querystring');
+const unescapedStr = querystring.unescape('name%3DJohn%20Doe%26city%3DNew%20York');
+console.log(unescapedStr); // Output: 'name=John Doe&city=New York'
+```
+
+
+Why Escape Special Characters?
+
+Escaping special characters in a query string is necessary because URLs can only contain certain characters safely. 
+Some characters have special meanings in URLs, so they need to be encoded to prevent misinterpretation.
+
 
 --------------------------------------------------------------------------------------------------------------
 
 
-8. crypto
-=========
+8️⃣. crypto Module
+===================
 Provides cryptographic functionalities like hashing, encryption, and decryption.
 
+1️⃣ crypto.createHash(algorithm) – Hashing Data
+Used to create a hash (a fixed-size unique representation of input data).
+Common algorithms: sha256, sha512, md5 (not secure for passwords).
 Example:
 ```
 const crypto = require('crypto');
-const hash = crypto.createHash('sha256').update('Hello').digest('hex');
-console.log(hash);
+const hash = crypto.createHash('sha256').update('Hello').digest('hex'); 
+console.log(hash); // Output: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b53f8bd8a7f5c2f74'
+```
+🔹 Use case: Password storage (with additional salt).
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+
+9️⃣. Cluster Module
+===================
+
+❓ What is Node.js Clustering? 🚀
+
+👉 Node.js runs on a 'single thread', meaning it can only use one CPU core at a time. But modern computers have multiple CPU cores.
+
+We need more CPU cores to handle 'multiple tasks at the same time' efficiently.
+A CPU core is like a brain inside the processor that handles tasks.
+
+Think of it Like a Kitchen:
+A single-core CPU is like one chef cooking everything alone.
+A multi-core CPU (e.g., 4 cores) is like 4 chefs working together, making food faster.
+
+What Does a CPU Core Do?
+✔ Executes instructions (running apps, calculations, tasks).
+✔ The more cores, the more tasks can run simultaneously (better multitasking).
+✔ Modern CPUs have multiple cores (dual-core, quad-core, octa-core, etc.) for better speed and efficiency.
+
+A CPU with 8 cores can handle 8 different tasks at the same time, making everything faster and smoother! 🚀
+
+
+
+🟢 Clustering allows Node.js to use 'all CPU cores' by creating 'multiple processes'/'workers processes' that share the same server port. 
+This improves performance and handles more traffic efficiently.
+
+In the cluster module, we create "worker processes", not worker threads. Each worker is a separate process with its "own memory space", running independently 
+from the main process (master process).
+
+Definition: "Worker processes" are independent instances of a program running separately from the main process.
+Memory: Each worker process has its own memory space, meaning they do not share memory with the main process.
+Communication: Processes communicate via Inter-Process Communication (IPC), which can be slower due to data serialization/deserialization.
+Use Case: Useful for CPU-intensive tasks, process isolation (e.g., microservices), or handling multiple users independently.
+
+
+
+👉 Clustering is the technique of running multiple instances of a Node.js application on different CPU cores to improve performance and handle more requests.
+👉 By default, a Node.js application runs on a 'single thread', meaning it can only use one CPU core. 
+Clustering allows Node.js to create multiple worker processes, each running on its own core, enabling better scalability.
+
+🟠 1. What is Process Isolation?
+Process isolation means running tasks in completely separate instances of a program, each with:
+Its own V8 engine (JavaScript runtime).
+Its own event loop.
+Its own memory space.
+Tools like the cluster module or child_process.fork() achieve this by spawning separate Node.js processes.
+
+🟠 2. When is Process Isolation Not Needed?
+Process isolation is unnecessary when:
+You want to share memory between tasks (e.g., via SharedArrayBuffer).
+Your tasks are CPU-intensive but don’t require separate memory or event loops.
+You want lighter-weight concurrency (threads are cheaper than processes).
+
+
+
+Why is Clustering Used?
+✅ Improves performance by using all CPU cores.
+✅ Handles more traffic without slowing down.
+✅ Fault tolerance – if one worker crashes, others keep running.
+✔ Handles More Traffic – Multiple workers process requests at the same time. 
+✔ Prevents Crashes – If one worker fails, the app doesn’t stop.
+✔ Uses Multi-Core CPUs – Most servers have multiple cores, so clustering makes full use of the system’s power.
+
+
+How Does Clustering Work? ⚙️
+
+👉 A 'master process' is created and it checks the number of CPU cores
+👉 The 'master process' forks (create) multiple "worker processes" to handle tasks.
+👉 Each 'worker process' runs its own Express.js server or instance of HTTP server, handling incoming requests like API requests, static files, and database queries.
+👉 The OS distributes incoming requests to different workers
+👉 If a worker process crashes, the master automatically restarts it.
+👉 Load Balancing	via OS.
+👉 This allows Node.js to handle more requests in parallel and use all CPU power.
+👉 It is useful for scaling applications by utilizing multiple CPU cores.
+
+
+
+🟠 Cluster Module in Node.js
+
+👉 Clustering and the Cluster Module are related but not exactly the same
+👉 Clustering (Concept), Cluster Module (Implementation)
+
+
+In the cluster module, we create worker processes, not worker threads. Each worker is a separate process with its own memory space, running independently from the main process (master process).
+
+
+1️⃣ Clustering (Concept)
+
+Clustering is the technique of running multiple instances of a Node.js application on different CPU cores to improve performance and handle more requests.
+By default, a Node.js application runs on a single thread, meaning it can only use one CPU core. Clustering allows Node.js to create multiple worker processes, each running on its own core, enabling better scalability.
+
+
+2️⃣ Cluster Module (Implementation)
+The Cluster Module (cluster) is the built-in Node.js module used to implement clustering.
+
+Creates multiple Node.js processes to utilize multiple CPU cores.
+Each process runs a separate instance of the Node.js runtime.
+Share the same server port across multiple workers.
+Processes/workers do not share memory but can communicate via IPC (Inter-Process Communication).
+✅ Best for: Scaling an HTTP server to handle multiple requests.
+
+🔹 What Happens?
+1️⃣ The master process forks multiple worker processes (equal to the number of CPU cores).
+2️⃣ Each worker handles requests independently, improving performance. Distribute incoming requests among workers (handled by the OS).
+3️⃣ If a worker crashes, the master process restarts it.
+
+
+example of cluster module: 
+
+```
+const cluster = require("cluster");
+const os = require("os");
+
+if (cluster.isMaster) {
+  cluster.schedulingPolicy = cluster.SCHED_RR; // Enable round-robin on Windows
+
+  const numCPUs = os.cpus().length;
+  console.log(`Master process ${process.pid} is running`);
+
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+
+  cluster.on("exit", (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} died, restarting...`);
+    cluster.fork();
+  });
+} else {
+  const http = require("http");
+  const server = http.createServer((req, res) => {
+    res.writeHead(200);
+    res.end(`Handled by worker ${process.pid}\n`);
+  });
+
+  server.listen(3000, () => {
+    console.log(`Worker ${process.pid} started`);
+  });
+}
+
+```
+
+On Linux/macOS, Node.js uses round-robin scheduling automatically.
+On Windows, the default scheduling policy sends all requests to a single worker.
+Setting "cluster.schedulingPolicy = cluster.SCHED_RR;" enables round-robin manually.
+
+How the Code Works
+1️⃣ Master Process (Main Thread)
+The script first checks if the process is the master (cluster.isMaster).
+It determines the number of CPU cores using os.cpus().length.
+It creates (forks) multiple worker processes equal to the number of CPU cores.
+If a worker crashes, it automatically restarts a new worker (cluster.fork()).
+
+2️⃣ Worker Processes
+If the process is not the master, it becomes a worker (else block).
+Each worker starts an HTTP server listening on port 3000.
+The server responds with a message indicating which worker (process ID) handled the request.
+
+
+
+============================================================================================================================================================
+
+
+1️⃣0️⃣.  "worker_threads" Module: 
+
+The worker_threads module in Node.js is used for "multithreading" to perform CPU-intensive tasks efficiently. 
+Unlike the cluster module, which creates multiple Node.js processes, worker_threads allows running "multiple threads within the same process".
+
+'Worker Threads' in Node.js allow running JavaScript code in parallel threads inside the same process. 
+
+Key Features of worker_threads
+
+Enables true parallel execution in Node.js.
+Best for CPU-intensive tasks (e.g., large calculations, image processing).
+Runs in an isolated environment with its own memory.
+Threads share memory, allowing for efficient data processing.
+Uses message passing to communicate between threads.
+
+
+IMP Methods: 
+
+
+const { parentPort } = require('node:worker_threads')
+
+1️⃣ Worker 
+Used to create new worker threads.
+Enables sending and receiving messages between the main thread and worker threads.
+
+
+2️⃣ parentPort (Worker Thread)
+Used inside the "worker thread" to communicate with the main thread.
+Listens for messages from the main thread and sends responses back.
+
+
+
+When you run a Node.js application, it starts in a single thread called the main thread.
+The main thread runs the "Event Loop", which executes tasks from the Call Stack.
+The Call Stack is responsible for executing synchronous JavaScript code.
+
+
+
+Main Thread ≠ Worker (Main Thread)
+The main thread is part of the event loop and call stack
+The "main thread" (event loop) creates a worker thread using "new Worker()".
+The worker thread runs in the background, separate from the main thread.
+They communicate using message passing (postMessage).
+A worker thread is separate and runs its own JavaScript execution context
+They communicate using message passing (postMessage / parentPort).
+
+Worker threads are separate from the main thread.
+When you create a new Worker, it runs JavaScript code in a new thread (outside the event loop).
+Workers do not share the call stack with the main thread. They run in parallel.
+
+
+
+When to Use worker_threads?
+✔️ CPU-heavy tasks like encryption, compression, AI computations, image processing, large computations
+✔️ Running multiple tasks without blocking the main event loop
+✔️ Handling large amounts of data in parallel
+
+❌ Not needed for I/O operations (e.g., database calls, file system), as Node.js handles these asynchronously.
+❌ Simple API Requests – Node.js is event-driven and handles async calls efficiently.
+
+
+Why Use worker_threads?
+🔥 Without worker_threads, the main thread would be blocked (unresponsive).
+🔥 With worker_threads, the main thread remains free to handle other tasks.
+
+
+🟠 1. What is Process Isolation?
+Process isolation means running tasks in completely separate instances of a program, each with:
+Its own V8 engine (JavaScript runtime).
+Its own event loop.
+Its own memory space.
+Tools like the cluster module or child_process.fork() achieve this by spawning separate Node.js processes.
+
+🟠 2. When is Process Isolation Not Needed?
+Process isolation is unnecessary when:
+You want to share memory between tasks (e.g., via SharedArrayBuffer).
+Your tasks are CPU-intensive but don’t require separate memory or event loops.
+You want lighter-weight concurrency (threads are cheaper than processes).
+
+
+🟠 3. Why Use worker_threads in This Case?
+The worker_threads module runs threads within the same Node.js process, sharing:
+A single V8 instance (but with separate JavaScript execution contexts).
+The same event loop (though threads can offload work to avoid blocking it).
+The ability to share memory (unlike separate processes).
+This makes threads more efficient for certain tasks (e.g., parallel computations) when full process isolation is overkill.
+
+
+example: 
+
+main-thread.js: 
+```
+const http = require("http");
+
+const server = http.createServer((req, res) => {
+    if (req.url === "/") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("Home page");
+    } else if (req.url === "/slow-page") {
+        let j = 0;
+        for (let i = 0; i < 600000000; i++) {
+            j++;
+        }
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("Slow Page ${j}");
+    }
+});
+
+server.listen(8000, () => console.log("Server is running on port 8000"));
+```
+
+open two requests inside postmon
+call "/slow-page" endpoint and immediately visit "/" route, as you can see the main thread is block.
+The "/slow-page" route contains a CPU-intensive loop (60000000000 iterations), which blocks the main thread and makes the server unresponsive during execution.
+
+
+Now solve this problem like this : 
+
+main-thread.js: 
+```
+const http = require("http");
+const { Work } = require("node:worker_threads");
+const server = http.createServer((req, res) => {
+    if (req.url === "/") {
+        res.writeHead(200, { "Content-Type": "text/plain" });
+        res.end("Home page");
+    } else if (req.url === "/slow-page") {
+        const worker = new Worker("./worker-thread.js")
+        worker.on("message", (j)=>{
+            res.writeHead(200, { "Content-Type": "text/plain" });
+            res.end("Slow Page ${j}");
+        })
+    }
+});
+
+server.listen(8000, () => console.log("Server is running on port 8000"));
+```
+
+worker-thread.js:
+```
+const { parentPort } = require("node:worker_threads");
+let j = 0;
+for (let i = 0; i < 6000000000; i++) {
+    j++;
+}
+parentPort.postMessage(j);
+```
+
+now visit both routes quickly and you can see main thread is not block.
+
+
+
+
+
+ex: 2
+Concept:
+
+The main thread (main.js) creates a new worker thread (worker.js).
+The worker thread performs a CPU-intensive task (simulating a heavy calculation).
+The worker thread sends the result back to the main thread.
+The main thread receives and logs the result.
+
+
+Main Thread (main.js)
+```
+const { Worker } = require('worker_threads');
+
+const worker = new Worker('./worker.js'); // Create a new worker thread
+
+worker.on('message', (result) => {
+  console.log('Received from worker:', result); // Logs the result
+});
+
+worker.on('error', (error) => {
+  console.error('Worker error:', error); // Handles any errors
+});
+
+worker.postMessage(10); // Sends the number 10 to the worker
+
+```
+
+
+Explanation
+
+We import Worker from worker_threads.
+We create a new worker thread from worker.js.
+We listen for messages from the worker using .on('message', callback).
+We handle errors in case the worker fails.
+We send a message (number 10) to the worker.
+
+2. Worker Thread (worker.js) 
+
+```
+const { parentPort } = require('worker_threads');
+
+parentPort.on('message', (num) => {
+  let result = 0;
+  for (let i = 0; i < num * 1e9; i++) result++; // Simulate a CPU-heavy task
+  parentPort.postMessage(result); // Send result back to the main thread
+});
+
+```
+
+
+Explanation
+We import parentPort from worker_threads (used for communication).
+We listen for messages sent by the main thread (parentPort.on('message', callback)).
+When we receive a number (e.g., 10), we run a CPU-intensive loop (for loop running 10 * 1e9 times).
+After completing the task, we send the result back to the main thread using parentPort.postMessage(result).
+
+
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+11. child_process:
+
+The 'child_process module' allows us to create and manage 'child processes' in Node.js. 
+The `child_process` module is powerful for executing system commands, running scripts, and handling background processes.
+The "child_process" module and the "cluster module" in Node.js are both used to "create multiple processes", but they serve different purposes
+child_process creates separate processes for "general-purpose tasks"
+cluster is specifically for scaling a Node.js server.
+Both use Inter-Process Communication (IPC) to communicate between processes.
+Both Runs a Separate Process
+child_process don't have Load Balancing 
+child_process use for Running scripts, parallel tasks, microservices
+
+
+✅ Use child_process for "general-purpose tasks" like:
+
+Running external scripts (Python, Bash).
+Executing shell commands (exec, spawn).
+Performing background tasks (e.g., email sending, report generation).
+
+✅ Use cluster for scaling a Node.js server across multiple CPU cores. 🚀
+
+
+
+Key Methods in child_process
+| ---------- | ------------------------------------------------------------ |
+| Method     | Description                                                  |
+| ---------- | ------------------------------------------------------------ |
+| spawn()    | Best for handling continuous output (like streaming data).   |
+| exec()     | Best for short-lived commands (returns full output at once). |
+| execFile() | Runs a file directly (faster than exec).                     |
+| fork()     | Used to create Node.js child processes (has built-in IPC).   |
+| ---------- | ------------------------------------------------------------ |
+
+
+
+
+Running external scripts (Python, Bash) from Node.js means executing a Python, Bash, or any other script from within your Node.js code using the child_process module.
+
+```
+const { exec } = require('child_process');
+
+exec('python script.py', (error, stdout, stderr) => {    // script.py => print("hello python")
+  if (error) {
+    console.error(`Error: ${error.message}`);
+    return;
+  }
+  console.log(`Python Output: ${stdout}`);
+});
+```
+📌 This runs script.py using Python and returns its output in Node.js.
+
+```
+const { exec } = require('child_process');
+
+exec('dir', (error, stdout, stderr) => {
+  if (error) {
+    console.error(`Error: ${error.message}`);
+    return;
+  }
+  console.log(`Command Output:\n${stdout}`);
+});
+```
+📌 This runs 'dir' command (to list files) in the terminal from Node.js.
+
+
+
+Executing Shell Commands in Node.js
+
+Executing shell commands means running command-line (terminal) commands directly from your Node.js code using the child_process module. These commands can be:
+✅ System commands (e.g., listing files, checking disk usage)
+✅ Running scripts (Python, Bash, etc.)
+✅ Managing files (copying, deleting, renaming)
+
+
+✅ Example: Running a Shell Command (Windows & Linux)
+
+```
+const { exec } = require('child_process');
+
+exec('dir', (error, stdout, stderr) => {    // instead of 'dir' you can use 'mkdir Anime'
+  if (error) {
+    console.error(`Error: ${error.message}`);
+    return;
+  }
+  console.log(`Output:\n${stdout}`);
+});
+
+```
+
+
+Performing background tasks:
+Background tasks are operations that run separately from the main thread, so they don’t block the main application. Examples include:
+✅ Sending emails (e.g., order confirmations, OTPs)
+✅ Generating reports (e.g., sales, user activity)
+✅ Processing large data (e.g., database cleanup)
+
+```
+const { fork } = require('child_process');
+
+const emailWorker = fork('./sendEmail.js'); // Create a child process
+
+emailWorker.send({ email: 'user@example.com', message: 'Your order is confirmed!' });
+
+emailWorker.on('message', (msg) => {
+  console.log('Email Worker Response:', msg);
+});
+
+
+
+sendEmail.js:
+```
+const nodemailer = require('nodemailer');
+
+process.on('message', async (data) => {
+  console.log(`Sending email to: ${data.email}`);
+
+  // Simulating email sending (Replace with real email logic)
+  setTimeout(() => {
+    process.send(`Email sent to ${data.email}`);
+  }, 3000);
+});
+
+```
+
+
+===============================================================================================================================================================
+
+
+
+
+11. stream module;
+
+
+Streams are a core module in Node.js!
+
+However, you often see streams being imported from other core modules like fs, http, and net, because these modules use streams internally.
+
+👉 Streams in Node.js are used to 'handle large amounts of data' efficiently by 'processing it chunk by chunk', instead of loading everything into memory at once.
+
+👉 With streams, instead of loading the entire file into memory at once, you load it chunk by chunk, process it, and then discard it before loading the next chunk. 
+This means:
+Without streams: The entire file is loaded into RAM, which can be problematic for large files (e.g., a 5GB video).
+With streams: Only small chunks (e.g., 64KB) are loaded into memory at a time, processed, and then discarded before the next chunk arrives.
+This reduces memory usage and allows Node.js to handle large files efficiently without exhausting system resources.
+
+
+👉 Streams in Node.js can handle any type of data that can be processed in chunks. This includes:
+
+1. Text files (.txt, .csv, .json, etc.) – Read and process line by line instead of loading the entire file into memory.
+
+2. DOCX, PDF, and other document files – Useful for generating or modifying documents without reading the whole file into memory.
+
+3. Images (.jpg, .png, etc.) – Streams are used for image uploads, processing, and compression.
+
+4. Videos and audio (.mp4, .mp3, .wav, etc.) – Essential for streaming services where loading an entire video/audio file would be inefficient.
+
+5. Binary files (.zip, .tar, etc.) – Streams can help process large compressed files efficiently.
+
+6. Network data (HTTP requests, WebSockets, etc.) – Handling real-time data, such as uploading or downloading large files.
+
+7. Database operations – Some databases support streaming large query results instead of returning everything at once.
+
+So, Node.js streams are not limited to text files; they can handle any type of data that can be processed in chunks.
+
+
+
+📌 Why use streams?
+✔ Faster than 'traditional I/O operations' like fs.readFile(), fs.writeFile() etc.
+✔ Efficient for large files (e.g., reading/writing logs, video streaming).
+✔ Memory-efficient (processes chunks instead of entire data).
+✔ Doesn’t load the full file into memory.
+✔ Processes data as it arrives and then discard it before loading the next chunk.
+
+
+|-----------------|---------------------------------------------------------------------|
+| Stream Type     | Function                                                            |
+|-----------------|---------------------------------------------------------------------|
+| Readable        | Read data from a source (e.g., file, API, socket).                  |
+| Writable        | Write data to a destination (e.g., file, response).                 |
+| Duplex          | Read and write simultaneously (e.g., network sockets).              |
+| Transform       | Modify data while reading/writing (e.g., compression, encryption).  |
+|-----------------|---------------------------------------------------------------------|
+
+
+🔹 1️⃣ Readable Stream (Reading Data)
+A Readable Stream allows data to be read in chunks.
+
+
+```
+const fs = require("fs");
+
+const readableStream = fs.createReadStream("example.txt", "utf-8");
+
+readableStream.on("data", (chunk) => {
+  console.log("Received chunk:", chunk);
+});
+
+```
+
+🔹 2️⃣ Writable Stream (Writing Data)
+
+A Writable Stream writes data in chunks.
+
+```
+const fs = require("fs");
+
+const writableStream = fs.createWriteStream("output.txt");
+
+writableStream.write("Hello, ");
+writableStream.write("world!");
+writableStream.end(); 
+```
+
+🔹 3️⃣ Duplex Stream (Read & Write)
+
+A Duplex Stream can both read and write data.
+
+```
+const { Duplex } = require("stream");
+
+const duplexStream = new Duplex({
+  read(size) {
+    this.push("Hello from Duplex Stream!");
+    this.push(null);
+  },
+  write(chunk, encoding, callback) {
+    console.log("Writable received:", chunk.toString());
+    callback();
+  },
+});
+
+duplexStream.on("data", (chunk) => console.log("Readable output:", chunk.toString()));
+
+duplexStream.write("Sending data");
+duplexStream.end();
+
 ```
 
 
 
+🔹 4️⃣ Transform Stream (Modifies Data)
+
+A Transform Stream is a Duplex Stream that modifies data before passing it.
+
+
+```
+const { Transform } = require("stream");
+
+const transformStream = new Transform({
+  transform(chunk, encoding, callback) {
+    this.push(chunk.toString().toUpperCase()); // Convert data to uppercase
+    callback();
+  },
+});
+
+process.stdin.pipe(transformStream).pipe(process.stdout);
+
+```
 
 
 
+============================================================================================================================================================
 
+Buffer Module: 
+
+Buffer is a core module in Node.js
+The Buffer module provides a way to handle binary data directly in memory. It is automatically available in Node.js without requiring an import (global module).
+It is useful for "processing" files, network packets, or raw binary streams.
+
+
+🔹 Key Features of Buffer
+✔️ Handles binary data (e.g., images, files, network packets)
+✔️ Works with streams (useful for large file processing)
+✔️ Faster than regular JavaScript strings for binary operations
+✔️ Efficiently manipulates raw data in memory
+
+✅ Creating a Buffer
+```
+const buf = Buffer.alloc(10); // Creates a buffer of 10 bytes (filled with zeros)
+console.log(buf); // <Buffer 00 00 00 00 00 00 00 00 00 00>
+```
+
+✅ Creating a Buffer from Data
+const buf = Buffer.from('Hello')
+console.log(buf); // <Buffer 48 65 6c 6c 6f>
+console.log(buf.toString()); // "Hello"
+
+
+✅ Writing to a Buffer
+buf.write("Node.js");
+console.log(buf.toString()); // "Node.js"
+
+
+✅ Reading Buffer Data
+const buf = Buffer.from("ABC");
+console.log(buf[0]); // 65 (ASCII code of 'A')
+console.log(buf[1]); // 66 ('B')
+console.log(buf[2]); // 67 ('C')
+
+
+✅ Example: Using Buffer in Streams
+const fs = require('fs');
+fs.readFile('sample.txt', (err, data) => {
+  if (err) throw err;
+  console.log(data); // Output: <Buffer ...>
+  console.log(data.toString()); // Output: File content
+});
 

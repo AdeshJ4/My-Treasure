@@ -117,6 +117,18 @@ requests.
 This allows Node.js to efficiently handle thousands of concurrent connections with minimal hardware resources.
 
 
+
+
+
+IMP: 
+
+When you run a Node.js application, it starts in a single thread called the main thread.
+The main thread runs the "Event Loop", which executes tasks from the Call Stack.
+The Call Stack is responsible for executing synchronous JavaScript code.
+
+
+
+
 Event Loop: 
 
 -> 'Event loop' is a "C program" and is part of "libuv".

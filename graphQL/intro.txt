@@ -1,0 +1,169 @@
+1️⃣ What is GraphQL, and how does it differ from REST?
+
+👉 GraphQL is a "query language for APIs" that allows clients to request exactly the data they need, reducing "over-fetching" and "under-fetching" of data.
+GraphQL is used on both the client and backend
+
+Differences from REST:
+Flexible Data Fetching – Clients specify the exact fields they need, unlike REST, where fixed endpoints return predefined data.
+
+Single Endpoint – GraphQL typically uses a single "/graphql" endpoint, whereas REST has multiple endpoints for different resources.
+
+Efficient Data Fetching – Fetch multiple related resources in a single request, avoiding multiple API calls in REST.
+
+Strongly Typed Schema – GraphQL uses a "schema" to define the structure of API responses, while REST relies on standard JSON responses.
+
+Backend Agnostic – Works with any database or programming language, making it highly adaptable.
+
+No Over-fetching/Under-fetching – REST responses may include unnecessary data (Over-fetching) or require multiple requests(Under-fetching), while GraphQL delivers only 
+what's requested.
+
+Under-fetching happens when a REST API doesn't return enough data in a single request, forcing the client to make multiple API calls to gather all the required information.
+✅ Example of Under-Fetching
+GET /movies/123  
+🔻 Response:
+{
+  "id": 123,
+  "title": "Inception",
+  "directorId": 5
+}
+🚨 Problem: The API only returns directorId, so the client must make another request:
+GET /directors/5
+🔻 Response:
+{
+  "id": 5,
+  "name": "Christopher Nolan"
+}
+📌 ❌ Multiple requests = slower performance
+
+GraphQL Solution: The client specifies exactly what fields it needs, reducing data transfer and improving performance.
+
+✅ Solution: Use GraphQL or Expand Data in REST
+GraphQL: Fetch exactly what you need in one request.
+```
+{
+  movie(id: 123) {
+    title
+    director {
+      name
+    }
+  }
+}
+```
+
+============================================================================================================================================================
+
+
+❓ where we use GraphQL?
+
+✅ GraphQL is used on both the client and backend! 🚀
+
+🔹 GraphQL on the Backend
+
+👉 The backend defines the GraphQL schema and resolves queries.
+// Define GraphQL Schema
+const typeDefs = `#graphql
+  type Movie {
+    id: ID!
+    title: String!
+    director: String!
+    releaseYear: Int!
+  }
+
+  type Query {
+    movies: [Movie]
+    movie(id: ID!): Movie
+  }
+
+  type Mutation {
+    addMovie(title: String!, director: String!, releaseYear: Int!): Movie
+    updateMovie(id: ID!, title: String, director: String, releaseYear: Int): Movie
+    deleteMovie(id: ID!): String
+  }
+`;
+
+
+👉 It uses GraphQL servers like Apollo Server, Express-GraphQL, or Mercurius.
+Apollo Server, Express-GraphQL, and Mercurius are different "GraphQL server" implementations that provide ways to set up and run a GraphQL API
+Each of these libraries helps handle GraphQL queries, mutations, and subscriptions, but they have different architectures and features.
+
+
+
+👉 The GraphQL resolver functions fetch data from databases or APIs.
+ex: 
+const resolvers = {
+  Query: {
+    getMovies: async () => await Movie.find(),   // database
+  },
+  Mutation: {
+    addMovie: async (_, { title, director, releaseYear }) => {
+      const movie = new Movie({ title, director, releaseYear });
+      return await movie.save();
+    }
+  },
+};
+
+from api: 
+    resolvers: {
+      Query: {
+        user: async (todo) =>
+          (await axios.get(`https://jsonplaceholder.typicode.com/users/${todo.userId}`))
+            .data,
+      }
+    }
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+❓ Explain the difference between "queries", "mutations", and "subscriptions" in GraphQL.
+
+
+1️⃣ Queries – Fetch Data
+
+Similar to GET requests in REST.
+Used to retrieve data without modifying it.
+Clients can request specific fields.
+
+Example:
+query {
+  movie(id: "123") {
+    title
+    genre
+  }
+}
+
+
+
+2️⃣ Mutations – Modify Data
+
+Similar to POST, PUT, DELETE in REST.
+Used to create, update, or delete data.
+Can return updated data after execution.
+
+Example:
+mutation {
+  addMovie(title: "Inception", genre: "Sci-Fi") {
+    id
+    title
+  }
+}
+
+
+3️⃣ Subscriptions – Real-time Updates
+
+Uses "WebSockets" to push real-time updates to clients.
+Clients stay connected and get notified when data changes.
+we can integrate GraphQL Subscriptions using WebSockets (graphql-ws).
+
+
+Example:
+subscription {
+  movieAdded {
+    id
+    title
+  }
+}

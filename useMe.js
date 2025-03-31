@@ -1,30 +1,81 @@
-const http = require('http');
+// Install dependencies: npm install express @apollo/server graphql mongoose cors dotenv
 
-const server = http.createServer((req, res) => {
-  if (req.method === 'POST') {
-    let body = "";
+const express = require("express");
+const { ApolloServer } = require("@apollo/server");
+const { expressMiddleware } = require("@apollo/server/express4");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+require("dotenv").config();
 
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    })
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error(err));
 
-    req.on("end", () => {
-      console.log(body), body;
-      res.end("Data received successfully")
-    })
-  } else if (req.url === '/') {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end("Home Page");
-  } else if (req.url === '/api/customer') {
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify({ name: 'Adesh', age: 22 }))
-  } else {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end("404 Not Found")
+// Define Movie Model
+const Movie = mongoose.model("Movie", {
+  title: String,
+  director: String,
+  releaseYear: Number,
+});
+
+// Define GraphQL Schema
+const typeDefs = `#graphql
+  type Movie {
+    id: ID!
+    title: String!
+    director: String!
+    releaseYear: Int!
   }
-})
 
+  type Query {
+    movies: [Movie]
+    movie(id: ID!): Movie
+  }
 
-server.listen(5000, () => {
-  console.log(`Server ius listening on port 5000`)
-})
+  type Mutation {
+    addMovie(title: String!, director: String!, releaseYear: Int!): Movie
+    updateMovie(id: ID!, title: String, director: String, releaseYear: Int): Movie
+    deleteMovie(id: ID!): String
+  }
+`;
+
+// Define Resolvers
+const resolvers = {
+  Query: {
+    movies: async () => await Movie.find(),
+    movie: async (_, { id }) => await Movie.findById(id),
+  },
+  Mutation: {
+    addMovie: async (_, { title, director, releaseYear }) => {
+      const movie = new Movie({ title, director, releaseYear });
+      return await movie.save();
+    },
+    updateMovie: async (_, { id, title, director, releaseYear }) => {
+      return await Movie.findByIdAndUpdate(
+        id,
+        { title, director, releaseYear },
+        { new: true }
+      );
+    },
+    deleteMovie: async (_, { id }) => {
+      await Movie.findByIdAndDelete(id);
+      return "Movie deleted successfully";
+    },
+  },
+};
+
+// Start Apollo Server
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+const server = new ApolloServer({ typeDefs, resolvers });
+async function startServer() {
+  await server.start();
+  app.use("/graphql", expressMiddleware(server));
+  app.listen(4000, () => console.log("Server running on http://localhost:4000/graphql"));
+}
+startServer();
