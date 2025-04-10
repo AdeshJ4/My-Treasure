@@ -1,11 +1,8 @@
 JavaScript Promises:
 --------------------
 
--> Promises are used to handle the eventual result (success or failure) of an asynchronous operation
--> In JavaScript, a promise is a good way to handle result of asynchronous operations/task.
-asynchronous operations/task is a operations/task thats goint to take time ans running in background.
--> It is used to find out if the asynchronous operation is successfully completed or not.
 -> promise is javascript object which holds the eventual(result of period of time) result of an asynchronous operation.
+-> Promises are used to handle the eventual result (success or failure) of an asynchronous operation
 -> when asynchronous operation completes it can either return result in value or an error.
 -> A promise basically promise you that it will give the result of an asynchronous operation.
 -> this object can be in one of the three state: 
@@ -21,6 +18,26 @@ When a Promise object is "rejected", the result is an error object.
 
 
 
+🔴 then catch finally :
+-----------------------
+.then()
+Used to handle the "resolved value" of a promise.
+.catch()
+Used to handle promise rejection.
+.finally()
+Executes code regardless of whether the promise resolved or rejected.
+
+ex: 
+Promise.resolve("Done")
+  .then(res => console.log(res))
+  .catch(err => err.message)
+  .finally(() => console.log("Always runs"));
+
+
+
+
+
+
 -> Initially when we create promise object it is initially in "pending" state.
 -> at this point it will kick/start some asynchronous operations.
 -> when the result is ready the promise can either be fulfilled or resolved which basically means asynchronous operation completes 
@@ -30,12 +47,6 @@ in this we have an error object.
 
 
 ✅ Example of Handling Asynchronous Operation Result
-
-
-
-
-
-
 
 
 example 1: 
@@ -134,8 +145,18 @@ function getCommits(repoName) {
 
 
 
+✅ 1. Promise.resolve()
+Creates a promise that is resolved with a given value.
+```
+Promise.resolve("Hello").then(console.log); // Output: Hello
+```
 
 
+✅ 2. Promise.reject():
+Creates a promise that is rejected with a given reason.
+```
+Promise.reject("Error").catch(console.log); // Output: Error
+```
 
 
 
@@ -143,14 +164,13 @@ function getCommits(repoName) {
 Promise.all([])
 ---------------
 
--> Promise.all() is a method that takes an array of Promises and returns a single Promise that:
+-> Promise.all() is a method is used to run multiple promises parallelly, simultaneously with each other.
+-> Promise.all() takes an array of Promises and returns a single Promise that:
 "Resolves" when all input Promises resolve, returning an array of results.
 "Rejects" immediately if any Promise rejects, returning the first error.
--> Promise.all() waits for all to resolve, then returns [p1 result, p2 result, p3 result].
 -> If any Promise rejects, the entire Promise.all() fails.
 -> In Promise.all, all promises are initiated almost simultaneously, not sequentially. 
-The event loop schedules their execution in quick succession
--> Promise.all initiates all promises in the array without waiting for any of them to complete
+
 
 
 code: 
@@ -216,40 +236,46 @@ Promise
 
 
 
-Promise.any(): 
-
--> Promise.any() method is used to run multiple promises parallelly, simultaneously with each other and return only first resolve 
-promise who completes its execution firstly than others.
--> any() method takes array of promises.
--> any() method return, first single fulfilled promise from list of promises.
--> if first promise is giving rejected value then this method will search other promise who is givin resolve value.
--> if all of the given promises are rejected, then it returned array which contain rejected errors.
+✅ Promise.any() : 
+-----------------
+-> Its similar to Promise.race() but it return only first resolve promise who completes its execution firstly than others.
 -> any() method only returned you fulfilled promise who completes its execution fast.
+-> if first promise is giving rejected value then this method will search other promise who is givin resolve value.
 
-const p1 = new Promise((resolve, reject) =>
-  setTimeout(()=> {    
-    // resolve('Promise 1')
-    reject(new Error('Error detected in Promise p1'))
-  }, 1000)
-);
-const p2 = new Promise((resolve, reject) =>
-  setTimeout(()=> {
-    reject(new Error('Error detected in Promise p2'))
-    // reject('Promise 2')
-  }, 500)
-);
-const p3 = new Promise((resolve, reject) =>
-  setTimeout(()=> {
-    reject(new Error('Error detected in Promise p3'))
-    // resolve('Promise 3')
-  }, 1500)
-);
+ex:
+let p1 = new Promise((resolve, reject) => setTimeout(() => resolve("resolve 1"), 700));
+let p2 = new Promise((resolve, reject) => setTimeout(() => resolve("resolve 2"), 600));
+let p3 = new Promise((resolve, reject) => setTimeout(() => reject(new Error('rejected 3')), 500));
 
 Promise.any([p1, p2, p3])
-  .then(value=> console.log('Fulfilled with:', value))
-  .catch(err => console.log('All promises were rejected:', err))
+    .then(data => console.log(data))
+    .catch(err => console.log(err.message));
 
 
+
+
+
+
+
+
+✅ Promise.allSettled():
+------------------------
+Waits for all promises to settle (resolve or reject) and gives the result for each.
+Promise.allSettled() gives you a promise that resolves with an array of results, where each result is an object with either:
+{ status: "fulfilled", value: result } – if the promise was successful
+{ status: "rejected", reason: error } – if the promise was rejected
+
+
+
+```
+let p1 = new Promise((resolve, reject) => setTimeout(() => resolve("resolve 1"), 700));
+let p2 = new Promise((resolve, reject) => setTimeout(() => resolve("resolve 2"), 600));
+let p3 = new Promise((resolve, reject) => setTimeout(() => reject(new Error('rejected 3')), 500));
+
+Promise.allSettled([p1, p2, p3])
+    .then(data => console.log(data))
+    .catch(err => console.log(err.message));
+```
 
 
 

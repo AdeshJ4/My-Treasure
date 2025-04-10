@@ -1,0 +1,1396 @@
+Ah, got it — you had a conversation with me (or ChatGPT) in a now-deleted chat where you asked for **30 React.js scenario-based questions**, and now you'd like the **exact same set** again.
+
+I can't retrieve deleted chats or their exact contents, but I can regenerate a high-quality, diverse list of **30 scenario-based React.js questions**, covering key areas like hooks, performance, state management, component design, lifecycle, and advanced patterns — likely very similar to what I gave you earlier.
+
+---
+
+### 🔁 30 React.js Scenario-Based Interview Questions
+
+1. **How would you implement a debounced search input in React?**
+2. **How do you persist form state across different steps in a multi-step form?**
+3. **Describe how you’d fetch data with `useEffect`, and how you’d avoid memory leaks.**
+4. **How would you manage a global loading spinner using React Context?**
+5. **Explain how to prevent unnecessary re-renders in a React component.**
+6. **You need to share data between sibling components — how would you do it?**
+7. **How do you optimize a large list rendering in React?**
+8. **What’s the best way to handle authentication state in a React app?**
+9. **How would you implement route protection (private routes)?**
+10. **Explain how to dynamically render a form based on API data.**
+
+11. **How would you handle file uploads in a React app and show progress?**
+12. **What would you do if your React app needs to respond to a window resize?**
+13. **How do you handle race conditions when making API calls in React?**
+14. **How would you build a custom reusable input component with validation?**
+15. **Explain lazy loading components and how to implement it.**
+16. **How would you reset the state of a form after submitting or canceling?**
+17. **You need to create a sortable and filterable table — how would you structure your code?**
+18. **How can you implement a modal component that’s reusable across the app?**
+19. **What’s your approach to handling theme (light/dark mode) in React?**
+20. **How would you manage user roles and permissions in a React dashboard?**
+
+21. **How would you trigger a parent component function from a deeply nested child?**
+22. **What’s your strategy for error boundaries and error handling in React?**
+23. **How would you handle localization (i18n) in a large React app?**
+24. **What’s the difference between controlled and uncontrolled components?**
+25. **How do you manage pagination from both frontend and backend in React?**
+26. **How do you handle a scenario where multiple API requests must run in sequence?**
+27. **You need to display live updates from the server. How would you implement this?**
+28. **Explain a time when you had to refactor a class component to a functional one.**
+29. **How would you structure your React app folders for scalability?**
+30. **What are some performance pitfalls you’ve encountered in React and how did you fix them?**
+
+---
+
+Would you like me to export these into a downloadable file (PDF, TXT, etc.)? Or want answers to any of them?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔥 React.js Scenario-Based Interview Questions: 
+
+
+❓ Question: You're working on a React app where a component is re-rendering too frequently. How would you optimize it?
+
+React Developer Tools extensiopn: 
+Developer Tools : ctrl; + shift + c
+
+To optimize frequent re-renders in a React app, you can:
+Use React.memo to prevent re-renders if props haven’t changed.
+Use useCallback and useMemo to memoize functions and values.
+Avoid unnecessary state updates.
+Split large components into smaller ones.
+Check dependencies of useEffect.
+
+
+============================================================================================================================================================
+
+
+
+❓ Question: How would you manage form state with multiple dynamic input fields like add/remove fields in real-time?
+
+To manage form state with multiple dynamic input fields (like add/remove in real-time), you can:
+Use useState or useReducer to manage an array of field objects.
+Each field has a unique id and its own value.
+Provide buttons to add (push a new object) or remove (filter by id) fields.
+Map over the array to render inputs dynamically.
+Update values by matching the id.
+For better handling, libraries like Formik or React Hook Form also support dynamic fields.
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: A user reports that form data is being lost when they navigate back. How would you persist form data?
+
+```
+🔍 What it means:
+The user is filling out a form (e.g. name, email, etc.), then navigates away (to another page), and when they come back, the form is reset or cleared — the data is lost.
+This question tests how you'd keep form data intact even if the user switches pages, refreshes, or uses browser navigation.
+
+✅ What the interviewer wants to hear:
+You understand persistence and can handle it in React.
+
+```
+
+🔍 What does "unmount" mean?
+
+in React, when you navigate to another route using React Router, the current page gets unmounted by default.
+The component and its state are removed from memory.
+All local useState, useEffect, etc., are cleared.
+That’s why form data is lost if not persisted.
+
+
+
+💡 How to persist form data:
+
+
+1️⃣ . State Management (Redux, Zustand, Context API)
+Store form data in global state so it stays available across routes.
+
+
+ex: 
+
+📦 1. Set up Redux store
+```
+npm install @reduxjs/toolkit react-redux
+```
+
+🧠 2. Create a form slice
+```
+// src/store/formSlice.js
+import { createSlice } from '@reduxjs/toolkit';
+
+const initialState = {
+  name: '',
+  age: '',
+  email: '',
+};
+
+const formSlice = createSlice({
+  name: 'form',
+  initialState,
+  reducers: {
+    updateField: (state, action) => {
+      const { field, value } = action.payload;
+      state[field] = value;
+    },
+    resetForm: () => initialState
+  },
+});
+
+export const { updateField, resetForm } = formSlice.actions;
+export default formSlice.reducer;
+```
+
+
+🧱 3. Configure the store
+```
+// src/store/store.js
+import { configureStore } from '@reduxjs/toolkit';
+import formReducer from './formSlice';
+
+const store = configureStore({
+  reducer: {
+    form: formReducer
+  }
+});
+
+export default store;
+```
+
+
+🌐 4. Wrap app with Provider
+```
+// main.jsx or index.jsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import { Provider } from 'react-redux';
+import store from './store/store';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+```
+
+
+
+📝 5. Form Component (connected to Redux)
+```
+// src/FormPage.jsx
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateField } from './store/formSlice';
+
+const FormPage = () => {
+  const form = useSelector(state => state.form);
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    dispatch(updateField({ field: e.target.name, value: e.target.value }));
+  };
+
+  return (
+    <div>
+      <h2>Redux Form</h2>
+      <input
+        name="name"
+        value={form.name}
+        onChange={handleChange}
+        placeholder="Name"
+      /><br /><br />
+      <input
+        name="age"
+        type="number"
+        value={form.age}
+        onChange={handleChange}
+        placeholder="Age"
+      /><br /><br />
+      <input
+        name="email"
+        type="email"
+        value={form.email}
+        onChange={handleChange}
+        placeholder="Email"
+      />
+    </div>
+  );
+};
+
+export default FormPage;
+
+```
+
+
+
+
+
+
+2️⃣.  Local Storage (Most Common) or Session Storage
+Save form data to localStorage on change.
+Load it back into the form when the component mounts
+
+
+```
+import React, { useState, useEffect } from "react";
+
+const FormWithPersistence = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    age: "",
+    email: ""
+  });
+
+  // Load data from localStorage on mount
+  useEffect(() => {
+    const savedData = localStorage.getItem("formData");
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+  }, []);
+
+  // Save to localStorage on change
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  return (
+    <div>
+      <h2>Persistent Form</h2>
+      <input
+        name="name"
+        placeholder="Name"
+        value={formData.name}
+        onChange={handleChange}
+      /><br /><br />
+      <input
+        name="age"
+        type="number"
+        placeholder="Age"
+        value={formData.age}
+        onChange={handleChange}
+      /><br /><br />
+      <input
+        name="email"
+        type="email"
+        placeholder="Email"
+        value={formData.email}
+        onChange={handleChange}
+      />
+    </div>
+  );
+};
+
+export default FormWithPersistence;
+
+```
+
+
+
+3. Store small form data in the URL (e.g. search filters) with help of useSearchParams hook.
+```
+example.com/form?name=John&age=25
+```
+
+function SearchPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const updateSort = () => {
+    setSearchParams({ name: 'John', age: '25' });
+  };
+
+  return (
+    <div>
+      <h1>Search Page</h1>
+      <button onClick={updateSort}>Change Sort Order</button>
+    </div>
+  );
+}
+
+
+============================================================================================================================================================
+
+
+❓ Question: You have a deeply nested component that needs data from the top-level parent. What are your options?
+
+
+✅ 1. Prop Drilling (basic but not ideal)
+
+✅ 2. React Context API
+
+✅ 3. State Management (Redux, Zustand, Jotai, etc.)
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: You’re building a dashboard and want to fetch data every 5 seconds but stop fetching when the user leaves the tab. How would you do it?
+
+🧠 What’s happening:
+startPolling() fetches data every 5 seconds.
+visibilitychange detects when the tab becomes hidden or visible.
+When hidden: polling stops.
+When visible again: polling resumes.
+
+
+✅ Here's how to do it:
+Use:
+
+useRef() to store timer.
+setInterval() to fetch every 5 seconds
+document.visibilityState with the visibilitychange event to detect tab focus/blur
+
+```
+const Dashboard = () => {
+  const intervalRef = useRef(null);
+
+  const fetchData = () => {
+    console.log("Fetching data...");
+    // fetch("/api/data").then(...)
+  };
+
+  const startPolling = () => {
+    if (!intervalRef.current) {
+      fetchData(); // Fetch immediately
+      intervalRef.current = setInterval(fetchData, 5000);
+    }
+  };
+
+  const stopPolling = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  };
+
+  const handleVisibilityChange = () => {
+    if (document.visibilityState === "visible") {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    startPolling(); // start by default
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stopPolling(); // clean up
+    };
+  }, []);
+
+  return <div>📊 Dashboard</div>;
+};
+
+export default Dashboard;
+```
+
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: Imagine a list with 1000+ items. The rendering is slow. What techniques can you use to optimize performance?
+
+
+✅ 1. Virtualization (Windowing)
+Only render the items visible in the viewport.
+
+Tool: react-window or react-virtualized
+
+🧠 Instead of rendering all 1000, it might only render ~20 at a time.
+
+import { FixedSizeList as List } from 'react-window';
+
+const MyList = ({ items }) => (
+  <List
+    height={400}
+    itemCount={items.length}
+    itemSize={35}
+    width={300}
+  >
+    {({ index, style }) => (
+      <div style={style}>{items[index]}</div>
+    )}
+  </List>
+);
+
+
+
+✅ 2. Memoization
+
+Prevent unnecessary re-renders of list items.
+Use React.memo for item components.
+Use useCallback for event handlers passed down.
+
+✅ 3. Pagination or Infinite Scrolling
+
+Instead of showing all items at once, load chunks.
+Load e.g., 20 at a time.
+Load more on scroll or click.
+
+✅ 4. Lazy Load Images/Content
+If items contain images or media, lazy-load them using loading="lazy" or libraries like react-lazyload.
+
+✅ 5. Avoid Unnecessary State Changes
+If state updates unrelated to the list are causing re-renders, split the component or use React.memo to isolate.
+
+✅ 6. Throttle Expensive Operations
+Use lodash.throttle or debounce for scroll, resize, or search filtering.
+
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: A component makes an API call in useEffect, but it causes an infinite loop. What could be wrong?
+
+
+❌ Problem: useEffect dependencies
+You’ve probably included something in the dependency array that keeps changing, which triggers the effect over and over.
+
+🧠 Common example:
+jsx
+Copy
+Edit
+const [data, setData] = useState([]);
+
+useEffect(() => {
+  fetch('/api/data')
+    .then(res => res.json())
+    .then(json => setData(json));
+}, [data]); // ❌ BAD: `data` is in the dependency array
+Every time setData runs, data changes → useEffect runs again → which calls setData again → 💥 infinite loop.
+
+✅ Fix:
+Use an empty dependency array if the call is only needed once on mount:
+
+jsx
+Copy
+Edit
+useEffect(() => {
+  fetch('/api/data')
+    .then(res => res.json())
+    .then(json => setData(json));
+}, []); // ✅ Runs only once on mount
+Or, if you need to refetch on some specific value:
+
+jsx
+Copy
+Edit
+useEffect(() => {
+  fetchData();
+}, [userId]); // ✅ only runs when userId changes
+🔄 TL;DR
+✅ Only put dependencies that should trigger a new fetch.
+
+❌ Never include state that you update inside the effect.
+
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: How would you handle multiple API calls that must be resolved before rendering the component ?
+
+✅ 1. Use Promise.all in useEffect
+
+🔄 So why do people say:
+"Make API calls before rendering the component"?
+They mean:
+“Don’t render the actual UI (server data) content until the API calls finish.”
+In other words, you still render, but show a Loading... or spinner until the data is ready.
+✅ Final Answer:
+useEffect runs after first render. So we “block” rendering usefully by showing a loader, then render the real UI once all API calls complete.
+
+👇 Here's the normal flow:
+Component mounts ➝ useEffect fires.
+Show Loading... placeholder.
+API calls finish.
+Show actual content.
+
+
+```
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const Dashboard = () => {
+  const [user, setUser] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        const [userRes, postsRes] = await Promise.all([
+          axios.get('/api/user'),
+          axios.get('/api/posts')
+        ]);
+
+        setUser(userRes.data);
+        setPosts(postsRes.data);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAll();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <div>
+      <h1>{user?.name}'s Dashboard</h1>
+      <ul>
+        {posts.map((p) => (
+          <li key={p.id}>{p.title}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+```
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: You’re building a reusable modal component. How do you handle the open/close logic from the parent?
+
+✅ Short Answer:
+You handle the modal's open/close state in the parent component and pass it down via props to the reusable modal.
+
+
+🧱 1. Parent Component (controls state):
+```
+import { useState } from 'react';
+import MyModal from './MyModal';
+
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(true)}>Open Modal</button>
+
+      <MyModal open={isOpen} onClose={() => setIsOpen(false)} />
+    </div>
+  );
+};
+```
+
+
+📦 2. Reusable Modal Component (MyModal.jsx):
+```
+const MyModal = ({ open, onClose }) => {
+  if (!open) return null;
+
+  return (
+    <div className="modal-backdrop">
+      <div className="modal">
+        <h2>Reusable Modal</h2>
+        <p>This modal is controlled by the parent.</p>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
+
+export default MyModal;
+```
+
+
+
+🧠 Why this approach?
+Keeps the modal dumb (reusable, stateless).
+Parent handles when to show it (flexible control).
+Makes modal usable anywhere in the app.
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: How do you track online/offline user status in real-time in a React app?
+
+🟥 When is a browser considered offline?
+The browser is considered offline when it cannot connect to the internet, based on the underlying network adapter status or a failed DNS/ping test.
+
+✅ navigator.onLine:
+This built-in property returns:
+true → Browser has network access
+false → Browser has no network
+
+📌 When does navigator.onLine become false?
+Situation	navigator.onLine
+You turn off Wi-Fi or mobile data	false
+You unplug your Ethernet cable	false
+You switch to airplane mode	false
+Browser cannot detect a network	false
+
+❌ No — you shouldn't use "document" instead of "window" for tracking online/offline status.
+✅ Why?
+Because the online and offline events are part of the window object, not document.
+
+
+
+```
+import { useEffect, useState } from 'react';
+
+const OnlineStatus = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  return (
+    <div>
+      {isOnline ? (
+        <p style={{ color: 'green' }}>🟢 You’re online</p>
+      ) : (
+        <p style={{ color: 'red' }}>🔴 You’re offline</p>
+      )}
+    </div>
+  );
+};
+
+export default OnlineStatus;
+```
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: You have a list of items where each item can be marked as favorite. How would you manage local state efficiently?
+
+This question is asking how you’d efficiently manage list of items without causing unnecessary re-renders or messy code.
+You should avoid unnecessary re-renders of the entire list when one item is toggled.
+
+
+````
+
+import React, { useState, memo, useCallback } from 'react';
+import Item from './components/Item';
+
+const items = [
+  { id: 1, name: 'Item One' },
+  { id: 2, name: 'Item Two' },
+  { id: 3, name: 'Item Three' },
+];
+
+
+
+const ItemList = () => {
+  const [favorites, setFavorites] = useState(new Set());
+
+  // Only create this function once, when the component first mounts, and never recreate it again on re-renders."
+  const toggleFavorite = useCallback((id) => {
+    setFavorites(prev => {
+      const newFavs = new Set(prev);
+      newFavs.has(id) ? newFavs.delete(id) : newFavs.add(id);
+      return newFavs;
+    });
+  }, []);
+
+  return (
+    <ul>
+      {items.map(item => (
+        <Item
+          key={item.id}
+          item={item}
+          isFavorite={favorites.has(item.id)}
+          onToggle={toggleFavorite}
+        />
+      ))}
+    </ul>
+  );
+};
+
+export default ItemList;
+
+
+
+import { memo } from "react";
+
+const Item = ({ item, isFavorite, onToggle }) => {
+    console.log(`Rendering: ${item.name}`);
+    return (
+      <li>
+        {item.name}
+        <button onClick={() => onToggle(item.id)}>
+          {isFavorite ? '★ Favorited' : '☆ Favorite'}
+        </button>
+      </li>
+    );
+  }
+
+export default memo(Item);
+
+````
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: You need to detect if a user has unsaved changes in a form before navigating away. How do you approach it?
+
+
+✅ Question Breakdown:
+"You need to detect if a user has unsaved changes in a form before navigating away. How do you approach it?"
+You're being asked:
+How to warn the user if they try to leave the page or navigate away without saving changes in a form.
+This includes both closing the tab/window and navigating within the app (like with React Router).
+
+
+🧠 Approach:
+You need to handle two things:
+✅ Browser/tab navigation → Use "beforeunload" event
+✅ Internal navigation (React Router) → Use custom logic with "usePrompt" or a "useBlocker workaround" in v6+
+
+solution: 
+ if there are unsaved changes in the form (i.e. when isDirty is true).
+beforeunload is a browser event that fires when the user is about to leave the page (close tab, refresh, etc.).
+e.preventDefault() stops the default behavior.
+e.returnValue = '' triggers the browser’s native confirmation dialog:
+“Changes you made may not be saved. Are you sure you want to leave?”
+
+
+
+
+
+```
+import React, { useState, useEffect } from 'react';
+
+const Contact = () => {
+  const [formData, setFormData] = useState({ name: '', email: '' });
+  const [isDirty, setIsDirty] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setIsDirty(true);
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isDirty) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isDirty]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // You can send formData to API here
+    console.log('Form submitted:', formData);
+    setIsDirty(false); // Reset dirty flag after saving
+  };
+
+  return (
+    <div style={{ padding: '1rem' }}>
+      <h2>Form with Unsaved Changes Detection</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Name: </label>
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            type="text"
+            placeholder="Enter name"
+          />
+        </div>
+        <br />
+        <div>
+          <label>Email: </label>
+          <input
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            type="email"
+            placeholder="Enter email"
+          />
+        </div>
+        <br />
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  );
+};
+
+export default Contact;
+
+```
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: You want to animate a component when it enters and exits the DOM. How would you achieve that?
+
+
+✅ Option 1: Using framer-motion (Most Popular);
+npm install framer-motion
+
+```
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+
+const App = () => {
+  const [show, setShow] = useState(false);
+
+  return (
+    <div style={{ padding: '2rem' }}>
+      <button onClick={() => setShow((prev) => !prev)}>
+        Toggle Box
+      </button>
+
+      <AnimatePresence>
+        {show && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.4 }}
+            style={{
+              background: "#61dafb",
+              padding: "2rem",
+              marginTop: "1rem",
+              borderRadius: "10px"
+            }}
+          >
+            I'm animated!
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default App;
+
+```
+
+
+
+✅ Option 2: CSS + conditional rendering (simpler but limited)
+You can also use CSS transitions with conditional rendering, but you’d have to delay unmounting manually to allow the animation to finish. framer-motion handles this elegantly for you.
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: A user logs in and is redirected to the last visited page. How do you implement that?
+
+
+✅ 🔍 What’s the problem?
+You want to redirect a user back to the page they were trying to access before logging in.
+
+This is common in apps with protected routes.
+Example:
+User tries to access /dashboard
+They’re not logged in, so redirected to /login
+After logging in, they should be redirected back to /dashboard
+
+✅ How to Implement It in React (with react-router-dom):
+We'll use:
+useLocation() to remember the last visited route
+useNavigate() to redirect after login
+state prop in <Navigate /> to pass that info
+
+
+🧠 Step-by-Step Example
+1. Protected Route Wrapper
+jsx
+Copy
+Edit
+// RequireAuth.jsx
+import { Navigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux"; // or however you store auth
+
+const RequireAuth = ({ children }) => {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn); // replace with your logic
+  const location = useLocation();
+
+  if (!isLoggedIn) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
+
+export default RequireAuth;
+Use it like:
+
+jsx
+Copy
+Edit
+<Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
+2. Login Page
+jsx
+Copy
+Edit
+// Login.jsx
+import { useLocation, useNavigate } from "react-router-dom";
+
+const Login = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
+
+  const handleLogin = () => {
+    // ✅ perform login logic, then...
+    // e.g., dispatch(login(user))
+    navigate(from, { replace: true });
+  };
+
+  return (
+    <div>
+      <h2>Login</h2>
+      <button onClick={handleLogin}>Login</button>
+    </div>
+  );
+};
+
+export default Login;
+✅ What this does:
+If a user is not logged in, and they go to a protected route:
+
+They’re redirected to /login, and the original route is stored in location.state.from.
+
+After login, the app redirects back to that stored route.
+
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: How would you structure a React project for scalability and maintainability?
+
+
+src/
+│
+├── assets/             # Images, fonts, icons, etc.
+├── components/         # Reusable UI components (buttons, cards, modals, etc.)
+│   └── Button/
+│       ├── Button.jsx
+│       ├── Button.module.css
+│       └── index.js
+│
+├── features/           # Feature-specific folders (domain-driven)
+│   └── auth/
+│       ├── components/       # Auth-specific components
+│       ├── authSlice.js      # Redux slice or state logic
+│       ├── authService.js    # API calls
+│       ├── LoginPage.jsx
+│       └── RegisterPage.jsx
+│
+├── hooks/              # Custom reusable hooks (e.g. useAuth, useDebounce)
+│
+├── layouts/            # Layouts (Navbar + Sidebar, Admin layout, etc.)
+│
+├── pages/              # Route-level components (used by React Router)
+│   ├── Home.jsx
+│   ├── Dashboard.jsx
+│   └── NotFound.jsx
+│
+├── routes/             # Route definitions and protection logic
+│   ├── AppRoutes.jsx
+│   └── RequireAuth.jsx
+│
+├── services/           # API logic (Axios, GraphQL clients)
+│   └── apiClient.js
+│
+├── store/              # Redux Toolkit or Zustand setup
+│   ├── index.js
+│   └── rootReducer.js
+│
+├── utils/              # Utility functions (e.g. validators, formatters)
+│
+├── App.jsx
+├── main.jsx            # Entry point (Vite) or index.js (CRA)
+└── config/             # Constants, environment variables, etc.
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: You have a component that fetches data but sometimes fails due to network issues. How would you show a retry button?
+
+
+🧠 The Rule of useEffect
+You're absolutely right that side effects like fetching data should happen inside useEffect on component mount or when dependencies change.
+But that doesn't mean you can’t call the same side-effect logic (like a fetch function) manually in other places — like on a button click.
+
+It’s perfectly safe and common practice to:
+Declare side-effect logic (fetchData) outside useEffect
+Call it from both:
+useEffect for auto-fetching on mount
+User interaction (like clicking "Retry")
+
+
+
+```
+
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+
+const App = () => {
+    const [ users, setUsers ] = useState(null)
+    const [ loading, setLoading ] = useState(false);
+    const [ error, setError ] = useState(null);
+
+
+    const fetchUsers = async () => {
+        try{
+            setError(null);
+            setLoading(true);
+            const { data } = await axios.get(`https://jsonplaceholder.typicode.com/users`)
+            setUsers(data);
+
+        }catch(err){
+            setError(err.message);
+        }finally{
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers()
+    }, []);
+
+    if(loading) return <div>Loading...</div>
+    if(error) return (<div>
+        <h1>{error}</h1>
+        <button onClick={fetchUsers}>Retry</button>
+    </div>)
+
+
+  return (
+    <div>
+        { users && users.length > 0 && (
+            <ul>
+                {users.map(user => <li key={user.id}>{user.name}</li>)}
+            </ul>
+        )}
+    </div>
+  )
+}
+
+export default App
+
+```
+
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: How would you create a theme switcher (light/dark) and persist the selection?
+
+
+Add the dark mode css using : 'dark:---' ex: 'dark:text-white dark:bg-gray'
+for light theme give normal css.
+
+
+index.css: 
+----------
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+
+ThemeContext.jsx: 
+-----------------
+
+import React, { createContext, useEffect, useState } from 'react'
+
+export const ThemeContext = createContext(null);
+
+const ThemeProvider = ({ children }) => {
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem("theme") === "dark" 
+    });
+
+
+    useEffect(() => {
+        if(darkMode){
+            document.documentElement.classList.add("dark");
+            localStorage.setItem("theme", "dark");
+        }else{
+            document.documentElement.classList.remove("dark");
+            localStorage.setItem("theme", 'light')
+        }
+    }, [darkMode]);
+
+
+  return (
+    <ThemeContext.Provider value={{darkMode, setDarkMode}}>
+        {children}
+    </ThemeContext.Provider>
+  )
+}
+
+export default ThemeProvider
+
+
+main.jsx: 
+---------
+import './index.css'
+createRoot(document.getElementById('root')).render(
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+)
+
+
+
+useTheme.jsx: 
+-------------
+import { useContext } from "react"
+import { ThemeContext } from "../context/ThemeContext"
+
+const useTheme = () => {
+    const theme = useContext(ThemeContext);
+    return theme;
+}
+
+export default useTheme;
+
+
+
+DarkModeToggler: 
+---------------
+import { Link, Outlet } from "react-router-dom";
+import DarkModeToggler from "../components/DarkModeToggler";
+
+
+import React from 'react'
+import useTheme from '../hook/useTheme';
+
+const DarkModeToggler = () => {
+    const { darkMode, setDarkMode } =  useTheme();
+  return (
+    <button onClick={() => setDarkMode(!darkMode)} className='px-6 py-2 bg-gray-200 rounded-md transition-all dark:bg-white/10 dark:text-white'>
+        {darkMode ? "Light ☀️ ": "Dark 🌛"}
+    </button>
+  )
+}
+
+export default DarkModeToggler
+
+
+Layout.jsx: 
+-----------
+const Layout = () => {
+  return (
+    <>
+      <nav className="flex justify-between items-center px-6 py-4 bg-gray-100 dark:bg-gray-800 shadow">
+        <ul className="flex gap-10 list-none">
+          <li>
+            <Link to="/" className="text-gray-800 dark:text-white hover:underline">Home</Link>
+          </li>
+          <li>
+            <Link to="/about" className="text-gray-800 dark:text-white hover:underline">About</Link>
+          </li>
+        </ul>
+
+        <DarkModeToggler />
+      </nav>
+      <main className="p-1">
+        <Outlet />
+      </main>
+    </>
+  );
+};
+
+export default Layout;
+
+
+App.jsx: 
+-------
+
+const App = () => {
+    return(
+        <>
+
+            <Routes>
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+                    <Route path='about' element={<About />} />
+                    <Route path='contact' element={<Contact />} />
+                    <Route path='blogs' element={<Blogs />} />
+                    <Route path='*' element={<NoPage />} />
+                </Route>
+            </Routes>
+            
+        </>
+    )
+}
+
+
+
+Home.jsx: 
+---------
+
+const Home = () => {
+  return (
+    <div className='flex flex-col items-center justify-center min-h-screen bg-white dark:bg-gray-900 dark:text-white'>
+      <h1  className='text-3xl font-boldn mb-3'>Tailwind CSS Dark Mode</h1>
+    </div>
+  )
+}
+
+
+
+============================================================================================================================================================
+
+
+❓ Question: In a large form, some fields depend on the values of other fields. How would you handle conditional rendering and validation?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

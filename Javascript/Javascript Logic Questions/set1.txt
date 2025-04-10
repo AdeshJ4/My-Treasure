@@ -190,6 +190,9 @@ function countVowels (str){
   return count;
 }
 
+============================================================================================================================
+
+
 count how many times a character occur in a string: 
 
 function countCharacter(str, target){
@@ -363,6 +366,12 @@ function reverseNum (num){
     return  Number(reverse);
 }
 
+
+code 4: recursion
+function reverseNum(num) {
+  if (num === 1) return 1;
+  return num % 10 + '' + reverseNum(Math.trunc(num / 10))
+}
 
 ============================================================================================================================
 
@@ -750,7 +759,7 @@ code 1:
 function removeDuplicates(arr) {
     return arr.filter((element, index, array) => {  // 10 0, 20 1, 20 2, 10 3, 40 4, 50 5
         return array.indexOf(element) === index;   // 0==0,  1==1, 1!=2, 0!=3, 4==4, 5==5
-    }); //  [10, 20, 40, 50]
+    }); //  [10, 20 , 40, 50]
   }
 
 code 2: 

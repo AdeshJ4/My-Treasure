@@ -11,7 +11,7 @@ Indexing shines when dealing with millions of records.
 
 In MongoDB, an index is a data structure that improves the speed of data retrieval operations on a collection.
 Speeds up queries by reducing the number of documents MongoDB needs to scan
-
+  
 Indexes speed up find, update, and delete queries by reducing the number of documents MongoDB needs to scan that means basically Index on field Helps find the documents
 quickly but the Problem: is the actual update/delete operation still takes time.
 MongoDB update/delete every matching document individually, which is slow.
@@ -737,7 +737,9 @@ db.products.insertMany([
 
 The tags field contains an array of values.
 If we create a multi-key index on tags:
+
 db.products.createIndex({ tags: 1 });
+
 MongoDB will index each value separately, meaning:
 
 electronics → points to Laptop, Smartphone, Headphones
@@ -799,23 +801,14 @@ MongoDB does allow creating a multi-key index on genres.name, but not on the ent
 ✅ Correct Way to Create a Multi-Key Index
 Modify your schema like this:
 
-js
-Copy
-Edit
 movieSchema.index({ "genres.name": 1 });  // Multi-key index on genres.name
 This will allow efficient querying on genres.name, for example:
 
-js
-Copy
-Edit
 Movie.find({ "genres.name": "Action" }) // Efficient search using the multi-key index
 ❌ What You Cannot Do
 MongoDB does not allow indexing an array of full objects directly.
 For example, this would not work:
 
-js
-Copy
-Edit
 movieSchema.index({ genres: 1 });  // ❌ This is NOT allowed
 This is because genres is an array of objects, and MongoDB does not support indexing full objects within arrays.
 
@@ -823,9 +816,6 @@ This is because genres is an array of objects, and MongoDB does not support inde
 Yes, you can create a multi-key index on genres.name, but not on genres itself.
 Use this:
 
-js
-Copy
-Edit
 movieSchema.index({ "genres.name": 1 });
 This ensures efficient searching when filtering by genre name. 🚀
 
@@ -847,6 +837,11 @@ text efficiently even in the middle of a string.
 -> You need to create both a text index and a normal index on the name field, if you want to:
 Perform text search on the name field.
 Sort the name field.
+
+db.articles.createIndex({ title: "text" });
+db.articles.createIndex({ title: "text", description: "text" });
+
+
 
 🚫 MongoDB's text index does not support partial word matching, meaning it only searches for whole words and does not match substrings within a word.
 suppose you have a products collection and have text index on title.
@@ -933,7 +928,6 @@ db.articles.createIndex({ title: "text", description: "text" });
 
 
 7️⃣ Sorting by Relevance ($meta: "textScore")
-
 can i omit "score" from projection.
 db.movies.find({ $text: { $search: "cat"}}, { score: { $meta: "textScore"}}).sort({score: { $meta: "textScore"}})
 ans> Yes, you can omit the score from the projection in your MongoDB query. However, if you omit the score, you won’t be able to sort the results by the text search relevance score (textScore). 

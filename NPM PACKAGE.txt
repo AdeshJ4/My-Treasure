@@ -1,0 +1,114 @@
+I have created an NPM package and published it on Nexus (Sonatype Nexus Repository Manager) instead of the public npmjs.com registry.
+
+What Does This Mean?
+NPM Package → A reusable JavaScript module that can be installed via npm install <package-name>.
+
+Nexus Repository (Private Registry) → A private package registry (like Sonatype Nexus) where you can store, manage, and distribute your own NPM packages instead of using 
+the public NPM registry (npmjs.com).
+
+
+Configured .npmrc to point to your Nexus registry:
+registry=https://your-nexus-repo-url/repository/npm-private/
+
+
+Logged into Nexus using:
+npm login --registry=https://your-nexus-repo-url/repository/npm-private/
+
+
+Published Your Package using:
+npm publish --registry=https://your-nexus-repo-url/repository/npm-private/
+
+
+How to Install Your Package from Nexus?
+
+npm install your-package-name --registry=https://your-nexus-repo-url/repository/npm-private/
+
+
+
+
+============================================================================================================================================================
+
+
+
+Sentry is an "error-tracking" and "performance-monitoring" tool that helps developers capture and analyze errors in real time. 
+It supports Node.js, React, Express, and many other frameworks.
+
+
+1️⃣ Where Are Sentry Logs Stored?
+🔹 Sentry does not store logs on your server. Instead:
+✔ Logs are sent to Sentry’s cloud servers (if using sentry.io).
+✔ If using self-hosted Sentry, logs are stored in your database (PostgreSQL).
+✔ You can access logs via the Sentry Dashboard under Issues.
+
+
+2️⃣ How to Install and Set Up Sentry in a Node.js Application?
+Follow these steps to integrate Sentry with Node.js & Express.
+
+🔹 Step 1: Install Sentry SDK
+Run the following command to install Sentry:
+```
+npm install @sentry/node
+```
+
+
+🔹 Step 2: Initialize Sentry in Your Application
+Modify your server.js or app.js file:
+
+```
+const express = require("express");
+const Sentry = require("@sentry/node");
+
+const app = express();
+
+// 🔹 Step 2.1: Initialize Sentry
+Sentry.init({
+  dsn: "https://your-dsn@sentry.io/your-project-id",
+  tracesSampleRate: 1.0, // Set 1.0 for full performance monitoring
+  environment: process.env.NODE_ENV || "development",
+});
+
+// 🔹 Step 2.2: Attach Sentry Middleware (Must be at the TOP)
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+
+// Sample route to trigger an error
+app.get("/error", function (req, res) {
+  throw new Error("This is a test error for Sentry!");
+});
+
+// 🔹 Step 2.3: Sentry Error Handler (Must be at the END)
+app.use(Sentry.Handlers.errorHandler());
+
+// 🔹 Step 2.4: Standard Express Error Handler
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: "Something went wrong!", error: err.message });
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});
+```
+
+
+
+5️⃣ Viewing Logs in Sentry Dashboard
+
+Go to sentry.io and log in.
+Select your Node.js project.
+Navigate to Issues → View captured errors and logs.
+
+
+
+6️⃣ Best Practices for Sentry in Node.js
+✔ Use Sentry.captureException() for handling errors manually.
+✔ Enable Performance Monitoring with tracesSampleRate.
+✔ Use environment setting (e.g., development, staging, production).
+✔ Set up alerts in Sentry to get notified about critical errors.
+
+
+🔹 What Does Performance Monitoring Do?
+✅ Tracks API & DB Response Times – Helps identify slow API calls and database queries.
+✅ Measures Request Latency – Detects which parts of your backend/frontend are slowing down.
+✅ Shows Transaction Traces – Breaks down each request into sub-operations for debugging.
+✅ Identifies Bottlenecks – Highlights slow functions, middleware, or third-party services.
+✅ Monitors User Experience – Tracks frontend page load times and React component rendering.

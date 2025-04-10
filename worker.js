@@ -1,6 +1,9 @@
-const { parentPort } = require('node:worker_threads')
+const { parentPort } = require('worker_threads');
 
 
-parentPort.on("message", (num) => {
-  parentPort.postMessage(num*num)
-})
+let j = 0;
+for (let i = 0; i < 6000000000; i++) {
+  j++;
+}
+
+parentPort.postMessage(j)

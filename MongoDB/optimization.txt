@@ -35,19 +35,35 @@ This way, MongoDB does not need to fetch the document.
 ---
 
 3. Optimize Query Patterns
-✅ Avoid `OR` Queries When Possible
+| ------------------------------- | ------------------------------------------------------------------------------------- |
+| ✅ **Field/Operator**            | 🚀 **Why Use It?**                                                                    |
+| ------------------------------- | ------------------------------------------------------------------------------------- |
+| **`$in` (If Indexed)**          | Efficient **when used with indexed fields**. Reduces the number of scanned documents. |
+| **`$gte / $lte`**               | Supports **index scans**, making queries much faster.                                 |
+| **`$eq`**                       | Uses **indexes effectively**, improving query speed.                                  |
+| **`$and`**                      | Works well with **indexed fields** and compound indexes.                              |
+| **`$text`** (With Index)        | Highly optimized for **search queries** when a **text index** is used.                |
+| **Compound Indexes**            | Indexes on **multiple fields** improve performance instead of using `$or`.            |
+| **Covered Queries**             | Queries where **all fields are indexed** (avoids fetching from disk).                 |
+| **Projection (`{ field: 1 }`)** | Fetching **only required fields** reduces **I/O and memory usage**.                   |
+| ------------------------------- | ------------------------------------------------------------------------------------- |
 
-db.users.find({ $or: [{ age: { $lt: 18 } }, { age: { $gt: 60 } }] })
 
-Use **a compound index**:
+4. Don't use it: 
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| ❌ **Field/Operator**              | ⚠ **Why Avoid It?**                                                                                                       |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **`$or`**                          | Can cause **collection scans** if fields aren’t indexed properly. Use **compound indexes** instead.                        |
+| **`$where`**                       | Executes **JavaScript** on the server, making it **slow and unoptimized**. Use **aggregation or indexed queries** instead. |
+| **`$ne` (Not Equal)**              | **Prevents index usage**, leading to full collection scans. Use **range queries** (`$gte`, `$lte`) instead.                |
+| **`$nin`**                         | Like `$ne`, it **disables index scans** and forces a full collection scan.                                                 |
+| **`$not`**                         | Works like `$ne` and causes **index inefficiency**. Try filtering differently.                                             |
+| **`$exists: false`**               | MongoDB cannot use an index when checking for missing fields.                                                              |
+| **`$regex`** (Without Index)       | Causes **slow full collection scans** unless the search term is **anchored (`^pattern`) and indexed**.                     |
+| **`$elemMatch`** (On Large Arrays) | May cause performance issues if used on **large embedded arrays**. Index **subfields instead**.                            |
+| **Sorting Without Index**          | Sorting **without an index** can cause high memory usage. Always **create an index on the sorted field**.                  |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 
-db.users.createIndex({ age: 1 })
-
-
-✅ Use `$in` for Multiple Values
-Instead of multiple queries:
-
-db.users.find({ status: { $in: ["active", "pending"] } })
 
 
 ---
@@ -74,12 +90,30 @@ If using **MongoDB Aggregation**, avoid excessive `$lookup` operations. Instead:
 
 ---
 
-## **7. Monitor Queries & Performance**
-### ✅ **Use the MongoDB Profiler**
+7. Monitor Queries & Performance**
+✅ **Use the MongoDB Profiler**
 ```js
 db.setProfilingLevel(2) // Log all queries
 db.system.profile.find().sort({ ts: -1 }).limit(5) // View slowest queries
 ```
+
+Monitoring Queries & Performance in MongoDB Atlas
+1️⃣ Performance Advisor (Identify Slow Queries)
+📌 Location:
+Go to MongoDB Atlas Dashboard → Select Your Cluster → Click on Performance Advisor
+🔍 What It Does:
+Detects slow queries and suggests index optimizations
+Shows query execution time and collection scans
+Provides index recommendations for performance improvement
+
+
+2️⃣ Query Profiler (Monitor Real-Time Queries)
+
+3️⃣ Real-Time Metrics (Monitor CPU, Memory, and Disk Usage)
+4️⃣ explain() Method (Check Index Usage for Queries)
+5️⃣ Slow Query Logs (Set a Logging Threshold)
+
+
 
 ✅Check Query Execution Time 
 
@@ -185,6 +219,7 @@ Profiling: Enable the database profiler to identify slow queries and optimize th
 
 2️⃣. Capped Collections:
 
+-> Similar to TTL index
 -> A capped collection in MongoDB is a special type of collection with a fixed size and a circular behavior. Once the collection reaches its maximum size, it starts 
 overwriting the oldest documents to make space for new ones. This makes capped collections ideal for use cases where you need to store a fixed amount of data and 
 automatically discard older data.
@@ -286,11 +321,32 @@ Storage Control          No size control                  Fixed storage size
 
 
 
+============================================================================================================================================================
+
+
+
 3️⃣. Replica Sets:
 
+Sharding and Replica Sets are two different concepts in MongoDB, and they serve different purposes — but they can also work together in large-scale applications.
+
+
+| Feature                  | Description                                                                                                 |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| 🔄 **Same Data**         | All members of the replica set have **copies of the same data**.                                            |
+| 🧠 **Primary/Secondary** | One node is the **Primary** (handles writes); others are **Secondaries** (replicate data from the Primary). |
+| 💥 **Failover**          | If the primary fails, a secondary is automatically promoted to primary.                                     |
+| 📦 **Data Distribution** | **Not distributed**; all nodes have a **full copy** of the data.                                            |
+| 💡 **Use Case**          | Ensures your data is always available — even during failures.                                               |
+
+
+Each shard can be a **replica set** itself for high availability.  
+
+
+
 1. Replica Set
-A replica set is a group of MongoDB instances (A MongoDB instance refers to a single running MongoDB process (mongod)) that maintain the same data set. It is used for 
-high availability and data redundancy. If one instance fails, another can take over, ensuring that your database remains available.
+A replica set is a group of MongoDB instances that maintain the same data set. 
+It is used for high availability and data redundancy. 
+If one instance fails, another can take over, ensuring that your database remains available.
 
 How a Replica Set Works:
 A replica set consists of multiple MongoDB instances (usually 3 or more).
@@ -331,10 +387,26 @@ replica set. so we get fault tolerance in here because  even if one of our serve
 Client (Shell, Driver)  ---------->  MongoDB Server   ---------> | Primary Node --> secondary Node, secondary Node | 
 
 
+============================================================================================================================================================
 
 
 
 4️⃣. sharding (Horizontal Scaling):
+
+
+Sharding and Replica Sets are two different concepts in MongoDB, and they serve different purposes — but they can also work together in large-scale applications.
+
+
+| Feature                  | Description                                                                                         |
+| ------------------------ | --------------------------------------------------------------------------------------------------- |
+| 🧩 **Data Partitioned**  | Data is **split across shards**, each holding only a **subset** of the data (based on a shard key). |
+| 🖥️ **Shards**           | Each shard can be a **replica set** itself for high availability.                                   |
+| 🗺️ **Config Servers**   | Store metadata and manage the cluster’s data distribution.                                          |
+| 🚦 **mongos**            | Query router that directs operations to the correct shard.                                          |
+| 📦 **Data Distribution** | **Horizontally distributed** data (scale-out).                                                      |
+| 💡 **Use Case**          | For **very large datasets** or **high-throughput** systems that outgrow a single server's capacity. |
+
+
 
 MongoDB is designed to handle large volumes of data and high traffic by distributing data across multiple servers, a process known as horizontal scaling or sharding.
 
@@ -345,7 +417,8 @@ Horizontal scaling refers to adding more machines (servers) to your infrastructu
 In MongoDB, this is achieved through sharding.
 
 What is Sharding?
-Sharding is a method of splitting and distributing data across multiple servers (called shards) to improve performance, storage capacity, and availability. Each shard is an independent database, and together, the shards make up a single logical database.
+Sharding is a method of splitting and distributing data across multiple servers (called shards) to improve performance, storage capacity, and availability. 
+Each shard is an independent database, and together, the shards make up a single logical database.
 
 What is a Shard?
 

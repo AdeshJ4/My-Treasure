@@ -1,0 +1,555 @@
+❓ Question: How would you handle multiple simultaneous requests to an API without blocking the event loop: 
+===========================================================================================================
+
+
+To handle multiple simultaneous requests without blocking the event loop, you should use asynchronous, non-blocking operations like:
+
+🔧 Use async/await or Promises
+Promise.all()
+Worker Threads (for CPU tasks)
+cluster
+Streams (for large data processing)
+
+
+
+
+
+❓ Question:  You need to schedule tasks (like sending emails every day). What approach would you use in Node.js?
+==================================================================================================================
+
+
+✅ Use node-cron package:
+👉 The "node-cron" package is "tiny task scheduler" in pure JavaScript for node.js based on GNU crontab.
+👉 Good for periodic jobs (daily, weekly, hourly, etc.)
+
+
+🔄 When to use cron:
+Use cron when you want to:
+Send daily/weekly summary emails
+Clear expired sessions or tokens
+Generate reports every night
+Run regular database cleanup jobs
+
+
+📦 Install:
+```
+npm install node-cron
+```
+
+🚀 Example (running a task every second):
+```
+const cron = require('node-cron);
+
+cron.schedule("* * * * * *", () => {         // space between star
+    console.log('running in every sec')
+})
+```
+
+🚀 Example (running a task every minute):
+```
+const cron = require('node-cron');
+
+cron.schedule("* * * * *", () => {
+    console.log('run');
+})
+```
+
+🚀 Example (Send email daily at 9 AM):
+```
+const cron = require('node-cron');
+
+cron.schedule('0 9 * * *', () => {
+  // Your email sending logic here
+  console.log('Sending daily email at 9 AM');
+});
+```
+
+
+
+
+
+❓ Question: How do you handle file uploads and storage in a Node.js application?
+==================================================================================
+
+To handle file uploads and storage in a Node.js application, you typically use a combination of middleware and cloud or local storage.
+
+
+✅ Common Approach
+1. Use multer for handling file uploads
+
+read multer file.
+
+
+
+
+
+
+❓ Question: How would you secure an Express.js API endpoint so only authenticated users can access it?
+========================================================================================================
+
+To secure an Express.js API endpoint, you can use authentication middleware to check if the request comes from an authenticated user (e.g., using JWT). Here's a quick breakdown:
+
+
+// middleware/auth.js
+const jwt = require('jsonwebtoken');
+
+const authenticate = (req, res, next) => {
+  const token = req.header('Authorization')?.split(' ')[1]; // Bearer <token>
+  if (!token) return res.status(401).json({ message: 'Access denied. No token provided.' });
+
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret'); // Replace with env variable
+    req.user = decoded; // Add user info to request
+    next();
+  } catch (err) {
+    res.status(400).json({ message: 'Invalid token.' });
+  }
+};
+
+module.exports = authenticate;
+
+
+roles: 
+------
+
+const CustomError = require("../utils/CustomError");
+
+// allowedRoles => ["superadmin"] or ["superadmin", "admin"]  or ["superadmin", "admin", "manager"] or ["superadmin", "admin", "manager", "user"]
+const authorizeRoles = (...allowedRoles) => {  
+
+    return (req, res, next) => {
+        if (!allowedRoles.includes(req.user.role))
+            throw new CustomError(`Access denied for ${req.user.role}`, 403)
+
+        next();
+    }
+}
+
+
+module.exports = authorizeRoles;
+
+rentalRouter.get("/", authorizeRoles("superAdmin", "admin", "manager", "user"), asyncMiddleware(getRentals));
+
+
+
+
+
+❓ Question: Your Node.js app is crashing randomly — how would you troubleshoot it in production ? 
+==================================================================================================
+
+
+🛑 3. Catch Unhandled Errors
+```
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  // Optionally exit or report
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection:', reason);
+});
+```
+
+
+
+
+
+🕵️‍♂️ 4. Use Monitoring Tools
+🔧 Tools: Sentry, winston
+
+They capture stack traces, timestamps, users, memory usage, etc.
+
+
+
+
+
+
+❓ Question: How would you implement role-based access control (RBAC) in your Node.js app?
+==================================================================================================
+
+1. Assign Roles to Users
+When a user registers or logs in, their role should be stored in the user model and also sent in their JWT token.
+// Example user object in MongoDB
+{
+  _id: "123",
+  name: "John Doe",
+  email: "john@example.com",
+  role: "admin" // or "user", "editor", etc.
+}
+
+user schema:
+    role: {
+      type: String,
+      enum: ["superAdmin", "admin", "manager", "user"],
+      default: "user"
+    },
+
+
+2. Add Role to JWT Token (on Login)
+const token = jwt.sign(
+  { userId: user._id, role: user.role },
+  process.env.JWT_SECRET,
+  { expiresIn: '1d' }
+);
+
+
+
+3. Create Middleware to Authorize Roles
+
+const CustomError = require("../utils/CustomError");
+
+// allowedRoles => ["superadmin"] or ["superadmin", "admin"]  or ["superadmin", "admin", "manager"] or ["superadmin", "admin", "manager", "user"]
+const authorizeRoles = (...allowedRoles) => {  
+
+    return (req, res, next) => {
+        if (!allowedRoles.includes(req.user.role))
+            throw new CustomError(`Access denied for ${req.user.role}`, 403)
+
+        next();
+    }
+}
+
+module.exports = authorizeRoles;
+
+
+4. Protect Routes with the Middleware
+
+rentalRouter.get("/", authorizeRoles("superAdmin", "admin", "manager", "user"), asyncMiddleware(getRentals));
+
+
+
+
+❓ Question: How do you structure a scalable Node.js project for a growing team?
+==================================================================================================
+
+project/
+├── src/
+│   ├── config/          # Environment configs (e.g., db, JWT secrets)
+│   ├── controllers/     # Route handlers (business logic)
+│   ├── models/          # Mongoose/Sequelize models or schema definitions
+│   ├── routes/          # API endpoints
+│   ├── middlewares/     # Custom middleware (auth, error handling)
+│   ├── services/        # Business logic (e.g., email, payment)
+│   ├── utils/           # Utility/helper functions
+│   ├── validations/     # Joi/Yup input validation
+│   ├── constants/       # App-wide constants (roles, status codes)
+│   ├── jobs/            # Scheduled jobs or background workers
+│   └── app.js           # Express app config
+├── uploads/             # For file uploads (if any)
+├── .env                 # Environment variables
+├── server.js            # App entry point
+├── package.json
+
+
+
+
+❓ Question: How do you handle pagination when querying a large MongoDB collection with Node.js?
+==================================================================================================
+
+
+const getCustomers = async (req, res) => {
+  try {
+    const { page, limit, name, minAge, maxAge } = req.query;
+
+    const pageNumber = Number(page) || 1;
+    const limitNumber = Number(limit) || 10;
+    const skip = (pageNumber - 1) * limitNumber;
+
+    // 🔧 Build dynamic query
+    const query = {};
+
+    if (name) {
+      query.name = { $regex: name, $options: 'i' }; // case-insensitive partial match
+    }
+
+    if (minAge || maxAge) {
+      query.age = {};
+      if (minAge) query.age.$gte = Number(minAge);
+      if (maxAge) query.age.$lte = Number(maxAge);
+    }
+
+    const [customers, total] = await Promise.all([
+      Customer.find(query).skip(skip).limit(limitNumber),
+      Customer.countDocuments(query),
+    ]);
+
+    return res.status(200).json({
+      page: pageNumber,
+      limit: limitNumber,
+      totalPages: Math.ceil(total / limitNumber),
+      totalCustomers: total,
+      data: customers,
+    });
+  } catch (err) {
+    console.error('Error:', err);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
+
+
+
+
+❓ Question: How would you protect your Node.js API against common web vulnerabilities (XSS, CSRF, SQL Injection) ?
+===================================================================================================================
+
+
+| Area               | Recommendation                                    |
+| ------------------ | ------------------------------------------------- |
+| ✅ Input Validation | Use `Joi`, `Yup`, or `express-validator`.         |
+| 🔐 HTTPS           | Always use HTTPS in production.                   |
+| 🧱 Rate Limiting   | Prevent brute-force with `express-rate-limit`.    |
+| 🪪 Auth            | Use `JWT`, OAuth, or session-based auth securely. |
+| 📦 Helmet          | Adds common HTTP headers for security.            |
+
+
+
+
+❓ Question: How do you manage environment variables securely in a Node.js application?
+===================================================================================================================
+
+.env,    dotenv,    process.env.PORT,   .gitignore
+
+
+
+
+❓ Question: How would you implement request rate limiting in your Node.js/Express server?  and Explain how you’d use Redis in a Node.js app for caching frequently 
+requested data.
+===================================================================================================================================================================
+
+check redis project
+
+
+
+
+❓ Question: How would you handle database transactions (atomicity) in Node.js using MongoDB or SQL?
+=====================================================================================================
+
+read transaction file of mongodb.
+
+
+
+
+❓ Question: How would you run background tasks in a Node.js app (e.g., sending confirmation emails after registration)?
+=========================================================================================================================
+
+🚀 What are background tasks or jobs?
+
+Background tasks (aka jobs) are operations that are not executed immediately in response to a user’s request, but instead run in the background, either:
+After the main work is done (e.g., after sending a response)
+At a scheduled time (e.g., daily report generation)
+Continuously or on certain triggers
+
+
+
+### ✅ Common examples of background tasks:
+
+| Task Description                            | When/Why it's run                          |
+|--------------------------------------------|--------------------------------------------|
+| ✅ Sending a confirmation email             | After a user signs up                      |
+| ✅ Processing file uploads (like images)    | Resize, convert, or move them              |
+| ✅ Sending notifications (email, SMS, etc.) | Triggered by user activity or reminders    |
+| ✅ Scheduled database cleanup               | Run every day or week                      |
+| ✅ Generating reports or exports            | On-demand or on a schedule                 |
+| ✅ Payment retry logic                      | Automatically retry failed transactions    |
+| ✅ Logging and analytics                    | Log every request, but process later       |
+
+
+🧰 Tools for background tasks in Node.js:
+
+
+| Tool         | Purpose                                |
+|--------------|----------------------------------------|
+| `node-cron`  | Run tasks on schedule (like cron jobs) |
+| `Bull`       | Job queue with Redis support           |
+| `Agenda`     | MongoDB-backed job scheduler           |
+| `Bree`       | Job scheduler with worker threads      |
+| `cluster`    | Split tasks across multiple processes  |
+
+
+
+✅ solution: 
+use:
+Queue systems (e.g., Bull, Agenda)
+Worker threads for CPU-heavy work
+setImmediate for very simple, non-blocking tasks
+use cluster to offload background tasks to worker processes but it's not the most common or ideal way
+
+
+🔄 How it usually works:
+1. User signs up → API sends a response quickly
+2. In the background:
+  Save logs
+  Send welcome email
+  Notify admin
+  Start onboarding process
+
+The key idea is:
+“Do the heavy or slow work later, not while the user is waiting.”
+
+
+
+
+
+
+🐂 What is Bull?
+Bull is a Node.js library for handling jobs/queues backed by Redis.
+
+It helps you:
+Run background tasks (outside the main request-response cycle)
+Schedule jobs
+Retry failed jobs
+Rate-limit jobs
+
+💡 When to Use Bull?
+Sending emails
+Generating PDFs
+Processing images/videos
+Scheduled tasks (e.g., send a reminder every 24 hrs)
+Retry failed jobs automatically
+
+
+🐂 Bull & 🟥 Redis – What's the Relationship?
+🔗 Bull uses Redis as its backend to manage and store:
+
+Jobs
+Job status (waiting, completed, failed, etc.)
+Retry info
+Delayed jobs
+Priorities
+
+
+💡 Think of Redis as Bull’s brain/storage.
+
+Bull is just a Node.js library that gives you:
+A nice API to create/manage jobs
+A way to run background workers
+Features like retries, delays, rate-limiting, etc.
+But all the actual job data is stored in Redis.
+
+
+⚠️ Redis is Required for Bull
+You must have Redis running for Bull to work.
+Otherwise, it won’t be able to store/manage any job.
+
+
+
+
+
+❌ Without Bull (bad):
+
+You send the email during the signup API — user waits while the email is sent.
+```
+app.post('/signup', async (req, res) => {
+  const user = await createUser(req.body);
+  await sendWelcomeEmail(user.email); // slow!
+  res.send('User created');
+});
+```
+⛔ Bad experience: Email server might be slow → user has to wait.
+
+
+✅ With Bull (good):
+Offload email sending to a background job.
+```
+// queue.js
+const Queue = require('bull');
+const emailQueue = new Queue('email', 'redis://127.0.0.1:6379');
+module.exports = emailQueue;
+```
+
+
+
+
+
+✅ 2. Use a Message Broker
+With RabbitMQ, Kafka, or Redis Pub/Sub.
+
+More scalable for microservices or distributed apps.
+
+Example: publish an "email" event and let another service consume it and send the email.
+
+
+✅ 3. Simple setImmediate or setTimeout (For very light tasks)
+```
+app.post('/register', async (req, res) => {
+  const user = await createUser(req.body);
+  res.send('User created');
+
+  setImmediate(() => {
+    sendConfirmationEmail(user.email);
+  });
+});
+```
+✅ Non-blocking
+❌ Not reliable if server crashes or restarts
+
+
+✅ 4. Use worker_threads
+
+
+
+
+
+❓ Question: Your Node.js server is getting a spike of traffic — what are some ways to scale it?
+==================================================================================================
+
+When your Node.js server faces a spike in traffic, here are some effective ways to scale and handle the load smoothly:
+
+🧱 1. Horizontal Scaling
+Run multiple instances of your app on different CPU cores or machines.
+
+Use a load balancer (e.g., Nginx, HAProxy, or AWS ELB) to distribute traffic.
+
+✅ Use: PM2, Docker, or cloud tools like Kubernetes for orchestration.
+
+
+
+🔁 2. Clustering
+Node.js is single-threaded — use the cluster module to spawn workers across multiple CPU cores.
+
+
+🚀 3. Use a Reverse Proxy (e.g., Nginx)
+Handle SSL, caching, and load balancing at a web server layer.
+
+Can protect and improve performance of Node.js apps.
+
+
+
+
+🧠 4. Enable Caching
+Use Redis or in-memory cache for frequently accessed data.
+
+Reduces DB load and response time.
+
+
+
+🗃️ 5. Database Optimization
+Indexes, query optimization, replication, or moving to managed DBs.
+
+Use read replicas or sharding for huge datasets.
+
+
+
+📦 6. Queue Background Tasks
+Offload heavy processing using job queues (Bull, cron ) so user requests stay fast.
+
+
+☁️ 7. Use a CDN
+Offload static content (images, CSS, JS) using CDN (like Cloudflare, AWS CloudFront).
+
+
+🔄 8. Auto-scaling in the Cloud
+If deployed on cloud (AWS, Azure, GCP), configure auto-scaling groups to launch more instances as traffic increases.
+
+
+
+🧪 9. Monitor and Optimize
+Use monitoring tools:
+winston, Sentry, to analyze performance, memory leaks, etc.
+
+
+

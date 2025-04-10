@@ -49,7 +49,8 @@ nodemon server.js
 COMMON PROBLEMS: 
     
 1. The error *"Could not create server TCP listening socket :6379: bind:
-The error *"Could not create server TCP listening socket :6379: bind: An operation was attempted on something that is not a socket." means Redis couldn't start because port 6379 is already in use or blocked.
+The error *"Could not create server TCP listening socket :6379: bind: An operation was attempted on something that is not a socket." means Redis couldn't start 
+because port 6379 is already in use or blocked.
 
 
 How to Fix It?

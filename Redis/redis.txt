@@ -1,6 +1,11 @@
 Redis (Remote Dictionary Server) is an "in-memory data store" used as a **database**, **cache**, and **message broker**. 
 It is highly performant and supports various data structures like **strings, lists, sets, sorted sets, hashes, bitmaps, hyperloglogs, and streams**.
 
+
+📨 Message Broker (in short):
+A message broker is a software that helps different services or applications communicate with each other asynchronously by sending and receiving messages
+
+
 What is an In-Memory Data Structure?
 An in-memory data structure is a type of data storage that keeps all its data in RAM (Random Access Memory) instead of traditional disk-based storage 
 (like databases on HDDs or SSDs). 
@@ -9,24 +14,12 @@ This makes data access, retrieval, and manipulation extremely fast compared to d
 
 
 Redis stores data in the RAM of the server where Redis is running, NOT the client’s RAM.
-
+ 
 📌 Explanation
 Redis is an in-memory database, meaning all data is stored in RAM for fast access.
 The Redis server runs on a machine (your local machine, a remote server, or a cloud instance).
 When a client (e.g., a Node.js app) connects to Redis, it sends commands to the Redis server, which retrieves and returns the data from server RAM.
 The client does NOT store Redis data in its own RAM, only temporarily holding the data received from Redis.
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -96,12 +89,6 @@ return product;
 Redis is a **powerful** tool that improves **performance, scalability, and reliability** in modern applications. Whether you need **fast caching, real-time analytics, or distributed locking**, Redis is an excellent choice! 🚀
 
 
-
-
-
-
-
-
 =====================================================================
 
 
@@ -166,11 +153,11 @@ PONG
 ---
 
 ### **Redis as a Database vs Server**
-| Feature           | **Redis as a Server** | **Redis as a Database** |
-|------------------|----------------------|-------------------------|
-| **Purpose**      | Listens for client connections and executes commands. | Stores and retrieves key-value data. |
-| **Functionality** | Handles network requests from multiple clients. | Maintains in-memory data with optional persistence. |
-| **Persistence**  | Runs continuously as a background process. | Saves snapshots (RDB) or logs changes (AOF). |
+| Feature       | Redis as a Server                                     | Redis as a Database                                 |
+| ------------- | ----------------------------------------------------- | --------------------------------------------------- |
+| Purpose       | Listens for client connections and executes commands. | Stores and retrieves key-value data.                |
+| Functionality | Handles network requests from multiple clients.       | Maintains in-memory data with optional persistence. |
+| Persistence   | Runs continuously as a background process.            | Saves snapshots (RDB) or logs changes (AOF).        |
 
 ### **Final Thoughts**
 Yes, **Redis is a server**, but it is also an **in-memory database, cache, and message broker**. It acts as a **centralized storage system** that clients interact with over a network. 🚀
@@ -990,11 +977,11 @@ redis> ZREVRANGE players 0 3 WITHSCORES
 
 🔥 Redis Streams Explained 🔥
 ✅ What is Redis Streams?
-Redis Streams is a high-performance data structure that enables message queuing, real-time event processing, and data storage. It's similar to Kafka or RabbitMQ, but built inside Redis.
+Redis Streams is a high-performance data structure that enables message queuing, real-time event processing, and data storage. 
+It's similar to Kafka or RabbitMQ, but built inside Redis.
 .
 
 💡 Think of it as a log-based message broker, where producers add messages, and consumers read them asynchronously.
-
 
 
 🎯 Key Features of Redis Streams

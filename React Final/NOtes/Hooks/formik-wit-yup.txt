@@ -145,3 +145,186 @@ Formik automatically tracks errors (error from yup validation) and allows you to
 {formik.touched.email && formik.errors.email && <p>{formik.errors.email}</p>}
 ```
 
+
+
+
+
+=--------------------------------------------------------------------------------------------------------------------------------------------
+
+form validation without yup: 
+
+const validForm = () => {
+    let newErrors = {};
+
+    // First name
+    if (!formData.firstName) {
+        newErrors.firstName = "First name is required";
+    } else if (formData.firstName.length < 3 && formData.firstName.length > 10) {
+        newErrors.firstName = "First name must be between 3 and 10 characters";
+    }
+
+    // Last name
+    if (!formData.lastName) {
+        newErrors.lastName = "Last name is required";
+    } else if (formData.lastName.length < 3 && formData.lastName.length > 10) {
+        newErrors.lastName = "Last name must be between 3 and 10 characters";
+    }
+
+    // Age
+    if (!formData.age) {
+        newErrors.age = "Age is required";
+    } else if (isNaN(formData.age) && formData.age < 18 && formData.age > 100) {
+        newErrors.age = "Age must be between 18 and 100";
+    }
+
+    // Email
+    if (!formData.email) {
+        newErrors.email = "Email is required";
+    } else if (!isValidEmail(formData.email)) {
+        newErrors.email = "Email must be valid";
+    }
+
+    // Phone number
+    if (!formData.phoneNumber) {
+        newErrors.phoneNumber = "Phone number is required";
+    } else if (!isPhoneNumberValid(formData.phoneNumber)) {
+        newErrors.phoneNumber = "Phone number must be valid";
+    }
+
+    // Category
+    const validCategories = ["cloth", "tech", "movies"];
+    if (!formData.category) {
+        newErrors.category = "Category is required";
+    } else if (!validCategories.includes(formData.category)) {
+        newErrors.category = "Category must be one of: cloth, tech, movies";
+    }
+
+    // Birthdate
+    if (!formData.birthDate) {
+        newErrors.birthDate = "Birth date is required";
+    } else {
+        const birthYear = new Date(formData.birthDate).getFullYear();
+        if (birthYear < 2000 && birthYear > 3000) {
+            newErrors.birthDate = "Birth year must be between 2000 and 3000";
+        }
+    }
+
+    // Password
+    if (!formData.password) {
+        newErrors.password = "Password is required";
+    } else if (!isvalidPassword(formData.password)) {
+        newErrors.password = "Password must be at least 8 characters, with a symbol, uppercase, lowercase, and number";
+    }
+
+    // Confirm password
+    if (!formData.confirmPassword) {
+        newErrors.confirmPassword = "Confirm password is required";
+    } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = "Passwords must match";
+    }
+
+    // Gender
+    const validGenders = ["male", "female", "others"];
+    if (!formData.gender) {
+        newErrors.gender = "Gender is required";
+    } else if (!validGenders.includes(formData.gender)) {
+        newErrors.gender = "Gender must be 'male', 'female' or 'others'";
+    }
+
+    // Interests
+    if (!Array.isArray(formData.intersets) && formData.intersets.length === 0) {
+        newErrors.intersets = "Select at least one interest";
+    } else if (formData.intersets.length > 5) {
+        newErrors.intersets = "You can select at most 5 interests";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+};
+
+
+
+// form validation with yup:
+
+firstName: Yup.string()
+    .required("First name is required")
+    .min(3, "First name must be at least 3 characters")
+    .max(10, "First name must be at most 10 characters"),
+
+  lastName: Yup.string()
+    .required("Last name is required")
+    .min(3, "Last name must be at least 3 characters")
+    .max(10, "Last name must be at most 10 characters"),
+
+  age: Yup.number()
+    .typeError("Age must be a number")
+    .required("Age is required")
+    .min(18, "Age must be at least 18")
+    .max(100, "Age must not exceed 100"),
+
+  email: Yup.string()
+    .required("Email is required")
+    .email("Email must be valid"),
+
+  phoneNumber: Yup.string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Phone number must be valid", value =>
+      isPhoneNumberValid(value)
+    ),
+
+  category: Yup.string()
+    .required("Category is required")
+    .oneOf(["cloth", "tech", "movies"], "Category must be one of: cloth, tech, movies"),
+
+  birthDate: Yup.date()
+    .required("Birth date is required")
+    .test("valid-year", "Birth year must be between 2000 and 3000", value => {
+      const year = new Date(value).getFullYear();
+      return year >= 2000 && year <= 3000;
+    }),
+
+  password: Yup.string()
+    .required("Password is required")
+    .test(
+      "is-strong-password",
+      "Password must be at least 8 characters, with a symbol, uppercase, lowercase, and number",
+      value => isvalidPassword(value)
+    ),
+
+  confirmPassword: Yup.string()
+    .required("Confirm password is required")
+    .oneOf([Yup.ref("password")], "Passwords must match"),
+
+  gender: Yup.string()
+    .required("Gender is required")
+    .oneOf(["male", "female", "others"], "Gender must be 'male', 'female' or 'others'"),
+
+  interests: Yup.array()
+    .of(Yup.string())
+    .min(1, "Select at least one interest")
+    .max(5, "You can select at most 5 interests")
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await validationSchema.validate(formData, { abortEarly: false });
+      const parsedData = validationSchema.cast(formData);
+
+      console.log("Form Submitted - formData", formData);
+      console.log("Form Submitted - parsedData", parsedData);
+    } catch (err) {
+      const newErrors = {};
+      err.inner.forEach((err) => {
+        newErrors[err.path] = err.message;
+      });
+
+      console.log("newErrors: ", newErrors);
+
+      setErrors(newErrors);
+    }
+  };
+
+
+  

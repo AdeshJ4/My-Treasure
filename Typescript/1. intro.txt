@@ -6,34 +6,55 @@ What is TypeScript?
 
 -> JavaScript is a dynamically typed language, which means the data type of a variable is determined at runtime, and we don't need to 
 explicitly declare the type of data a variable will hold. 
+
 This flexibility can sometimes lead to errors or unexpected behavior, as the type of data stored in a variable can change during execution. 
+
 To address this, TypeScript was introduced. TypeScript is a "statically typed superset of JavaScript" that adds optional type annotations 
 and compile-time type checking, helping developers catch type-related errors early and write more predictable and maintainable code.
+
 -> when we say typescript is superset of javascript that means it has everything javascript have plus additional features of its own.
+
 -> Typescript is programming language created at microsoft and built on top of the js to address some shortcoming of javascript, 
 so every js file is valid ts file.
+
 -> we can think it like brother of js but with discipline .
+
 -> Typescript is javascript with "data type checking".
+
 -> with typescript we explicitly "set the type of variable" while the declarations.
+
 -> Then we pass our code to 'typescript compiler' and compiler will tell us if we are doing something wrong. so we can catch our 
 mistakes at compilation time.
+
 -> TypeScript is essentially JavaScript with "static typing" and some additional features that help us write more concise and robust 
 code.
+
+
 Static Typing: 
+
 In statically typed languages, variable types are determined at compile time, meaning the type of a variable is known before the 
-code is executed.Once a variable is declared with a specific type, it cannot hold values of any other type. This allows for early 
-detection of type errors, which can be caught by the compiler before the program is run.
+code is executed.
+Once a variable is declared with a specific type, it cannot hold values of any other type. 
+This allows for early detection of type errors, which can be caught by the compiler before the program is run.
 Examples of statically typed languages include Java, C, C++, and Swift
+
+
 Dynamic Typing:
+
 In dynamically typed languages, variable types are determined at runtime, meaning the type of a variable is checked as the 
-program is executed.Variables can hold values of any type, and their type can change over the course of the program's execution.
+program is executed.
+Variables can hold values of any type, and their type can change over the course of the program's execution.
 Examples of dynamically typed languages include Python, JavaScript, Ruby, and PHP.
+
+
+
 -> With TypeScript we can catch more bugs at compile time.
 -> We can use ts whenever we used js, like in frontend, backend.
 -> anything we do with js we can do with ts.
 -> Typescript: Medium to large projects
 -> Javascript: Simple projects
--> To check version of typescript used this command : tsc -v
+-> To check version of typescript used this 
+ : tsc -v
 -> TypeScript is backward-compatible, meaning that code written in older versions will generally work in newer versions without issues.
 -. In TypeScript, we set the type of our variables by annotating them
 -> Typescript add some cool features in js: 
@@ -41,24 +62,6 @@ Examples of dynamically typed languages include Python, JavaScript, Ruby, and PH
 2. code completion
 3. Refactoring 
 4. Shorthand notations.
-
-
-Static Type: C++, C#, Java
--> we know the type of a variable at compile time or while coding.
-ex. int num = 10;  we can't set num to another type like string.
-
-Dynamic Type: Js, Python, Ruby
--> The type of variable is dynamic. so it determine at runtime, and it also can change.
-ex. let num = 10; num = 'a';  perfectly fine
-so this variable don't have fix or static type. the type can change at runtime.
-what if we passes the variable in Math.round(num) which expects the number.then our application may misbehave or crash.
-so don't know about this issue until we run our code or unit tests.
-so we have to test every function with various edge cases to catch this kind of bugs.
-and this is the problem the typescript is solving.
-
-
-let x: number = 10;
-x = 'a';  XXXXX
 
 
 
@@ -162,11 +165,12 @@ any:
 -> The "any" type is a special type in TypeScript that essentially disables type checking for a variable.
 -> When a variable is declared as "any", it can hold values of any type, and TypeScript will not enforce any type restrictions on it.
 
-index.ts:  // no error, successful compilation
+```
 let data: any = "Hello";
 data = 10;
 data = true;
 data = { name: "adesh"}
+```
 
 -> if we declare a variable and don't initialize it the typescript compiler assume this variable of type any.
 -> The any type can represent any kind of value. It’s something we should avoid as much as possible because it defeats the purpose of 
@@ -200,7 +204,7 @@ let numbers: Array<number> = [1, 2, 3];
 
 
 tuple: 
--> is fixed length array where each element has a particular type.
+-> is "fixed length array" where each element has a particular type.
 -> for better practice store only two values inside a tuple like key value pair.
 let arr : [number, string] = [1, 'Adesh']; // if you try to add 3rd value then it will give you error.
 -> Internally tuple represent by plain javascript arrays.
@@ -493,19 +497,13 @@ Use type when:
 
 
 
-
-
-
-
-
-
 ======================================================================================================================================
 
 Union Types:
 ============
 
--> In TypeScript, Union Types allow a variable, parameter, or return type to hold multiple types. This is useful 
-when a value can be of more than one type.
+-> In TypeScript, Union Types allow a variable, parameter, or return type to hold multiple types. 
+This is useful when a value can be of more than one type.
 -> A union type is created using the | (pipe) operator: 
 ex: let value: string | number;
 Here, value can be either a string or a number.

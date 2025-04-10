@@ -266,14 +266,14 @@ Users in Database:
 ]
 ### **What Happens When You Search?**  
 
-| 🔍 Search Query (`?name=...`) | 🔎 Matching Users |
-|------------------------------|------------------|
-| `/users?name=Adesh`          | ✅ Adesh Kumar, adesh sharma, Radha Adeshwari |
-| `/users?name=adesh`          | ✅ Same as above (case-insensitive) |
-| `/users?name=sharma`         | ✅ adesh sharma |
-| `/users?name=ADEL`           | ✅ ADELAIDE |
-| `/users?name=suresh`         | ✅ Suresh |
-| `/users?name=xyz`            | ❌ No matches |  
+| 🔍 Search Query (`?name=...`) | 🔎 Matching Users                            |
+| ----------------------------- | -------------------------------------------- |
+| `/users?name=Adesh`           | ✅ Adesh Kumar, adesh sharma, Radha Adeshwari |
+| `/users?name=adesh`           | ✅ Same as above (case-insensitive)           |
+| `/users?name=sharma`          | ✅ adesh sharma                               |
+| `/users?name=ADEL`            | ✅ ADELAIDE                                   |
+| `/users?name=suresh`          | ✅ Suresh                                     |
+| `/users?name=xyz`             | ❌ No matches                                 |
 
 
 

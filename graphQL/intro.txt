@@ -1,20 +1,96 @@
+Here are some **popular GraphQL interview questions** categorized by difficulty:
+
+### **Basic Questions**
+1. What is GraphQL, and how does it differ from REST?
+2. What are the main benefits of using GraphQL?
+3. What is the structure of a GraphQL query?
+4. Explain the difference between queries, mutations, and subscriptions in GraphQL.
+5. What is a resolver in GraphQL?
+6. How do you define a GraphQL schema?
+7. What is the difference between scalar types and object types in GraphQL?
+8. How does GraphQL handle versioning compared to REST?
+
+### **Intermediate Questions**
+9. What is the purpose of the `@deprecated` directive in GraphQL?
+10. How do you implement authentication and authorization in GraphQL?
+11. How can you handle error handling in GraphQL?
+12. What is GraphQL introspection, and how is it useful?
+13. How does GraphQL handle over-fetching and under-fetching problems?
+14. What are fragments in GraphQL, and how are they useful?
+15. What is the difference between `GraphQLSchema` and `GraphQLObjectType`?
+16. How do you paginate data in GraphQL?
+17. How can you batch multiple GraphQL queries to reduce network requests?
+
+### **Advanced Questions**
+18. What is the N+1 problem in GraphQL, and how do you solve it?
+19. How can you implement caching in GraphQL?
+20. How do you handle file uploads in GraphQL?
+21. What is Apollo Federation, and how does it help in microservices architecture?
+22. How do you implement real-time updates with GraphQL subscriptions?
+23. How can you optimize the performance of a GraphQL API?
+24. Explain schema stitching and how it compares to Apollo Federation.
+25. What are GraphQL Directives, and how can they be used?
+26. How can you secure a GraphQL API against common vulnerabilities?
+27. What is DataLoader, and how does it help in optimizing GraphQL performance?
+
+Would you like a detailed explanation of any of these questions?
+
+
+
+
+
+
+
+
+
+
+
+
+
 1️⃣ What is GraphQL, and how does it differ from REST?
 
 👉 GraphQL is a "query language for APIs" that allows clients to request exactly the data they need, reducing "over-fetching" and "under-fetching" of data.
-GraphQL is used on both the client and backend
 
-Differences from REST:
-Flexible Data Fetching – Clients specify the exact fields they need, unlike REST, where fixed endpoints return predefined data.
+👉 GraphQL is used on both the client and backend
 
-Single Endpoint – GraphQL typically uses a single "/graphql" endpoint, whereas REST has multiple endpoints for different resources.
+👉 Apollo Server (@apollo/server), Express-GraphQL, and Mercurius are different "GraphQL servers" implementations that provide ways to set up and run a GraphQL API.
+Each of these libraries helps handle GraphQL queries, mutations, and subscriptions, but they have different architectures and features. 
 
-Efficient Data Fetching – Fetch multiple related resources in a single request, avoiding multiple API calls in REST.
 
-Strongly Typed Schema – GraphQL uses a "schema" to define the structure of API responses, while REST relies on standard JSON responses.
+🟠 What is a GraphQL Server?
+👉 when you say "GraphQL server", you are referring to a backend service that implements the GraphQL specification and processes GraphQL queries
+👉 A GraphQL server is a part of your Node.js backend, not separate from it.
+👉 If you are using @apollo/server, your GraphQL server runs inside your Node.js application and directly handles API requests.
 
-Backend Agnostic – Works with any database or programming language, making it highly adaptable.
 
-No Over-fetching/Under-fetching – REST responses may include unnecessary data (Over-fetching) or require multiple requests(Under-fetching), while GraphQL delivers only 
+🟠 GraphQL vs. GraphQL Server
+
+GraphQL: Just a specification (like SQL is for databases).
+GraphQL Server: A backend implementation that follows the GraphQL specification.
+
+🟠 Examples of GraphQL Servers
+
+👉 Apollo Server (@apollo/server)
+👉 Express-GraphQL
+👉 Mercurius (Fastify-based)
+👉 Hasura (Auto-generates GraphQL APIs for databases)
+👉 GraphQL Yoga (Lightweight GraphQL server for any JS framework)
+
+
+
+🟠 Differences from REST:
+
+👉 Flexible Data Fetching – Clients specify the exact fields they need, unlike REST, where fixed endpoints return predefined data.
+
+👉 Single Endpoint – GraphQL typically uses a single "/graphql" endpoint, whereas REST has multiple endpoints for different resources.
+
+👉 Efficient Data Fetching – Fetch multiple related resources in a single request, avoiding multiple API calls in REST.
+
+👉 Strongly Typed Schema – GraphQL uses a "schema" to define the structure of API responses, while REST relies on standard JSON responses.
+
+👉 Backend Agnostic – Works with any database or programming language, making it highly adaptable.
+
+👉 No Over-fetching/Under-fetching – REST responses may include unnecessary data (Over-fetching) or require multiple requests(Under-fetching), while GraphQL delivers only 
 what's requested.
 
 Under-fetching happens when a REST API doesn't return enough data in a single request, forcing the client to make multiple API calls to gather all the required information.
@@ -58,69 +134,89 @@ GraphQL: Fetch exactly what you need in one request.
 ✅ GraphQL is used on both the client and backend! 🚀
 
 🔹 GraphQL on the Backend
+📌 The backend defines the GraphQL schema and resolves queries.
+It uses GraphQL servers like Apollo Server, Express-GraphQL, or Mercurius.
+The GraphQL resolver functions fetch data from databases or APIs.
 
-👉 The backend defines the GraphQL schema and resolves queries.
-// Define GraphQL Schema
-const typeDefs = `#graphql
+Example: Backend (Node.js with Apollo Server)
+```
+const { ApolloServer, gql } = require('apollo-server');
+
+const typeDefs = gql`
   type Movie {
     id: ID!
     title: String!
     director: String!
-    releaseYear: Int!
   }
 
   type Query {
-    movies: [Movie]
     movie(id: ID!): Movie
-  }
-
-  type Mutation {
-    addMovie(title: String!, director: String!, releaseYear: Int!): Movie
-    updateMovie(id: ID!, title: String, director: String, releaseYear: Int): Movie
-    deleteMovie(id: ID!): String
   }
 `;
 
-
-👉 It uses GraphQL servers like Apollo Server, Express-GraphQL, or Mercurius.
-Apollo Server, Express-GraphQL, and Mercurius are different "GraphQL server" implementations that provide ways to set up and run a GraphQL API
-Each of these libraries helps handle GraphQL queries, mutations, and subscriptions, but they have different architectures and features.
-
-
-
-👉 The GraphQL resolver functions fetch data from databases or APIs.
-ex: 
 const resolvers = {
   Query: {
-    getMovies: async () => await Movie.find(),   // database
-  },
-  Mutation: {
-    addMovie: async (_, { title, director, releaseYear }) => {
-      const movie = new Movie({ title, director, releaseYear });
-      return await movie.save();
-    }
-  },
+    movie: (_, { id }) => ({ id, title: "Inception", director: "Christopher Nolan" })
+  }
 };
 
-from api: 
-    resolvers: {
-      Query: {
-        user: async (todo) =>
-          (await axios.get(`https://jsonplaceholder.typicode.com/users/${todo.userId}`))
-            .data,
-      }
+const server = new ApolloServer({ typeDefs, resolvers });
+server.listen().then(({ url }) => console.log(`🚀 Server ready at ${url}`));
+```
+
+
+🔹 GraphQL on the Client
+📌 The client sends GraphQL queries to the backend.
+Uses GraphQL client libraries like Apollo Client, Relay, or urql.
+Fetches only the required data.
+
+Example: Client (React with Apollo Client)
+```
+import { gql, useQuery } from '@apollo/client';
+
+const GET_MOVIE = gql`
+  query GetMovie($id: ID!) {
+    movie(id: $id) {
+      title
+      director
     }
+  }
+`;
+
+function MovieDetails({ id }) {
+  const { loading, error, data } = useQuery(GET_MOVIE, { variables: { id } });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return <h1>{data.movie.title} - Directed by {data.movie.director}</h1>;
+}
+```
+
+
+============================================================================================================================================================
+
+❓ How do you define a GraphQL schema?
+
+👉 In GraphQL, the schema defines the structure of your API, specifying types, queries, mutations, and subscriptions.
+
+📌 Schema = Blueprint of your GraphQL API
+
+type Movie {
+  id: ID!
+  title: String!
+  director: String!
+  releaseYear: Int!
+  genre: String!
+  rating: Float
+}
 
 
 
 
 ============================================================================================================================================================
 
-
-
-
 ❓ Explain the difference between "queries", "mutations", and "subscriptions" in GraphQL.
-
 
 1️⃣ Queries – Fetch Data
 
@@ -129,12 +225,10 @@ Used to retrieve data without modifying it.
 Clients can request specific fields.
 
 Example:
-query {
-  movie(id: "123") {
-    title
-    genre
-  }
-}
+  Query: {
+    movies: async () => await Movie.find(),
+    movie: async (_, { id }) => await Movie.findById(id),
+  },
 
 
 
@@ -145,12 +239,23 @@ Used to create, update, or delete data.
 Can return updated data after execution.
 
 Example:
-mutation {
-  addMovie(title: "Inception", genre: "Sci-Fi") {
-    id
-    title
-  }
-}
+Mutation: {
+    addMovie: async (_, { title, director, releaseYear }) => {
+      const movie = new Movie({ title, director, releaseYear });
+      return await movie.save();
+    },
+    updateMovie: async (_, { id, title, director, releaseYear }) => {
+      return await Movie.findByIdAndUpdate(
+        id,
+        { title, director, releaseYear },
+        { new: true }
+      );
+    },
+    deleteMovie: async (_, { id }) => {
+      await Movie.findByIdAndDelete(id);
+      return "Movie deleted successfully";
+    },
+  },
 
 
 3️⃣ Subscriptions – Real-time Updates
@@ -159,7 +264,6 @@ Uses "WebSockets" to push real-time updates to clients.
 Clients stay connected and get notified when data changes.
 we can integrate GraphQL Subscriptions using WebSockets (graphql-ws).
 
-
 Example:
 subscription {
   movieAdded {
@@ -167,3 +271,54 @@ subscription {
     title
   }
 }
+
+
+4️⃣ Resolver : 
+
+A resolver is a function in GraphQL that handles fetching or modifying data for a specific field in a query, mutation, or subscription. 
+It acts as the "bridge" between GraphQL and the database or API.
+GraphQL Processes the queries using a resolver function.
+Resolvers fetch data from a database, API, or other sources.
+The returned data is structured according to the GraphQL schema
+👉 The GraphQL resolver functions fetch data from databases or APIs.
+✔️ ex: from databases:
+const resolvers = {
+  Query: {
+    movies: async () => await Movie.find(),
+    movie: async (_, { id }) => await Movie.findById(id),
+  },
+  Mutation: {
+    addMovie: async (_, { title, director, releaseYear }) => {
+      const movie = new Movie({ title, director, releaseYear });
+      return await movie.save();
+    },
+    updateMovie: async (_, { id, title, director, releaseYear }) => {
+      return await Movie.findByIdAndUpdate(
+        id,
+        { title, director, releaseYear },
+        { new: true }
+      );
+    },
+    deleteMovie: async (_, { id }) => {
+      await Movie.findByIdAndDelete(id);
+      return "Movie deleted successfully";
+    },
+  },
+};
+
+✔️ ex: from api: 
+    resolvers: {
+      Todo: {
+        user: async (todo) =>
+          (await axios.get(`https://jsonplaceholder.typicode.com/users/${todo.userId}`))
+            .data,
+      },
+      Query: {
+        getTodos: async () =>
+          (await axios.get("https://jsonplaceholder.typicode.com/todos")).data,
+        getUsers: async () =>
+          (await axios.get("https://jsonplaceholder.typicode.com/users")).data,
+        getUser: async (parent, { id }) =>
+          (await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)).data,
+      },
+    },

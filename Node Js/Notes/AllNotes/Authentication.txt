@@ -1,3 +1,173 @@
+Here’s a list of **important HTTP status codes** commonly used in **Node.js** applications (especially REST APIs):
+
+---
+
+### ✅ **1xx – Informational**
+| Code | Meaning                  | Description                                  |
+|------|--------------------------|----------------------------------------------|
+| 100  | Continue                 | Initial part of request received; continue.  |
+
+---
+
+### ✅ **2xx – Success**
+| Code | Meaning                  | Description                                  |
+|------|--------------------------|----------------------------------------------|
+| 200  | OK                       | Successful request.                          |
+| 201  | Created                  | Resource successfully created.               |
+| 204  | No Content               | Success, but no content to return.           |
+
+
+✅ HTTP Status Code 204 – No Content
+📘 Meaning:
+The server successfully processed the request, but there's no content to send in the response.
+🔄 When to Use It:
+Scenario	                              Description
+✅ DELETE request	                    Resource was deleted, nothing else to return
+✅ PUT/PATCH request	                    Update was successful, no new content to send
+✅ Form submission (no page reload)	    Just want to signal success
+✅ Background actions	                When action succeeds but client doesn’t need data
+
+
+---
+
+
+### ⚠️ **3xx – Redirection**
+| Code | Meaning                  | Description                                  |
+|------|--------------------------|----------------------------------------------|
+| 301  | Moved Permanently        | Resource moved to a new URL permanently.     |
+| 302  | Found                    | Temporary redirect.                          |
+| 304  | Not Modified             | Use cached version.                          |
+
+
+🔁 301 – Moved Permanently
+Meaning: The requested resource has been permanently moved to a new URL.
+
+Usage:
+
+Typically used for SEO and URL redirection.
+Browsers and search engines will update bookmarks and indexes to the new location.
+
+```
+HTTP/1.1 301 Moved Permanently
+Location: https://new-url.com
+```
+
+
+🔁 302 – Found
+Meaning: The resource is temporarily located at a different URL.
+
+Usage:
+
+Often used when a resource has moved temporarily and may return to the original URL.
+The browser will redirect automatically to the URL specified in the Location header.
+Note: Originally intended for GET requests, but it can sometimes cause unexpected behavior with POST requests (use 307/308 instead in those cases).
+Example: Redirecting to a login page when the user is not authenticated.
+```
+HTTP/1.1 302 Found
+Location: https://temporary-redirect.com
+```
+
+
+🔁 304 – Not Modified
+Meaning: The resource has not changed since the last request. Use the cached version.
+
+The client (like your browser) makes a request with headers like:
+If-Modified-Since
+or If-None-Match (used with ETag)
+
+The server checks if the resource has changed:
+If it has changed, it sends back 200 OK with the new data.
+If it hasn’t changed, it sends back 304 Not Modified with no body, telling the client:
+“You already have the latest version in your cache — just use that.”
+
+
+
+
+---
+
+### ❌ **4xx – Client Errors**
+| Code | Meaning                  | Description                                  |
+|------|--------------------------|----------------------------------------------|
+| 400  | Bad Request              | Invalid request (missing/invalid params).    |
+| 401  | Unauthorized             | Authentication required.                     |
+| 403  | Forbidden                | Authenticated but not allowed.               |
+| 404  | Not Found                | Resource not found.                          |
+| 409  | Conflict                 | Conflict with existing resource (e.g., duplicate email). |
+| 422  | Unprocessable Entity     | Validation error (common with form data).    |
+| 429  | Too Many Requests        | The client has sent too many requests in a given amount of time (rate limiting).    |
+
+
+
+⚠️ 409 – Conflict
+Meaning: The request could not be completed due to a conflict with the current state of the resource.
+
+Usage:
+Commonly used when trying to create a resource that already exists, violating uniqueness constraints (e.g., duplicate email, username).
+Also used when two users attempt to update the same resource simultaneously, causing a versioning conflict.
+
+
+🔁 HTTP Status Code 429 – Too Many Requests
+✅ Meaning:
+The client has sent too many requests in a given amount of time (rate limiting).
+This status is used to protect the server from being overloaded by clients or bots.
+
+
+
+---
+
+### 💥 **5xx – Server Errors**
+| Code | Meaning                  | Description                                  |
+|------|--------------------------|----------------------------------------------|
+| 500  | Internal Server Error    | Generic server error.                        |
+| 502  | Bad Gateway              | Invalid response from upstream server.       |
+| 503  | Service Unavailable      | Server is down or overloaded.                |
+| 504  | Gateway Timeout          | Timeout from upstream server.                |
+
+
+💥 HTTP Status Code 500 – Internal Server Error
+📘 Meaning:
+The server encountered an unexpected condition that prevented it from fulfilling the request.
+It's a generic catch-all error when the server knows something went wrong, but isn’t sure what exactly or doesn't want to expose the internal details.
+
+
+🚧 502 – Bad Gateway
+Meaning: The server (acting as a gateway or proxy) received an invalid response from an upstream server.
+
+Usage:
+Happens in systems where there are multiple layers, like:
+Nginx → Node.js app
+Load balancer → Backend service
+If the backend crashes, times out, or returns a bad response, the gateway (e.g., Nginx) returns 502.
+
+
+🛑 503 – Service Unavailable
+Meaning: The server is temporarily unavailable due to being down, overloaded, or under maintenance.
+
+Usage:
+
+Indicates that the server cannot handle the request right now, but it might become available later.
+
+Often includes a Retry-After header to tell the client when to try again.
+
+Example: During server maintenance, or when a server is overloaded with too many requests.
+```
+HTTP/1.1 503 Service Unavailable
+Retry-After: 120
+```
+This means: “Service is down. Try again in 120 seconds.”
+
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+
 We are going to provide some endpoints which will help the user to register themselves  and then login. 
 Once they login they can use access token and then with the help of that token they can manage their contacts.
 
@@ -39,7 +209,8 @@ Ex. token looks like this :
   "user": {
     "id": 1,
     "username": "Adesh",
-    "email": "adejad1234@gmail.com"
+    "email": "adejad1234@gmail.com",
+    "role: 'admin'  
   },
   "iat": 1678770655,
   "exp": 1678770955
@@ -53,9 +224,75 @@ HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload),your-256-bit
 -> The token is signed using a secret key that only the server knows, which ensures that the data cannot be tampered with or modified.
 This signature is created by combining the header and payload with the secret key using a cryptographic algorithm.
 
--> Once the token is created, it can be sent to the client and stored in a cookie or local storage. On subsequent requests, the 
-client can send the token back to the server in the HTTP headers to authenticate and authorize the user.
+-> Once the token is created, it can be sent to the client and stored in a cookie or local storage. 
+On subsequent requests, the client can send the token back to the server in the HTTP headers to authenticate and authorize the user.
 
+
+⭐ Here's how you can pass a JWT token from the client (React + Redux + Axios) to the server with each request.
+
+🔐 Best Practices:
+Never store JWTs in cookies without "HttpOnly + Secure flags".
+Use interceptors so you don’t repeat token logic everywhere.
+Handle 401/403 errors globally (like logout on token expiry).
+
+✅ 1. Store the JWT securely
+When the user logs in and you receive the token:
+Use localStorage or sessionStorage (less secure)
+```
+localStorage.setItem("token", res.data.token);
+```
+
+✅ 2. Setup Axios to include JWT in headers
+
+Option A: Add token manually on each request
+```
+const token = localStorage.getItem("token");
+axios.get("/api/customers", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+```
+
+Option B: Use Axios Interceptors (recommended with Redux)
+This is cleaner and ensures all requests automatically carry the token.
+```
+import axios from "axios";
+const instance = axios.create({
+  baseURL: "https://your-api-url.com/api",
+});
+
+instance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default instance;
+```
+
+Then use this instance everywhere in your Redux thunks or components:
+```
+import axios from "../utils/axios"; // your custom instance
+export const fetchUser = createAsyncThunk("user/fetch", async () => {
+  const res = await axios.get("/user/me");
+  return res.data;
+});
+```
+
+Note: The "config" here is not a file — it's an "object" representing the "HTTP request" that Axios is about to send.
+
+🔍 What is config?
+It’s the Axios request configuration object. It includes:
+
+url
+method (GET, POST, etc.)
+headers
+data (for POST/PUT)
+params (for query strings)
+You can modify this config before the request goes out — for example, to add headers like a JWT token.
 
 
 
@@ -143,9 +380,7 @@ Cookies are another common way to handle tokens, especially for session-based au
 
 How It Works:
 The backend sets the token in an HttpOnly cookie when the user logs in.
-
 The frontend automatically includes the cookie in subsequent requests.
-
 The backend reads the token from the cookie.
 
 Example: 
@@ -270,16 +505,74 @@ Session-based authentication is a traditional method where the server maintains 
 How It Works:
 
 Login:
-The user sends their credentials (e.g., username and password) to the server.
-The server verifies the credentials and creates a session for the user.
-The session ID is stored in the server's memory or database and sent to the client as a cookie.
+1. The user sends their credentials (e.g., username and password) to the server.
+2. The server verifies the credentials and creates a session for the user by Creates a session object and Stores it in memory/database.
+ex: 
+```
+session object (e.g., { userId: 123 })
+session ID, like sid=abc123xyz
+````
+3. The session ID is stored in the server's memory or database and sent to the client as a cookie.
+Typically in memory, Redis, or a DB:
+{
+  abc123xyz: { userId: 123, role: 'admin' }
+}
+4. Server sends back session ID in a cookie
+```
+Set-Cookie: connect.sid=abc123xyz; Path=/; HttpOnly
+```
+
+
 
 Subsequent Requests:
 The client sends the session ID (cookie) with every request.
+```
+Cookie: connect.sid=abc123xyz
+```
 The server cheks the session ID to authenticate the user.
 
 Logout:
 The server destroys the session, and the client deletes the cookie.
+
+
+🔑 What is a Session ID?
+A Session ID is a unique identifier that the server assigns to a user when they log in (or interact with the app for the first time). 
+It's like giving each user their own ticket number so the server knows who they are on future requests.
+
+
+
+🔒 Session ID Example (Express + express-session)
+When you use this:
+```
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: false,
+}));
+```
+
+The middleware:
+
+Generates a session ID (like s%3Af9sW...)
+Sends it to the browser as a cookie: connect.sid
+Stores session data on the server in memory
+
+✅ Purpose of "secret" key in session ():
+This secret is used to sign the session ID cookie (connect.sid).
+It ensures the session ID can't be tampered with on the client side.
+So if someone tries to modify the cookie, the server can detect that it's invalid or fake.
+
+
+
+
+🔐 Is it Secure?
+
+HttpOnly: Prevents JavaScript from reading the cookie
+Secure: Ensures it’s only sent over HTTPS
+Signed: So clients can’t tamper with it
+If someone steals the session ID, they can hijack your session — so always use HTTPS + proper cookie settings.
+
+
 
 
 
@@ -445,34 +738,150 @@ Security: Tokens must be securely stored on the client side to prevent theft.
 
 
 
+
+
+============================================================================================================================================================
+
+
+
+## 🔐 Token-Based Auth vs Session-Based Auth
+
+| ------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Feature                        | Session-Based Authentication                                | Token-Based Authentication (JWT)                                        |
+| ------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Used in SPA / Mobile apps?     | Not ideal for mobile apps / SPAs                            | Perfect for SPAs and mobile apps                                        |
+| Where is data stored?          | On the server (in-memory, Redis, or DB)                     | On the client (in a token, typically stored in localStorage or cookies) |
+| How is user identified?        | Via a session ID cookie (`connect.sid`)                     | Via a token (usually JWT) sent with each request                        |
+| Authentication state stored?   | Server-side                                                 | Client-side (token holds the user info and auth state)                  |
+| Scalable?                      | Less scalable (server has to manage sessions for all users) | More scalable (no session tracking on server)                           |
+| **Logout (token invalidation)? | Easy: server just deletes the session                       | Hard: must manage blacklist or change secret                            |
+| Requires cookie?               | Yes (stores session ID)                                     | No, token is often sent in headers (but can use cookie too)             |
+| Cross-Origin (CORS)?           | Trickier (cookie-based needs `withCredentials`)             | Easier (token sent in headers)                                          |
+| Security                       | Safer from XSS (if HttpOnly cookies used)                   | Safer from CSRF (if token is in header, not cookie)                     |
+| ------------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------- |
+
+
+
+
+
+
+============================================================================================================================================================
+
+
+
 3️⃣. OAuth (Open Authorization)
-OAuth is a protocol that allows third-party applications to access user data without exposing their credentials.
+OAuth is a protocol that allows third-party applications(Movify, vidly) to access user data of OAuth provider (facebook data) without exposing their 
+credentials (username, passwords).
+
+Example: You use your Google account to log into another website like Medium, Spotify, or a to-do app.
+
+OAuth is primarily used for login purposes (Login with Google)
 
 How It Works:
 
-Authorization Request:
-The client redirects the user to the OAuth provider (e.g., Google, Facebook).
-The user logs in and grants permission to the client.
-
-Authorization Grant:
-The OAuth provider sends an authorization code to the client.
-
-Token Exchange:
-The client exchanges the authorization code for an access token.
-
-Access Resource:
-The client uses the access token to access the user's resources.
+register your application with OAuth provider.
 
 
-Pros:
-Security: No need to share user credentials with third-party apps.
-Standardized: Widely supported by major platforms (e.g., Google, Facebook).
+1. 🔑 Add Multiple OAuth Providers
 
-Cons:
-Complexity: More complex to implement than session or token-based authentication.
-Overhead: Requires additional requests for token exchange.
+if you're using Google OAuth, the user must have a Google account.
 
 
+You can support:
+
+Google
+Facebook
+GitHub
+Twitter
+Apple
+Microsoft
+
+
+Most Popular OAuth Packages
+1. Passport.js (Most flexible)
+The gold standard for authentication in Node.js
+Works with any OAuth provider (Google, Facebook, GitHub, etc.)
+passport + provider-specific strategy (e.g., passport-google-oauth20)
+
+2. Firebase Auth (Easiest implementation)
+Handles all OAuth flows for you
+Provides SDKs for React and Node.js
+firebase package
+
+3. NextAuth.js (Great if using Next.js)
+Simplified OAuth implementation
+
+
+
+
+
+
+"Providing access to someone without exposing a password"
+→ This is exactly what OAuth does. It uses access tokens instead of sharing login credentials like a password.
+
+"Create an account in one application and use it in multiple applications without creating a password in those applications"
+→ This describes SSO (Single Sign-On) using OAuth or OpenID Connect. 
+You log in once via a central identity provider (e.g., Google, Facebook, Auth0), and use that identity to access other applications
+ without registering separately or managing separate passwords.
+
+OAuth is providing someone access without password , it is an open standard for authorization which aloow an third party 
+application to go to an unauthorization provider on you behalf and get your data from their
+
+You click "Sign in with Google" on a website (let's call it ExampleApp)
+ExampleApp redirects you to Google's authorization page
+
+Google shows a page asking: "ExampleApp wants to access your Google account"
+It lists what information ExampleApp wants (e.g., your email, profile picture)
+
+
+You review the permissions requested
+You click "Allow" to grant access
+
+
+Google sends an "authorization code" back to ExampleApp.
+After you click "Allow" on Google's consent page, Google needs to send a temporary authorization code back to ExampleApp.
+Google sends your browser to a special URL at ExampleApp, like:
+https://exampleapp.com/auth/google/callback?code=A1B2C3D4E5...
+(This code is the authorization code)
+Your browser loads this URL, and the ExampleApp server sees the code in the address bar and extracts it.
+
+ExampleApp exchanges this code with Google for an access token (behind the scenes)
+Now, ExampleApp has the temporary code, but it needs a real access token to get your profile data. This happens behind the scenes between servers.
+ExampleApp’s server sends a secret request to Google’s server (to a special Google API endpoint).
+The request includes:
+The temporary code (A1B2C3D4E5...)
+ExampleApp’s client ID (like an ID card proving who they are)
+ExampleApp’s client secret (a password only they know)
+Google checks:
+Is the code valid?
+Does the client ID and client secret match what Google has on file?
+If everything is correct, Google sends back an access_token (like a special key) to ExampleApp’s server.
+Now, ExampleApp can use this access_token to ask Google for your email/profile (in the next step).
+
+The client secret is private—it can’t be exposed in the browser.
+Google needs to verify that only ExampleApp (not a hacker) can exchange the code.
+
+ExampleApp checks if your email exists in their database:
+If yes: logs you in
+If no: creates a new account using your Google profile info, then logs you in
+
+
+ExampleApp creates a session in your browser
+You're now logged in and redirected to the main application
+
+
+✅ Benefits of OAuth Login/Registration
+🟢 No need to remember another password
+🟢 Faster sign-up process (no forms to fill)
+🟢 More secure (website never sees your actual Google/Facebook password)
+🟢 Trusted by users (they recognize the provider's login page)
+🟢 Most modern websites implement OAuth alongside traditional login to give users both options.
+
+
+
+
+
+============================================================================================================================================================
 
 
 
@@ -530,8 +939,11 @@ tampered because doing so requires re-generating the digital signature.
 client. We store this token on the client and send it to the server every time we 
 need to call an API endpoint that is only accessible to authenticated users.
 -To generate JSON Web Tokens in an Express app use jsonwebtoken package.
+jwt.sign(user data, JwtKey, exprriIn)
+jwt.verify(token, jwtKey)
 
-
+becryptjs.hash(pwd, salt)
+bcryptjs.compare(pwd, user.pwd)
 
 
 
@@ -565,13 +977,14 @@ const hashedPassword = await bcrypt.hash(password, salt);
 
 
 Comparing Hashes:
-When a user logs in, you need to verify that the password they entered matches the hashed password stored in your database. However, since the hash is one-way, you 
-can't simply "reverse" the hash to compare the original passwords. Instead, you use the "bcrypt.compare" function to perform the comparison.
+When a user logs in, you need to verify that the password they entered matches the hashed password stored in your database. 
+However, since the hash is one-way, you  can't simply "reverse" the hash to compare the original passwords. 
+Instead, you use the "bcrypt.compare" function to perform the comparison.
 
 Here's how it works:
-1. User Enters Password: When the user logs in, they provide their password.
-2. Retrieve Hashed Password: You retrieve the hashed password from your database for that user.
-3. Re-hash the Entered Password: The bcrypt.compare function takes the plaintext password entered by the user and re-hashes it using the same salt that was used to create 
+1. User Enters Password.
+2. You get stored hashed password from your database for that user.
+3. The bcrypt.compare function takes the plaintext password entered by the user and re-hashes it using the same salt that was used to create 
 the original hash. This is possible because the salt is stored as part of the hashed password string in the database.
 4. Compare Hashes: The function then compares the newly generated hash with the stored hash. If they match, it means the entered password is correct.
 

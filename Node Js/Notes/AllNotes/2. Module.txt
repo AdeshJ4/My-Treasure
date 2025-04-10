@@ -355,8 +355,6 @@ Although it's part of the url module, you don’t need to require (require('url'
 👉 Use "new URL()" for new projects 🚀
 👉 Use "url.parse()" only if working with old Node.js versions (< v10.0)
 
-
-
 code: 
 
 ex.1: "new URL()" (Modern API)
@@ -482,7 +480,6 @@ console.log(path.format(pathObj)); // '/home/user/docs/file.txt'
 6. Events Module:
 =================
 
-👉 Events is core module.
 👉 The 'Events module' provides a way of 'working with events'.
 👉 Used to "create" and "handle" "custom events".
 👉 Implements an "event-driven architecture"
@@ -506,6 +503,36 @@ allows us to:
 
 🟠 The publisher (emitter) generates events.
 🟠 The subscriber (listener) waits for and responds to those events.
+
+
+
+❓ Event-Driven Architecture in Node.js:
+
+
+An event-driven architecture (EDA) is a design pattern where application components communicate via events instead of direct method calls. 
+In this model, events trigger specific handlers (listeners) that respond asynchronously.
+
+Event is basically a 'signal' that indicates something has happened in your application and you have to handle that event. 
+Like when a connection is made or a file is opened. Every action on a computer is an event. 
+
+Node.js is built on this event-driven, non-blocking architecture, making it highly efficient for handling multiple concurrent operations without creating multiple 
+threads.
+
+🔹 How Does Event-Driven Architecture Work in Node.js?
+
+Node.js uses an "Event Loop" and the "events module" to handle events.
+
+1. Event Emitter (Publisher-Subscriber Model)
+A publisher (emitter) generates an event.
+A subscriber (listener) waits for that event and executes a callback function when the event occurs.
+
+2. Event Loop
+Node.js listens for incoming requests and adds them to the Event Queue.
+The Event Loop processes them asynchronously, delegating I/O tasks (like database queries, file reads) to the system.
+
+3. Callbacks & Handlers
+Once an operation completes, a callback function executes to handle the response.
+
 
 
 Example 1: Creating & Handling Events with EventEmitter
@@ -603,12 +630,13 @@ It allows you to convert a query string into an object and vice versa.
 code: 
 ```
 const querystring = require('querystring');
+
+
 const queryString = 'name=John&age=30&city=NewYork';
 const parsedObj = querystring.parse(queryString);
 console.log(parsedObj);
 // Output: { name: 'John', age: '30', city: 'NewYork' }
 ```
-
 
 Converts an object into a query string:
 ```
@@ -672,15 +700,6 @@ console.log(hash); // Output: 'a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b5
 We need more CPU cores to handle 'multiple tasks at the same time' efficiently.
 A CPU core is like a brain inside the processor that handles tasks.
 
-Think of it Like a Kitchen:
-A single-core CPU is like one chef cooking everything alone.
-A multi-core CPU (e.g., 4 cores) is like 4 chefs working together, making food faster.
-
-What Does a CPU Core Do?
-✔ Executes instructions (running apps, calculations, tasks).
-✔ The more cores, the more tasks can run simultaneously (better multitasking).
-✔ Modern CPUs have multiple cores (dual-core, quad-core, octa-core, etc.) for better speed and efficiency.
-
 A CPU with 8 cores can handle 8 different tasks at the same time, making everything faster and smoother! 🚀
 
 
@@ -694,7 +713,13 @@ from the main process (master process).
 Definition: "Worker processes" are independent instances of a program running separately from the main process.
 Memory: Each worker process has its own memory space, meaning they do not share memory with the main process.
 Communication: Processes communicate via Inter-Process Communication (IPC), which can be slower due to data serialization/deserialization.
-Use Case: Useful for CPU-intensive tasks, process isolation (e.g., microservices), or handling multiple users independently.
+Use Case: 
+Best for improving server performance by leveraging multiple CPU cores.
+Creates multiple independent Node.js processes (one per CPU core).
+Ideal for HTTP servers (e.g., Express, Fastify) to handle more requests in parallel.
+Useful for  process isolation (e.g., microservices), or handling multiple users independently.
+
+
 
 
 
@@ -740,8 +765,6 @@ How Does Clustering Work? ⚙️
 
 
 🟠 Cluster Module in Node.js
-
-👉 Clustering and the Cluster Module are related but not exactly the same
 👉 Clustering (Concept), Cluster Module (Implementation)
 
 
@@ -881,6 +904,17 @@ When to Use worker_threads?
 ✔️ Running multiple tasks without blocking the main event loop
 ✔️ Handling large amounts of data in parallel
 
+🟠 When to Use worker_threads?
+👉 CPU-Intensive Use Cases for worker_threads:
+👉 Image/Video Processing (e.g., resizing, filtering).
+👉 Large Data Parsing (e.g., CSV/JSON processing).
+👉 Machine Learning/AI Models (e.g., TensorFlow.js).
+👉 Cryptography (e.g., hashing, encryption).
+
+
+
+
+
 ❌ Not needed for I/O operations (e.g., database calls, file system), as Node.js handles these asynchronously.
 ❌ Simple API Requests – Node.js is event-driven and handles async calls efficiently.
 
@@ -945,7 +979,7 @@ Now solve this problem like this :
 main-thread.js: 
 ```
 const http = require("http");
-const { Work } = require("node:worker_threads");
+const { Worker } = require("node:worker_threads");
 const server = http.createServer((req, res) => {
     if (req.url === "/") {
         res.writeHead(200, { "Content-Type": "text/plain" });
@@ -1308,6 +1342,9 @@ process.stdin.pipe(transformStream).pipe(process.stdout);
 
 
 ============================================================================================================================================================
+
+
+
 
 Buffer Module: 
 

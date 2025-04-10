@@ -1,0 +1,235 @@
+🌐 What is WebSocket?
+WebSocket is a protocol that allows full-duplex (two-way) communication between client and server over a single, long-lived TCP connection.
+
+✅ Two-way (bidirectional): Both client and server can send messages anytime.
+🔄 Real-time communication: No need to refresh or repeatedly request updates.
+⚡ Low latency & lightweight: Faster than HTTP polling or long-polling.
+📡 Persistent connection: One connection stays open as long as needed
+
+
+📦 Example Use Cases:
+
+Chat applications 💬
+Multiplayer games 🎮
+Real-time dashboards 📊
+Live trading apps 📈
+Collaborative tools (like Google Docs) 📝
+
+
+⚙️ How WebSocket Works (Step-by-Step):
+
+1. Client initiates a connection
+It starts with an HTTP request, but it includes a special header:
+
+```
+GET /chat HTTP/1.1
+Host: example.com
+Upgrade: websocket
+Connection: Upgrade
+```
+This is called a WebSocket handshake.
+
+
+
+
+
+2. Server accepts and upgrades
+if server want to make websocket connection then server responds with status code 101 (switching protocol response) like this:
+```
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+```
+🔄 Now the connection upgrades from HTTP to WebSocket.
+
+
+3. Bi-directional communication begins
+Both client and server can now send messages anytime.
+The connection stays open (until either side closes it).
+
+
+
+
+
+
+
+
+
+
+
+
+ek bar client and server ke beech connection establish ho gaya  to phir client and server kabhi bji ek dusre ko data send kar sakte hai.
+
+In fact websocket is bi-directional full duplex connection, jisme clent and server ek dusre ko kisi bhi time data send kar skate hai.
+
+
+server don't have to wait for the client to send any data. and client don't have to make new connection to send any data to server.
+
+
+we use websocket to build real time system. aise system ko build karne ke liye jisme bahut hi frequently data send karna hota hai and server 
+ko client ko send karna hota hai.
+
+
+ex: whatsapp, telegram, we don't want that again and again we have to request to check is there any new message, we want jaise hi naya message aa jaye vaise hi vo hamare inbox mai display ho jaye.
+ex: trading app.  isme data frequntly change hota rehta hai.
+open "https://www.wsj.com/market-data/stocks" and go inside network tab and select "ws" option and refresh the page.
+
+
+ex: multi-player games jisme hame real time data hona chahiye . 
+
+
+
+
+
+
+what is websocket and how they are diffenrt fronm http: 
+
+
+
+
+🌐 How an HTTP Request Works (Step-by-Step):
+
+1. TCP Connection
+The client (e.g., browser) opens a TCP connection to the server (usually on port 80 or 443).
+
+2. Request Sent
+The client sends an HTTP request (like GET or POST) to ask for data.
+
+3. Server Processes
+The server receives the request, processes it, and prepares a response (like HTML, JSON, etc.).
+
+4. Response Sent
+The server sends back the HTTP response.
+
+5. TCP Connection Closed
+By default (in HTTP/1.1), the TCP the connection is closed.
+again if you want something from server then you hjave to make req again.
+
+Note: In HTTP/2 and HTTP/3, connections are usually kept open longer and allow multiple requests/responses over the same connection 
+(multiplexing).
+
+
+🌐 HTTP Protocol – Key Points:
+
+1. Stateless
+Each request is independent.
+Server doesn’t remember previous requests.
+
+2. Unidirectional
+Communication is "client → server" only.
+Server can’t send data unless the client requests it.
+Client sends a request ➝ Server sends back a response.
+When we say HTTP is unidirectional, we mean:
+The client (e.g., browser) always initiates the communication.
+The server only responds — it cannot initiate a request on its own. The server's "response" is not a separate request — it's just part of 
+the same cycle started by the client.
+
+3. 🔄 What is Full Duplex?
+Full duplex means both sides (client and server) can send and receive data at the same time — simultaneously.
+
+
+
+
+
+3. Based on TCP/IP
+HTTP runs over TCP, which ensures reliable delivery.
+
+4. Uses Methods
+Like GET, POST, PUT, DELETE, etc. to perform actions.
+
+
+
+
+-> But problem arises when we talk about real time application like chatting app, tading app, where reasl time data required per sec, in 
+that case we can't send http req again and again. which is useless.
+
+
+-> Ese solve karne ke liye http ke andar there is somthing called "polling", 
+
+
+🔁 What is Polling in HTTP?
+
+Polling is a technique where the client repeatedly sends requests to the server to check if there’s any new data or updates.
+
+
+🧾 Types of Polling:
+
+1. Short Polling
+
+Client sends a request at regular intervals (e.g., every 5 seconds).
+Server responds immediately (even if no new data) because of this there is waste of resources.
+Easy to implement but can waste resources.
+
+2. Long Polling
+
+Client sends a request, and the server waits until new data is available before responding.
+If there's no data, the server holds the request open (up to a timeout).
+After response, the client sends another request.
+More efficient than short polling.
+
+
+so polling is not that good so we have abnother method call "Server Sent Events".
+
+📡 What are Server-Sent Events (SSE)?
+SSE is a way for the server to push real-time updates to the browser (client) over HTTP.
+
+🔄 How it works:
+Client sends a one-time request to the server.
+Server keeps the connection open.
+Server sends updates automatically whenever new data is available.
+Client receives updates without sending repeated requests.
+
+✅ Key Features:
+
+Works over HTTP.
+Only server → client (one-way).
+Used for live data like stock prices, notifications, etc.
+Built-in support in browsers using JavaScript:
+```
+const source = new EventSource('/events');
+source.onmessage = (e) => console.log(e.data);
+```
+
+❌ Limitations:
+Unidirectional (no client → server communication in the same connection).
+Not supported in older browsers or some non-browser clients.
+Better for simple real-time needs, not full duplex like WebSockets.
+
+
+✅ Where SSE is Used:
+
+1. Live Notifications
+In apps like email, chat, or admin dashboards
+Example: "You have a new message!" alert
+
+2. Live News or Sports Updates
+Real-time news tickers, match scores, or headlines without refreshing
+
+3. Stock Market or Crypto Price Feeds
+To push live price updates to trading dashboards
+
+4.Live Poll Results or Voting Systems
+Updates as people vote, without refreshing the page
+
+
+
+
+
+
+
+
+
+
+
+difference between http and web socket : 
+
+http: 
+ 👉 stateless
+ 👉 unidirectional
+ 👉 half duplex
+
+websocket: 
+ 👉 stateful
+ 👉 bi-directional
+ 👉 full duplex
+

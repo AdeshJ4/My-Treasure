@@ -1,55 +1,311 @@
+OOPS: 
 
-class and objects: 
--------------------
+1. class/objects
+2. Encapsulation
+3. Abstraction
+4. Inheritance
+5. Polymorphoism
 
--> Classes and Objects are reference types.
 
 
 
-Objects: 
 
--> The entire OOP methodology has been derived from a single root concept called 'object'. 
--> An object is anything that really exists in the world.
--> Objects are created on heap memory by JVM at run time.
-For example, a table, a ball, a car, a dog, a person, etc., every thing will come under objects. 
--> Then what is not an object? If something does not really exist, then it is not an object. For example, our thoughts, imagination, plans, ideas etc., are not objects, because they do not physically exist.
--> Every object has properties(variables) and can perform certain actions(methods). 
-For example, let us take a person whose name is 'Raju'. Raju is an object because he exists physically. He has properties like name, age, gender, etc. These properties can be represented by variables in our programming. 
-For example,
-String name;
-int age: 
-char gender: M/F
-Similarly, Raju can perform some actions like talking, walking, eating and sleeping. 
-These actions are performed by methods (functions). 
-So an object contains variables and methods.
+
+
+
+
+
+
 
 
 class: 
 
--> Collection of objects is called class. It is a logical entity.
--> A class is a blueprint or a template that defines the structure and behavior of objects.
--> It specifies the fields (data members) and methods (functions) that objects of the class will have.
--> When you create an object of a class, you are essentially instantiating that class.
--> Class doen't consume memory.
--> when we create a object of class than memory is assigned to a class 
-It is possible that some objects may have similar properties and actions. Such objects belong to same category called a 'class'. 
-For example, not only Raju, but also Ravi, Sita, Vijay, etc., persons have same properties and actions. So they are all objects of same class, 'Person'. Now observe that the 'Person' will not exist physically but only Raju, Ravi, Sita etc. exist physically.
-
--> a "building sketch" is class and real building is object. using that single sketch builder can build lots of buildings.
-
-class : Fruit
-Objects: banana, cherry, Apple
-
-class : Flower
-Objects: Lotus, Rose
-
-
-
-Person raju = new Person();
-
-Here raju is a variable of a class Person and stores reference number of a object returned by JVM.
+-> class is a model for creating objects.
+-> This means properties and actions of the objects are writeen in the class.
+-> properties are represented by variables and actions represented by methods.
+-> These variables are also called "instance variables" because they are created inside objects (instance)
+ex: if we take Person class, we can write the code in the class that specify the properties and actions performed by any persons.like pweron
+has properties like name, age , gender and can perform actions like talking, walking.
+-> We use keyword called "class" to define class.
+-> To use class we should create an object to the class.
+-> Object creation represent allocating memory necessory to store the actual data of the variable.
+-> "new" operator that creates the oject to Person class.
+-> "raju" (name of object) is a actually a variable of Person class. This variable store ther reference number of object returned by JVM after 
+creating the object.
+-> After creation of an object JVM produces a unique reference number for the object from the memory address of the object.
+-> This reference number also called "hash code number".
+-> The object reference (hash code) internally represent heap memory  where instance variable are stored.
+-> JVM will create an object to Person class on heap memory and return a unique referenc numberf the object.
+-> we define objects in class which has main() method. since JVM starts execution,  
+-> Initialization means storing the starting data.
 
 
+ex:
+Person p1 = new Person();
+System.out.println(p1.hashCode());
+
+
+
+public class Main {
+    String name;
+    int age;
+
+    public void talk(){
+        System.out.println("name: " + name + "\nage: " + age);
+    }
+
+    public static void main(String[] args){
+        Main p1 = new Main();
+        p1.name = "Raju";
+        p1.age = 22;
+
+        p1.talk();
+    } 
+}
+
+
+
+
+
+Access Specifier: 
+
+
+Access specifier is an keyword that specify how to access the memmbers of a class or a class itself.
+
+private: 
+private members of a class are not accessible any where outside a class . They are accessible only within the class by the methods of the class.
+
+public: 
+public members of a class are accessible everywhere outside and inside ofd a class 
+
+protected: 
+protected members of a class are Accessible Inside the same package.
+In subclasses (even if they’re in different packages)
+🟢 Same package = accessible
+🟢 Different package = accessible only in subclasses
+
+
+default: 
+
+If you don’t write any access modifier, it's default.
+Accessible only within the same package.
+🟢 Accessible from other classes in the same package
+🔴 Not accessible outside the package — even by subclasses
+
+
+we generally use private for instance variables and public for methods.
+In java class cannot be declared by using 'private'.
+
+
+Instance methods: 
+👉 Instance nemthhods are the mewtrhdops which acts on instance variabnle, they also have access rto static variables.
+
+class Person{
+    int x = 10;
+    static int y = 20;
+
+    public void display(){
+        sout(x + ' ' + y ) 
+    }
+}
+
+Static methods: 
+👉 Static methods are methods which access only static members because static methods executed beefore object creation so static methods 
+don't have access too instance variabnles.
+
+class Person{
+    static int x = 10;
+
+    static void access(){
+        sout(x)
+    }
+}
+
+
+
+
+❤️‍🩹 pass by value and pass by reference: 
+
+primitive data types, objects, every thing is passed to methods using "pass by value".
+============================================================================================================================================================
+
+
+Objects: 
+
+-> the entire OOPS methodology is derived from single root concept called "object".
+-> An object is anything that really exists in real world.
+-> Object conrtain variables and methods.
+-> Every object has propertiers and actions 
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+
+constructor: 
+
+-> A constructor is siimilar to a method that is used to initialzed the instance variable.
+-> The sole purpose of constructor is to initialze the instance variables.
+
+constructor name and class name should be same.
+a constructor may or may not have parameters.
+if constructor don't have parameters then its called default constructor.
+if it has one or more parameters then its called "parameterized constructor".
+constructor does not retuirn any value not even void.
+A constructor is automatically called and executed at the time of creating an obbject.
+A constructor is called and executed only once per second.
+you can have deault and parameterized constructore at the same time thats called "overloading", same name but differnt paramerter.
+ex:
+
+class Main{
+    String name;
+    int age;
+
+    Main() {
+        name = "raju";
+        age = 30;
+    }
+
+    Main(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+
+    public void display() {
+        System.out.println("name " + name + "\nage " + age);
+    }
+
+    public static void main(String[] args) {
+        Main m1 = new Main();
+        Main m2 = new Main("Adesh", 23);
+
+        m1.display();
+        m2.display();
+    }
+}
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+2️⃣. Encapsulation:
+
+👉 Encapsulation is a mechanism where data(variable)  and code (methods) that act on data  will bind together.
+ex. is class.
+
+👉 Encapsulation protects the inner implementation of the member(variables and methods) of the class from outside environment by 
+defining instance variables using private keyword so that they will not accessible outside the class  and methods by public
+so you can access those varibale through methods. so you can't overwrite data of insance variable, you just read not update.
+
+👉 Encapsulation isolates the member of the class from the members of the another class, so that we can't overwrite the data of variables.
+if two classes have same name, then according to encapsulation, each class will protects its own data members by preventing overwrite of ddata.
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+Abstraction: 
+
+
+->  Its a mechnism where we only expose necessory data to user/client/service instead of showing complete data which user/client/service
+don't want to see.
+
+ex: tv remote, we only have specific buttons not all things.
+ex. bank account
+
+public class Bank {
+    private int accno;
+    private String name;
+    private float balance;
+    private float loan;
+    private float profit;
+
+    // Abstraction
+    public void display_to_check(){
+        System.out.println(accno);
+        System.out.println(name);
+        System.out.println(balance);
+    }
+}
+
+
+
+============================================================================================================================================================
+
+
+
+Inheritance: 
+
+-> Inheritance is a core concept of OOPS where child class can inherit the properties and methods of parent class.
+-> Ita  a mechnism where we create a new classes from existing one so that new classes can have all the properties and methods of existing
+one so that new classes can override the inheritaed data or can create their own.
+👉 we use "extends" word.
+
+
+
+class Father {
+    private String name;
+    private int age;
+    public int assets = 500;
+
+
+    Father(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+    
+    
+    public void display(){
+        System.out.println("Father Name " + name);
+        System.out.println("Father Age " + age);
+    }
+}
+
+class Son extends Father{
+    private String name;
+    private int age;
+    public int assets = 100;
+
+    Son(String Sname, int Sage, String Fname, int Fage){
+        super(Fname, Fage);
+        this.name = Sname;
+        this.age = Sage;
+    }
+
+    public void display() {
+        super.display();
+        System.out.println("Son Name " + name);
+        System.out.println("Son Age " + age);
+        System.out.println("Son Assets : " + assets);
+        System.out.println("Father Assets: " + super.assets);  
+    }
+}
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        Son s1 = new Son("Adesh", 22, "Pramod", 53);
+        s1.display();
+    }
+}
+
+
+
+============================================================================================================================================================
 
 
 

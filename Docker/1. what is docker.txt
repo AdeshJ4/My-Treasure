@@ -29,6 +29,9 @@ One app needs Python 3.8, another needs Python 3.10 → No problem! Each runs in
 Example:
 A developer can build a Docker image locally and deploy it to AWS, Azure, or Google Cloud without modifications.
 
+🛑 5. Scaling Apps is Hard
+✅ Solution: Docker works with tools like Kubernetes to scale applications easily. You can quickly add or remove containers as traffic increases or decreases.
+
 🛑 4. Wasting Resources with Virtual Machines (VMs)
 ✅ Solution: Unlike VMs, "Docker shares the OS kernel", making it much lighter and faster.
 
@@ -44,8 +47,6 @@ A developer can build a Docker image locally and deploy it to AWS, Azure, or Goo
 Would you like me to format it differently or add more details? 🚀
 
 
-🛑 5. Scaling Apps is Hard
-✅ Solution: Docker works with tools like Kubernetes to scale applications easily. You can quickly add or remove containers as traffic increases or decreases.
 
 
 When Should You Use Docker?
@@ -84,8 +85,16 @@ Since Windows and Linux have different kernels, applications are not natively co
 Linux Host → Runs only Linux containers because they rely on the Linux kernel.
 Windows Host → Can run both Windows and Linux containers, but not at the same time.
 Windows uses a lightweight VM (via WSL 2) to run Linux containers.
+Docker Desktop automatically manages whether a container should run in WSL 2 or directly on Windows.
 macOS Host → Cannot run macOS containers (Apple does not support this).
 Instead, Docker on macOS runs Linux containers inside a lightweight Linux VM (using HyperKit).
+
+
+Windows can run both Windows and Linux containers using WSL 2 (Windows Subsystem for Linux 2) and Hyper-V:
+Windows Containers: Run directly on the Windows kernel using the Windows Host OS.
+Linux Containers: Run inside a lightweight Linux VM (provided by WSL 2 or Hyper-V) that contains a Linux kernel.
+
+Docker Desktop automatically manages whether a container should run in WSL 2 or directly on Windows.
 
 
 
@@ -213,7 +222,7 @@ For example, this Dockerfile:
 
 dockerfile
 ---
-FROM node:18
+FROM node:18-alpine
 WORKDIR /app
 COPY . .
 RUN npm install
@@ -451,7 +460,7 @@ Log in and view your repositories.
 
 6️⃣. Docker Compose:
 🚀 Docker Compose is a tool that allows you to define and manage multi-container Docker applications using a simple YAML file (docker-compose.yml). 
-Instead of running multiple docker run commands manually, Compose automates container creation, networking, and management.
+Instead of running multiple docker run commands manually,  .
 
 Why Use Docker Compose?
 ✅ Multiple Containers, One Command – Easily manage multi-container applications (e.g., frontend + backend + database).
@@ -621,13 +630,15 @@ services:
 ```
 
 ### Key Differences:
-| Feature | Dockerfile | Docker Compose (YAML) |
-|---------|-----------|----------------------|
-| **Purpose** | Builds a single **Docker image** | Manages **multiple containers/services** |
-| **Scope** | Defines how a container is **built** | Defines how containers **run and interact** |
-| **Command** | Used with `docker build` | Used with `docker-compose up` |
-| **Usage** | Creates an image for a single service | Defines multi-container applications (e.g., app + DB) |
-| **Dependencies** | Only the image setup, no service dependencies | Allows linking containers using `depends_on` |
+| ---------------- | --------------------------------------------- | ----------------------------------------------------- |
+| Feature          | Dockerfile                                    | Docker Compose (YAML)                                 |
+| ---------------- | --------------------------------------------- | ----------------------------------------------------- |
+| **Purpose**      | Builds a single **Docker image**              | Manages **multiple containers/services**              |
+| **Scope**        | Defines how a container is **built**          | Defines how containers **run and interact**           |
+| **Command**      | Used with `docker build`                      | Used with `docker-compose up`                         |
+| **Usage**        | Creates an image for a single service         | Defines multi-container applications (e.g., app + DB) |
+| **Dependencies** | Only the image setup, no service dependencies | Allows linking containers using `depends_on`          |
+| ---------------- | --------------------------------------------- | ----------------------------------------------------- |
 
 ### **How They Work Together**
 - A **Dockerfile** is used to build an image.
@@ -799,13 +810,15 @@ docker network ls
 ---
 
 
-| **Network Type**          | **Description**                                                                                     | **Use Case** |
-|---------------            |-----------------                                                                                    |-------------|
-| **Bridge (Default)**      | Containers can talk to each other **inside the same network** 
-| **Host**                  | Containers **share** the host machine's network, removing isolation. | When you need the container to behave like a native app on your system. |
-| **None**                  | The container has **no network** access. | Running isolated workloads without external communication. |
-| **Overlay**               | Used in **Docker Swarm** to connect containers across multiple machines. | Scaling applications across multiple servers. |
-| **Macvlan**               | Assigns **real IP addresses** to containers, making them act like physical devices on a network. | Running services that need their own unique IPs. |
+| ---------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Network Type     | Description                                                                                  | Use Case                                                                |
+| ---------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Bridge (Default) | Containers can talk to each other inside the same network                                    |                                                                         |
+| Host             | Containers share the host machine's network, removing isolation.                             | When you need the container to behave like a native app on your system. |
+| None             | The container has no network access.                                                         | Running isolated workloads without external communication.              |
+| Overlay          | Used in Docker Swarm to connect containers across multiple machines.                         | Scaling applications across multiple servers.                           |
+| Macvlan          | Assigns real IP addresses to containers, making them act like physical devices on a network. | Running services that need their own unique IPs.                        |
+| ---------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
 
 ---
 

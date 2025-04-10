@@ -1,0 +1,73 @@
+No worries! Here's a **simple step-by-step guide** to create a **Java project in VS Code**:
+
+---
+
+## ✅ 1. **Install Java & VS Code Extensions**
+
+### 🧩 Prerequisites:
+
+1. **Install JDK** (Java Development Kit)  
+   - Download from: [https://www.oracle.com/java/technologies/javase-downloads.html](https://www.oracle.com/java/technologies/javase-downloads.html)  
+   - After install, verify with:
+     ```bash
+     java -version
+     ```
+
+2. **Install VS Code**:  
+   [https://code.visualstudio.com](https://code.visualstudio.com)
+
+3. **Install Required Extensions in VS Code**:  
+   Open Extensions (`Ctrl + Shift + X`) and install:
+   - ✅ **Java Extension Pack** (includes all Java tools)
+
+---
+
+## 🛠️ 2. **Create a Java Project**
+
+### Option A: Using Command Palette (Easy way)
+
+1. Press `Ctrl + Shift + P`
+2. Type: `Java: Create Java Project`
+3. Select **"No build tools"** (or choose Maven/Gradle if you're advanced)
+4. Choose folder to save
+5. Name your project
+6. VS Code creates a `src` folder and basic structure
+
+---
+
+### Option B: Manually
+
+1. Create a folder for your project:
+   ```
+   MyJavaApp/
+   └── src/
+       └── Main.java
+   ```
+
+2. Inside `Main.java`, add:
+   ```java
+   public class Main {
+       public static void main(String[] args) {
+           System.out.println("Hello, Java in VS Code!");
+       }
+   }
+   ```
+
+---
+
+## ▶️ 3. **Run Your Java Program**
+
+1. Open `Main.java` in VS Code
+2. Click the **"Run" button** at the top
+   - or right-click inside the file → **Run Java**
+
+Alternatively, in terminal:
+```bash
+cd src
+javac Main.java
+java Main
+```
+
+---
+
+Let me know if you want to use **Maven**, **Gradle**, or connect it with a GUI like **JavaFX**!

@@ -1,3 +1,81 @@
+🔐 ACID stands for:
+
+A - Atomicity
+All or nothing: A transaction either completes fully or doesn't happen at all.
+Example: In a bank transfer, both debit and credit must succeed — or neither.
+
+
+C - Consistency
+
+Ensures the database stays in a valid state before and after the transaction.
+Consistency ensures rules are enforced automatically by the database or application logic — preventing corrupt data.
+Let’s say your bank requires that account balances never be negative.
+Now imagine a transaction where:
+A user tries to withdraw ₹10,000 from an account with only ₹5,000.
+If the transaction were processed without checking the balance, the account would become -₹5,000, violating the rule.
+
+❌ Without Consistency:
+
+UPDATE accounts SET balance = balance - 10000 WHERE id = 1;
+✅ With Consistency:
+
+IF (balance >= 10000) {
+  balance -= 10000;
+  // commit
+} else {
+  // reject
+}
+So, Consistency ensures this type of rule is enforced automatically by the database or application logic — preventing corrupt data.
+
+
+
+I - Isolation
+
+Isolation ensures that concurrent transactions do not interfere with each other, and each runs as if it were the only transaction running.
+🍕 Real-World Example (Ordering System):
+Imagine two customers placing an order for the last pizza in stock at the same time.
+Without proper isolation, both transactions might:
+Check stock → sees 1 pizza
+Place the order → both succeed
+Final stock = -1 ❌ (data corruption)
+This is known as a race condition.
+
+✅ With Isolation (e.g., using locks or isolation levels):
+Transaction A starts, locks the row, places the order, updates stock to 0, commits.
+Transaction B must wait for A to finish, then it sees stock = 0 and fails the order.
+Each transaction behaves as if executed one at a time, even though they’re parallel
+
+
+D - Durability
+Once committed, changes are permanent, even if the system crashes.
+
+
+
+✅ MongoDB does support ACID properties, but with some context
+
+
+🧩 MongoDB and ACID — in a nutshell:
+✅ Single Document Operations
+Always ACID-compliant.
+
+Even if the document is huge or deeply nested (subdocuments, arrays, etc).
+
+Because MongoDB treats each document as independent and atomic.
+
+✅ Multi-document Transactions (MongoDB 4.0+)
+From MongoDB 4.0 (for replica sets) and 4.2 (for sharded clusters), multi-document ACID transactions are supported.
+
+So you can now do:
+
+Atomic operations across multiple collections.
+
+Transactions similar to relational databases (like MySQL, PostgreSQL).
+
+
+
+
+
+
 
 -> It is possible after we executed 1st operation something may goes wrong. may be our server crashes or connection to mongoDB drop.
 -> then 2nd operation will not complete.
@@ -200,3 +278,49 @@ const deleteAuthor = async (authorId) => {
 };
 
 deleteAuthor("67b059aa344b6b5756d4f080");
+
+
+
+
+
+
+real life ex: 
+
+const deleteCustomer = async (req, res) => {
+    const session = await mongoose.startSession();
+    try {
+        session.startTransaction();
+        const { id: customerId } = req.params;
+
+        // Validate customerId
+        if(!validateObjectId(customerId)){
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(400).json({ message: `Invalid customer Object ID: ${customerId}` });
+        }
+
+        // Delete the customer
+        const deletedCustomer = await Customer.findByIdAndDelete(customerId).session(session);
+        if (!deletedCustomer) {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(404).json({ message: `Customer with id ${customerId} not found` });
+        }
+
+        // Delete all rentals related to this customer
+        const deleteRentalsResult = await Rental.deleteMany({ "customer._id": deletedCustomer._id }).session(session);
+        controllerDebug(`Deleted ${deleteRentalsResult.deletedCount} rentals`);
+
+        // Commit the transaction
+        await session.commitTransaction();
+        session.endSession();
+
+        return res.status(200).json({ customer: deletedCustomer, message: `Customer with id ${customerId} deleted successfully` });
+    } catch (err) {
+        // Abort the transaction on error
+        await session.abortTransaction();
+        session.endSession();
+        controllerDebug("Error in deleteCustomer:", err);
+        return res.status(500).json({ message: err.message || "Internal Server Error" });
+    }
+};

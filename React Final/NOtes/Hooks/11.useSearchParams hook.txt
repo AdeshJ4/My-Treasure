@@ -62,6 +62,10 @@ function SearchPage() {
   const category = searchParams.get('category'); // "react"
   const sort = searchParams.get('sort');   // "asc"
 
+
+  const paramsObj = Object.fromEntries(searchParams.entries());
+  console.log(paramsObj); // { name: "Addesh", age: "222" }
+
   return (
     <div>
       <h1>Search Page</h1>

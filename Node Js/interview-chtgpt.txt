@@ -75,3 +75,46 @@ Here’s a list of **Node.js interview questions** categorized from **beginner**
 ---
 
 Would you like me to provide detailed answers for any of these? 🚀
+
+
+
+
+
+============================================================================================================================================================
+
+
+
+🔥 30 Most Asked Node.js Scenario-Based Interview Questions
+
+1. **How would you handle multiple simultaneous requests to an API without blocking the event loop?**
+2. **You need to schedule tasks (like sending emails every day). What approach would you use in Node.js?**
+3. **How do you handle file uploads and storage in a Node.js application?**
+4. **How would you secure an Express.js API endpoint so only authenticated users can access it?**
+5. **Your Node.js app is crashing randomly — how would you troubleshoot it in production?**
+6. **How would you implement role-based access control (RBAC) in your Node.js app?**
+7. **How do you structure a scalable Node.js project for a growing team?**
+8. **How do you handle pagination when querying a large MongoDB collection with Node.js?**
+9. **How would you protect your Node.js API against common web vulnerabilities (XSS, CSRF, SQL Injection)?**
+10. **How do you manage environment variables securely in a Node.js application?**
+
+11. **How would you implement request rate limiting in your Node.js/Express server?**
+12. **Explain how you’d implement email verification after user registration.**
+13. **How do you handle async errors in Express.js middleware?**
+14. **How would you design a RESTful API to manage a product inventory system using Node.js and MongoDB?**
+15. **How do you debug performance issues (like memory leaks) in a Node.js app?**
+16. **What’s your approach to logging in a production-ready Node.js app?**
+17. **How would you implement file download functionality from a server using Node.js?**
+18. **How do you implement soft deletes (not permanently removing data) in Node.js with MongoDB?**
+19. **How would you design a system to handle image processing (e.g., resize, compress) in Node.js?**
+20. **How do you handle circular dependencies in Node.js modules?**
+
+21. **How would you implement a chat system using WebSockets in Node.js?**
+22. **You want to expose your Node.js microservice to other services — how would you document your APIs?**
+23. **How do you handle breaking changes in APIs in a large Node.js-based system?**
+24. **Explain how you’d use Redis in a Node.js app for caching frequently requested data.**
+25. **How would you implement OTP-based login or 2FA in a Node.js backend?**
+26. **How would you implement file streaming (video/audio) in Node.js?**
+27. **Your Node.js server is getting a spike of traffic — what are some ways to scale it?**
+28. **How would you run background tasks in a Node.js app (e.g., sending confirmation emails after registration)?**
+29. **How would you handle database transactions (atomicity) in Node.js using MongoDB or SQL?**
+30. **How would you structure a Node.js app with Express, MongoDB, and JWT-based authentication?**

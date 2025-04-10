@@ -1,29 +1,6 @@
-// 1. Garbage Collection in JavaScript
-/*
--> Garbage collection (GC) is the process of automatically freeing up memory by removing objects that are no longer needed or accessible.
--> The garbage collector identifies and removes objects that are unreachable
--> JavaScript uses an automatic garbage collector, meaning developers don't need to manually manage memory.
-
-
-example: 
-function demo() {
-    let obj = {
-        name: 'Sample'
-    };
-    
-    obj = null;  // The object "{name: 'Sample'}" is now unreachable
-}
-Explanation:
-Initially, obj holds a reference to an object.
-When obj = null; is assigned, the original object becomes unreachable because no variable is referencing it.
-The garbage collector will clean up this object during the next GC cyc
-
-*/
-
-
 // Q0] What is a "first class function" in Javascript?
 /*
--> In JavaScript, functions are considered first-class citizens, which means they can be treated like any other variable 
+-> In JavaScript, functions are considered "first-class citizens", which means they can be treated like any other variable 
 (e.g., a number, string, or object).
 
 -> so we can assign a function to a variable using "function expression syntax".
@@ -84,6 +61,9 @@ obj.fun2();
 obj.fun3();
 obj.fun4();
 */
+
+
+
 
 
 //Q1]. What are the different data types present in javascript?
@@ -392,6 +372,7 @@ v. RegExp (Regular Expressions)
 -> Represents patterns used for string matching and manipulation.
 
 
+
 vii. Set and WeakSet
 🔷 Set (Collection of Unique Values)
 A Set is a collection of unique values (no duplicates allowed) regardless of type.
@@ -498,7 +479,6 @@ for (let [key, value] of person) {
 viii. Class
 
 
-
 Characteristics of Reference Types:
 1. Stored in Memory (Heap):
 The actual value is stored in a separate memory location (heap), and the variable holds a reference to that location.
@@ -568,6 +548,7 @@ the 'current scope' which can be 'current script' or the 'current function' and 
 -> const keyword must be initialized at the time of declaration.
 -> class declarations are not hoisted
 -> JavaScript in strict mode does not allow variables to be used if they are not declared.
+-> arrpw functions are not hosited
 
 x = 5;  // initialization
 var x;  // declaration
@@ -582,6 +563,10 @@ function walk(){
 
 
 */
+
+
+
+
 
 
 
@@ -775,7 +760,8 @@ grandparent();
 🔷 JavaScript Scope Chain:
 
 Scope Chain is the mechanism JavaScript uses to resolve variable names.
-When a variable is accessed inside a function, JavaScript searches for it in the current scope, then in its parent scope, then in the next parent, and so on until it reaches the global scope.
+When a variable is accessed inside a function, JavaScript searches for it in the current scope, then in its parent scope, then in the next parent, and so on until it 
+reaches the global scope.
 
 🔹 If the variable is not found, JavaScript throws a ReferenceError.
 
@@ -830,6 +816,14 @@ Destroyed after the function finishes execution.
 
 
  */
+
+
+
+
+
+
+
+
 
 
 
@@ -913,6 +907,65 @@ import { color } from './useMe.js';
 
 
 
+// Q5] Why Attaching Global Variables (var) to the Global Object in Node.js is Bad?
+
+/*
+
+In Node.js, unlike browsers, global variables declared with var do not attach to the global object (global) but instead remain local to the module due to Node.js's module system.
+node.js:
+```
+var fname = 'Adesh';
+console.log(global.fname); // undefined.
+```
+
+The var keyword is considered bad practice in modern JavaScript, including in Node.js, due to several issues related to scope, hoisting, and reassignment. Here’s why you should avoid var in favor of let and const:
+
+issues: 
+
+1. var keyword is function0-scope means its not accessible outside a fuction butr its nort block scope you can access it outsode blocvck scope.
+
+✅ Example with var (Issue)
+```
+if (true) {
+  var x = 10;  // `x` is accessible outside the if block!
+}
+console.log(x); // Output: 10 (Unexpected behavior)
+```
+
+
+Variables declared with var are hoisted to the top but not initialized, leading to undefined values before assignment.
+✅ Example with var (Issue)
+```
+console.log(a); // Output: undefined (not an error, but unexpected)
+var a = 5;
+```
+
+
+Allows Re-declaration (Leads to Accidental Overwrites)
+-> var allows re-declaring the same variable, which can lead to accidental overwrites
+
+```
+✅ Example with var (Issue)
+var x = 10;
+var x = 20; // No error, overwrites previous value
+console.log(x); // Output: 20
+```
+
+5. var Makes Code Less Maintainable and Harder to Debug
+Since var lacks block scope, hoisting, and allows re-declaration, it makes debugging much harder. Modern JavaScript and Node.js use let and const to enforce safer, more readable code.
+
+
+
+
+*/
+
+
+
+
+
+
+
+
 
 
 //Q6] Difference between var and let keyword in javascript
@@ -921,10 +974,26 @@ import { color } from './useMe.js';
 	      let							                                      var
 -> let is block-scoped.					                          -> var is function scoped.
 -> let does not allow to redeclare variables.		          -> var allows to redeclare variables.
--> Hoisting does not occur in let.				                -> Hoisting occurs in var.
+-> Hoisting does not occur in let.				                -> Hoisting occurs in var. but only declaration is hoisted and not initialzation part.
 -> let doesn't attach with window object                  -> attach with window object & can overwrite global properties
 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1084,8 +1153,7 @@ OR ( || ) operator - If the first value is truthy, then the first value is retur
 
 AND ( && ) operator - If both the values are truthy, always the second value is returned. 
 If both are falsy then 1st value is returned.
-If the first value is falsy then the first
-value is returned or if the second value is falsy then the second value is returned.
+otherwise which ever is falsy that value is returned.
 
 
 console.log( 0 || "Adesh Pramod Jadhav");   // "Adesh Pramod Jadhav"
@@ -1098,6 +1166,19 @@ console.log( 10 && "Adesh");    // "Adesh"
 console.log( "" && "Adesh");    // ""
 console.log( 10 && 0);          // 0 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1541,7 +1622,7 @@ let PrintName = {
         console.log(this.name + " age is " + age); 
     } 
 } 
-PrintName.sayHi.apply({name: "Tony"}, [42]);
+PrintName.sayHi.apply({ name: "Tony" }, [42]);
 
 
 
@@ -1613,8 +1694,7 @@ console.log(insideVar);  // NOT ACCESSIBLE
 
 /*
 -> A higher order function is a function that takes one or more functions as arguments, or returns a function as its result.
--> for ex. map(), forEach(), filter(), reduce() these are the higher order functions because they take anther function as an 
-arguments.
+-> for ex. map(), forEach(), filter(), reduce() these are the higher order functions because they take anther function as an arguments.
 -> Callback is a function which is passed as an argument to another function where the function which receive this callback is a 
 higher order function.
 
@@ -2256,6 +2336,18 @@ function extractPerson ({id, lname, address: {city}}) {
 /*
 You can create an object in three different ways:
 
+
+Object literal
+new Object({})
+constructor function
+factory function
+Object.assign()
+Object.create()
+ES6 classes
+Using JSON.parse()
+
+
+
 1. Using Object Literal (Simplest and Most Common)
 2. Using the new Object() Constructor
 3. Using a Constructor Function
@@ -2314,7 +2406,7 @@ Example 3: Create an object using Constructor Function
 ------------------------------------------------------
 -> job of constructor function is to construct or create an object.
 -> new keyword creates empty js object. next "this" keyword points to newly created object. and insert all properties inside that 
-newly created object. finally "new" keyword return newly created object from constructor function.
+newly created object. finally "new" keyword return  newly created object fromconstructor function.
 
 function Person(fname, age){
     this.fname = fname,
@@ -2345,7 +2437,7 @@ eg. const x = {}  // this line converted to -> const x = new Object();
 function createPerson(fname, age) {
     return {
         id: 101,
-        fname, // if our key and value are same then we can make our code shorter  by writing only key
+        fname, 
         age,
         intro(){
             console.log(`Name: ${this.fname} Age: ${this.age}`);
@@ -2379,6 +2471,18 @@ const childObj = Object.create(parentObj);
 console.log(childObj);  // return empty array {}
 childObj['fname'] = 'Ram'; 
 childObj.intro();  // fname: Ram lname: Jadhav age: 22  -> js engine will search property in a child if it present then it will take from their but if it absent then js engine will search for that property in parent obj.
+
+
+
+
+
+6. Using Object.assign()
+Used to copy properties from one or more objects.
+-> const person = Object.assign({}, { name: "John", age: 30 });
+
+
+
+
 
 
 Example 6 : Using es6 classes: 
@@ -2942,34 +3046,20 @@ const myJSON = JSON.stringify(obj);
 // Q14] What do you mean by strict mode in javascript and characteristics of javascript strict-mode?
 
 /*
--> we define strict mode like "use strict"; to the beginning of a script or a function.
--> The purpose of "use strict" is to indicate that the code should be executed in "strict mode".
--> if you declare "use strict" at the beginning of the file then it has global scope and if you declare "use strict"; inside the 
-function then it have local scope.
+-> Strict Mode ("use strict";) is a feature in JavaScript that helps catch common coding mistakes and makes the code more secure and optimized.
+-> It enforces stricter parsing and error handling in your JavaScript code.
+How to Enable Strict Mode?
+For entire script: Add "use strict"; at the beginning.
+For a specific function: Add "use strict"; inside a function.
+
+
 
 characteristics: 
 
--> variable is not allowed without declaring it
--> objects is not allowed without declaring it
--> Deleting a variable (or object) is not allowed.
-"use strict";
-let x = 3.14;
-delete x;                // This will cause an error
--> Deleting a function is not allowed.
-"use strict";
-function x(p1, p2) {};
-delete x;                // This will cause an error 
--> Duplicating a parameter name is not allowed
-"use strict";
-function x(p1, p1) {};   // This will cause an error
--> Octal numeric literals are not allowed:
-"use strict";
-let x = 010;             // This will cause an error
--> Octal escape characters are not allowed:
-"use strict";
-let x = "\010";            // This will cause an error
-
-
+Eliminates silent errors – Converts previously ignored mistakes into errors.
+Prevents the use of undeclared variables – Variables must be declared using let, const, or var.
+Restricts this value – In strict mode, this remains undefined instead of defaulting to the global object.
+Disallows duplicate parameter names – Helps avoid conflicts in function parameters.
 
 */
 
