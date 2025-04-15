@@ -329,6 +329,9 @@ Storage Control          No size control                  Fixed storage size
 
 Sharding and Replica Sets are two different concepts in MongoDB, and they serve different purposes — but they can also work together in large-scale applications.
 
+By default, MongoDB does not have replica sets enabled — you need to manually configure and initiate a replica set.
+
+
 
 | Feature                  | Description                                                                                                 |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------- |

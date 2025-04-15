@@ -9,7 +9,8 @@
 9. includes()    -> check give character/word present inside string or not, return true/false
 10. charAt()
 11. split()      -> Split a string into substrings using the specified separator and return them as an array.
-12. indexOf(str)
+12. indexOf(str) 
+12. lastIndexOf()
 13. replace() : replace() does not modify the original string because strings are immutable. Instead, it returns a new string with the replacement applied.
 14. replaceAll()
 
@@ -40,5 +41,5 @@ str.indexOf('pramod');  // 'Adesh Pramod Jadhav' => -1
 str.indexOf('a');  // 'Adesh Pramod Jadhav' => 8
 str.replace('Adesh', 'Ram'); // 'Adesh Jadhav'  => 'Ram Jadhav'  -> replace only first occurrence
 let str =  "Hello, World! Hello, Universe!";
-let newStr = str.replace(/Hello/g, 'Hi');  // Hi, World! Hi, Universe!
+let newStr = str.replaceAll(Hello, 'Hi');  // Hi, World! Hi, Universe!
 

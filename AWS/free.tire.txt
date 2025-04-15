@@ -1,0 +1,187 @@
+Absolutely, you **can create a free AWS account** and explore services like EC2, S3 (bucket), and Lambda under the **AWS Free Tier**.
+
+Here’s a step-by-step guide for you as a working professional:
+
+---
+
+### ✅ 1. **Go to the AWS Free Tier Page**  
+Visit: [https://aws.amazon.com/free](https://aws.amazon.com/free)
+
+Click **"Create a Free Account"**.
+
+---
+
+### ✅ 2. **Sign Up with Your Email**
+- Use your personal or professional email address.
+- Choose a strong password and a unique AWS account name.
+
+---
+
+### ✅ 3. **Enter Contact Information**
+- Choose **"Personal"** account type (even though you're a developer, this avoids linking with company billing).
+- Fill in your name, phone number, and address.
+
+---
+
+### ✅ 4. **Add a Payment Method**
+- AWS **requires a debit/credit card** for verification.
+- Don’t worry — **they won’t charge** you if you stay within Free Tier limits.
+- You may see a **₹2 (or $1)** hold for verification, which is refunded.
+
+---
+
+### ✅ 5. **Verify Your Identity**
+- Enter your **mobile number**.
+- AWS will send an OTP (One-Time Password) via SMS or call.
+
+---
+
+### ✅ 6. **Choose a Support Plan**
+- Select the **Basic Support Plan (Free)**.
+
+---
+
+### ✅ 7. **Start Using AWS**
+- Once your account is ready (usually within 5-10 mins), log into the [AWS Console](https://console.aws.amazon.com/).
+- Start exploring EC2, S3, and Lambda — many features are covered under the **12-month Free Tier**.
+
+---
+
+### ✅ **What’s Included in the AWS Free Tier?**
+
+| Service       | Free Usage (Per Month) | Duration        |
+|---------------|------------------------|-----------------|
+| **EC2**       | 750 hours of t2.micro or t3.micro | 12 months |
+| **S3**        | 5 GB storage, 20,000 GET & 2,000 PUT requests | 12 months |
+| **Lambda**    | 1M requests + 400,000 GB-seconds | Always Free |
+| **DynamoDB**  | 25 GB storage + 25 RCU/WCU | Always Free |
+| **CloudWatch**| 10 custom metrics + 5GB logs | 12 months |
+| **RDS**       | 750 hours of db.t2.micro + 20 GB storage | 12 months |
+
+
+---
+
+### ⚠️ Tips to Avoid Charges:
+- Use **only Free Tier-eligible resources** (they’re labeled in the console).
+- Always **stop or terminate unused EC2 instances**.
+- Use **budgets and billing alerts** from the AWS Billing dashboard.
+- Monitor your **Free Tier usage**:  
+  👉 [https://console.aws.amazon.com/billing/home#/freetier](https://console.aws.amazon.com/billing/home#/freetier)
+
+---
+
+If you want, I can also help you set up a small EC2 instance, upload to S3, or write a simple Lambda function after your account is created. Just say the word!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+The URL https://portal.aws.amazon.com is the AWS Account Management Portal, specifically for:
+
+🔐 Billing & Account Settings
+When you go to this portal, you can:
+
+View and manage your AWS billing and invoices
+
+Update your account details (email, payment methods, etc.)
+
+Close or reactivate an account
+
+Set budgets and alerts
+
+Access cost explorer to track usage
+
+Check Free Tier usage
+
+
+
+
+
+
+
+
+🔐 Root User (Selected by Default)
+This is the main account owner who has full access to billing, service management, and security.
+It's the email address you used to register with AWS (even if partially).
+This is you, if you were trying to create the account.
+✅ To proceed:
+Enter the email you tried to use earlier when signing up.
+Click Next
+If it prompts for a password and you don’t know it, click “Forgot password?” on the next screen to reset it.
+
+
+
+👥 IAM User (2nd Option - not selected)
+For employees/teammates created inside an AWS account.
+You can ignore this for now — it’s not what you need as an individual developer creating an account.
+
+
+
+
+
+
+
+
+
+
+You're on the AWS Console Home screen — great start! 🔥 Here's how you can **check your billing, free tier usage, and previously used services**:
+
+---
+
+## ✅ 1. **Check Free Tier Usage**
+### Steps:
+1. In the **top search bar**, type: `Free Tier`
+2. Click on **“Free Tier”** (should be the first result)
+3. You'll see:
+   - **Services used**
+   - **How much of the free tier you've consumed**
+   - Remaining limits for each service
+
+---
+
+## 💰 2. **Check Billing Details**
+### Steps:
+1. In the **top search bar**, type: `Billing`
+2. Click on **“Billing Dashboard”**
+3. Explore:
+   - **Cost Explorer** (for graphs)
+   - **Bills** (monthly breakdown)
+   - **Free tier usage alerts**
+   - **Payment history**
+
+---
+
+## 📦 3. **Check Previously Used Services**
+### Steps:
+1. Click on **"All services"** (left sidebar)
+2. Scroll down or search for any AWS service (like EC2, S3, Lambda)
+3. Go into each service and check for:
+   - **Running or stopped instances**
+   - **Logs/history** if any were used
+
+OR
+
+1. On the Console Home screen, under “Recently visited” — you’d normally see services you’ve accessed.
+2. If blank (like in your screenshot), maybe the account is new or it’s a UI load issue (which happens sometimes).
+
+---
+
+### ⚠️ NOTE:
+If you see **“Unable to load”** like in your image:
+- Wait a bit and refresh the page
+- Try switching **AWS regions** (top-right dropdown: Europe (Stockholm) → Change to N. Virginia or Mumbai etc.)
+- It may also be a temporary **network or AWS-side issue**
+
+---
+
+Want help checking a specific service (like EC2, S3, Lambda)? Just let me know.

@@ -5,8 +5,8 @@
 -> 'document' should satisfy 'all conditions' specified in array of $and operator then and only then that document will return.
 -> there is no limit for conditions.
 -> In the second query, MongoDB implicitly uses the $and operator to combine the conditions. 
-db.tb1.find({$and: [{id: 101}, {name: "Adesh"}, {age: 21}]}) 
-db.tb1.find({id: 101, name: "Adesh", age: 21})
+db.tb1.find({ $and: [{ id: 101 }, { name: "Adesh" }, { age: 21 }]}) 
+db.tb1.find({ id: 101, name: "Adesh", age: 21 })
 
 
 2. $or : 

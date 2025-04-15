@@ -3,7 +3,7 @@ In CSS, HTML elements are generally classified as either block-level elements or
 
 
 1. Block-Level Elements: 
-
+------------------------
 Layout: Block-level elements start on a new line and take up the full width available by default.
 Width and Height: You can set width and height properties.
 Margin and Padding: Margins and padding can be set on all four sides (top, right, bottom, left).
@@ -29,21 +29,17 @@ Common Block-Level Elements:
 
 
 2. Inline Elements
-
+-------------------
 Characteristics:
 Display Property: display: inline;
-Layout: Inline elements do not start on a new line. They occupy only the necessary width required by their content and can sit next to other inline elements.
+Layout: Inline elements do not start on a new line. They occupy only the necessary width required by their content and can sit next 
+to other inline elements.
 Width and Height: Width and height properties do not apply.
-Margin and Padding: Margins and padding apply only to the left and right sides. Top and bottom margins and padding do not affect the layout.
+Margin and Padding: Margins and padding apply only to the left and right sides. Top and bottom margins and padding do not affect 
+the layout.
 
 Common Inline Elements:
-<span>
-<a>
-<img>
-<strong>, <em>
-<br>
-<label>
-<input>, <button>
+<span>    <a>   <img>   <strong>, <em>  <br>    <label>     <input>
 
 Example:
 <span style="background-color: lightcoral;">
@@ -54,8 +50,10 @@ Example:
 </a>
 
 
-3. Inline-Block Elements
 
+
+3. Inline-Block Elements
+------------------------
 There is also a hybrid display type called inline-block that combines characteristics of both block and inline elements.
 
 Characteristics:

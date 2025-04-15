@@ -783,11 +783,9 @@ A multi-key index allows MongoDB to index array fields, meaning each value insid
 
 📌 Example:
 If a document contains:
-
-json
-Copy
-Edit
+```
 { "genres": [ { "name": "Action" }, { "name": "Sci-Fi" } ] }
+```
 A multi-key index on genres.name would index both "Action" and "Sci-Fi" separately.
 
 

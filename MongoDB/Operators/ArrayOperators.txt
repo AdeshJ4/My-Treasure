@@ -3,7 +3,6 @@
 1. $all :
 2. $elemMatch
 3. $size
-4. $unwind    
 5. $ifNull
 6. $push
 8. $pop
@@ -330,7 +329,6 @@ $each:
 db.tb1.updateOne({_id: 1}, {$push: {scores: {$each: [10, 20, 30]}}})
 { "_id": 1, "scores": [ 44, 78, 38, 80, 10, 20, 30 ] }
 
-
 =============================================================================================================
 
 $addToSet: 
@@ -403,63 +401,25 @@ ex.2  store only first three elements inside array.
 Query> db.students.updateOne({ _id: 1 }, { $push: { grades: { $each: [60, 70], $slice: 3 } } })   // first 3
 {  "_id": 1, "grades": [10, 20, 30] }
 
-
-
 db.users.updateOne({_id: 101}, {$push: {hobbies: {$each: ["A", "B"], $slice: 3}}})
 
+find: 
+// Return the First 3 Elements
+db.tb1.find({_id: 1}, {hobbies: {$slice: 3}})
 
+// Return the Last 3 Elements
+db.tb1.slice({_id: 1}, {hobbies: {$slice: -3}})
 
+// skip first 2 elements and return 3 elements [skip, limit]
+db.tb1.find({_id: 1}, {hobbies: {$slice: [2, 3]}}) 
 =============================================================================================================
-
-
-$unwind stage:
-
-
-The $unwind stage in MongoDB's aggregation pipeline is used to deconstruct an array field, meaning it creates a separate document for each array element.
-Note: $unwind cannot be used in find() or simple queries because $unwind is part of the aggregation pipeline. 
-
-
-sample Data: 
-db.orders.insertMany([
-  { 
-    _id: 1, 
-    customer: "Alice", 
-    items: [
-      { product: "Laptop", quantity: 1 },
-      { product: "Phone", quantity: 2 }
-    ] 
-  },
-  { 
-    _id: 2, 
-    customer: "Bob", 
-    items: [
-      { product: "Tablet", quantity: 3 }
-    ] 
-  }
-])
-
-output: 
-[
-  { "_id": 1, "customer": "Alice", "items": { "product": "Laptop", "quantity": 1 } },
-  { "_id": 1, "customer": "Alice", "items": { "product": "Phone", "quantity": 2 } },
-  { "_id": 2, "customer": "Bob", "items": { "product": "Tablet", "quantity": 3 } }
-]
-
-
-Query>
-db.orders.aggregate([
-  { $unwind: "$items" }
-])
-
-
-=============================================================================================================
-
 
 
  $ifNull: 
 
 
-The $ifNull operator in MongoDB is used to handle null or missing values by providing a "default value" when a field is null or does not exist.
+The $ifNull operator in MongoDB is used to handle null or missing values by providing a "default value" when a field is null or does 
+not exist.
 
 
 if age is null or absent then return it as "Unknown"
@@ -493,3 +453,13 @@ db.users.aggregate([
   }
 ])
 
+
+
+db.users.aggregate([
+  {
+    $project: {
+      name: 1,
+      age: { $ifNull: ["$age", "Unknown"] }
+    }
+  }
+]);

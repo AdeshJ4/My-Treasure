@@ -31,7 +31,7 @@ db.movies.find({ director: { $exists: true } })
 
 2️⃣. Add a new field category: "Sci-Fi" where director exists
 
-db.movies.updateMany(  { "director": { $exists: true } },  { $set: { "category": "Sci-Fi" } });
+db.movies.updateMany({ "director": { $exists: true } },  { $set: { "category": "Sci-Fi" } });
 
 
 3️⃣ Delete documents where director does not exist
@@ -89,7 +89,7 @@ db.users.find({ name: { $regex: "^Al" } });
 ```
 db.users.find({ name: { $regex: "son$" } });
 ```
-🔹 Matches: "Jackson", "Emerson", "Johnson"
+🔹 Matches: "Jackson", "Emerson", "Johnson", "son"
 ❌ Does NOT match: "Sonny"
 
 
@@ -124,6 +124,19 @@ db.users.find({ name: { $regex: "john|doe", $options: "i" } });
 
 
 
+Aggregation:
+-----------
+
+db.users.aggregate([
+  {
+    $match: {
+      name: {
+        $regex: "Adesh|Manoj",
+        $options: "i"
+      }
+    }
+  }
+]);
 
 
 

@@ -17,6 +17,14 @@ ii] id Selector:
 -> The id of an element is unique within a page, so the id selector is used to select one unique element.
 -> if id selector and class selector have the same css property and define on same element then css will give preference to id selector
 -> inside id selector we write unique property of an element.
+-> IDs are meant to be unique in an HTML document. If multiple elements have the same id, it violates the HTML specification.
+Browsers still try to render the page, but it’s not valid HTML, and can lead to unpredictable behavior
+⚠️ JavaScript Pitfall
+document.getElementById('box') will return only the first matching element, not all.
+This can cause bugs, especially when you're trying to manipulate the DOM and assume there's only one element.
+
+
+ex:
 <p id='para1'>ID Selector</p>
 #para1{
     color: blue;

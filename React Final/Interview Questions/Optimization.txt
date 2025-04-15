@@ -1,6 +1,6 @@
 1. Memo function
--> Using memo we will skip rendering a component if its props have not changed, even though you didn't pass any state to 
-that component it will unnecessary rerender so we can stop it by memo function.
+-> Using memo we will skip rendering a component if its props have not changed, even though you didn't pass 
+any state to that component it will unnecessary rerender so we can stop it by memo function.
 ->  It works by memoizing the rendered output of the component and re-rendering it only if its props change
 -> refer w3school example and react website ex
 
@@ -33,14 +33,18 @@ example video : https://www.meziantou.net/assets/demo-throttle.mp4?v=af81
 
 What is Debouncing?
 
--> Debouncing is a technique that delays the execution of a function until the user stops performing a certain action/event for a specified amount of time and If 
-new events occur within the delay period, the timer is reset, and the timer started from beginning.
--> For example, if you have a search bar that fetches suggestions from the backend as the user types, you can "debounce the function" that makes the API call, 
-so that it only runs after the user stops typing for specified amount of time. This way, you can avoid making too many API calls that might overload your server or return 
-irrelevant results
--> To implement debouncing in JavaScript, you can use a timer variable to track the delay period. You can use the setTimeout function to set a timer that will 
-execute your function after the delay period. You can also use the clearTimeout function to cancel the timer if the user performs the action again before the delay 
-period ends. This way, you can ensure that your function only runs once after the user stops performing the action.
+-> Debouncing is a technique that delays the execution of a function until the user stops performing a 
+certain action/event for a specified amount of time and If new events occur within the delay period, the 
+timer is reset, and the timer started from beginning.
+-> For example, if you have a search bar that fetches suggestions from the backend as the user types, you 
+can "debounce the function" that makes the API call, so that it only runs after the user stops typing for 
+specified amount of time. This way, you can avoid making too many API calls that might overload your server 
+or return irrelevant results
+-> To implement debouncing in JavaScript, you can use a timer variable to track the delay period. 
+You can use the setTimeout function to set a timer that will execute your function after the delay period. 
+You can also use the clearTimeout function to cancel the timer if the user performs the action again before 
+the delay period ends. This way, you can ensure that your function only runs once after the user stops 
+performing the action.
 
 
 code 1 : debounceing in search bar:
@@ -142,7 +146,7 @@ const useDebounce = (callback, delay) => {
   const timeoutRef = useRef(null); // Explicitly initialize as null
 
   useEffect(() => {  
-    return () => timeoutRef.current && clearTimeout(timeoutRef.current);
+    return () => timeoutRef.current && clearTimeout(timeoutRef.current);  // If "timeoutRef.current" exists (i.e., it's not null or undefined), then call clearTimeout(timeoutRef.current).
   }, []);
 
   return (value) => {
@@ -210,8 +214,9 @@ export default DebouncedButton;
 
 What is Throttling?
 
-Throttling: In throttling, the function is executed at a fixed interval. Even if the triggering event occurs more frequently, the function is invoked according to the 
-defined interval.This is particularly useful for performance optimization in scenarios like scrolling or resizing.
+In throttling, the function is executed at a fixed interval. Even if the triggering event occurs more frequently, the 
+function is invoked according to the defined interval.
+This is particularly useful for performance optimization in scenarios like scrolling or resizing.
 
 1️⃣ When to Use Throttling?
 Window resizing events
@@ -306,13 +311,14 @@ export default SearchBox;
 Lazy Load and code splitting
 -----------------------------
 
--> Code splitting and lazy loading are techniques used in React to optimize the performance of your application by reducing the initial load time. 
+-> Code splitting and lazy loading are techniques used in React to optimize the performance of your application by reducing the 
+initial load time. 
 
 
 Code Splitting:
 
--> Code splitting is the process of dividing/Splitting your application's code into multiple bundles/files that can be loaded on demand instead of combining all 
-components into a single JavaScript file/bundle.
+-> Code splitting is the process of dividing/Splitting your application's code into multiple bundles/files that can be loaded on 
+demand instead of combining all components into a single JavaScript file/bundle.
 
 -> If you don't use code splitting, all components get merged into a single JavaScript file after running the npm run build command.
 
@@ -326,10 +332,11 @@ components into a single JavaScript file/bundle.
 
 2. Lazy Loading
 
--> Lazy loading is a technique that delays the loading of non-critical resources until they are needed, ensuring that these chunks/compoents/imagges/pages are 
-loaded on demand when the user requires them.
--> Lazy loading is a technique where resources (like images, components, or scripts) are loaded only when they are needed, typically when they come into the viewport 
-or are about to be rendered or we navigate to them. This improves performance by reducing the initial load time and bandwidth usage.
+-> Lazy loading is a technique that delays the loading of non-critical resources until they are needed, ensuring that these 
+chunks/compoents/imagges/pages are loaded on demand when the user requires them.
+-> Lazy loading is a technique where resources (like images, components, or scripts) are loaded only when they are needed, typically 
+when they come into the viewport or are about to be rendered or we navigate to them. 
+This improves performance by reducing the initial load time and bandwidth usage.
 In React, we use React.lazy() for lazy loading components and "Suspense" to handle the fallback UI while the component is being loaded.
 
 
@@ -348,7 +355,7 @@ import Home from './Components/Home';
 const About = lazy(() => import('./Components/About'));
 const Contact = lazy(() => import('./Components/Contact'));
 
-const App = () => {
+const App = () => { 
   return (
     <div>
       <Navbar /> {/* Navbar is rendered here */}

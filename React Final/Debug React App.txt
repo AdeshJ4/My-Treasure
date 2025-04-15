@@ -101,8 +101,8 @@ export default App;
 
 2️⃣ debugger Statement (Built-in JavaScript Debugging)
 
-debugger is acts like a breakpoint. once hit you can use all methods like continue, step over, step into, step out
-When the browser hits this line, it will pause execution (if DevTools is open).
+debugger is acts like a breakpoint. once hit you can use all methods like continue, step over, step into, 
+step out When the browser hits this line, it will pause execution (if DevTools is open).
 
 
 =====================================================================================================

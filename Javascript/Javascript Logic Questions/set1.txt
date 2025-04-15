@@ -1,9 +1,5 @@
-
-
-============================================================================================================================================================
-
-
 Q] Sum of Digits Using Iteration
+--------------------------------
 
 INPUT: 1234
 OUTPUT: 10
@@ -29,7 +25,12 @@ function sumDigitsIterative(n) {
 }
 
 
-
+using recursion: 
+----------------
+function sumOfDigits(num){
+  if(num === 0) return 0;
+  return (num % 10) + sumOfDigits(Math.trunc(num/10)) 
+}
 
 ============================================================================================================================================================
 
@@ -58,6 +59,14 @@ function calculateDigits(n) {
     return count;
 }
 
+using recursion: 
+----------------
+
+function calculateDigits(num){
+  if(num === 0) return 0;
+  return 1 + calculateDigits(Math.trunc(num / 10))
+}
+
 
 ============================================================================================================================================================
 
@@ -82,6 +91,17 @@ function reverseArray(arr){
 }
 
 
+// using recursion: 
+
+function reverseArray(arr, start = 0, end = arr.length - 1) {
+    if (start >= end) return arr;
+
+    // Swap elements
+    [arr[start], arr[end]] = [arr[end], arr[start]];
+
+    return reverseArray(arr, start + 1, end - 1);
+}
+
 =============================================================================================================================
 
 
@@ -89,6 +109,7 @@ function reverseArray(arr){
 Q. Adding elements of array: 
 
 1. using for loop
+------------------
 function addElements(arr){
   let sum = 0;
   for(let num of arr){
@@ -99,12 +120,22 @@ function addElements(arr){
 }
 
 2. reduce() function
-
+---------------------
 function addElements(arr){
   return arr.reduce((accumulator, curElement)=>{
     return accumulator + curElement;
   }, 0)
 }
+
+
+3. recursion: 
+-------------
+
+function addELements(arr) {
+    if (arr.length === 0) return 0;
+    return arr[0] + addELements(arr.slice(1))
+}
+
 
 =============================================================================================================================
 
@@ -134,61 +165,8 @@ Object.defineProperty(user, "dob", propertyDescriptor);
 user.dob = '2001-07-23';    
 console.log(user);
 
-=============================================================================================================================
 
 
-
-Question 1 : Reverse each word of a sentence.
-
-INPUT : "Hey Adesh"
-OUTPUT: "yeH hsedA"
-code : using split(), reverse(), join()
-function reverseSentence(str){
-    let savesStr = str.split(" ").map((ele)=>{
-        return ele.split("").reverse().join("")
-    }); // return ["hsedA", "domarP", "vahdaJ"];
-
-    return savesStr.join(" ");
-}
-let res = reverseSentence("Adesh Pramod Jadhav");   
-
-or 
-
-function reverseStr (str){
-    return str.split(' ').map(ele=> ele.split('').reverse().join('')).join(' ');
-}
-
-
-code 2: using loop
-INPUT : "Adesh Jadhav"
-OUTPUT: "hsedA vahdaJ"
-
-function reverseString(str) {
-  let reverse = "";
-  // R A M = 2, 1, 0
-  for (let i = str.length - 1; i >= 0; i--) {
-    reverse = reverse + str[i]; // M A  R
-  }
-  return reverse.split(' ').reverse().join(' ');
-}  // hsedA vahdaJ
-
-
-
-============================================================================================================================
-
-Q] Count vowels: 
-
-sol: using includes()
-function countVowels (str){
-  let vowels = 'aeiou';
-  let count = 0;
-  for (let ch of str){
-    if(vowels.includes(ch.toLowerCase())){
-      count++;
-    }
-  }
-  return count;
-}
 
 ============================================================================================================================
 
@@ -197,8 +175,8 @@ count how many times a character occur in a string:
 
 function countCharacter(str, target){
   let count = 0;
-  for(let ch of str){
-    if(target.indexOf(ch.toLowerCase()) !== -1){
+  for(let i=0; i<str.length; i++){
+    if(str.toLowerCase() === char.toLowerCase()){
       count++;
     }
   }
@@ -206,27 +184,6 @@ function countCharacter(str, target){
   return count;
 }
 
-============================================================================================================================
-
-Question 2 : Reverse a String.
-
-INPUT : "Adesh"
-OUTPUT: "hsedA"
-code : using split(), reverse(), join()
-function reverseString(str){ // Adesh -> ['A', 'd', 'e', 's', 'h'] -> ['h', 's', 'e', 'd', 'A'] -> hsedA
-    return str.split('').reverse().join("");
-}
-const res = reverseString('Adesh');
-
-code 2: using loop
-
-function reverseString(str){
-    let reverse = '';
-    for(let i=str.length-1; i>=0; i--){
-        reverse += str[i];
-    }
-    return reverse;
-}
 ============================================================================================================================
 
 Question 3 : check given object is array or not.
@@ -573,7 +530,7 @@ want element, don't want element:
 4. don't want gender property: !ele.hasOwnProperty("gender")   // return everything except gender
 
 
-Question 16 : return elements from array which contain gender property that means delete all objects which don't have gender.
+Question 16 : return elements from array which contain gender property
 INPUT: [
     {id: 101, fname: 'Adesh', gender: 'M'},
     {id: 102, fname: 'Akshay', gender: 'M'},
@@ -585,11 +542,8 @@ OUTPUT: [
 ]
 
 code 1 : 
-function genderRemove(array){
-    return array.filter((ele)=>{
-        return ele.hasOwnProperty(ele);
-    });
-};
+const res = arr.filter(ele => ele.hasOwnProperty('gender'))
+
 code 2: 
 
 function onlyGender(array){
@@ -715,28 +669,6 @@ function mostFrequentElementOfArray(array) {
 const res = mostFrequentElementOfArray(["a", "p", "p", "l", "e", "e", "e"]);
 
 
-
-============================================================================================================================
-
-Question 21 : Shuffle array
-INPUT: [10, 20, 30, 40]
-OUTPUT: [40, 10, 30, 20]
-
-
-function shuffleArray(array){
-  for(let i = array.length-1; i>0; i--){
-    const j = Math.floor(Math.random() * (i+1));  // 0 - current index
-    [array[i], array[j]] = [array[j], array[i]]
-  }
-}
-
-const arr = [10, 20, 30, 40];
-console.log('Before: ', arr);
-shuffleArray(arr)
-console.log('After ', arr);
-
-
-
 ============================================================================================================================
 
 Question 21 : generate random no between given range.
@@ -746,50 +678,6 @@ OUTPUT: 1 or 5 or 0
 function generateRandom(min, max){
     return Math.floor(Math.random() * (max - min + 1)) - min;
 }
-
-
-============================================================================================================================
-
-Question 22 : remove duplicates: 
-
-INPUT: [10, 20, 20, 10, 40, 50];
-OUTPUT: [10, 20, 40, 50]; 
-
-code 1: 
-function removeDuplicates(arr) {
-    return arr.filter((element, index, array) => {  // 10 0, 20 1, 20 2, 10 3, 40 4, 50 5
-        return array.indexOf(element) === index;   // 0==0,  1==1, 1!=2, 0!=3, 4==4, 5==5
-    }); //  [10, 20 , 40, 50]
-  }
-
-code 2: 
-
-// so here we are comparing elements of main array with unique array.
-function removeDuplicates(arr) {
-    const uniqueArray = [];// [10, 20, 40, 50]
-    for (let i = 0; i < arr.length; i++) {  // i=0,1,2
-      let isDuplicate = false; // false, false, false
-      for (let j = 0; j < uniqueArray.length; j++) { // 0<0, 0<1,1<1,  0<1
-        if (arr[i] === uniqueArray[j]) {  // 20==10, 30
-          isDuplicate = true;
-          break;
-        }
-      }
-      if (!isDuplicate) { // true, false
-        uniqueArray.push(arr[i]);  // 10,20, 
-      }
-    }
-    return uniqueArray;
-  }
-
-  // Example usage:
-  const arrayWithDuplicates = [10, 20, 20, 10, 40, 50]; // uniqueArr=[10, 20, 40, 50]
-  const arrayWithoutDuplicates = removeDuplicates(arrayWithDuplicates);
-  
-  console.log('Array with Duplicates:', arrayWithDuplicates);
-  console.log('Array without Duplicates:', arrayWithoutDuplicates);
-  
-
 
 
 

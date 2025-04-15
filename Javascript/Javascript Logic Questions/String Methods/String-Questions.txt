@@ -1,3 +1,20 @@
+
+Q] Count vowels: 
+
+sol: using includes()
+function countVowels (str){
+  let vowels = 'aeiou';
+  let count = 0;
+  for (let ch of str){
+    if(vowels.includes(ch.toLowerCase())){
+      count++;
+    }
+  }
+  return count;
+}
+
+============================================================================================================================
+
 1. Reverse a String
 
 Problem: Given a string, return its reverse.

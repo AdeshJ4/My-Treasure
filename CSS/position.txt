@@ -97,7 +97,8 @@ div.myDiv{
 4. position: absolute;
 -> An element with position: absolute; is positioned relative to the parent.
 -> It 
--> parent must have position: relative, if not then position:absolute will not have any effect on child element;
+❓ Is it necessary for a parent to have "position: relative" when its child has "position: absolute"?
+Not always, but often yes — if you want the child to be positioned relative to that parent
 
 const App = () => {
   return (
@@ -152,15 +153,37 @@ css:
 -> A sticky element toggles between relative and fixed, depending on the scroll position. 
 -> It is positioned relative until a given offset position is met in the viewport - then it "sticks" in place (like position:fixed).
 -> You must also specify at least one of top, right, bottom or left for sticky positioning to work also their value must be 0.
+-> position: sticky only works with top, left, not bottom/right.
 
-div.myDIv{
-    position: sticky;
-    top: 0;
-    padding: 5px;
-    background-color: #cae8ca;
-    border: 2px solid #4CAF50;
+const App = () => {
+  return (
+    <div className="container">
+      <div>1</div>
+      <div>2</div>
+      <div>3</div>
+      <div>4</div>
+      <div className="box1"></div>
+    </div>
+  )
 }
 
+css: 
+.container{
+    height: 5000px;
+    background-color: black;
+    color: white;
+}
+
+div {
+    height: 30px;
+    border: 1px solid white;
+}
+.box1 {
+    background-color: red;
+    position: sticky; 
+    top: 10px;
+    height: 50px;
+  }
 
 ====================================================================================================================================
 

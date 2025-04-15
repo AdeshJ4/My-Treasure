@@ -69,6 +69,9 @@ proceed to the next pipeline stage.
 db.users.aggregate([
   {
     $match: { status: "active" }
+  },
+  {
+    $count: 'total'
   }
 ]);
 
@@ -113,6 +116,127 @@ db.users.aggregate([
       }
   }
 ])
+
+
+
+🔍 Basic $match Queries
+{ $match: { genre: "Action" } }
+
+{ $match: { rating: { $gt: 8 } } }
+
+{ $match: { releaseYear: 2020 } }
+
+{ $match: { duration: { $lte: 120 } } }
+
+{ $match: { language: "Hindi" } }
+
+{ $match: { director: "James Cameron" } }
+
+{ $match: { isAvailable: true } }
+
+{ $match: { title: "Titanic" } }
+
+{ $match: { awards: { $gte: 5 } } }
+
+{ $match: { "cast": "Tom Hanks" } }
+
+🔁 Logical Operators
+{ $match: { $or: [{ genre: "Drama" }, { genre: "Romance" }] } }
+
+{ $match: { $and: [{ rating: { $gt: 7 } }, { releaseYear: { $gt: 2010 } }] } }
+
+{ $match: { $nor: [{ language: "English" }, { rating: { $lt: 6 } }] } }
+
+{ $match: { $not: { rating: { $lte: 5 } } } }
+
+{ $match: { $and: [{ isAvailable: true }, { genre: { $ne: "Horror" } }] } }
+
+📅 Date & Range Filters
+{ $match: { releaseYear: { $gte: 2000, $lte: 2010 } } }
+
+{ $match: { releaseYear: { $in: [1990, 1995, 2000] } } }
+
+{ $match: { releaseYear: { $nin: [2020, 2021, 2022] } } }
+
+{ $match: { rating: { $gte: 7.5, $lte: 9.5 } } }
+
+`{ $match: { awards: { $mod: [2, 0] } } } // Even number of awards
+
+📚 Array Queries
+{ $match: { cast: { $all: ["Robert Downey Jr.", "Chris Evans"] } } }
+
+{ $match: { cast: { $size: 3 } } }
+
+{ $match: { cast: { $elemMatch: { $eq: "Leonardo DiCaprio" } } } }
+
+{ $match: { cast: { $in: ["Brad Pitt", "Matt Damon"] } } }
+
+{ $match: { cast: { $nin: ["Shahrukh Khan", "Salman Khan"] } } }
+
+📄 Text & String Queries
+{ $match: { title: { $regex: "^The", $options: "i" } } }
+
+{ $match: { title: { $regex: "man$", $options: "i" } } }
+
+{ $match: { director: { $regex: "Nolan", $options: "i" } } }
+
+{ $match: { title: { $regex: "war", $options: "i" } } }
+
+{ $match: { title: { $regex: "^[A-Z]" } } }
+
+🧠 Field Comparisons
+{ $match: { $expr: { $gt: ["$rating", 8] } } }
+
+{ $match: { $expr: { $eq: ["$language", "English"] } } }
+
+{ $match: { $expr: { $lt: ["$awards", "$rating"] } } }
+
+{ $match: { $expr: { $gte: ["$duration", 120] } } }
+
+{ $match: { $expr: { $ne: ["$director", "Steven Spielberg"] } } }
+
+📊 Conditional Operators
+{ $match: { $expr: { $cond: [{ $gt: ["$rating", 8] }, true, false] } } }
+
+{ $match: { $expr: { $and: [{ $gt: ["$rating", 7] }, { $lt: ["$awards", 10] }] } } }
+
+{ $match: { $expr: { $eq: [{ $strLenCP: "$title" }, 10] } } }
+
+{ $match: { $expr: { $gt: [{ $size: "$cast" }, 2] } } }
+
+{ $match: { $expr: { $in: ["English", "$language"] } } }
+
+📂 Nested Matching (if nested objects existed)
+Assume this nested structure:
+
+js
+Copy
+Edit
+ratings: { imdb: 8.2, rottenTomatoes: 95 }
+{ $match: { "ratings.imdb": { $gte: 8 } } }
+
+{ $match: { "ratings.rottenTomatoes": { $gte: 90 } } }
+
+{ $match: { "ratings.imdb": { $lt: 7 } } }
+
+{ $match: { "ratings.imdb": { $ne: 10 } } }
+
+{ $match: { "ratings.imdb": { $exists: true } } }
+
+🧪 Other Operators
+{ $match: { awards: { $exists: true } } }
+
+{ $match: { awards: { $type: "int" } } }
+
+{ $match: { title: { $not: { $regex: "Love" } } } }
+
+{ $match: { rating: { $in: [7.8, 8.5, 9.0] } } }
+
+{ $match: { isAvailable: { $eq: true } } }
+
+
+
+
 
 
 ==================================================================
@@ -222,7 +346,6 @@ db.orders.aggregate([
   { _id: 'Clothing', totalSum: 500 },
   { _id: 'Electronics', totalSum: 1600 }
 ]
-
 
 --------------
 
@@ -844,6 +967,7 @@ db.orders.aggregate([
   }
 ])
 
+Hint: $dayOfMonth is a date operator in MongoDB's aggregation pipeline that extracts the day of the month (1–31) from a given date.
 
 
 ========================================================================================================================
@@ -864,12 +988,10 @@ db.orders.aggregate([
 ]);
 
 
-
 ========================================================================================================================
 
 
 🟢 7. Find the First Order Date Per Customer
-
 
 [
   { "_id": 1, "customer": "Alice",   "product": "Laptop",  "price": 1000,  "quantity": 1, "date": ISODate("2024-03-05T10:00:00Z") },
@@ -1000,7 +1122,6 @@ db.orders.aggregate([
 ]);
 
 
-
 ========================================================================================================================
 
 🟢 Group orders by day of the week (Monday, Tuesday, etc.)
@@ -1100,20 +1221,27 @@ o/p
 ]
 
 
-
 ========================================================================================================================
 
 $sort: 
 -> Sorts the documents based on specified criteria
-$sort: {
-    totalCount: -1  // descending order
-}
+
+db.students.aggregate([
+    $sort: {
+        totalCount: -1  // descending order
+    }
+])
 
 ========================================================================================================================
 
 $limit:
 -> Limits the number of documents passed to the next stage in the pipeline.
-eg> $limit: 3
+eg> 
+db.students.aggregate([
+  {
+    $limit: 3 
+  }
+])
 
 ========================================================================================================================
 
@@ -1209,7 +1337,6 @@ Query> db.users.aggregate([
 ]);
 
 
-
 3️⃣. Include Array Index: 
 db.orders.aggregate([
   { $unwind: { path: "$items", includeArrayIndex: "itemIndex" } }
@@ -1241,33 +1368,29 @@ Output:
 ]
 
 
-db.stud.aggregate([
+db.collection.aggregate([
   {
-    $
-  }
-])
-
-
-db.users.aggregate([
-  {
-    $unwind: '$tags'
-  },
-  {
-    $match: {
-      'tags': {
-        $gt: 5
-      }
+    $project: {
+      name: 1,
+      totalTagSum: { $sum: "$tags" }
     }
   }
-]);
+])
 
 
-
-db.users.aggregate([
+❓ find the total number of elements in an array field like tags:
+Query>
+db.collection.aggregate([
   {
-    $unwind: '$tags'
+    $project: {
+      name: 1,
+      tagCount: { $size: "$tags" }
+    }
   }
 ])
+
+
+
 ========================================================================================================================
 
 

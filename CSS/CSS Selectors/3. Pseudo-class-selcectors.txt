@@ -13,48 +13,75 @@ Style an element when it gets focus
 3. 'hover ' is pseudo-class-selector which is used to select and style element once you mouse over it.
 
 
-ex: 
-<a href="www.google.com">Google.com</a>
-a:link{
-    color: blue;
+
+
+
+Sure! Let’s break down **pseudo-class selectors** in CSS in a super simple way:
+
+---
+
+### 🌟 What is a Pseudo-Class Selector?
+
+A **pseudo-class** is a keyword added to a selector that **targets an element in a specific state or condition**, without needing to add a class or ID.
+
+It starts with a **colon (`:`)**.
+
+---
+
+### 🔥 Common Pseudo-Class Selectors:
+
+#### 1. `:hover`
+- When you hover over an element (like with your mouse).
+```css
+button:hover {
+  background-color: blue;
 }
-a:hover{
-    color: red;
+```
+
+#### 2. `:active`
+- When an element is being clicked or tapped.
+```css
+a:active {
+  color: red;
 }
+```
 
+#### 3. `:focus`
+- When an element is focused (like an input field when you click or tab into it).
+```css
+input:focus {
+  border-color: green;
+}
+```
 
--> Pseudo-classes can be combined with HTML classes:
+#### 4. `:first-child`
+- Targets the **first child** of its parent.
+```css
+p:first-child {
+  font-weight: bold;
+}
+```
 
-    <p>Para 1</p>
-    <p class="onlyMe">Para 2</p>
-    <p>Para 3</p>
-    p.onlyMe:hover{
-        color: powderblue;
-    }
+#### 5. `:last-child`
+- Targets the **last child** of its parent.
+```css
+li:last-child {
+  color: red;
+}
+```
 
+#### 6. `:nth-child(n)`
+- Targets the **nth** child (1-based index).
+```css
+li:nth-child(2) {
+  background: yellow;
+}
+```
 
--> Simple Tooltip hover
-    <div>
-      <p>Para 1</p>
-      <p class="para2">Para 2</p>
-    </div>
-
-    .para2{
-        display: none;
-        background-color: yellow;
-        padding: 20px;
-    }
-    div:hover p.para2{
-        display: block;
-    }
-
-
-
-
-
-
-
-
-
-
-
+#### 7. `:not(selector)`
+- Targets elements that **do NOT** match the selector.
+```css
+button:not(.primary) {
+  opacity: 0.5;
+}
+```

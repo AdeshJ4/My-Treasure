@@ -1,3 +1,38 @@
+https://eu-north-1.console.aws.amazon.com/console/home?region=eu-north-1
+
+
+
+
+AWS needs to verify your payment method by charging a small refundable amount (like ₹2 or $1), and SBI blocks international or online transactions by default unless you enable international or online usage for your card.
+
+✅ Through SBI YONO App
+Open the YONO SBI app.
+Go to "Services" > "ATM/Debit Card Services".
+Select "Manage Card".
+Choose your active debit card.
+Enable:
+International usage
+Online (E-commerce) transactions
+Set a daily limit (₹100 or more should be fine for AWS verification).
+
+
+✅ Through SBI Net Banking
+Log in to onlinesbi.com
+Go to e-Services > ATM Card Services > ATM Card Limit/Channel/Usage Change
+Select your card and enable:
+E-commerce (CNP)
+International usage (if you're using a global site like AWS)
+Set transaction limits.
+
+
+⚠️ After enabling it:
+Wait 5–10 minutes and try adding the card again on the AWS billing page. Make sure:
+You're entering correct CVV, expiry date, and your name exactly as on the card.
+You have some balance in the account (₹100–₹200 just to be safe).
+
+
+
+
 ⭐ Cloud Computing: 
 -------------------
 
@@ -41,7 +76,8 @@ If your server crashes, gets stolen, or suffers a fire or flood — your data co
 
 
 🧯 6. Disaster Recovery is Tough
-If something goes wrong (e.g., power failure, natural disaster), restoring everything takes a lot more time and effort without cloud backup systems.
+If something goes wrong (e.g., power failure, natural disaster), restoring everything takes a lot more time and effort without cloud 
+backup systems.
 
 
 
@@ -117,7 +153,6 @@ You only pay for what you use.
 Let’s take the most popular serverless service from AWS: AWS Lambda
 
 
-
 🔴 disadvnatages: 🔴
 1. cold start
 2. Connection Pool for mongodb
@@ -180,8 +215,7 @@ Once the function finishes executing and there's no traffic, AWS shuts down thos
 
 
 ⭐ one of the best parts about AWS Lambda
--> 
-Whether you're a student, hobbyist, or working professional — if you're using your personal AWS account, you get:
+-> Whether you're a student, hobbyist, or working professional — if you're using your personal AWS account, you get:
 
 🎁 Lambda Free Tier Includes:
 
@@ -191,26 +225,6 @@ Whether you're a student, hobbyist, or working professional — if you're using 
 | 1 million invocations | per month                 |
 | 400,000 GB-seconds    | of compute time per month |
 | --------------------- | ------------------------- |
-
-This free tier is available for 12 months after you create your AWS account.
-After 12 months, you still get 1M free invocations per month, as part of the always-free tier — yes, AWS is generous here!
-
-
-
-💻 What does this mean for you?
-If you're:
-Testing
-Learning
-Running small projects or experiments
-You can easily use Lambda for free, unless you go way beyond the free limits (which is rare for learning purposes).
-
-
-🔄 Real Example:
-You run a Lambda function 1,000 times/day = 30,000 times/month → well under 1 million.
-You pay $0.
-
-
-
 
 
 🌐 Other AWS Serverless Tools:
@@ -260,7 +274,6 @@ But in
 | **Maintenance**       | High (updates, patches, monitoring)    | Low to none                                |
 | **Flexibility**       | Full control over environment          | Limited (function-based logic only)        |
 | --------------------- | -------------------------------------- | ------------------------------------------ |
-
 
 
 ❓❓❓❓   if i have movify application where each endpoint like getUsers, getMovies, getGenres, should i create a lambdaa function for each route, ?
@@ -372,7 +385,8 @@ AWS automatically adds more EC2 instances to handle extra traffic.
 You are charged for each extra instance (per second or hour).
 More traffic = more EC2s = more cost.
 
-
+🟢 If traffic goes down, extra EC2 instances added by auto scaling will automatically shut down, and only the minimum number of 
+instances will keep running.
 
 
 🆚 EC2 vs Lambda (Server vs Serverless)
@@ -380,8 +394,8 @@ More traffic = more EC2s = more cost.
 | ---------------------- | -------------------------------- | --------------------------- |
 | Feature                | EC2                              | Lambda                      |
 | ---------------------- | -------------------------------- | --------------------------- |
-| **You manage server?** | ✅ Yes                            | ❌ No                        |
-| **Always running?**    | ✅ Often                          | ❌ Runs only when triggered  |
+| **You manage server?** | ✅ Yes                           | ❌ No                        |
+| **Always running?**    | ✅ Often                         | ❌ Runs only when triggered  |
 | **Use cases**          | Websites, DBs, long-running apps | Short tasks, APIs, triggers |
 | ---------------------- | -------------------------------- | --------------------------- |
 
@@ -399,7 +413,7 @@ More traffic = more EC2s = more cost.
 | Restarting if it crashes         | ✅ **You handle it**                                             |
 | Security updates, firewall rules | ✅ **You configure it**                                          |
 | Monitoring usage                 | ✅ **You set it up (or use AWS tools)**                          |
-| Cooling, electricity             | **AWS handles** (you don’t worry about this)                  |
+| Cooling, electricity             | AWS handles** (you don’t worry about this)                  |
 | Charges                          | ✅ **You pay based on time used, type of server, storage, etc.** |
 | -------------------------------- | --------------------------------------------------------------- |
 
@@ -420,3 +434,104 @@ Run a database (like MySQL or MongoDB)
 Deploy a React app, Node.js app, etc.
 Test apps on different operating systems
 Build your own gaming or streaming server
+
+
+============================================================================================================================================================
+
+
+What is S3 Bucket?
+
+
+S3 (Simple Storage Service) is 'Amazon's cloud storage' where you can store files like images, videos, documents, backups, etc.
+Bucket name should be unique globally
+
+🔹 What is a Bucket?
+A bucket in S3 is like a container or folder where you store your files (called objects).
+Each file (object) can be up to 5 TB in size
+Each bucket has a unique name and is used to organize your data.
+
+
+🔸 How Many Buckets Can I Create?
+By default: You can create 100 buckets per AWS account
+You can request a limit increase if needed
+
+🔹 How Much Data Can Each Bucket Hold?
+Each bucket can store unlimited data
+You can upload files up to 5 TB in size
+There’s no size limit per bucket, only per file
+
+
+So in short:
+Bucket = folder for files
+Default: 100 buckets
+Each bucket = unlimited storage
+
+
+
+✅ Packages to Install:
+```
+npm install aws-sdk multer multer-s3
+```
+
+✅ Step-by-Step Setup:
+1. Create an S3 Bucket on AWS Console
+Make sure it's public or has the right permissions if you want public access.
+
+2. Set Your AWS Credentials
+You can set them using environment variables or ~/.aws/credentials:
+```
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_REGION=your-region
+```
+
+
+
+3. Node.js Code (Express Example);
+
+
+const express = require("express");
+const AWS = require("aws-sdk");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+
+const app = express();
+
+// Initialize S3
+const s3 = new AWS.S3({
+  region: "your-region",
+  credentials: {
+    accessKeyId: ....,
+    secretKey: ....
+  }
+});
+
+
+// Set up multer with S3
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: "your-bucket-name",
+    acl: "public-read",
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString() + "-" + file.originalname);
+    },
+  }),
+});
+
+
+// Create upload endpoint
+app.post("/upload", upload.single("image"), (req, res) => {
+  res.send({
+    message: "Image uploaded successfully!",
+    imageUrl: req.file.location,
+  });
+});
+
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});

@@ -94,6 +94,19 @@ Let me know if you need more details! 🚀🔥
 -> db.tb1.find({  $expr: { $gt: [{ $multiply: ["$price", "$quantity"] }, "$total"] }   })
 -> db.tb1.find({  $expr: { $gte: [{ $divide: ["$price", "$cost"] }, 2] }    })
 
+-> db.tb1.aggregate([
+  {
+    $match: {
+      $expr: {
+        $eq: ["$age", "$target"]
+      }
+    }
+  }
+]);
+
+
+
+
 
 Sample Data:
 [

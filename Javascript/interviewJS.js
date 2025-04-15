@@ -3064,3 +3064,81 @@ Disallows duplicate parameter names – Helps avoid conflicts in function parame
 */
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+🔷 What is a Prototype?
+In JavaScript, every object has an internal link to another object called its prototype. This prototype object can have properties and methods, which are inherited by the original object.
+
+This mechanism is known as prototype-based inheritance.
+
+🧠 Think of a prototype like a blueprint or a backup plan for an object.
+When you try to access a property or method on an object:
+
+JavaScript first checks if the object itself has it.
+
+If not, it goes to its prototype to look for it.
+
+If it still doesn't find it, it goes further up the chain (called the prototype chain).
+
+
+🔷 Prototype vs __proto__ vs prototype:
+prototype is a property of constructor functions (like function Person() {}), which defines the prototype for all instances created by that constructor.
+
+__proto__ is an internal property that points to the actual prototype object of an instance.
+
+Object.getPrototypeOf(obj) is the official way to get the prototype of an object.
+
+
+
+🔷 How It Works:
+When a property or method is accessed on an object:
+
+JavaScript looks for the property directly on the object.
+
+If it's not found, it checks the object's prototype.
+
+If still not found, it checks the prototype’s prototype — and so on — until it reaches null.
+
+This chain of objects is called the prototype chain.
+
+
+
+🔷 Why Use Prototypes?
+To share common methods and properties across multiple object instances.
+
+Saves memory, as methods are not duplicated for each instance.
+
+Enables inheritance in JavaScript.
+
+
+
+🔷 Prototype Chain:
+```
+car1 --> Car.prototype --> Object.prototype --> null
+```
+
+
+All JavaScript objects (except one) inherit from the main built-in object called Object
+
+
+So person automatically has access to methods from Object.prototype like:
+
+toString()
+
+hasOwnProperty()
+
+valueOf()
+
+
+

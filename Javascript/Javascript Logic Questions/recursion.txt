@@ -112,6 +112,28 @@ fun();
 
 ===================================================================================================
 
+reverse array: 
+
+function reverseArray(arr, start = 0, end = arr.length - 1) {
+    if (start >= end) return arr;
+
+    // Swap elements
+    [arr[start], arr[end]] = [arr[end], arr[start]];
+
+    return reverseArray(arr, start + 1, end - 1);
+}
+
+===================================================================================================
+
+add elemenst of array: 
+
+function addELements(arr) {
+    if (arr.length === 0) return 0;
+    return arr[0] + addELements(arr.slice(1))
+}
+
+===================================================================================================
+
 Q1] Factorial Calculation
 Write a function to calculate the factorial of a number n.
 Example: factorial(5) => 120
@@ -129,6 +151,17 @@ function factorial(num){
   if(num === 1) return 1;
 
   return num * factorial(num-1)
+}
+
+-----
+
+function fact(num) {
+    let mul = 1;
+
+    for (let i = 1; i <= num; i++) {
+        mul *= i;
+    }
+    return mul;
 }
 
 
@@ -245,6 +278,7 @@ Q.6]. Palindrome Check
    Check if a string is a palindrome (reads the same forward and backward).  
    **Example:** `isPalindrome("racecar") => true`  
 
+string: 
 function isPalindrome(str) {
     function check(start, end) {
         if (start >= end) return true; // Base case: if start crosses end, it's a palindrome
@@ -255,6 +289,29 @@ function isPalindrome(str) {
     return check(0, str.length - 1);
 }
 
+
+number: 
+
+function isPalindrome(num) {
+    if (num < 0) return false;
+
+    function reverse(n, rev = 0) {
+        if (n === 0) return rev;
+        return reverse(Math.floor(n / 10), rev * 10 + (n % 10));
+    }
+
+    return num === reverse(num);
+}
+
+
+/*
+num = 1221
+reverse(1221, rev = 0) =>  reverse(122, 1);
+reverse(122, 1) => reverse(12, 10 + 2)
+reverse(12, 12) => reverse(1, 120 + 2)
+reverse(1, 122) => reverse(0, 1220 + 1 )
+reverse(0, 1221 ) => 1221
+*/
 
 
 ===================================================================================================
@@ -283,6 +340,23 @@ function calculateDigit(n) {
 }
 
 
+without recursion: 
+
+function calculateTotalDigits(num){
+    let count = 0;
+
+    while(num > 0){
+        count++;
+        num = Math.trunc(num / 10);
+    }
+
+    return count;
+
+}
+
+
+
+
 
 ===================================================================================================
 
@@ -307,28 +381,43 @@ function sumDigitsRecursive(n) {
 }
 
 
+without recursion:
+function sumDigitsIterative(n) {
+    let sum = 0;
+    while (n > 0) {
+        sum += n % 10; // Extract last digit and add to sum
+        n = Math.floor(n / 10); // Remove last digit
+    }
+    return sum;
+}
 
 
 
+============================================================================================================================================================
+
+Input: permutations("abc")
+Output: ["abc", "acb", "bac", "bca", "cab", "cba"]
 
 
+✅ Simple Recursive Code for String Permutations:
+```
+function permutations(str) {
+    if (str.length === 1) return [str];
 
+    const result = [];
 
+    for (let i = 0; i < str.length; i++) {
+        const char = str[i];
+        const remaining = str.slice(0, i) + str.slice(i + 1);
+        const perms = permutations(remaining);
 
+        for (let perm of perms) {
+            result.push(char + perm);
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return result;
+}
+🧪 Example:
+console.log(permutations("abc"));
+// Output: ["abc", "acb", "bac", "bca", "cab", "cba"]
