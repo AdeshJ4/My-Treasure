@@ -1,0 +1,40 @@
+In CSS, the overflow property controls what happens when content inside a container exceeds its size (usually its height or width). 
+It determines whether the extra content is clipped, scrollable, or visible outside the container.
+
+
+🔧 Syntax:
+
+overflow: visible | hidden | scroll | auto;
+
+
+🔍 Common Values:
+
+---------------------------------------------------------------------------------------------
+Value	    Description
+---------------------------------------------------------------------------------------------
+visible :	    Default. Overflowing content is not clipped and may overflow outside the box.
+hidden	:       Clips the content that exceeds the container. No scrollbars.
+scroll  :	    Always shows scrollbars, even if content doesn't overflow.
+auto    :	    Adds scrollbars only if needed (when content overflows).
+---------------------------------------------------------------------------------------------
+
+
+🧠 Example:
+
+<div style="width: 200px; height: 100px; overflow: auto;">
+  This is a long block of text that might overflow the container.
+</div>
+
+
+📌 Bonus:
+
+You can control overflow individually:
+overflow-x: horizontal overflow
+overflow-y: vertical overflow
+
+
+
+
+
+
+

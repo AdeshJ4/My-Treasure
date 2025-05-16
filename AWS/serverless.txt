@@ -1,0 +1,68 @@
+🛠️ What is Serverless Framework?
+
+
+https://www.serverless.com:
+
+that URL points to the Serverless Framework (https://www.serverless.com), which is a developer tool / framework designed to make building and deploying serverless applications easier — especially with AWS Lambda and similar services
+
+
+
+
+🟢 The Serverless Framework is an open-source CLI tool (and platform) that helps you:
+
+Write serverless applications (usually in Node.js, Python, Go, etc.)
+Deploy them easily to AWS Lambda or other cloud providers
+Manage infrastructure-as-code using YAML configuration
+
+Handle things like:
+
+👉 API Gateway setup
+👉 IAM permissions
+👉 Function deployment
+👉 Logging
+👉 Rollbacks
+👉 Environment variables
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+visit: https://www.serverless.com/framework/docs/getting-started
+
+
+
+
+npm i serverless -g
+
+
+see screnshots
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -12,8 +12,8 @@ Indexing shines when dealing with millions of records.
 In MongoDB, an index is a data structure that improves the speed of data retrieval operations on a collection.
 Speeds up queries by reducing the number of documents MongoDB needs to scan
   
-Indexes speed up find, update, and delete queries by reducing the number of documents MongoDB needs to scan that means basically Index on field Helps find the documents
-quickly but the Problem: is the actual update/delete operation still takes time.
+Indexes speed up find, update, and delete queries by reducing the number of documents MongoDB needs to scan that means basically 
+Index on field Helps find the documents quickly but the Problem: is the actual update/delete operation still takes time.
 MongoDB update/delete every matching document individually, which is slow.
 
 Without indexes, MongoDB must scan every document in a collection to return query results
@@ -29,11 +29,6 @@ For collections with a high write-to-read ratio, indexes are expensive because e
 5-10 indexes → ⚠️ Monitor performance
 10+ indexes → 🔴 Likely slowing down writes
 Use only necessary indexes and avoid indexing fields with frequent updates.
-
-
-don't create index on numeric fields like phone number even though its string because it doen not support partial search.
-Text Index Does Not Support Partial Matching → If you search "987", it won’t match "9876543210".
-
 
 
 ❌ 1️⃣Indexes Won’t Help If a Query Uses $regex (Without Prefix)

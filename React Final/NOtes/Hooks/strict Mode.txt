@@ -73,7 +73,8 @@ we get count 2,4,6.
         count 6
 
 -> so in this case react renders each <Fun /> component twice and takes result od second render.
--> The first render is used primarily for detecting and reporting potential issues with our code. while the 2nd render is used to actally updates UI. that is why we don't see count 1,2,3
+-> The first render is used primarily for detecting and reporting potential issues with our code. 
+while the 2nd render is used to actally updates UI. that is why we don't see count 1,2,3
 -> from React 18 strict mode is on by default so react render each component twice.
 -> strict mode only behaves like this in development mode.
 -> so when we build our application for production we will teurn off strict mode.

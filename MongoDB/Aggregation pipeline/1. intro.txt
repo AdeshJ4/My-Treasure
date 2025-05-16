@@ -36,7 +36,7 @@ $group → Groups data (like SQL GROUP BY)
 $project → Selects/reshapes fields
 $sort → Sorts results
 $lookup → Performs joins (foreign key-like relations)
-
+$limit
 
 
 
@@ -187,8 +187,6 @@ db.users.aggregate([
 🧠 Field Comparisons
 { $match: { $expr: { $gt: ["$rating", 8] } } }
 
-{ $match: { $expr: { $eq: ["$language", "English"] } } }
-
 { $match: { $expr: { $lt: ["$awards", "$rating"] } } }
 
 { $match: { $expr: { $gte: ["$duration", 120] } } }
@@ -204,15 +202,6 @@ db.users.aggregate([
 
 { $match: { $expr: { $gt: [{ $size: "$cast" }, 2] } } }
 
-{ $match: { $expr: { $in: ["English", "$language"] } } }
-
-📂 Nested Matching (if nested objects existed)
-Assume this nested structure:
-
-js
-Copy
-Edit
-ratings: { imdb: 8.2, rottenTomatoes: 95 }
 { $match: { "ratings.imdb": { $gte: 8 } } }
 
 { $match: { "ratings.rottenTomatoes": { $gte: 90 } } }
@@ -233,10 +222,6 @@ ratings: { imdb: 8.2, rottenTomatoes: 95 }
 { $match: { rating: { $in: [7.8, 8.5, 9.0] } } }
 
 { $match: { isAvailable: { $eq: true } } }
-
-
-
-
 
 
 ==================================================================
@@ -552,67 +537,55 @@ db.users.aggregate([
 
 -------------
 
-7️⃣ Grouping and Finding Min, Max, Avg
-
-playGround> db.shops.aggregate([ 
-  { $group: { 
-    _id: '$category', 
-    totDocuments: {$sum: 1}, 
-    totalSum: { $sum: '$amount' }, 
-    average: { $avg: '$amount' }, 
-    minAmount: { $min: '$amount' }, 
-    maxAmout: { $max: '$amount' } } 
-    }
-]);
-o/p: 
-
+1️⃣ Group by 'item' and count the number of unique 'customers' who bought that item.
 [
-  {
-    _id: 'Electronics',
-    totDocuments: 5,
-    totalSum: 1500,
-    average: 300,
-    minAmount: 100,
-    maxAmout: 500
-  },
-  {
-    _id: 'Clothing',
-    totDocuments: 5,
-    totalSum: 1750,
-    average: 350,
-    minAmount: 150,
-    maxAmout: 550
-  },
-  {
-    _id: 'Home Appliances',
-    totDocuments: 5,
-    totalSum: 2500,
-    average: 500,
-    minAmount: 300,
-    maxAmout: 700
-  },
-  {
-    _id: 'Books',
-    totDocuments: 5,
-    totalSum: 750,
-    average: 150,
-    minAmount: 50,
-    maxAmout: 250
-  }
+  { "item": "apple", "customer": "John" },
+  { "item": "banana", "customer": "Alice" },
+  { "item": "apple", "customer": "John" },
+  { "item": "banana", "customer": "Bob" },
+  { "item": "orange", "customer": "John" },
+  { "item": "banana", "customer": "Alice" },
+  { "item": "apple", "customer": "Alice" }
+]
+o:
+[
+  { "_id": "apple", "uniqueCustomerCount": 2 },
+  { "_id": "banana", "uniqueCustomerCount": 2 },
+  { "_id": "orange", "uniqueCustomerCount": 1 }
 ]
 
-
--------------
-
-1️⃣ Group and Count Unique Values
-db.users.aggregate([
+Query>
+db.products.aggregate([
   {
     $group: {
-      _id: "$location.city",
-      totalUsers: { $sum: 1 }
+      _id: '$item',
+      uniCus: { $addToSet: '$customer'}
     }
   }
-]);
+])
+
+if you want to calculate total numbers: 
+db.products.aggregate([
+  {
+    $group: {
+      _id: '$item',
+      uniCus: { $addToSet: '$customer' }  
+    }
+  },
+  {
+    $project: {
+      _id: 1,
+      uniCusCount: { $size: '$uniCus'} 
+    }
+  }
+])
+
+o: 
+[
+  { _id: 'orange', uniCusCount: 1 },
+  { _id: 'apple', uniCusCount: 2 },
+  { _id: 'banana', uniCusCount: 2 }
+]
 
 -------------
 
@@ -638,20 +611,6 @@ db.users.aggregate([
     $group: {
       _id: "$city",
       averageAge: { $avg: "$age" }
-    }
-  }
-]);
-
--------------
-
-
-4️⃣ Count the Number of Orders per Customer
-
-db.orders.aggregate([
-  {
-    $group: {
-      _id: "$customer",
-      orderCount: { $sum: 1 }
     }
   }
 ]);
@@ -761,33 +720,6 @@ db.orders.aggregate([
     }
   }
 ])
-
-
------------
-
-
-8️⃣ Write a query to find the highest order amount each customer has placed.
-
-[
-  { "_id": 1, "customer": "Alice", "amount": 500 },
-  { "_id": 2, "customer": "Alice", "amount": 700 },
-  { "_id": 3, "customer": "Bob", "amount": 300 },
-  { "_id": 4, "customer": "Bob", "amount": 1000 }
-]
-Expected Output:
-[
-  { "_id": "Alice", "maxOrderAmount": 700 },
-  { "_id": "Bob", "maxOrderAmount": 1000 }
-]
-Query>
-db.orders.aggregate([
-  {
-    $group: {
-      _id: "$customer",
-      maxOrderAmount: { $max: "$amount" }
-    }
-  }
-]);
 
 
 
@@ -1531,7 +1463,8 @@ db.users.aggregate([
 
 $first: 
 
--> The $first operator is used inside aggregation stages like $group or $project to return the "first element of an array" or the "first document in a group".
+-> The $first operator is used inside aggregation stages like $group or $project or $addFields to return the "first element of an array" or the "first document in a 
+group".
 
 1️⃣ returns the first order for each customer
 db.orders.insertMany([
@@ -1667,7 +1600,7 @@ db.orders.aggregate([
 
 
 ❓ To find customers who haven’t placed any orders, we need to compare two collections:  
-
+---------------------------------------------------------------------------------------
 customers:
 [
   { "_id": 1, "name": "Alice", "email": "alice@example.com" },
@@ -1703,6 +1636,50 @@ db.customers.aggregate([
 ])
 
 
+or: 
+---
+
+
+  db.customers.aggregate([
+    {
+        $lookup: {
+            from: 'orders',
+            localField: '_id',
+            foreignField: 'customerId',
+            as: "orderDetails"
+        }
+    },
+    {
+        $match: {
+                $expr: {
+                    $lt: [{ $size: "$orderDetails"}, 1]
+                }
+        }
+    }
+  ]);
+
+
+
+
+
+❓ customers whoplaces orders (take above sample data): 
+-------------------------------------------------------
+  db.orders.aggregate([
+    {
+        $lookup: {
+            from: 'customers',
+            localField: 'customerId',
+            foreignField: '_id',
+            as: "customerDetails"
+        }
+    }
+  ])
+
+
+
+
+
+  ============================================================================================================================================================
 
 
 

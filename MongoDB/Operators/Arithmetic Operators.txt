@@ -10,9 +10,6 @@ Arithmetic operators return numbers, but find() requires a Boolean condition (e.
 To make a valid query, arithmetic results must be wrapped in a comparison operator like $gt, $lt, $eq, etc.
 
 
-
-
-
 |---------------|-------------------------------------------|-----------------------------------------------|
 | Operator      | Description                               | Example Usage                                 |
 |---------------|-------------------------------------------|-----------------------------------------------|
@@ -63,24 +60,12 @@ db.tb1.find({
 
 ---
 
-### Summary
-✅ Arithmetic Operators in MongoDB  
-1️⃣ `$add` ➝ Addition  
-2️⃣ `$subtract` ➝ Subtraction  
-3️⃣ `$multiply` ➝ Multiplication  
-4️⃣ `$divide` ➝ Division  
-5️⃣ `$mod` ➝ Modulo (Remainder)  
-
-Let me know if you need more details! 🚀🔥
-
-
-
-
-
 
 3. $expr: 
 
+-> $expr allows the use of "aggregation expressions" inside find() queries.
 -> useful when you need to 'compare fields from the same document' or 'perform more complex comparisons'
+-> By default, in MongoDB, you cannot compare two fields of the same document using a simple query without using $expr. 
 -> find all documents where "age" is greater than "target" (both fields are in the same document).
 -> db.tb1.find( { $expr: { $eq:  [ "$age", "$target" ] } } )
 -> db.tb1.find( { $expr: { $ne:  [ "$age", "$target" ] } } )

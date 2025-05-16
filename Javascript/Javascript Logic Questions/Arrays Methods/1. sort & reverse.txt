@@ -40,6 +40,57 @@ console.log(numbers); // [30, 10, 2, 1]
 
 
 
+sort objects of array.
+
+
+const people = [
+    { name: "Alice", age: 30 },
+    { name: "Bob", age: 25 },
+    { name: "Charlie", age: 35 }
+];
+  
+people.sort((a, b) => a.age - b.age);
+  
+console.log(people);
+
+
+
+
+
+
+import _ from 'lodash';
+
+const people = [
+  { name: "Alice", age: 30 },
+  { name: "Bob", age: 25 },
+  { name: "Alice", age: 22 },
+  { name: "Charlie", age: 35 },
+  { name: "Bob", age: 28 }
+];
+
+const sorted = _.orderBy(people, ['name', 'age'], ['asc', 'desc']);
+
+
+
+const people = [
+  { name: "Alice", age: 30 },
+  { name: "Bob", age: 25 },
+  { name: "Alice", age: 22 },
+  { name: "Charlie", age: 35 },
+  { name: "Bob", age: 28 }
+];
+
+people.sort((a, b) => {
+  const nameCompare = a.name.localeCompare(b.name);
+  if (nameCompare !== 0) return nameCompare; // if names are different
+  return a.age - b.age; // if names are same, compare by age
+});
+
+console.log(people);
+
+
+
+
 
 reverse(): 
 

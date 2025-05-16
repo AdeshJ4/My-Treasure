@@ -1,3 +1,4 @@
+0. startsWith()
 1. toLowerCase()
 2. toUpperCase()
 3. trim()

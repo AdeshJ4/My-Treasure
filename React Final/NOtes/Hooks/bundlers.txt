@@ -1,0 +1,65 @@
+🧩 What is a Bundler?
+👉 A "bundler is a tool" that takes all the files in your project ( JavaScript, CSS, images, etc.) and combines (bundles) them 
+into one or more optimized files that can be loaded by a web browser. This bundle can then be included on a webpage to load an entire app at once.
+👉 Bundling is great, but as your app grows, your bundle will grow too. 
+Especially if you are including large third-party libraries. 
+👉 You need to keep an eye on the code you are including in your bundle so that you don’t accidentally make it so 
+large that your app takes a long time to load.
+👉 To avoid winding up with a large bundle, it’s good to get ahead of the problem and start “splitting” your bundle. 
+Code-Splitting is a feature supported by bundlers like Webpack, Rollup and Browserify (via factor-bundle) which can 
+create multiple bundles that can be dynamically loaded at runtime.
+
+
+How to 
+import()
+The best way to introduce code-splitting into your app is through the dynamic import() syntax.
+
+
+🧪 Why Do We Need a Bundler?
+In a real-world project:
+
+You write many small files (components, styles, modules)
+Browsers can't understand import/export or JSX directly
+Loading too many files is slow
+
+A bundler solves this by:
+
+Combining files into fewer files
+Transpiling code (like JSX, ES6+)
+Minifying code to reduce file size
+Optimizing for fast performance
+
+⚙️ Common Bundlers
+|--------------|--------------------------------|-------------------------------------|
+| Tool         | Used With                      | Notes                              |
+|--------------|--------------------------------|-------------------------------------|
+| **Webpack**  | React, Angular, Vue, etc.      | Very powerful, configurable         |
+| **Vite**     | React, Vue, Svelte, etc.       | Super fast, uses native ES modules  |
+| **Parcel**   | Zero-config setup               | Simple for beginners                |
+| **esbuild**  | Next-gen bundler, lightning fast| Used internally by Vite             |
+| **Rollup**   | Libraries and frameworks        | Focuses on small and optimized output|
+|--------------|--------------------------------|-------------------------------------|
+
+
+📦 Example (React + Webpack)
+
+1. You write:
+```
+import App from './App';
+import './styles.css';
+```
+
+2. Bundler creates:
+```
+// bundled.js — minified and optimized
+(function(){ /* your whole app here */ })();
+```
+
+3. Then your browser just loads:
+```
+<script src="bundled.js"></script>
+```
+
+
+
+

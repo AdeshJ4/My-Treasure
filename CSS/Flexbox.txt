@@ -1,6 +1,5 @@
 
 
-
     justify-content: center;  /* horizontally center*/
     align-items: center;  /* vertically center*/
 
@@ -64,3 +63,36 @@ align-self property:
   <div style="align-self: center">2</div>
   <div>3</div>
 </div>
+
+
+
+
+🎯 flex: 
+=========
+👉 The flex property is a shorthand property for:
+1️⃣ flex-grow
+2️⃣ flex-shrink
+3️⃣ flex-basis
+👉 Let all the flexible items be the same length, regardless of its content.Basically divide all items in equal width.
+
+ex: "flex: 1" is a shortcut for setting three individual flex properties:
+"
+flex-grow: 1;
+flex-shrink: 1;
+flex-basis: 0%;
+"
+
+ex: "flex: 0 0 200px"
+"
+flex-grow: 0;
+flex-shrink: 0;
+flex-basis: 200px;
+"
+
+
+ex: "flex: 50%" is a shorthand, and it’s equivalent to:
+"
+flex-grow: 1;
+flex-shrink: 1;
+flex-basis: 50%;
+"

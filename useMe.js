@@ -1,22 +1,15 @@
-function bubbleSort(arr){
-    for(let i=0; i<arr.length; i++){
-        let isSorted = false;
-        for(let j=1; j<arr.length; j++){
-            if(arr[j] < arr[j-1]){
-                [arr[j-1], arr[j]] = [arr[j], arr[j-1]]
-                isSorted = true;
-            }
-        }
-
-        if(!isSorted)
-            return;
-    }
-}
+const people = [
+    { name: "Alice", age: 30 },
+    { name: "Alice", age: 30 },
+    { name: "Bob", age: 25 },
+    { name: "Charlie", age: 35 }
+];
 
 
-let arr = [50, 40, 30, 20, 10];
 
-bubbleSort(arr);
+people.sort((a, b) => {
+    return a.age - b.age
+})
 
-console.log(arr);
 
+console.log(people);

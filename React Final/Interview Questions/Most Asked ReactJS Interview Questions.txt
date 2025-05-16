@@ -27,6 +27,77 @@ The parent component manages the state and passes it down to the child component
 
 
 
+ways of exporting (default vs named export):
+
+
+Could you clarify what you mean by **"ame export"** in React? Did you mean:
+
+### ✅ Named Export
+
+You can export multiple items with **named exports**:
+
+```js
+// Button.js
+export const Button = () => {
+  return <button>Click me</button>;
+};
+
+export const Icon = () => {
+  return <span>🌟</span>;
+};
+```
+
+And import like this:
+
+```js
+import { Button, Icon } from './Button';
+```
+
+---
+
+### ✅ Default Export
+
+Only one **default export** is allowed per file:
+
+```js
+// Button.js
+const Button = () => {
+  return <button>Click me</button>;
+};
+
+export default Button;
+```
+
+And import like this:
+
+```js
+import Button from './Button';
+```
+
+---
+
+### 🔄 Mixing Exports
+
+You **can** mix both, but it's not common:
+
+```js
+export const Button = () => <button>Click</button>;
+const Icon = () => <span>⭐</span>;
+export default Icon;
+```
+
+```js
+import Icon, { Button } from './Button';
+```
+
+---
+
+
+
+
+
+
+
 
 Q1] What is React & SPA?
 
@@ -76,17 +147,61 @@ Q] What are the differences between controlled and uncontrolled components?
 
 Q0] What is the virtual DOM and why we use it? 
 
--> virtual DOM is a virtual representation of the real DOM is kept inside the memory and is 
-synced with the real DOM by a library such as 'ReactDOM'.
+-> The Virtual DOM is a lightweight copy of the real DOM, kept in memory by React and is synced with the real DOM by a library such as 'ReactDOM'.
 
 Why we use: 
--> DOM manipulation is an imp part of any web application
--> The efficiency of the application gets affected when several DOM manipulations are being done
--> Most JavaScript frameworks 'update the entire DOM' even when a 'small part of the DOM changes'.
--> For example, consider a list that is being rendered inside the DOM. If one of the items in the list 
-changes, the entire list gets rendered again instead of just rendering the item that was changed/updated. 
-This is called 'inefficient updating'.
+
+🧱 Real DOM:
+The Real DOM is the actual UI in the browser.
+It's slow to update because changing even a small part re-renders the entire tree.
 -> To address the problem of inefficient updating, the react team introduced the concept of virtual DOM.
+
+-> DOM stands for Document Object Model.  
+-> When a web page is loaded, the browser creates a Document Object Model of the page which is like a tree-like structure in its 
+memory,where each HTML element becomes a node.
+tree structure: window -> Document -> HTML -> 1.Head 2.Body
+-> Js can talk to the DOM and ask fro specific element
+
+-> Most Common methods for accessing DOM elements : 
+1. getElementById
+2. getElementByClassName 
+3. getElementByTagName
+4. querySelector
+5. querySelectorAll
+
+1. getElementById
+-> This method allow you to select a single element by its unique id attribute
+HTML:
+<div id="myDiv">Hello</div>
+JS: 
+const myDiv = document.getElementById('myDiv')
+
+2. getElementByClassName
+-> This method allow you to select a multiple element by its class attribute
+HTML:
+<div class="myDiv">Hello</div>
+<div class="myDiv">JS</div>
+JS: 
+const myDiv = document.getElementByClassName('myDiv')
+
+3. getElementByTagName
+-> This method allow you to select a multiple element by its specific Tag Name
+HTML:
+<h1>Heading</h1>
+<div>Hello</div>
+<div>JS</div>
+JS: 
+const myDiv = document.getElementByTagName('div')
+
+
+🪞 Virtual DOM:
+💡 Why is the Virtual DOM lightweight?
+It's just JavaScript objects
+The Virtual DOM is not the actual HTML or browser-rendered elements.
+It's a tree of plain JavaScript objects that represent the structure of the UI.
+JS objects are lightweight and fast to create and compare.
+
+
 
 working: 
 -> For every DOM object(html tag), there is a corresponding virtual DOM object(copy), which has the same 

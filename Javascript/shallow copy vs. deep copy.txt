@@ -58,12 +58,10 @@ obj2.hobbies.push("Card");  //  changes will reflect
 console.log("obj1: ", obj1);
 console.log("obj2: ", obj2);
 
-Shallow Copy inside Array
-
-
+🟢 Shallow Copy inside Array
 1. Array.slice():
 const arr1 = [10, 20, [30, 40]];
-consslice();t arr2 = arr1.
+const arr2 = arr1.slice(0)
 arr2[2].push(50);  // changes will reflect
 arr2.push(50);  // changes will not reflect
 console.log(arr1);

@@ -7,6 +7,9 @@ Formik simplifies this process.
 
 🔥 Key Benefits of Formik:
 
+If you're using Formik (with or without Yup), your form components are considered controlled components.
+Formik internally manages form state using React's useState, and it controls the values of the input fields through its values object. Here's what happens:
+
 
 1️⃣ State Management for Forms
 Handles form input values, errors, touched fields, and submission state automatically.

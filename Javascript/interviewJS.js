@@ -736,7 +736,8 @@ console.log(globalVar); // ✅ Accessible outside function
 🔷 Lexical Scope in JavaScript:
 
 Lexical Scope means that a function has access to variables defined in its own scope, as well as in its parent (outer) scopes.
-It follows a hierarchical (nested) structure where inner functions can access outer function variables, but outer functions cannot access inner function variables.
+It follows a hierarchical (nested) structure where inner functions can access outer function variables, but outer functions cannot 
+access inner function variables.
 
 ex: 
 ```
@@ -760,8 +761,8 @@ grandparent();
 🔷 JavaScript Scope Chain:
 
 Scope Chain is the mechanism JavaScript uses to resolve variable names.
-When a variable is accessed inside a function, JavaScript searches for it in the current scope, then in its parent scope, then in the next parent, and so on until it 
-reaches the global scope.
+When a variable is accessed inside a function, JavaScript searches for it in the current scope, then in its parent scope, then in 
+the next parent, and so on until it reaches the global scope.
 
 🔹 If the variable is not found, JavaScript throws a ReferenceError.
 
@@ -3046,7 +3047,8 @@ const myJSON = JSON.stringify(obj);
 // Q14] What do you mean by strict mode in javascript and characteristics of javascript strict-mode?
 
 /*
--> Strict Mode ("use strict";) is a feature in JavaScript that helps catch common coding mistakes and makes the code more secure and optimized.
+-> Strict Mode ("use strict";) is a feature in JavaScript that helps catch common coding mistakes and makes the code more secure and 
+optimized.
 -> It enforces stricter parsing and error handling in your JavaScript code.
 How to Enable Strict Mode?
 For entire script: Add "use strict"; at the beginning.
@@ -3058,7 +3060,7 @@ characteristics:
 
 Eliminates silent errors – Converts previously ignored mistakes into errors.
 Prevents the use of undeclared variables – Variables must be declared using let, const, or var.
-Restricts this value – In strict mode, this remains undefined instead of defaulting to the global object.
+Restricts this value – In strict mode, "this" remains "undefined" instead of referring to the global object.
 Disallows duplicate parameter names – Helps avoid conflicts in function parameters.
 
 */
@@ -3078,7 +3080,8 @@ Disallows duplicate parameter names – Helps avoid conflicts in function parame
 
 
 🔷 What is a Prototype?
-In JavaScript, every object has an internal link to another object called its prototype. This prototype object can have properties and methods, which are inherited by the original object.
+In JavaScript, every object has an internal link to another object called its prototype. 
+This prototype object can have properties and methods, which are inherited by the original object.
 
 This mechanism is known as prototype-based inheritance.
 

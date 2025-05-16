@@ -93,7 +93,6 @@ If it hasn’t changed, it sends back 304 Not Modified with no body, telling the
 | 403  | Forbidden                | Authenticated but not allowed.               |
 | 404  | Not Found                | Resource not found.                          |
 | 409  | Conflict                 | Conflict with existing resource (e.g., duplicate email). |
-| 422  | Unprocessable Entity     | Validation error (common with form data).    |
 | 429  | Too Many Requests        | The client has sent too many requests in a given amount of time (rate limiting).    |
 
 
@@ -127,7 +126,8 @@ This status is used to protect the server from being overloaded by clients or bo
 💥 HTTP Status Code 500 – Internal Server Error
 📘 Meaning:
 The server encountered an unexpected condition that prevented it from fulfilling the request.
-It's a generic catch-all error when the server knows something went wrong, but isn’t sure what exactly or doesn't want to expose the internal details.
+It's a generic catch-all error when the server knows something went wrong, but isn’t sure what exactly or doesn't want to expose 
+the internal details.
 
 
 🚧 502 – Bad Gateway

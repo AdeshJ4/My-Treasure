@@ -1,10 +1,21 @@
 1. Memo function
+-----------------
 -> Using memo we will skip rendering a component if its props have not changed, even though you didn't pass 
 any state to that component it will unnecessary rerender so we can stop it by memo function.
-->  It works by memoizing the rendered output of the component and re-rendering it only if its props change
+->  It works by memoizing the "rendered output" of the component and re-rendering it only if its props change
+-> Memoization is an optimization technique used to speed up function calls by caching the results of expensive function calls and returning the cached 
+result when the same inputs occur again.
+-> A cache is a place where data is stored temporarily so that it can be quickly accessed the next time it’s needed.
+Cache is temporary and in-memory.
+Once you refresh the page or restart your app, it’s gone.
+If you want to store results permanently, you’d use localStorage, a database, or a file — not cache.
+
+-> Wrap a component in memo to get a memoized version of that component.
+-> This memoized version of your component will usually not be re-rendered when its parent component is re-rendered as long as its props have not changed. 
+But React may still re-render it: memoization is a performance optimization, not a guarantee.
 -> refer w3school example and react website ex
 
-===================================================================================================================================================================
+==============================================================================================================================================================
 
 2. useCallback hook: 
 -> The React useCallback Hook returns a "memoized callback function".
@@ -15,7 +26,6 @@ any state to that component it will unnecessary rerender so we can stop it by me
 -> refer react website ex
 
 ===================================================================================================================================================================
-
 
 3. useMemo hook: 
 -> The React useMemo Hook returns a "memoized value".
@@ -274,6 +284,30 @@ const ScrollLogger = () => {
   return <div style={{ height: "200vh", padding: "20px" }}>Scroll Down</div>;
 };
 
+
+1️⃣ throttle in resize the window.
+
+const App = () => {
+
+  const handlerResize = useThrottle(() => {
+    console.log('called');
+  }, 1000) 
+
+  useEffect(() => {
+    window.addEventListener('resize', handlerResize);
+
+    return () => window.removeEventListener('resize', handlerResize)
+  }, []);
+
+
+  return (
+    <div style={{ height: '10000px', backgroundColor:"dodgerblue"}}>App</div>
+  )
+}
+
+
+
+
 3️⃣ Throttling a Search Input:
 
 const SearchBox = () => {
@@ -305,20 +339,105 @@ export default SearchBox;
 ============================================================================================================================================================================================================================
 
 
-
-
-
 Lazy Load and code splitting
 -----------------------------
+
+🟢 build (for production)        : "npm run build"  
+🟢 run build (for production)  : "npm run preview" 
+
+1️⃣ if you don't use code spitting then it will create three files: html, js, css.
+2️⃣ if you use code spitting then it will create multiple js files but single html, css.
+
+
+
+☀️ Bundling:
+Most React apps will have their files “bundled” using tools like Webpack, Rollup or Browserify.
+Bundling is the process of following imported files and merging them into a single file: a “bundle”. 
+This bundle can then be included on a webpage to load an entire app at once.
+
+
+🧩 What is a Bundler?
+👉 A "bundler is a tool" that takes all the files in your project ( JavaScript, CSS, images, etc.) and combines (bundles) them 
+into one or more optimized files that can be loaded by a web browser. 
+This bundle can then be included on a webpage to load an entire app at once.
+👉 Bundling is great, but as your app grows, your bundle will grow too. 
+Especially if you are including large third-party libraries. 
+👉 You need to keep an eye on the code you are including in your bundle so that you don’t accidentally make it so 
+large that your app takes a long time to load.
+👉 To avoid winding up with a large bundle, it’s good to get ahead of the problem and start “splitting” your bundle. 
+Code-Splitting is a feature supported by bundlers like Webpack, Rollup and Browserify (via factor-bundle) which can 
+create multiple bundles that can be dynamically loaded at runtime.
+
+
+How to code-splitting into your app:
+
+1. "import()"
+The best way to introduce code-splitting into your app is through the dynamic import() syntax.
+When Webpack comes across this syntax, it automatically starts code-splitting your app.
+when you import functions, arrays, or compoennts using "import()" it creates a seprate file of it.
+
+
+📦 Example (React + Webpack)
+
+1. You write:
+```
+import App from './App';
+import './styles.css';
+```
+
+2. Bundler creates:
+```
+// bundled.js — minified and optimized
+(function(){ /* your whole app here */ })();
+```
+
+3. Then your browser just loads:
+```
+<script src="bundled.js"></script>
+```
+
+
+🧪 Why Do We Need a Bundler?
+In a real-world project:
+
+You write many small files (components, styles, modules)
+Browsers can't understand import/export or JSX directly
+Loading too many files is slow
+
+A bundler solves this by:
+
+Combining files into fewer files
+Transpiling code (like JSX, ES6+)
+Minifying code to reduce file size
+Optimizing for fast performance
+
+⚙️ Common Bundlers
+|--------------|--------------------------------|-------------------------------------|
+| Tool         | Used With                      | Notes                               |
+|--------------|--------------------------------|-------------------------------------|
+| **Webpack**  | React, Angular, Vue, etc.      | Very powerful, configurable         |
+| **Vite**     | React, Vue, Svelte, etc.       | Super fast, uses native ES modules  |
+| **Parcel**   | Zero-config setup               | Simple for beginners                |
+| **esbuild**  | Next-gen bundler, lightning fast| Used internally by Vite             |
+| **Rollup**   | Libraries and frameworks        | Focuses on small and optimized output|
+|--------------|--------------------------------|-------------------------------------|
+
+
+
+
+🟢 Code splitting:
+-> Code splitting is the process of dividing/Splitting your application's code into multiple bundles/files that can be loaded on 
+demand instead of combining all components into a single JavaScript file/bundle.
 
 -> Code splitting and lazy loading are techniques used in React to optimize the performance of your application by reducing the 
 initial load time. 
 
 
-Code Splitting:
+🧠 Why is it useful?
+👉 Faster initial load ⏱️
+👉 Smaller JavaScript bundles 📦
+👉 Improves performance and user experience 🚀
 
--> Code splitting is the process of dividing/Splitting your application's code into multiple bundles/files that can be loaded on 
-demand instead of combining all components into a single JavaScript file/bundle.
 
 -> If you don't use code splitting, all components get merged into a single JavaScript file after running the npm run build command.
 
@@ -332,12 +451,82 @@ demand instead of combining all components into a single JavaScript file/bundle.
 
 2. Lazy Loading
 
+-> The React.lazy function lets you render a dynamic import as a regular component
 -> Lazy loading is a technique that delays the loading of non-critical resources until they are needed, ensuring that these 
 chunks/compoents/imagges/pages are loaded on demand when the user requires them.
 -> Lazy loading is a technique where resources (like images, components, or scripts) are loaded only when they are needed, typically 
 when they come into the viewport or are about to be rendered or we navigate to them. 
 This improves performance by reducing the initial load time and bandwidth usage.
 In React, we use React.lazy() for lazy loading components and "Suspense" to handle the fallback UI while the component is being loaded.
+
+🎯 If you have 500 cards, lazy loading with React.lazy() won’t help much — because it lazy-loads component code, not component 
+instances. 
+Meaning: React.lazy is good for large components loaded once (e.g. pages or modals), not for repeating items like 500 cards.
+pagination and infinite scroll are the most common optimization techniques for rendering large datasets like 500+ cards.
+
+
+🎯 lazy load a array: 
+```
+import React, { useState } from 'react'
+
+const App = () => {
+  const [ todosList, setTododsList ] = useState([]);
+
+🧠 Dynamic Import (on button click)
+  const handleData = () => {
+    import('../utils/todos').then((module => setTododsList(module.todos)))
+  }
+
+  return (
+    <div>
+      <h1>About</h1>
+      <button onClick={handleData}>Load Data</button>
+      <ul>
+        { todosList.map(todo => (<li key={todo.id}>{todo.title}</li>))}
+      </ul>
+    </div>
+  )
+}
+
+export default App
+```
+
+todos.js: 
+--------
+export const todos = [
+  {
+    userId: 1,
+    id: 1,
+    title: "delectus aut autem",
+    completed: false,
+  },
+  {
+    userId: 2,
+    id: 2,
+    title: "quis ut nam facilis et officia qui",
+    completed: false,
+  },
+
+  ....
+  ,
+
+  {
+    userId: n,
+    id: n,
+    title: "fugiat veniam minus",
+    completed: false,
+  }
+]
+
+explanation: 
+
+👉 import() Loads data on demand (saves initial bundle size)
+👉 import('../utils/todos') is a dynamic import.
+👉 It means: load the module only when the user clicks the button, not when the component first loads.
+👉 This helps with performance and code-splitting.
+👉 Once the module is loaded, .then(...) gives you access to the exported stuff in that file.
+👉 You're accessing module.todos and setting that as the new state (todosList).
+
 
 
 Relationship between Code Splitting and Lazy Loading:
@@ -352,7 +541,7 @@ import { Route, Routes } from 'react-router-dom';
 import Navbar from './Components/Navbar';
 import Home from './Components/Home';
 
-const About = lazy(() => import('./Components/About'));
+const About = lazy(() => waitMe(2000).then(() => import('./pages/About')));
 const Contact = lazy(() => import('./Components/Contact'));
 
 const App = () => { 
@@ -455,7 +644,8 @@ What Happens When You Run npm run build (With Code Splitting & Lazy Loading)?
 -----------------------------------------------------------------------------
 
 1. Multiple JavaScript Files (Chunks) Are Created: 
--> Instead of one large index.js file, React splits the code into smaller chunks (e.g., main.[hash].js, About.[hash].js, Contact.[hash].js).This reduces the initial download size for users.
+-> Instead of one large index.js file, React splits the code into smaller chunks (e.g., main.[hash].js, About.[hash].js, Contact.[hash].js).
+This reduces the initial download size for users.
 2. Only Essential Code Loads Initially: 
 -> The homepage loads faster because only the required JavaScript files are downloaded first.
 Other pages/components are lazy-loaded (downloaded when the user navigates to them).
@@ -478,6 +668,9 @@ Other pages/components are lazy-loaded (downloaded when the user navigates to th
 
 
 
-Most Used Design Patterns in React | Learn React Design Patterns in One Video
 
-Dipesh Malvi
+
+
+video: 
+
+

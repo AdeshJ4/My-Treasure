@@ -251,6 +251,17 @@ db.users.find({ interests: { $size: 3 } });
 ✅ Result: Alice (["sports", "music", "reading"])
 
 
+{ $match: { $expr: { $gt: [{ $size: "$cast" }, 2] } } }
+
+db.users.aggregate([
+    { 
+      $match: { 
+        $expr: { 
+          $gt: [{ $size: "$cast" }, 2] } 
+        }
+      }
+])
+
 =============================================================================================================
 
 $push: 

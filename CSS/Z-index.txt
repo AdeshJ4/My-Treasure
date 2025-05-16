@@ -1,0 +1,24 @@
+The `z-index` in CSS controls the **stacking order** of elements along the z-axis (which is front-to-back).
+
+### 📌 Quick Summary:
+- **Higher `z-index` = Closer to the user (on top)**
+- **Only works on elements with `position: relative | absolute | fixed | sticky`**
+- Default `z-index` is `auto`
+
+### 🔧 Example:
+
+```css
+.box1 {
+  position: absolute;
+  z-index: 1;
+}
+
+.box2 {
+  position: absolute;
+  z-index: 2; /* This will appear on top of .box1 */
+}
+```
+
+So, use `z-index` to control which elements appear in front when they overlap.
+
+Let me know if you want a visual demo or Tailwind version!

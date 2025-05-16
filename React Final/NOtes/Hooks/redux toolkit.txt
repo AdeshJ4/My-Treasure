@@ -115,6 +115,43 @@ reducers should be pure functions and not have side effects.
 
 
 
+:
+
+🔍 Why use rejectWithValue?
+By default, if an error is thrown inside a createAsyncThunk, Redux Toolkit catches it and puts it into the rejected action — but it only gives you the error object, which might not contain the actual message or error structure you want (like the one returned by your backend).
+
+rejectWithValue allows you to:
+
+Pass custom error data (e.g., error.response.data.message)
+
+Access this custom payload later in your slice’s extraReducers
+
+Handle backend validation or API errors gracefully
+
+✅ Without rejectWithValue
+If you just throw the error or don't use rejectWithValue, the rejected action’s payload will be undefined, and you’ll need to check action.error.message.
+
+✅ With rejectWithValue
+js
+Copy
+Edit
+return rejectWithValue(error.response?.data || error.message);
+Now in your slice:
+
+js
+Copy
+Edit
+extraReducers: (builder) => {
+  builder
+    .addCase(registerUser.rejected, (state, action) => {
+      state.error = action.payload; // This contains the value you passed with rejectWithValue
+    });
+}
+🔄 Analogy
+Think of rejectWithValue like saying:
+
+“Hey, my async function failed, but here's a neat, specific error message you can use to show toasts or update the UI.”
+
 
 
 
