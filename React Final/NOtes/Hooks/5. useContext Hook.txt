@@ -117,15 +117,8 @@ function Component3() {
 
 
 Ex: 
-
-
-
-
-
 File1.jsx: 
 ----------
-
-
 import React, { createContext, useState } from "react";
 import File1 from "./File1";
 
@@ -145,8 +138,6 @@ const FIle1 = () => {
 };
 
 export default FIle1;
-
-
 
 File 2.jsx
 -----------
@@ -302,7 +293,7 @@ Here's how the unidirectional data flow works in React:
     export default ChildComponent;
 
 
-2. **Child-to-Parent (Callback Props):**
+2. **Child-to-Parent (Calback Plrops):**
    - If a child component needs to communicate with its parent, the parent can pass callback functions to the child as props.
    - The child invokes the callback, and the parent handles the state changes.
 

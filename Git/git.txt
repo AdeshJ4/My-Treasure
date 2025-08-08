@@ -51,16 +51,7 @@ git merge --abort
 ✅ **Use `git switch`** if you’re just changing branches (cleaner & safer).  
 ✅ **Use `git checkout`** if you’re using an older Git version or need to check out specific files/commits.  
 
-Would you like to update your Git version to use `git switch`? 🚀
-
-
-
-
 ------------------
-
-
-
-
 
 Merge changes :
 ---------------
@@ -68,7 +59,8 @@ Merge changes :
 I have two branches locally since my repository is not published on GitHub:
 1. master
 2. feat/button
-Currently, I am on the feat/button branch, and I have committed all my feature changes. Now, I want to merge this feature branch into the master branch.
+Currently, I am on the feat/button branch, and I have committed all my feature changes. 
+Now, I want to merge this feature branch into the master branch.
 
 sol> 
 You can merge your feat/button branch into master by following these steps:

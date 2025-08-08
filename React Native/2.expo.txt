@@ -1,0 +1,144 @@
+https://docs.expo.dev/tutorial/create-your-first-app/#initialize-a-new-expo-app
+
+step 1: run : expo init DoneWithIt
+step 2: you will get this options: 
+
+? Choose a template: » - Use arrow-keys. Return to submit.
+    ----- Managed workflow -----
+>   blank               a minimal app as clean as an empty canvas
+    blank (TypeScript)  same as blank but with TypeScript configuration
+    tabs (TypeScript)   several example screens and tabs using react-navigation and TypeScript
+    ----- Bare workflow -----
+    minimal             bare and minimal, just the essentials to get you started  (Android and ios)
+
+
+choose blank (Project without Android and ios folder) 
+choose minimal (contain Android and ios folder)
+
+
+
+
+for running the project: 
+=======================
+npx expo start
+
+
+
+
+
+Nope, you're good — the command you used is **not outdated**.
+
+```bash
+expo init DoneWithIt
+```
+
+is still the **recommended way** to create a new Expo project in 2025.
+
+---
+
+### ✅ What `expo init` does:
+
+* Creates a new React Native app using the **Expo managed workflow**
+* Gives you a template option (like `blank`, `blank with TypeScript`, or `tabs`)
+* Sets up everything needed to run the app with **Expo Go**
+
+---
+
+### Want to check your Expo CLI version?
+
+Run this:
+
+```bash
+npx expo --version
+```
+
+If it's outdated, you can update it like this:
+
+```bash
+npm install -g expo-cli
+```
+
+Or if you're using the new **Expo CLI 6+ (recommended)**, use:
+
+```bash
+npm install -g expo
+```
+
+---
+
+Let me know if you’re planning to use custom native code or just sticking to the managed workflow — I can help you pick the right setup.
+
+
+
+
+
+
+
+
+
+
+Upgrade Expo SDK: 
+=================
+
+
+1. install : 
+
+# install latest
+-npm install expo@latest
+
+# install specific SDK version
+npm install expo@51
+
+
+2. Upgrade dependencies
+
+# Upgrade all dependencies to match the installed SDK version.
+- npx expo install --fix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

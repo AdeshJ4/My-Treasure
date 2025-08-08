@@ -1,3 +1,20 @@
+* {
+  box-sizing: border-box;
+}
+
+This CSS rule means:
+
+👉 Apply box-sizing: border-box to all elements (* is the universal selector).
+
+📦 What does border-box do?
+It makes sure that:
+👉 The width and height you set on an element includes padding and border.
+So the actual size of the element stays as you set it.
+
+
+
+
+
 
 
     justify-content: center;  /* horizontally center*/

@@ -1,0 +1,42 @@
+expo cli and react native cli
+
+expo cli is like bana banya ghar. we don't have to create a things from scratch.
+No custimization
+
+React native yoiu ahve to do things by your need like customization.
+
+All main production grade applications like whatsapp are created using react native cli.
+
+so in this tutorial we are going to learn React native cli and not expo.
+
+visit this link:  https://reactnative.dev/docs/environment-setup
+
+
+
+the navigate to this page : "Set Up Your Environment"
+
+
+inside tyhis page select: 
+
+Development OS : Windows
+Target OS : Android
+
+
+then click on "Chocolatey".
+
+then copy this link and open powershell as adminstrative and paste that link: "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+after succesfully installing chocolatey open cmd as adminstrative and paste this link mention in document: 
+link: choco install -y nodejs-lts microsoft-openjdk17
+then check version of node and java.
+
+now clcik on : 1. Install Android Studio - Download and install Android Studio. (https://developer.android.com/studio)
+click: Download Android Studio Meerkat Feature Drop
+
+
+
+
+
+
+command to create a react native project:  npx @react-native-community/cli init appName
+
+to start application: npx react-native run-android
