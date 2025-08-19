@@ -67,40 +67,36 @@ You can merge your feat/button branch into master by following these steps:
 
 1️⃣ Switch to the master Branch
 Since you are currently on feat/button, first switch to master:
+```
+git switch master
+```
 
-bash
-Copy
-Edit
-git checkout master
+
 2️⃣ Merge feat/button into master
 Run the following command to merge the changes from feat/button into master:
-
-bash
-Copy
-Edit
+```
 git merge feat/button
+```
+
 3️⃣ Resolve Any Merge Conflicts (If Any)
 If Git reports conflicts, open the affected files, resolve them, and then run:
-
-bash
-Copy
-Edit
+```
 git add .
 git commit -m "Resolved merge conflicts"
+```
+
 4️⃣ Verify the Merge
 Check if everything looks good:
-
-bash
-Copy
-Edit
+```
 git log --oneline --graph --decorate --all
+```
+
 5️⃣ Delete the feat/button Branch (Optional)
 If you no longer need the feat/button branch, delete it:
-
-bash
-Copy
-Edit
+```
 git branch -d feat/button
+```
+
 Now, your master branch has all the changes from feat/button. 🚀
 
 
@@ -119,11 +115,13 @@ This will list all existing branches and highlight the current branch.
 🚀Create a New Branch (Multiple ways):
 1️⃣. git branch branch_name       or  
 2️⃣. git checkout -b new_branch   or  
-3️⃣. git switch -c new_branch
+3️⃣. git switch -c new_branch    (recommended)
 
 1. you have to use seprate checkout command to switch to that branch. ex: git checkout new_branch.
-2. Can switch branches or checkout a specific commit. If the branch doesn’t exist, you need to use -b to create it. Can be confusing because it also allows checking out files (e.g., git checkout file.txt).
-3. Only used for switching branches, making it safer. If the branch doesn’t exist, use -c to create it. Cannot be used for checking out specific commits or files.
+2. Can switch branches or checkout a specific commit. If the branch doesn’t exist, you need to use -b to create it. 
+Can be confusing because it also allows checking out files (e.g., git checkout file.txt).
+3. Only used for switching branches, making it safer. If the branch doesn’t exist, use -c to create it. 
+Cannot be used for checking out specific commits or files.
 
 
 

@@ -433,7 +433,8 @@ destination: <p>Navigated from: {location.state?.from}</p>
 replace: true: 
 --------------
 
--> Without "replace: true" (Default Behavior) if you navigate without the replace option, the previous page stays in the history stack and you can go back to previous page.
+-> Without "replace: true" (Default Behavior) if you navigate without the replace option, the previous page stays in the history 
+stack and you can go back to previous page.
 -> With "replace: true" (Replacing History Entry) you can't go back to previous page, useful in login/register page.
 
 code:
