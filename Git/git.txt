@@ -1,12 +1,337 @@
-git config --global user.name
-git config --global user.email
+🎯 "git init"
+👉 When you run git init, Git starts tracking your "project", but it only tracks files — not empty folders.
+
+============================================================================================================================================================
+
+
+git config --global user.name     -> Adesh Jadhav 
+git config --global user.email    -> adejad1234@gmail.com
+
+
+============================================================================================================================================================
+
+
+🔹 What is a Fork?
+
+👉 A fork is just a copy of someone else’s repository into your own GitHub account.
+
+It lets you:
+Experiment freely (without breaking the original project).
+Suggest changes to the original project later (via Pull Request).
+
+👉 Think of it like this:
+Fork = photocopy of a book that is now yours.
+Clone = borrowing a book from the library to read at home.
+
+🎯 When You’re Contributing to Open Source (not your job)
+👉 The repo belongs to someone else (you don’t have push rights).
+👉 Here, you fork the repo first → make your own copy on GitHub.
+👉 Then you clone your fork to your PC, do changes, and submit a Pull Request to the original project.
+
+🎯 When You’re Doing a Job (Company Project)
+👉 The company already has a repo on GitHub / GitLab / Bitbucket.
+👉 You don’t fork it (because you’re not an outsider).
+👉 Instead, you clone the repo directly and start working.
+👉 That repo is usually private, and your manager/lead gives you access.
+👉 The remote will be called origin (default).
+👉 You create branches, commit, and push code back to the company’s repo.
+
+
+🟢 So, in short:
+👉 Job / Company Project → Just git clone (no fork needed).
+👉 Open Source Contribution → Fork (on GitHub) → Clone (to your PC).
+
+
+============================================================================================================================================================
+
+🔹 What is git add?
+👉 It is used to track an untracked files. (use "git add <file>..." to "include in" what will be "committed")
+👉 "git add" is used to move changes from the 'working directory' to the 'staging area'.
+👉 Only changes that are in the 'staging area' can be committed with git commit.
+👉 summary - select which changes you want in your next commit.
+👉 📝 You edit files → 📦 git add (pack changes for commit) → ✅ git commit (save snapshot in history).
+
+Syntax: 
+
+1. "git add <file>"
+2. "git add index.html"   (Add a specific file)
+3. "git add index.html style.css"     (Add multiple files)
+4. "git add ."      (Add all changes in the current directory (and subfolders))
+5. "git add -A"     (Add all files in the entire repository)
+
+
+============================================================================================================================================================
+
+
+🔹 What is a Remote?  🔹 Why Have Multiple Remotes?
+
+👉 A remote is just a URL (like GitHub/GitLab repo link) that points to a repository somewhere else.
+👉 By default, when you git clone, Git sets up one remote called origin.
+
+👉 Example:
+```
+git remote -v           (list all remotes)
+```
+
+Might show:
+
+```
+origin   https://github.com/YourFork/repo.git (fetch)
+upstream https://github.com/MainOwner/repo.git (fetch)
+origin  https://github.com/AdeshJ4/Doctor-Appointment-Booking-System-Client.git (fetch)
+origin  https://github.com/AdeshJ4/Doctor-Appointment-Booking-System-Client.git (push)
+```
+
+🎯 You add multiple remotes when you need to interact with more than one repository for the same project.
+🟢 Common Cases:
+
+1️⃣ Open Source Contribution (Fork + Upstream)
+You fork a repo (your copy = origin).
+The original repo = upstream.
+So you set two remotes:
+origin → your fork (you can push here ✅).
+upstream → original repo (read-only, you fetch updates from here).
+👉 This way, you can keep your fork updated with the main project.
+
+2️⃣ Company + Your Own Copy (rare in jobs)
+Sometimes, a developer might fork the company repo into their own account (for experimenting).
+Then they’d add:
+origin → company repo
+personal → their fork
+👉 Not very common in jobs unless you’re trying something experimental.
+
+
+🎯 Is It Necessary to Create Multiple Remotes?
+👉 No, not always.
+👉 For most job/company projects, you will only use one remote (origin) because you have direct push access to the company’s repo.
+👉 Multiple remotes are optional and usually for special cases like open-source or cross-team collaboration.
+
+
+
+============================================================================================================================================================
+
+🔹 Branch Management:
+
+1️⃣ List all local branches: 
+**git branch**
+👉 Shows only branches available on your machine.
+
+2️⃣ List all remote-tracking branches
+**git branch -r**
+👉 Shows branches from the remote (origin/some-branch).
+
+3️⃣ List all branches (local + remote)
+**git branch -a**
+
+4️⃣ Create a new branch (but don’t switch)
+**git branch branch-name**
+
+5️⃣ Create and switch to a new branch 
+**git switch -c branch-name**  (recommended)    or     **git checkout -b branch-name**   (not recommended)
+
+
+7️⃣ Switch to an existing branch  
+**$ git switch branch-name **  (recommended)   or      **$ git checkout branch-name **     (not recommended)
+
+
+
+🔹 Branch Deletion
+
+9️⃣ Delete a local branch
+**git branch -d branch-name**
+👉 -d = safe delete (won’t delete if unmerged).
+👉 Use -D (capital D) to force delete.
+Note: if you don't merge child branch in source/parent branch then it will give you error but if you publish the child branch then it will not give you error because 
+publish child branch can be merege in source/parent branch 
+
+1️⃣0️⃣  Delete a remote branch
+**git push origin --delete branch-name**
+
+
+🔹 Branch Info & Tracking
+
+1️⃣1️⃣ See branch details with origin (last commit on each)
+$ git branch -vv
+* b1   fee14fb ooooo
+  main 1977c62 [origin/main] Entry Point
+
+
+1️⃣2️⃣  Publish Your Local Branch
+$ git push -u origin feat/login
+
+What this does:
+origin → your remote name (default when you clone).
+feat/login → your local branch name.
+-u (or --set-upstream) → links your local branch with the remote branch.
+
+
+1️⃣3️⃣  Fetch all remote branches
+$ git fetch origin
+
+
+📝 Git Notes – Switching to a Remote Branch
+==================================================
+🔹 Problem / Scenario
+```
+👉 There is a branch called "feat/login" on origin but you don't have it on your local so :
+```
+
+You ran 1:  $git fetch origin
+You ran 2:  $ git branch
+* b1
+  main
+You ran 3:  $git branch -a
+* b1    <- you are currently on this branch 
+  main
+  remotes/origin/main
+  remotes/origin/b1
+  remotes/origin/feat/login     <--- you want this on your local   or   switch to the remote branch 'feat/login'
+
+🔹 Answer
+
+You cannot directly checkout "remotes/origin/feat/login" because it’s a remote-tracking branch (read-only).
+You need to create a local branch that tracks it.
+
+👉 Command:
+"$git switch -c feat/login origin/feat/login"       or      "$git checkout -b feat/login origin/feat/login"
+Switched to a new branch 'feat/login'
+Branch 'feat/login' set up to track remote branch 'feat/login' from 'origin'.
+
+🔹 Explanation
+
+feat/login → new local branch name.
+origin/feat/login → remote branch it will track.
+After this, local feat/login will automatically connect to remote origin/feat/login. (so 'git pull' and 'git push' will work automatically).
+
+
+📝 Git Notes – Fetching Only the Branch You Need
+==================================================
+🔹 Problem / Scenario
+```
+On the remote (origin) there are lots of branches.
+But you don’t want to fetch/download all branches into your local repo.
+You only want specific branches (say b3) locally.
+```
+🔹 Answer
+
+Instead of fetching all ("$ git fetch origin "), you can fetch only the branch you need and then create a local branch from it.
+
+👉 Command:
+
+$git fetch origin b3
+$git switch -c b3 origin/b3          or        $git checkout -b b3 origin/b3
+
+🟢 Explanation
+$git fetch origin b3 → fetches only the b3 branch from remote.
+$$git switch -c b3 origin/b3  :
+-c → create a new branch.
+b3 → name of your new local branch.
+origin/b3 → remote branch it should track.
+👉 After this, your local b3 branch will automatically track remote origin/b3.
+👉 This way, you avoid downloading all remote branches.
+
+============================================================================================================================================================
+
+
+🔹 whats difference between "git fetch origin" and "git fetch --all"
+
+In Summary : use "git fetch origin" if you have single origin which is common in many cases even in job (since in company you have single remote called origin) 
+and use "git fetch --all" if you have multiple remotes which is not common case, use it only if you fork a repo.
+
+1️⃣ "git fetch origin":
+
+👉 Fetches updates from the remote named "origin" only.
+👉 origin is usually the default remote created when you clone a repo:
+👉 If your repo has only one remote (origin) then use this command.
+
+```
+git clone https://github.com/user/repo.git
+# remote named 'origin' gets created automatically
+```
+
+If your repo has only one remote (origin) then,
+```
+git fetch origin
+```
+will download "all new branches", tags, commits from that remote.
+
+
+2️⃣ "git fetch --all":
+👉 Fetches updates from all remotes configured in your repo.
+👉 Useful when you have multiple remotes (e.g., origin, upstream, team-remote).
+
+👉 Example:
+```
+git remote -v           (list all remotes)
+```
+
+Might show:
+
+```
+origin   https://github.com/YourFork/repo.git (fetch)
+upstream https://github.com/MainOwner/repo.git (fetch)
+```
+
+Now:
+```
+git fetch --all
+```
+
+will fetch from both:
+origin → your fork
+upstream → the main repo
+
+
+✅ Practical Scenario
+You cloned a fork:
+```
+git clone https://github.com/YourFork/repo.git
+```
+→ You have origin.
+
+You add the original repo as another remote:
+```
+git remote add upstream https://github.com/MainOwner/repo.git
+```
+
+If you run:
+```
+git fetch origin
+```
+→ Fetches only your fork’s updates.
+
+If you run:
+```
+git fetch --all
+```
+→ Fetches both your fork (origin) and the main repo (upstream).
 
 
 
 
+
+-> "git branch -r"
+See All Remote Branches (e.g., origin/branch_name)
+-> "git branch -a"
+To see both local and remote branches
+-> "git fetch origin"
+Fetch the all Remote Branches code: 
+-> "git remote -v"    (list all remotes)
+origin  https://github.com/AdeshJ4/Doctor-Appointment-Booking-System-Client.git (fetch)
+origin  https://github.com/AdeshJ4/Doctor-Appointment-Booking-System-Client.git (push)
+----------------------------
 
 
 stash : 
+
+🔹 Why use git stash?
+git stash is a command used to temporarily save your uncommitted changes (both staged and unstaged) without committing them.
+It gives you a clean working directory so you can switch branches or pull updates, and later you can restore your saved changes.
+
+Imagine this:
+You’re working on a new feature but suddenly need to switch to another branch to fix a bug.
+You don’t want to commit half-done work, but also don’t want to lose it.
+👉 That’s where git stash helps. It saves your changes aside, and you can apply them back later.
 
 push untracked stash:
 git stash push -u -m "pastellification changes"
@@ -136,12 +461,7 @@ This merges the latest updates from the remote master branch into your local mas
 
 
 
--> git branch -r
-See All Remote Branches (e.g., origin/branch_name)
--> git branch -a
-To see both local and remote branches
--> git fetch --all
-Download & fetch All Remote Branches Locally (without switching to them)
+
 
 
 
@@ -218,9 +538,9 @@ Branch not available locally :
 
 When branch is available on remote server but you can't see it in local then run these commands: 
 
-1. List All Remote Branches: git branch -r
-2. Fetch the all Remote Branches code: git fetch origin
-3. Switch to given branch : git checkout b1
+1. List All Remote Branches: "git branch -r"  or "git branch -a"
+2. Fetch the all Remote Branches code: "git fetch origin"
+3. Switch to given branch : "git switch b1"
 
 
 ================================================================================================================================================================================
