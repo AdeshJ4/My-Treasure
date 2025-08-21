@@ -113,18 +113,18 @@ personal → their fork
 🔹 Branch Management:
 
 1️⃣ List all local branches: 
-**git branch**
+** $git branch **
 👉 Shows only branches available on your machine.
 
 2️⃣ List all remote-tracking branches
-**git branch -r**
+** $git branch -r **
 👉 Shows branches from the remote (origin/some-branch).
 
 3️⃣ List all branches (local + remote)
-**git branch -a**
+** $git branch -a **
 
 4️⃣ Create a new branch (but don’t switch)
-**git branch branch-name**
+** $git branch branch-name **
 
 5️⃣ Create and switch to a new branch 
 **git switch -c branch-name**  (recommended)    or     **git checkout -b branch-name**   (not recommended)
@@ -145,7 +145,7 @@ Note: if you don't merge child branch in source/parent branch then it will give 
 publish child branch can be merege in source/parent branch 
 
 1️⃣0️⃣  Delete a remote branch
-**git push origin --delete branch-name**
+** $git push origin --delete branch-name **
 
 
 🔹 Branch Info & Tracking
@@ -340,18 +340,42 @@ You’re working on a new feature but suddenly need to switch to another branch 
 You don’t want to commit half-done work, but also don’t want to lose it.
 👉 That’s where git stash helps. It saves your changes aside, and you can apply them back later.
 
-push untracked stash:
-git stash push -u -m "pastellification changes"
-
-apply named stash:
-git stash list
-git stash apply stash@{0}
 
 
 abort the merge if you don't want new changes: 
 if you have this : (poc/dev|MERGING)
 git merge --abort
 
+
+
+🔹 Common Git Stash Commands
+
+1️⃣ Stash your changes (Only staged files):
+👉 git stash
+
+2️⃣ Stash All files (untracked files + staged files):
+👉 git stash -u
+
+9️⃣ name a stash
+👉 git stash push -u -m "pastellification changes"
+
+3️⃣ List stashed changes:
+👉 git stash list
+
+4️⃣ Apply the latest stash (but keep it in stash list):
+👉 git stash apply
+
+5️⃣ Apply a specific stash:
+👉 git stash apply stash@{1}
+
+6️⃣ Pop the latest stash (apply + remove from stash list)
+👉 git stash pop
+
+7️⃣ Drop a specific stash
+👉 git stash drop stash@{0}
+
+8️⃣ Clear all stashes
+👉 git stash clear
 
 
 ----------------------------
