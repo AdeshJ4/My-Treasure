@@ -334,7 +334,6 @@ stash :
 🔹 Why use git stash?
 
 -> if you switch branch with both staged and unstaged code then that code will appear in all branches, so stash before switching or taking pull.
-
 -> git stash is a command used to temporarily save your uncommitted changes (both staged and unstaged) without committing them.
 It gives you a clean working directory so you can switch branches or pull updates, and later you can restore your saved changes.
 
@@ -342,6 +341,20 @@ Imagine this:
 You’re working on a new feature but suddenly need to switch to another branch to fix a bug.
 You don’t want to commit half-done work, but also don’t want to lose it.
 👉 That’s where git stash helps. It saves your changes aside, and you can apply them back later.
+
+
+Here are some common scenarios where you might want to use git stash:
+
+1. Switching Branches: 
+-> If you need to switch branches but have uncommitted changes that you don't want to commit yet, stashing can help:
+Scenario: You're working on a feature branch and suddenly need to switch to another branch to fix a bug or review code.
+Solution: Use git stash to save your uncommitted changes, switch branches, and then use git stash apply or git stash pop to reapply the changes when you switch back.
+
+2. Pulling Latest Changes
+-> Before pulling the latest changes from the remote repository, it's a good practice to ensure your working directory is clean. 
+Scenario: You need to pull the latest changes from the remote branch but have some work in progress.
+Solution: Use git stash to temporarily save your changes, then git pull to update your branch. After pulling, you can reapply your stashed changes.
+
 
 
 
@@ -791,53 +804,13 @@ PR:
 -> check your code and create pull request.
 
 
-
-
-
-===================================================================================================================================================================================
-
-
-
-
-git stash: 
-
-***
-git stash -u       // to stash the changes
-git stash apply    // to apply stash again. does not remove stash just applied.
-git stash pop	   // to apply and remove the latest stash. same as git stash apply but it removed that stash.
-git stash list     // list all stashes
-***
-
--> Stashing changes is useful in various situations when you need to temporarily set aside your uncommitted work. 
-
-Here are some common scenarios where you might want to use git stash:
-
-1. Switching Branches: 
--> If you need to switch branches but have uncommitted changes that you don't want to commit yet, stashing can help:
-Scenario: You're working on a feature branch and suddenly need to switch to another branch to fix a bug or review code.
-Solution: Use git stash to save your uncommitted changes, switch branches, and then use git stash apply or git stash pop to reapply the changes when you switch back.
-
-2. Pulling Latest Changes
--> Before pulling the latest changes from the remote repository, it's a good practice to ensure your working directory is clean. 
-Scenario: You need to pull the latest changes from the remote branch but have some work in progress.
-Solution: Use git stash to temporarily save your changes, then git pull to update your branch. After pulling, you can reapply your stashed changes.
-
-
-
 ================================================================================================================================================================================
 
 
 incoming changes  &&  current changes: 
 
 1. Current Changes: 
--> "Current changes" refer to the modifications that you have made locally in your working directory or branch. These changes have not yet been incorporated into the remote repository or another branch. They represent your work-in-progress and can include:
--> Uncommitted Changes: Modifications you have made in your working directory but haven't committed yet. These are the changes you see when you run git status and they are listed as modified, new (untracked), or deleted files.
--> Committed Changes: Changes you have committed to your local branch that may not yet be pushed to the remote repository or merged into another branch.
--> Examples of Current Changes:
-Editing a file and not yet committing those edits.
-Adding new files that are not yet tracked by Git.
-Committing changes to your local branch but not pushing them to the remote.
-
+-> "Current changes" refer to the modifications that you have made locally in your working directory or branch. 
 
 2. Incoming Changes
 -> "Incoming changes" are modifications made in the remote repository or in another branch that are not yet present in your current branch. These changes are typically discovered when you perform operations like fetching, pulling, or merging, and they can include:
@@ -846,7 +819,6 @@ Committing changes to your local branch but not pushing them to the remote.
 -> Examples of Incoming Changes:
 A colleague pushes new commits to the main branch, and you want to update your local main branch.
 Changes made in a feature branch that you want to merge into the main development branch.
-
 
 common example : 
 
