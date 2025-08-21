@@ -332,7 +332,10 @@ origin  https://github.com/AdeshJ4/Doctor-Appointment-Booking-System-Client.git 
 stash : 
 
 🔹 Why use git stash?
-git stash is a command used to temporarily save your uncommitted changes (both staged and unstaged) without committing them.
+
+-> if you switch branch with both staged and unstaged code then that code will appear in all branches, so stash before switching or taking pull.
+
+-> git stash is a command used to temporarily save your uncommitted changes (both staged and unstaged) without committing them.
 It gives you a clean working directory so you can switch branches or pull updates, and later you can restore your saved changes.
 
 Imagine this:
