@@ -1,0 +1,7 @@
+create folder: "pro1"
+create file inside it : "app.py"
+write code and open terminal and write: "python app.py"
+for "Linux / macOS" write: "python3 app.py"
+
+
+
