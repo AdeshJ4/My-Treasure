@@ -1,0 +1,22 @@
+visit: https://www.python.org/downloads/windows/
+
+select latest stable version (Python 3.13.9 - Oct. 14, 2025). then: 
+click: Download Windows installer (64-bit)
+
+==============================================================================================================================================
+
+After downloading (IMPORTANT)
+-----------------------------
+
+✔ Tick “Add Python to PATH”
+
+==============================================================================================================================================
+
+
+Verify Python Installation: 
+---------------------------
+
+Open Command Prompt: 
+
+C:\Users\user>python --version
+Python 3.13.9
