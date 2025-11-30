@@ -1,0 +1,29 @@
+Python has been 20 years.
+
+python is multi purpose language.
+
+Use: 
+
+1. Data Analysis
+2. AI / ML
+3. Automation
+4. Web App
+5. Mobile Apps
+6. Desktop App
+7. Testings
+8. Hacking
+
+
+High Level
+Huge community
+Cross platform
+large ecosystem
+
+
+versions: 
+
+Python 2: legacy version (outdated: use until 2020)
+Python 3: Future. use this.
+
+
+ 
