@@ -1,0 +1,8 @@
+1. print "Hello" 10 times:
+
+code:
+
+print("Hello" * 10)
+
+
+
