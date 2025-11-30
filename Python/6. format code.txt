@@ -1,0 +1,63 @@
+# ✅ Most popular VS Code extension for formatting Python code
+
+### **1️⃣ Black Formatter — MOST popular**
+
+✔ Most widely used
+✔ Industry standard
+✔ Auto-formats your code
+✔ Simple & clean style
+
+Extension name in VS Code:
+
+```
+Black Formatter
+```
+
+---
+
+# ✅ Other popular Python formatting tools (but less than Black)
+
+### **2️⃣ Autopep8**
+
+✔ Formats code according to PEP 8 rules
+✔ Good for beginners
+
+Extension:
+
+```
+autopep8
+```
+
+---
+
+### **3️⃣ Ruff**
+
+✔ Very fast formatter + linter
+✔ Gaining popularity fast
+✔ Modern alternative
+(But Black is still more popular globally)
+
+Extension:
+
+```
+Ruff
+```
+
+---
+
+# 🔥 **Correct recommendation for you**
+
+Since you are learning Python:
+
+👉 **Install: Black Formatter**
+👉 It is the most used and most stable formatter for Python.
+
+---
+
+If you want, I can show you how to:
+
+* set Black as default formatter in VS Code
+* auto-format on save
+* configure settings.json correctly
+
+Just tell me!
