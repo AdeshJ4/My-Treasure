@@ -1,0 +1,98 @@
+🔹 What are Derivatives?
+
+A derivative is a "financial contract" whose value depends (or is “derived”) from the price of something else (called the underlying asset).
+That "something else" could be:
+A stock (e.g., Reliance share)
+An index (e.g., Nifty, Sensex)
+A commodity (e.g., gold, oil)
+A currency (e.g., USD/INR)
+👉 So, derivatives don’t have their own independent value; they get value from the underlying asset.
+
+
+🔹 Example in Daily Life:
+Think of mangoes 🍋.
+Suppose mangoes are ₹100 per kg today.
+You and I make a deal: Next month, I’ll buy 10 kg from you at ₹100 per kg, no matter what the price is then.
+🟢 If next month mangoes become ₹150 per kg → I get profit.
+🔴 If price falls to ₹80 → I face loss.
+⚡ That "agreement" itself is a "derivative contract" (its value depends on mango price).
+
+
+
+🔹 Why Derivatives Exist?
+
+Hedging (protection) → Reduce risk (e.g., farmer locks in crop price before harvest).
+Speculation → Traders bet on price movements to earn profit.
+Arbitrage → Take advantage of price differences in different markets.
+
+
+
+
+============================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
